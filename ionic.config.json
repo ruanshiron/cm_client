@@ -1,0 +1,7 @@
+{
+  "name": "cm",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
