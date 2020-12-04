@@ -29,7 +29,7 @@ interface MainTabsProps {}
 const MainTabs: React.FC<MainTabsProps> = () => {
   return (
     <IonContent>
-      <IonFab vertical="bottom" horizontal="center" slot="fixed">
+      <IonFab vertical="bottom" horizontal="center" slot="fixed" >
         <IonFabButton>
           <IonIcon icon={add} size="large" />
         </IonFabButton>
@@ -57,21 +57,23 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         </IonRouterOutlet>
 
         <IonTabBar slot="bottom">
-          <IonTabButton tab="diary" href="/tabs/diary">
-            <IonIcon icon={calendar} />
+          <IonTabButton tab="diary" href="/tabs/diary" layout="label-hide">
+            <IonIcon size="large" icon={calendar} />
             <IonLabel>Nhật ký</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="report" href="/tabs/report">
-            <IonIcon icon={newspaperOutline} />
+          <IonTabButton tab="report" href="/tabs/report" layout="label-hide">
+            <IonIcon size="large" icon={newspaperOutline} />
             <IonLabel>Báo cáo</IonLabel>
           </IonTabButton>
-          <IonTabButton disabled></IonTabButton>
-          <IonTabButton tab="order" href="/tabs/order">
-            <IonIcon icon={checkmarkDoneCircleOutline} />
+          <IonTabButton layout="label-hide" disabled>
+            <IonLabel></IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="order" href="/tabs/order" layout="label-hide">
+            <IonIcon size="large" icon={checkmarkDoneCircleOutline} />
             <IonLabel>Đơn hàng</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="account" href="/tabs/account">
-            <IonIcon icon={personCircleOutline} />
+          <IonTabButton tab="account" href="/tabs/account" layout="label-hide">
+            <IonIcon size="large" icon={personCircleOutline} />
             <IonLabel>Tài khoản</IonLabel>
           </IonTabButton>
         </IonTabBar>

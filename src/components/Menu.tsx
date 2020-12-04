@@ -62,7 +62,7 @@ const Menu: React.FC = () => {
   const location = useLocation();
 
   return (
-    <IonMenu contentId="main" type="overlay">
+    <IonMenu contentId="main" type="overlay" swipeGesture>
       <IonContent>
         <IonList id="tab-list">
           <IonListHeader>Trang Quản Lý</IonListHeader>
