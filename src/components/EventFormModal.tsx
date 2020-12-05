@@ -17,6 +17,7 @@ import {
   IonSelectOption,
   IonTitle,
   IonToolbar,
+  IonTextarea,
 } from "@ionic/react";
 import {
   add,
@@ -31,9 +32,30 @@ import {
 
 interface EventFormModalrops {}
 
+const selectedDateLabelParser = (text: string) => {
+  const date = new Date(text);
+  const today = new Date();
+  if (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  )
+    return "Hôm nay";
+  else if (
+    date.getDate() === today.getDate() - 1 &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  )
+    return "Hôm qua";
+  return "";
+};
+
 const EventFormModal: React.FC<EventFormModalrops> = () => {
+  const now = new Date();
   const [showEventForm, setShowEventForm] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().substring(0, 10));
+  const [selectedDate, setSelectedDate] = useState(
+    now.toISOString().substring(0, 10)
+  );
 
   return (
     <>
@@ -145,13 +167,25 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
 
             <IonItemDivider color="light"></IonItemDivider>
             <IonItem lines="full">
-              <IonIcon size="large" icon={calendarClearOutline} color="medium" />
-              <IonLabel></IonLabel>
-              <IonInput type="date" placeholder="ngày tháng" value={selectedDate} onIonChange={(e) => setSelectedDate(e.detail.value || selectedDate)}/>
+              <IonIcon
+                size="large"
+                icon={calendarClearOutline}
+                color="medium"
+              />
+              <IonLabel color="medium" style={{ paddingLeft: 8 }}>
+                {selectedDateLabelParser(selectedDate)}
+              </IonLabel>
+              <IonInput
+                type="date"
+                placeholder="ngày tháng"
+                value={selectedDate}
+                onIonChange={(e) => setSelectedDate(e.detail.value!)}
+                style={{ textAlign: "right" }}
+              />
             </IonItem>
             <IonItem lines="full">
               <IonIcon size="large" icon={readerOutline} color="medium" />
-              <IonLabel></IonLabel>
+              <IonLabel color="medium"></IonLabel>
               <IonInput placeholder="Ghi chú" />
             </IonItem>
           </IonList>
