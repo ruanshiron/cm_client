@@ -168,6 +168,12 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
                 dayNames={customDayNames}
               ></IonDatetime>
             </IonItem>
+
+            <IonItem lines="full">
+              <IonIcon size="large" icon={calendarClearOutline} color="medium" />
+              <IonLabel></IonLabel>
+              <IonInput type="date" placeholder="Ghi chú" />
+            </IonItem>
             <IonItem lines="full">
               <IonIcon size="large" icon={readerOutline} color="medium" />
               <IonLabel></IonLabel>
