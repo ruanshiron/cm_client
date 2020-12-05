@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  IonAvatar,
   IonButton,
   IonButtons,
   IonContent,
@@ -17,25 +16,17 @@ import {
   IonModal,
   IonSelect,
   IonSelectOption,
-  IonTextarea,
   IonTitle,
   IonToolbar,
-  IonListHeader,
 } from "@ionic/react";
 import {
   add,
   bodyOutline,
   calendarClearOutline,
-  calendarClearSharp,
   closeOutline,
-  helpBuoyOutline,
   helpCircleOutline,
-  helpCircleSharp,
-  listCircleSharp,
   peopleCircleOutline,
-  peopleCircleSharp,
   readerOutline,
-  remove,
   shirtOutline,
 } from "ionicons/icons";
 

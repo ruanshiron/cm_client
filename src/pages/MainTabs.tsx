@@ -6,7 +6,6 @@ import {
   IonTabButton,
   IonIcon,
   IonLabel,
-  IonContent,
 } from "@ionic/react";
 import { Route, Redirect } from "react-router";
 import {
