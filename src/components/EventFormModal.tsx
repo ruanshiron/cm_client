@@ -17,7 +17,6 @@ import {
   IonSelectOption,
   IonTitle,
   IonToolbar,
-  IonTextarea,
 } from "@ionic/react";
 import {
   add,
