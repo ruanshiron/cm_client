@@ -3,7 +3,6 @@ import {
   IonButton,
   IonButtons,
   IonContent,
-  IonDatetime,
   IonFab,
   IonFabButton,
   IonHeader,
@@ -30,21 +29,12 @@ import {
   shirtOutline,
 } from "ionicons/icons";
 
-const customDayNames = [
-  "Chủ nhật",
-  "Thứ hai",
-  "Thứ ba",
-  "Thứ tư",
-  "Thứ năm",
-  "Thứ sáu",
-  "Thứ bảy",
-];
-
 interface EventFormModalrops {}
 
 const EventFormModal: React.FC<EventFormModalrops> = () => {
   const [showEventForm, setShowEventForm] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().substring(0, 10));
+
   return (
     <>
       <IonFab vertical="bottom" horizontal="end" slot="fixed">
@@ -155,24 +145,9 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
 
             <IonItemDivider color="light"></IonItemDivider>
             <IonItem lines="full">
-              <IonIcon
-                size="large"
-                icon={calendarClearOutline}
-                color="medium"
-              />
-              <IonLabel></IonLabel>
-              <IonDatetime
-                displayFormat="DDDD, ngày D.M.YYYY"
-                value={selectedDate}
-                onIonChange={(e) => setSelectedDate(e.detail.value!)}
-                dayNames={customDayNames}
-              ></IonDatetime>
-            </IonItem>
-
-            <IonItem lines="full">
               <IonIcon size="large" icon={calendarClearOutline} color="medium" />
               <IonLabel></IonLabel>
-              <IonInput type="date" placeholder="Ghi chú" />
+              <IonInput type="date" placeholder="ngày tháng" value={selectedDate} onIonChange={(e) => setSelectedDate(e.detail.value || selectedDate)}/>
             </IonItem>
             <IonItem lines="full">
               <IonIcon size="large" icon={readerOutline} color="medium" />
