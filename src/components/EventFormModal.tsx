@@ -28,8 +28,11 @@ import {
   readerOutline,
   shirtOutline,
 } from "ionicons/icons";
+import Event from "../models/Event";
 
-interface EventFormModalrops {}
+interface EventFormModalrops {
+  state: any;
+}
 
 const selectedDateLabelParser = (text: string) => {
   const date = new Date(text);
@@ -49,12 +52,41 @@ const selectedDateLabelParser = (text: string) => {
   return "";
 };
 
-const EventFormModal: React.FC<EventFormModalrops> = () => {
-  const now = new Date();
-  const [showEventForm, setShowEventForm] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(
-    now.toISOString().substring(0, 10)
-  );
+const EventFormModal: React.FC<EventFormModalrops> = ({ state }) => {
+  const [showEventForm, setShowEventForm] = useState<boolean>(false);
+
+  const today = new Date().toISOString().substring(0, 10);
+  const [quantity, setQuantity] = useState<number>();
+  const [productCode, setProductCode] = useState<string>();
+  const [sizeCode, setSizeCode] = useState<string>();
+  const [typeCode, setTypeCode] = useState<string>();
+  const [workshop, setWorkshop] = useState<string>();
+  const [selectedDate, setSelectedDate] = useState<string>(today);
+  const [note, setNote] = useState<string>();
+
+  const { save } = state;
+
+  const handleOnSubmit = () => {
+    const param: Event = {
+      quantity,
+      productCode,
+      sizeCode,
+      typeCode,
+      workshop,
+      selectedDate,
+      note,
+    };
+
+    save(param, () => setShowEventForm(false));
+
+    setQuantity(undefined);
+    setProductCode(undefined);
+    setSizeCode(undefined);
+    setTypeCode(undefined);
+    setWorkshop(undefined);
+    setSelectedDate(today);
+    setNote(undefined);
+  };
 
   return (
     <>
@@ -77,7 +109,7 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
             </IonButtons>
             <IonTitle>Thêm vào nhật ký</IonTitle>
             <IonButtons slot="end">
-              <IonButton>Lưu</IonButton>
+              <IonButton onClick={handleOnSubmit}>Lưu</IonButton>
             </IonButtons>
           </IonToolbar>
         </IonHeader>
@@ -90,6 +122,8 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
                 type="number"
                 placeholder="Số lượng"
                 style={{ textAlign: "right", fontSize: 36 }}
+                value={quantity}
+                onIonChange={(e) => setQuantity(parseInt(e.detail.value!, 0))}
               />
             </IonItem>
             <IonItem lines="full">
@@ -100,6 +134,8 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
                 cancelText="Hủy"
                 interface="action-sheet"
                 placeholder="Sản phẩm"
+                value={productCode}
+                onIonChange={(e) => setProductCode(e.detail.value!)}
               >
                 <IonSelectOption value="1">Sản phẩm 1</IonSelectOption>
                 <IonSelectOption value="2">Sản phẩm 2</IonSelectOption>
@@ -116,6 +152,8 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
                 cancelText="Hủy"
                 interface="action-sheet"
                 placeholder="Kích cỡ"
+                value={sizeCode}
+                onIonChange={(e) => setSizeCode(e.detail.value!)}
               >
                 <IonSelectOption value="1">S</IonSelectOption>
                 <IonSelectOption value="2">M</IonSelectOption>
@@ -134,6 +172,8 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
                 cancelText="Hủy"
                 interface="action-sheet"
                 placeholder="Nhóm"
+                value={typeCode}
+                onIonChange={(e) => setTypeCode(e.detail.value!)}
               >
                 <IonSelectOption value="sent">Yêu cầu sản xuất</IonSelectOption>
                 <IonSelectOption value="received">
@@ -155,12 +195,14 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
                 cancelText="Hủy"
                 interface="action-sheet"
                 placeholder="Xưởng"
+                value={workshop}
+                onIonChange={(e) => setWorkshop(e.detail.value!)}
               >
-                <IonSelectOption value="id">Xưởng 1</IonSelectOption>
-                <IonSelectOption value="id">Xưởng 1</IonSelectOption>
-                <IonSelectOption value="id">Xưởng 1</IonSelectOption>
-                <IonSelectOption value="id">Xưởng 1</IonSelectOption>
-                <IonSelectOption value="id">Xưởng 1</IonSelectOption>
+                <IonSelectOption value="1">Xưởng 1</IonSelectOption>
+                <IonSelectOption value="2">Xưởng 2</IonSelectOption>
+                <IonSelectOption value="3">Xưởng 3</IonSelectOption>
+                <IonSelectOption value="4">Xưởng 4</IonSelectOption>
+                <IonSelectOption value="5">Xưởng 5</IonSelectOption>
               </IonSelect>
             </IonItem>
 
@@ -185,7 +227,11 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
             <IonItem lines="full">
               <IonIcon size="large" icon={readerOutline} color="medium" />
               <IonLabel color="medium"></IonLabel>
-              <IonInput placeholder="Ghi chú" />
+              <IonInput
+                placeholder="Ghi chú"
+                value={note}
+                onIonChange={(e) => setNote(e.detail.value!)}
+              />
             </IonItem>
 
             <IonItemDivider color="light"></IonItemDivider>

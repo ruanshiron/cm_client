@@ -8,19 +8,23 @@ import {
   IonPage,
   IonSearchbar,
   IonTitle,
+  IonToast,
   IonToolbar,
 } from "@ionic/react";
 import { ellipsisVerticalSharp } from "ionicons/icons";
 import React from "react";
 import EventFormModal from "../components/EventFormModal";
 import { EventList } from "../components/EventList";
+import useEvent from "../hooks/useEvent";
 
 interface DiaryPageProps {}
 
 const DiaryPage: React.FC<DiaryPageProps> = (props) => {
+  const state = useEvent();
+  const { message, setMessage } = state;
   return (
     <IonPage>
-      <EventFormModal />
+      <EventFormModal state={state} />
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -43,7 +47,14 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
             <IonSearchbar placeholder="Search"></IonSearchbar>
           </IonToolbar>
         </IonHeader>
-        <EventList />
+        <EventList state={state} />
+
+        <IonToast
+          isOpen={!!message}
+          onDidDismiss={() => setMessage(undefined)}
+          message={message}
+          duration={1000}
+        ></IonToast>
       </IonContent>
     </IonPage>
   );
