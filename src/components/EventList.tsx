@@ -21,7 +21,7 @@ export const EventList: React.FC<{
             <IonLabel>{group}</IonLabel>
           </IonItemDivider>
           {events[group].map((item, j) => (
-            <IonItem key={j}>
+            <IonItem routerLink={`/tabs/diary/${item.id}`} key={j}>
               <IonAvatar slot="start">
                 <img
                   alt=""

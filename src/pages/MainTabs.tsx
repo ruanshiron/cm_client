@@ -26,8 +26,9 @@ const MainTabs: React.FC<MainTabsProps> = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Redirect exact path="/tabs" to="/tabs/diary" />
+        <Redirect from="/tabs" to="/tabs/diary" exact />
         <Route path="/tabs/diary" render={() => <DiaryPage />} exact={true} />
+        <Route path="/tabs/diary/:id" component={EventDetail} />
         <Route path="/tabs/report" render={() => <ReportPage />} exact={true} />
         <Route path="/tabs/order" render={() => <OrderPage />} exact={true} />
         <Route
@@ -35,7 +36,6 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           render={() => <AccountPage />}
           exact={true}
         />
-        <Route path="/tabs/diary/:id" component={EventDetail} />
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom">

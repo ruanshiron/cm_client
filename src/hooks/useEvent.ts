@@ -21,11 +21,11 @@ const useEvent = () => {
         e.hasOwnProperty(group)
           ? {
               ...e,
-              [group]: [...e[group], doc.data()],
+              [group]: [...e[group], { ...doc.data(), id: doc.id }],
             }
           : {
               ...e,
-              [group]: [doc.data()],
+              [group]: [{ ...doc.data(), id: doc.id }],
             }
       );
     });
