@@ -19,7 +19,7 @@ import {
   IonMenuToggle,
   IonNote,
 } from "@ionic/react";
-import "./Menu.css";
+import "./Menu.scss";
 
 interface AppPage {
   url: string;
@@ -62,7 +62,7 @@ const Menu: React.FC = () => {
   const location = useLocation();
 
   return (
-    <IonMenu contentId="main" type="overlay" swipeGesture>
+    <IonMenu id="side-menu" contentId="main" type="overlay" swipeGesture>
       <IonContent>
         <IonList id="tab-list">
           <IonListHeader>Trang Quản Lý</IonListHeader>
