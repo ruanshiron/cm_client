@@ -1,30 +1,29 @@
 import React from "react";
-import {
-  IonItem,
-  IonNote,
-} from "@ionic/react";
-import Event from "../models/Event";
+import { IonAvatar, IonItem, IonLabel, IonNote } from "@ionic/react";
+import { Event } from "../models/Diary";
 
-export const EventListItem: React.FC<{ data: Event }> = ({ data }) => {
+const EventListItem: React.FC<{ data: Event }> = ({ data }) => {
   return (
     <IonItem routerLink={`/tabs/diary/${data.id}`} detail={false}>
-      <IonNote slot="start">
+      <IonAvatar slot="start">
+        <img
+          alt=""
+          src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"
+        />
+      </IonAvatar>
+      <IonLabel>
         <h2>
-          <b>{data.productCode}</b>
-          <br />
-          <small>{data.sizeCode}</small>
+          {data.workshop}・<b>{data.typeCode}</b>
         </h2>
-      </IonNote>
-      <IonNote slot="start" color="dark">
-        <h2>
-          <b>{data.workshop}</b>
-          <br />
-          <small></small>
-        </h2>
-      </IonNote>
+        <p>
+          {data.productCode} / {data.sizeCode}
+        </p>
+      </IonLabel>
       <IonNote slot="end" color="success">
         <h4>{data.quantity}</h4>
       </IonNote>
     </IonItem>
   );
 };
+
+export default React.memo(EventListItem);

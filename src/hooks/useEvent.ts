@@ -1,35 +1,17 @@
 import { database } from "../config/firebase";
-import Event from "../models/Event";
+import { Event } from "../models/Diary";
 import * as _ from "lodash";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { getEvents } from "../store/diary/diary.actions";
 
 const useEvent = () => {
-  const [events, setEvents] = useState<{ [key: string]: Array<any> }>({});
   const [message, setMessage] = useState<string>();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    get();
-  }, []);
-
-  const get = async () => {
-    setEvents({});
-    let res = await database.collection("events").get();
-    res.forEach((doc) => {
-      let group = doc.data().selectedDate;
-
-      setEvents((e) =>
-        e.hasOwnProperty(group)
-          ? {
-              ...e,
-              [group]: [...e[group], { ...doc.data(), id: doc.id }],
-            }
-          : {
-              ...e,
-              [group]: [{ ...doc.data(), id: doc.id }],
-            }
-      );
-    });
-  };
+    dispatch(getEvents());
+  }, [dispatch]);
 
   const save = (param: Event, callback = () => {}) => {
     const data = _.pickBy(param, _.identity);
@@ -41,7 +23,7 @@ const useEvent = () => {
         console.log(res);
         setMessage("Lưu thành công");
         callback();
-        get();
+        dispatch(getEvents());
       })
       .catch((err) => {
         console.error(err);
@@ -53,7 +35,6 @@ const useEvent = () => {
     save,
     message,
     setMessage,
-    events,
   };
 };
 

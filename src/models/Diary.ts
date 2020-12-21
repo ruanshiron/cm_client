@@ -1,4 +1,4 @@
-export default interface Event {
+export interface Event {
   id?: any;
   quantity?: number;
   productCode?: string;
@@ -7,4 +7,9 @@ export default interface Event {
   workshop?: string;
   selectedDate?: string;
   note?: string;
+}
+
+export interface EventGroup {
+  date: string;
+  events: Event[];
 }

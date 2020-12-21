@@ -47,7 +47,7 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
             <IonSearchbar placeholder="Search"></IonSearchbar>
           </IonToolbar>
         </IonHeader>
-        <EventList state={state} />
+        <EventList/>
 
         <IonToast
           isOpen={!!message}
