@@ -19,6 +19,9 @@ import EventDetail from "./EventDetail";
 import ReportPage from "./ReportPage";
 import OrderPage from "./OrderPage";
 import AccountPage from "./AccountPage";
+import { WorkshopDetail } from "./WorkshopDetail";
+import { OrderDetail } from "./OrderDetail";
+import { ReportDetail } from "./ReportDetail";
 
 interface MainTabsProps {}
 
@@ -36,6 +39,9 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           render={() => <AccountPage />}
           exact={true}
         />
+        <Route path="/tabs/workshops/:id" component={WorkshopDetail} />
+        <Route path="/tabs/order/:id" component={OrderDetail} />
+        <Route path="/tabs/report/:id" component={ReportDetail} />
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom">
