@@ -8,13 +8,15 @@ import {
   IonIcon,
   IonMenuButton,
   IonPage,
+  IonPopover,
   IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { ellipsisVerticalSharp } from "ionicons/icons";
-import React from "react";
+import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
+import React, { useState } from "react";
 import { ReportItem } from "../components/ReportItem";
+import ReportPopover from "../components/ReportPopover";
 import "./ReportPage.scss";
 
 const reports = [
@@ -161,6 +163,13 @@ const reports = [
 interface ReportPageProps {}
 
 const ReportPage: React.FC<ReportPageProps> = () => {
+  const [showPopover, setShowPopover] = useState(false);
+  const [popoverEvent, setPopoverEvent] = useState<any>();
+
+  const presentPopover = (e: React.MouseEvent) => {
+    setPopoverEvent(e.nativeEvent);
+    setShowPopover(true);
+  };
   return (
     <IonPage id="report-page">
       <IonHeader>
@@ -170,8 +179,12 @@ const ReportPage: React.FC<ReportPageProps> = () => {
           </IonButtons>
           <IonTitle>Báo cáo</IonTitle>
           <IonButtons slot="end">
-            <IonButton>
-              <IonIcon slot="icon-only" icon={ellipsisVerticalSharp} />
+            <IonButton onClick={presentPopover}>
+              <IonIcon
+                slot="icon-only"
+                ios={ellipsisHorizontal}
+                md={ellipsisVertical}
+              ></IonIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -192,6 +205,13 @@ const ReportPage: React.FC<ReportPageProps> = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
+      <IonPopover
+        isOpen={showPopover}
+        event={popoverEvent}
+        onDidDismiss={() => setShowPopover(false)}
+      >
+        <ReportPopover dismiss={() => setShowPopover(false)} />
+      </IonPopover>
     </IonPage>
   );
 };

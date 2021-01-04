@@ -22,6 +22,7 @@ import AccountPage from "./AccountPage";
 import { WorkshopDetail } from "./WorkshopDetail";
 import { OrderDetail } from "./OrderDetail";
 import { ReportDetail } from "./ReportDetail";
+import CreateProductPage from "./CreateProductPage";
 
 interface MainTabsProps {}
 
@@ -30,18 +31,18 @@ const MainTabs: React.FC<MainTabsProps> = () => {
     <IonTabs>
       <IonRouterOutlet>
         <Redirect from="/tabs" to="/tabs/diary" exact />
-        <Route path="/tabs/diary" render={() => <DiaryPage />} exact={true} />
+
+        <Route path="/tabs/diary" render={() => <DiaryPage />} exact />
+        <Route path="/tabs/report" render={() => <ReportPage />} exact />
+        <Route path="/tabs/order" render={() => <OrderPage />} exact />
+        <Route path="/tabs/account" render={() => <AccountPage />} exact />
+
         <Route path="/tabs/diary/:id" component={EventDetail} />
-        <Route path="/tabs/report" render={() => <ReportPage />} exact={true} />
-        <Route path="/tabs/order" render={() => <OrderPage />} exact={true} />
-        <Route
-          path="/tabs/account"
-          render={() => <AccountPage />}
-          exact={true}
-        />
         <Route path="/tabs/workshops/:id" component={WorkshopDetail} />
         <Route path="/tabs/order/:id" component={OrderDetail} />
         <Route path="/tabs/report/:id" component={ReportDetail} />
+
+        <Route path="/tabs/report/new" component={CreateProductPage} exact />
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom">
