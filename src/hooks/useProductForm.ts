@@ -1,9 +1,11 @@
 import { useIonRouter } from "@ionic/react";
 import { useState } from "react";
 import { database } from "../config/firebase";
+import { useToast } from "./useToast";
 
 export const useProductForm = () => {
   const router = useIonRouter();
+  const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState<string>();
   const [code, setCode] = useState<string>();
@@ -11,7 +13,7 @@ export const useProductForm = () => {
   const [note, setNote] = useState<string>();
 
   const submit = () => {
-    if (name?.trim() === "" || code?.trim() === "" || sizes?.length === 0)
+    if (!name?.trim() || !code?.trim() || !sizes?.length)
       return;
 
     const product = {
@@ -24,7 +26,8 @@ export const useProductForm = () => {
       .collection("products")
       .add(product)
       .then((doc) => {
-        console.log(doc.id);
+        toast("Sản phẩm mới đã được thêm")
+
         setName(undefined);
         setCode(undefined);
         setSizes(undefined);
@@ -33,7 +36,8 @@ export const useProductForm = () => {
         router.back();
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
+        toast("Sản phẩm mới đã được thêm")
       });
   };
 
