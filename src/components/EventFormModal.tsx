@@ -116,7 +116,7 @@ const EventFormModal: React.FC<EventFormModalrops> = ({ state }) => {
             </IonButtons>
           </IonToolbar>
         </IonHeader>
-        <IonContent>
+        <IonContent color="light">
           <IonItem lines="full">
             <IonIcon size="large" icon={readerOutline} color="medium" />
             <IonLabel></IonLabel>
@@ -236,7 +236,7 @@ const EventFormModal: React.FC<EventFormModalrops> = ({ state }) => {
           </IonItem>
 
           <IonItemDivider color="light"></IonItemDivider>
-          <IonItem lines="none" button onClick={() => setShowEventForm(false)}>
+          <IonItem lines="full" button onClick={() => setShowEventForm(false)}>
             <IonLabel
               color="danger"
               style={{ textAlign: "center" }}
