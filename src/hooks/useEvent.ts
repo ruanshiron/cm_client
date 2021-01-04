@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getEvents } from "../store/diary/diary.actions";
 
-const useEvent = () => {
+export const useEvent = () => {
   const [message, setMessage] = useState<string>();
   const dispatch = useDispatch();
 
@@ -37,5 +37,3 @@ const useEvent = () => {
     setMessage,
   };
 };
-
-export default useEvent;

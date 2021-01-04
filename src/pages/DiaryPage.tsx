@@ -15,7 +15,7 @@ import { ellipsisVerticalSharp } from "ionicons/icons";
 import React from "react";
 import EventFormModal from "../components/EventFormModal";
 import { EventList } from "../components/EventList";
-import useEvent from "../hooks/useEvent";
+import { useEvent } from "../hooks/useEvent";
 
 interface DiaryPageProps {}
 
@@ -47,7 +47,7 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
             <IonSearchbar placeholder="Search"></IonSearchbar>
           </IonToolbar>
         </IonHeader>
-        <EventList/>
+        <EventList />
 
         <IonToast
           isOpen={!!message}
