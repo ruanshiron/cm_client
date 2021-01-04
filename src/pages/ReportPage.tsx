@@ -14,151 +14,13 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { ReportItem } from "../components/ReportItem";
 import ReportPopover from "../components/ReportPopover";
+import { useSelector } from "../store";
+import { getProducts } from "../store/report/report.actions";
 import "./ReportPage.scss";
-
-const reports = [
-  {
-    id: 0,
-    name: "Tất cả",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã sản suất",
-        value: 20000,
-      },
-      {
-        name: "Hỏng",
-        value: 192,
-      },
-      {
-        name: "Tồn Kho",
-        value: 8000,
-      },
-      {
-        name: "Đã bán",
-        value: 12000,
-      },
-    ],
-  },
-  {
-    id: 1,
-    name: "Sản phẩm 1",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã sản suất",
-        value: 1200,
-      },
-      {
-        name: "Hỏng",
-        value: 192,
-      },
-      {
-        name: "Tồn Kho",
-        value: 231,
-      },
-      {
-        name: "Đã bán",
-        value: 1431,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Sản phẩm 2",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã sản suất",
-        value: 1200,
-      },
-      {
-        name: "Hỏng",
-        value: 192,
-      },
-      {
-        name: "Tồn Kho",
-        value: 231,
-      },
-      {
-        name: "Đã bán",
-        value: 1431,
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Sản phẩm 3",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã sản suất",
-        value: 1200,
-      },
-      {
-        name: "Hỏng",
-        value: 192,
-      },
-      {
-        name: "Tồn Kho",
-        value: 231,
-      },
-      {
-        name: "Đã bán",
-        value: 1431,
-      },
-    ],
-  },
-  {
-    id: 4,
-    name: "Sản phẩm 4",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã sản suất",
-        value: 1200,
-      },
-      {
-        name: "Hỏng",
-        value: 192,
-      },
-      {
-        name: "Tồn Kho",
-        value: 231,
-      },
-      {
-        name: "Đã bán",
-        value: 1431,
-      },
-    ],
-  },
-  {
-    id: 5,
-    name: "Sản phẩm 5",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã sản suất",
-        value: 1200,
-      },
-      {
-        name: "Hỏng",
-        value: 192,
-      },
-      {
-        name: "Tồn Kho",
-        value: 231,
-      },
-      {
-        name: "Đã bán",
-        value: 1431,
-      },
-    ],
-  },
-];
 
 interface ReportPageProps {}
 
@@ -170,6 +32,14 @@ const ReportPage: React.FC<ReportPageProps> = () => {
     setPopoverEvent(e.nativeEvent);
     setShowPopover(true);
   };
+
+  const reports = useSelector((state) => state.report.products);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
+
   return (
     <IonPage id="report-page">
       <IonHeader>
