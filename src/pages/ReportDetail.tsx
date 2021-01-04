@@ -17,24 +17,23 @@ export const ReportDetail: React.FC<ReportDetailProps> = () => {
   return (
     <>
       <IonPage>
-        <IonContent>
-          <IonHeader>
-            <IonToolbar>
-              <IonButtons slot="start">
-                <IonBackButton defaultHref="/tabs/report" />
-              </IonButtons>
-              <IonButtons slot="end">
-                <IonButton>
-                  <IonIcon
-                    slot="icon-only"
-                    ios={shareOutline}
-                    md={shareSharp}
-                  ></IonIcon>
-                </IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-        </IonContent>
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonBackButton defaultHref="/tabs/report" />
+            </IonButtons>
+            <IonButtons slot="end">
+              <IonButton>
+                <IonIcon
+                  slot="icon-only"
+                  ios={shareOutline}
+                  md={shareSharp}
+                ></IonIcon>
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent></IonContent>
       </IonPage>
     </>
   );
