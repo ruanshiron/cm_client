@@ -12,7 +12,7 @@ export const DiaryActionTypes = {
 
 export const addEvent = (event: Event) => ({
   type: DiaryActionTypes.ADD_EVENT,
-  event,
+  payload: event,
 });
 
 export const getEvents = () => {

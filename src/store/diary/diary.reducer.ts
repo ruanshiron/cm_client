@@ -15,7 +15,7 @@ export const diaryReducer = (
       return {
         ...state,
         loading: false,
-        events: [action.event, ...state.events],
+        events: [action.payload, ...state.events],
       };
     case DiaryActionTypes.GET_EVENTS_STARTED:
       return {
