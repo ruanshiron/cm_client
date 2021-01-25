@@ -16,15 +16,15 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ReportItem } from "../components/ReportItem";
-import ReportPopover from "../components/ReportPopover";
+import { ProductItem } from "../components/ProductItem";
+import { ProductPagePopover } from "../components/ProductPagePopover";
 import { useSelector } from "../store";
-import { getProducts } from "../store/report/report.actions";
-import "./ReportPage.scss";
+import { getProducts } from "../store/data/data.actions";
+import "./ProductPage.scss";
 
-interface ReportPageProps {}
+interface ProductPageProps {}
 
-const ReportPage: React.FC<ReportPageProps> = () => {
+const ProductPage: React.FC<ProductPageProps> = () => {
   const [showPopover, setShowPopover] = useState(false);
   const [popoverEvent, setPopoverEvent] = useState<any>();
 
@@ -33,7 +33,7 @@ const ReportPage: React.FC<ReportPageProps> = () => {
     setShowPopover(true);
   };
 
-  const reports = useSelector((state) => state.report.products);
+  const products = useSelector((state) => state.data.products);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const ReportPage: React.FC<ReportPageProps> = () => {
   }, [dispatch]);
 
   return (
-    <IonPage id="report-page">
+    <IonPage id="product-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -67,9 +67,9 @@ const ReportPage: React.FC<ReportPageProps> = () => {
         </IonHeader>
         <IonGrid fixed>
           <IonRow>
-            {reports.map((product) => (
+            {products.map((product) => (
               <IonCol size="12" size-md="6" key={product.id}>
-                <ReportItem data={product} />
+                <ProductItem data={product} />
               </IonCol>
             ))}
           </IonRow>
@@ -80,10 +80,10 @@ const ReportPage: React.FC<ReportPageProps> = () => {
         event={popoverEvent}
         onDidDismiss={() => setShowPopover(false)}
       >
-        <ReportPopover dismiss={() => setShowPopover(false)} />
+        <ProductPagePopover dismiss={() => setShowPopover(false)} />
       </IonPopover>
     </IonPage>
   );
 };
 
-export default ReportPage;
+export default ProductPage;

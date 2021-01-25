@@ -29,7 +29,7 @@ const CreateProductPage: React.FC<CreateProductPageProps> = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/tabs/report"></IonBackButton>
+            <IonBackButton defaultHref="/tabs/product"></IonBackButton>
           </IonButtons>
           <IonTitle>Thêm sản phẩm</IonTitle>
           <IonButtons slot="end">

@@ -3,10 +3,10 @@ import { IonList, IonLabel, IonListHeader, IonItem } from "@ionic/react";
 import EventListItem from "./EventListItem";
 import "./EventList.scss";
 import { useSelector } from "../store";
-import { Event, EventGroup } from "../models/Diary";
+import { Event, EventGroup } from "../models";
 
 export const EventList: React.FC = () => {
-  const groups: EventGroup[] = useSelector((state) => state.diary.groups);
+  const groups: EventGroup[] = useSelector((state) => state.data.filteredEvents);
   return (
     <IonList lines="none">
       {groups.map((group, i) => (

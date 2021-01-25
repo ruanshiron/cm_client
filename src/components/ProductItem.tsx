@@ -8,17 +8,17 @@ import {
 } from "@ionic/react";
 import React from "react";
 
-export const ReportItem: React.FC<{ data: any }> = ({ data }) => {
+export const ProductItem: React.FC<{ data: any }> = ({ data }) => {
   return (
     <>
-      <IonCard className="report-card">
+      <IonCard className="product-card">
         <IonCardHeader>
           <IonItem
             button
             detail={false}
             lines="none"
-            className="report-item"
-            routerLink={`/tabs/report/${data.id}`}
+            className="product-item"
+            routerLink={`/tabs/product/${data.id}`}
           >
             <IonAvatar slot="start">
               <img
@@ -38,7 +38,7 @@ export const ReportItem: React.FC<{ data: any }> = ({ data }) => {
             {data.fields.map((field: any) => (
               <IonItem
                 detail={false}
-                routerLink={`/tabs/report/fields/${field.id}`}
+                routerLink={`/tabs/product/fields/${field.id}`}
                 key={field.name}
               >
                 <IonLabel>

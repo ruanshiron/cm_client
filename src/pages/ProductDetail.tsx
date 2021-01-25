@@ -17,7 +17,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../store";
 import _ from "lodash";
-import { Field } from "../models/Report";
+import { Field } from "../models";
 
 const parseFieldName = (key: string) => {
   switch (key) {
@@ -38,22 +38,22 @@ const parseFieldName = (key: string) => {
   }
 };
 
-interface ReportDetailProps {}
+interface ProductDetailProps {}
 
-export const ReportDetail: React.FC<ReportDetailProps> = () => {
+export const ProductDetail: React.FC<ProductDetailProps> = () => {
   const { id } = useParams<{ id: string }>();
   const [fields, setFields] = useState<Field[]>();
 
-  const report = useSelector((state) =>
-    state.report.products.find((x) => x.id === id)
+  const product = useSelector((state) =>
+    state.data.products.find((x) => x.id === id)
   );
 
   const events = useSelector((state) =>
-    state.diary.events.filter((x) => x.productCode === id)
+    state.data.events.filter((x) => x.productCode === id)
   );
 
   useEffect(() => {
-    if (!report || !events) return;
+    if (!product || !events) return;
 
     const result = _.groupBy(events, "typeCode");
 
@@ -74,9 +74,9 @@ export const ReportDetail: React.FC<ReportDetailProps> = () => {
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonBackButton defaultHref="/tabs/report" />
+              <IonBackButton defaultHref="/tabs/product" />
             </IonButtons>
-            <IonTitle>{report?.name}</IonTitle>
+            <IonTitle>{product?.name}</IonTitle>
             <IonButtons slot="end">
               <IonButton>
                 <IonIcon

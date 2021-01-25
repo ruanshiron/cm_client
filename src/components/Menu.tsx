@@ -37,7 +37,7 @@ const appPages: AppPage[] = [
   },
   {
     title: "Báo cáo",
-    url: "/tabs/report",
+    url: "/tabs/product",
     iosIcon: newspaperOutline,
     mdIcon: newspaperOutline,
   },

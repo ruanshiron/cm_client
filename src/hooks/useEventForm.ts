@@ -1,11 +1,10 @@
 import { database } from "../config/firebase";
-import { Event } from "../models/Diary";
+import { Event, Product } from "../models";
 import * as _ from "lodash";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getEvents } from "../store/diary/diary.actions";
 import { useToast } from "./useToast";
-import { Product } from "../models/Report";
+import { getEvents } from "../store/data/data.actions";
 
 export const useEventForm = () => {
   const dispatch = useDispatch();

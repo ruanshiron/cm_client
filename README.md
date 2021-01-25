@@ -2,7 +2,7 @@
 In processing Project
 ## ToDo
 
-- [ ] Refactor code
+- [*] Refactor code
 
 ## State
 ```typescript

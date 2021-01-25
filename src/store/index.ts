@@ -1,8 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import { diaryReducer } from "./diary/diary.reducer";
-import { reportReducer } from "./report/report.reducer";
 import { createSelectorHook } from "react-redux";
+import { dataReducer } from "./data/data.reducer";
 
 declare global {
   interface Window {
@@ -11,7 +10,7 @@ declare global {
 }
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const rootReducer = combineReducers({ diary: diaryReducer, report: reportReducer });
+const rootReducer = combineReducers({ data: dataReducer });
 
 const store = createStore(
   rootReducer,

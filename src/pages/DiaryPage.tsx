@@ -15,7 +15,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import EventFormModal from "../components/EventFormModal";
 import { EventList } from "../components/EventList";
-import { getEvents } from "../store/diary/diary.actions";
+import { getEvents } from "../store/data/data.actions";
 
 interface DiaryPageProps {}
 

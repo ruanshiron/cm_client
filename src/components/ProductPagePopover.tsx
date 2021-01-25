@@ -5,7 +5,7 @@ interface AboutPopoverProps {
   dismiss: () => void;
 }
 
-const ReportPopover: React.FC<AboutPopoverProps> = ({ dismiss }) => {
+export const ProductPagePopover: React.FC<AboutPopoverProps> = ({ dismiss }) => {
   const router = useIonRouter();
 
   // eslint-disable-next-line
@@ -21,11 +21,9 @@ const ReportPopover: React.FC<AboutPopoverProps> = ({ dismiss }) => {
 
   return (
     <IonList>
-      <IonItem button onClick={(e) => open("/tabs/report/new")}>
+      <IonItem button onClick={(e) => open("/tabs/product/new")}>
         <IonLabel>Thêm sản phẩm</IonLabel>
       </IonItem>
     </IonList>
   );
 };
-
-export default ReportPopover;
