@@ -1,6 +1,7 @@
-import { Event } from "../../models/Diary";
+import { Event, EventGroup } from "../../models/Diary";
 
 export interface DiaryState {
   loading: boolean;
   events: Event[];
+  groups: EventGroup[];
 }

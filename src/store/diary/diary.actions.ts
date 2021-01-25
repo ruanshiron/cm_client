@@ -1,7 +1,8 @@
 import { AppDispatch } from "..";
 import { database } from "../../config/firebase";
-import { Event } from "../../models/Diary";
+import { Event, EventGroup } from "../../models/Diary";
 import { DispatchObject } from "../../utils/types";
+import _ from "lodash";
 
 export const DiaryActionTypes = {
   ADD_EVENT: "add_event",
@@ -22,7 +23,21 @@ export const getEvents = () => {
       .collection("events")
       .get()
       .then((snap) => {
-        dispatch(getEventsSuccess(snap.docs.map((doc) => doc.data())));
+        const events: Event[] = snap.docs.map((doc) => doc.data());
+        const groups = _.chain(events)
+          .groupBy((event) => {
+            const date = new Date(event.selectedDate!);
+            return `${date.getFullYear()}/${
+              date.getMonth() + 1
+            }/${date.getDate()}`;
+          })
+          .map((value, key) => ({ name: key, events: value }))
+          .value()
+          .sort(function (a, b) {
+            return +new Date(b.name) - +new Date(a.name);
+          });
+
+        dispatch(getEventsSuccess(events, groups));
       })
       .catch((snap) => {
         dispatch(getEventsFailure());
@@ -32,9 +47,12 @@ export const getEvents = () => {
 
 const getEventsStarted = () => ({ type: DiaryActionTypes.GET_EVENTS_STARTED });
 
-const getEventsSuccess = (events: Event[]) => ({
+const getEventsSuccess = (events: Event[], groups: EventGroup[]) => ({
   type: DiaryActionTypes.GET_EVENTS_SUCCESS,
-  payload: [...events],
+  payload: {
+    events,
+    groups,
+  },
 });
 
 const getEventsFailure = () => ({ type: DiaryActionTypes.GET_EVENTS_FAILURE });

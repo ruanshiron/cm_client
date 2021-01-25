@@ -10,6 +10,6 @@ export interface Event {
 }
 
 export interface EventGroup {
-  date: string;
+  name: string;
   events: Event[];
 }

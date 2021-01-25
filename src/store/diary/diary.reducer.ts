@@ -3,6 +3,7 @@ import { DiaryState } from "./diary.state";
 
 const initialDiaryState: DiaryState = {
   events: [],
+  groups: [],
   loading: false,
 };
 
@@ -25,7 +26,7 @@ export const diaryReducer = (
     case DiaryActionTypes.GET_EVENTS_SUCCESS:
       return {
         ...state,
-        events: action.payload,
+        ...action.payload,
         loading: false,
       };
     case DiaryActionTypes.GET_EVENTS_FAILURE:
