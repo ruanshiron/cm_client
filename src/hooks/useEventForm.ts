@@ -74,7 +74,7 @@ export const useEventForm = () => {
     if (
       !quantity ||
       !productCode?.trim() ||
-      !sizeCode?.trim ||
+      !sizeCode?.trim() ||
       !typeCode?.trim() ||
       !selectedDate ||
       !workshop?.trim()
