@@ -47,7 +47,7 @@ const ProductPage: React.FC<ProductPageProps> = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Báo cáo</IonTitle>
+          <IonTitle>Sản phẩm</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={presentPopover}>
               <IonIcon

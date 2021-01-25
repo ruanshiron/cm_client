@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import {
   bookmarkOutline,
   calendar,
-  newspaperOutline,
+  shirtOutline,
   checkmarkDoneCircleOutline,
   personCircleOutline,
 } from "ionicons/icons";
@@ -36,10 +36,10 @@ const appPages: AppPage[] = [
     mdIcon: calendar,
   },
   {
-    title: "Báo cáo",
+    title: "Sản phẩm",
     url: "/tabs/product",
-    iosIcon: newspaperOutline,
-    mdIcon: newspaperOutline,
+    iosIcon: shirtOutline,
+    mdIcon: shirtOutline,
   },
   {
     title: "Đơn hàng",

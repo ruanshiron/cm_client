@@ -10,7 +10,7 @@ import {
 import { Route, Redirect } from "react-router";
 import {
   calendar,
-  newspaperOutline,
+  shirtOutline,
   checkmarkDoneCircleOutline,
   personCircleOutline,
 } from "ionicons/icons";
@@ -51,8 +51,8 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           <IonLabel>Nhật ký</IonLabel>
         </IonTabButton>
         <IonTabButton tab="product" href="/tabs/product" layout="label-hide">
-          <IonIcon size="large" icon={newspaperOutline} />
-          <IonLabel>Báo cáo</IonLabel>
+          <IonIcon size="large" icon={shirtOutline} />
+          <IonLabel>Sản phẩm</IonLabel>
         </IonTabButton>
         <IonTabButton tab="order" href="/tabs/order" layout="label-hide">
           <IonIcon size="large" icon={checkmarkDoneCircleOutline} />
