@@ -1,5 +1,5 @@
 export interface DispatchObject {
-  [key: string]: any,
+  payload?: any,
   type: string
 }
 

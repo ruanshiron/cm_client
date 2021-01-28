@@ -3,12 +3,11 @@ import { Event, Product } from "../models";
 import * as _ from "lodash";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useToast } from "./useToast";
 import { getEvents } from "../store/data/data.actions";
+import { toast } from "../utils/toast";
 
 export const useEventForm = () => {
   const dispatch = useDispatch();
-  const toast = useToast();
 
   const [showEventForm, setShowEventForm] = useState<boolean>(false);
 

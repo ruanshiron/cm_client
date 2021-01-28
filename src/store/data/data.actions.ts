@@ -2,7 +2,7 @@ import { AppDispatch } from "..";
 import { database } from "../../config/firebase";
 import { Event, EventGroup, Product } from "../../models";
 import _ from "lodash";
-import { DispatchObject } from "../../utils/types";
+import { ACTIONS } from "../action.types";
 
 export const DataActionTypes = {
   ADD_EVENT: "add_event",
@@ -50,53 +50,70 @@ export const getEvents = () => {
   };
 };
 
-const getEventsStarted = () => ({ type: DataActionTypes.GET_EVENTS_STARTED });
+const getEventsStarted = () => ({ type: ACTIONS.DATA.EVENT.GET.STARTED });
 
 const getEventsSuccess = (events: Event[], filteredEvents: EventGroup[]) => ({
-  type: DataActionTypes.GET_EVENTS_SUCCESS,
+  type: ACTIONS.DATA.EVENT.GET.SUCCESS,
   payload: {
     events,
     filteredEvents,
   },
 });
 
-const getEventsFailure = () => ({ type: DataActionTypes.GET_EVENTS_FAILURE });
-
-export const addProduct = (product: Product) => ({
-  type: DataActionTypes.ADD_PRODUCT,
-  product,
-});
+const getEventsFailure = () => ({ type: ACTIONS.DATA.EVENT.GET.FAILURE });
 
 export const getProducts = () => {
-  return (dispatch: AppDispatch) => {
+  return async (dispatch: AppDispatch) => {
     dispatch(getProductsStarted());
-    database
-      .collection("products")
-      .get()
-      .then((snap) => {
-        dispatch(
-          getProductsSuccess(
-            snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-          )
-        );
-      })
-      .catch((snap) => {
-        dispatch(getProductsFailure());
-      });
+    try {
+      const snap = await database.collection("products").get();
+      const products = await snap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      dispatch(getProductsSuccess(products));
+    } catch (error) {
+      dispatch(getProductsFailure());
+    }
   };
 };
 
 const getProductsStarted = () => ({
-  type: DataActionTypes.GET_PRODUCTS_STARTED,
+  type: ACTIONS.DATA.PRODUCT.GET.STARTED,
 });
-
 const getProductsSuccess = (products: Product[]) => ({
-  type: DataActionTypes.GET_PRODUCTS_SUCCESS,
+  type: ACTIONS.DATA.PRODUCT.GET.SUCCESS,
   payload: [...products],
 });
-
 const getProductsFailure = () => ({
-  type: DataActionTypes.GET_PRODUCTS_FAILURE,
+  type: ACTIONS.DATA.PRODUCT.GET.FAILURE,
 });
 
-export type DataActions = DispatchObject;
+export const saveProduct = (
+  product: Product,
+  onSuccess = () => {},
+  onError = () => {}
+) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(saveProductStarted());
+    try {
+      await database.collection("products").doc(product.code!).set(product);
+      dispatch(saveProductSuccess(product));
+      onSuccess();
+    } catch (error) {
+      dispatch(saveProductFailure());
+      onError();
+    }
+  };
+};
+
+const saveProductStarted = () => ({
+  type: ACTIONS.DATA.PRODUCT.SAVE.STARTED,
+});
+const saveProductFailure = () => ({
+  type: ACTIONS.DATA.PRODUCT.SAVE.FAILURE,
+});
+const saveProductSuccess = (product: Product) => ({
+  type: ACTIONS.DATA.PRODUCT.SAVE.SUCCESS,
+  payload: product,
+});

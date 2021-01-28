@@ -16,7 +16,7 @@ export interface EventGroup {
 
 export interface Product {
   id?: any;
-  code?: number;
+  code?: string;
   name?: string;
   sizes?: string[];
   note?: string;

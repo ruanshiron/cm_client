@@ -44,20 +44,20 @@ const CreateProductPage: React.FC<CreateProductPageProps> = () => {
         <IonItem>
           <IonLabel position="floating">Tên</IonLabel>
           <IonInput
-            onIonChange={(e) => form.setName(e.detail.value!)}
+            onIonChange={(e) => form.setFieldsValue({ name: e.detail.value! })}
           ></IonInput>
         </IonItem>
         <IonItem>
           <IonLabel position="floating">Mã</IonLabel>
           <IonInput
-            onIonChange={(e) => form.setCode(e.detail.value!)}
+            onIonChange={(e) => form.setFieldsValue({ code: e.detail.value! })}
           ></IonInput>
         </IonItem>
         <div className="ion-padding-top ion-padding-start"></div>
         <IonItem>
           <IonLabel position="floating">Kích cỡ</IonLabel>
           <IonSelect
-            onIonChange={(e) => form.setSizes(e.detail.value!)}
+            onIonChange={(e) => form.setFieldsValue({ sizes: e.detail.value! })}
             multiple={true}
             cancelText="Hủy"
             okText="Ok!"

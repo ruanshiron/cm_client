@@ -1,4 +1,6 @@
-import { DataActions, DataActionTypes } from "./data.actions";
+import { DispatchObject } from "../../utils/types";
+import { ACTIONS } from "../action.types";
+import { DataActionTypes } from "./data.actions";
 import { DataState } from "./data.state";
 
 const initialDiaryState: DataState = {
@@ -10,7 +12,7 @@ const initialDiaryState: DataState = {
 
 export const dataReducer = (
   state: DataState = initialDiaryState,
-  action: DataActions
+  action: DispatchObject
 ): DataState => {
   switch (action.type) {
     case DataActionTypes.ADD_EVENT:
@@ -19,44 +21,54 @@ export const dataReducer = (
         loading: false,
         events: [action.payload, ...state.events],
       };
-    case DataActionTypes.GET_EVENTS_STARTED:
+    case ACTIONS.DATA.EVENT.GET.STARTED:
       return {
         ...state,
         loading: true,
       };
-    case DataActionTypes.GET_EVENTS_SUCCESS:
+    case ACTIONS.DATA.EVENT.GET.SUCCESS:
       return {
         ...state,
         ...action.payload,
         loading: false,
       };
-    case DataActionTypes.GET_EVENTS_FAILURE:
+    case ACTIONS.DATA.EVENT.GET.FAILURE:
       return {
         ...state,
         events: [],
         loading: false,
       };
-    case DataActionTypes.ADD_PRODUCT:
-      return {
-        ...state,
-        loading: false,
-        products: [action.event, ...state.products],
-      };
-    case DataActionTypes.GET_PRODUCTS_STARTED:
+    case ACTIONS.DATA.PRODUCT.GET.STARTED:
       return {
         ...state,
         loading: true,
       };
-    case DataActionTypes.GET_PRODUCTS_SUCCESS:
+    case ACTIONS.DATA.PRODUCT.GET.SUCCESS:
       return {
         ...state,
         products: action.payload,
         loading: false,
       };
-    case DataActionTypes.GET_PRODUCTS_FAILURE:
+    case ACTIONS.DATA.PRODUCT.GET.FAILURE:
       return {
         ...state,
         products: [],
+        loading: false,
+      };
+    case ACTIONS.DATA.PRODUCT.SAVE.STARTED:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ACTIONS.DATA.PRODUCT.SAVE.SUCCESS:
+      return {
+        ...state,
+        products: [action.payload, ...state.products],
+        loading: false,
+      };
+    case ACTIONS.DATA.PRODUCT.SAVE.FAILURE:
+      return {
+        ...state,
         loading: false,
       };
     default:
