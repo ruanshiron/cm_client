@@ -48,7 +48,7 @@ const appPages: AppPage[] = [
     mdIcon: checkmarkDoneCircleOutline,
   },
   {
-    title: "Xưởng",
+    title: "Xưởng May",
     url: "/tabs/workshop",
     iosIcon: personCircleOutline,
     mdIcon: personCircleOutline,

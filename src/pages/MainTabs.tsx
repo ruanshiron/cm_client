@@ -60,7 +60,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         </IonTabButton>
         <IonTabButton tab="workshop" href="/tabs/workshop" layout="label-hide">
           <IonIcon size="large" icon={personCircleOutline} />
-          <IonLabel>Xưởng</IonLabel>
+          <IonLabel>Xưởng May</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>
