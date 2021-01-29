@@ -1,115 +1,61 @@
-import { database } from "../config/firebase";
-import { Event, Product } from "../models";
-import * as _ from "lodash";
+import { Event } from "../models";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getEvents } from "../store/data/data.actions";
+import { getProducts, saveEvent } from "../store/data/data.actions";
 import { toast } from "../utils/toast";
+import { useSelector } from "../store";
 
 export const useEventForm = () => {
   const dispatch = useDispatch();
 
   const [showEventForm, setShowEventForm] = useState<boolean>(false);
 
-  const today = new Date().toISOString().substring(0, 10);
-  const [quantity, setQuantity] = useState<number>();
-  const [productCode, setProductCode] = useState<string>();
-  const [sizeCode, setSizeCode] = useState<string>();
-  const [typeCode, setTypeCode] = useState<string>();
-  const [workshop, setWorkshop] = useState<string>();
-  const [selectedDate, setSelectedDate] = useState<string>(today);
-  const [note, setNote] = useState<string>();
+  const [fields, setFields] = useState<Event>();
 
-  const [products, setProducts] = useState<Product[]>();
+  const products = useSelector((state) => state.data.products);
 
   useEffect(() => {
-    database
-      .collection("products")
-      .get()
-      .then((snap) => {
-        setProducts(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      });
-  }, []);
+    dispatch(getProducts());
+    setFields({ selectedDate: new Date().toISOString().substring(0, 10) });
+  }, [dispatch, showEventForm]);
 
-  const save = (param: Event) => {
-    const data = _.pickBy(param, _.identity);
-
-    database
-      .collection("events")
-      .add(data)
-      .then((res) => {
-        console.log(res);
-        toast("Thêm thành công");
-        dispatch(getEvents());
-        setShowEventForm(false);
-        setQuantity(undefined);
-        setNote(undefined);
-        setProductCode(undefined);
-        setProducts(undefined);
-        setSelectedDate(today);
-        setSizeCode(undefined);
-        setTypeCode(undefined);
-        setWorkshop(undefined);
-      })
-      .catch((err) => {
-        console.error(err);
-        toast("Lưu thất bại");
-      });
+  const setFieldsValue = (e: Partial<Event>) => {
+    setFields((fields) => ({ ...fields, ...e }));
   };
 
-  const submit = (e: any) => {
-    console.log(e);
-
-    const event: Event = {
-      quantity,
-      productCode,
-      sizeCode,
-      typeCode,
-      workshop,
-      selectedDate,
-      note,
-    };
-
+  const submit = () => {
     if (
-      !quantity ||
-      !productCode?.trim() ||
-      !sizeCode?.trim() ||
-      !typeCode?.trim() ||
-      !selectedDate ||
-      !workshop?.trim()
+      !fields?.quantity ||
+      !fields?.productCode?.trim() ||
+      !fields?.sizeCode?.trim() ||
+      !fields?.typeCode?.trim() ||
+      !fields?.selectedDate ||
+      !fields?.workshop?.trim()
     )
       return;
 
-    save(event);
+    console.log(fields);
 
-    setQuantity(undefined);
-    setProductCode(undefined);
-    setSizeCode(undefined);
-    setTypeCode(undefined);
-    setWorkshop(undefined);
-    setSelectedDate(today);
-    setNote(undefined);
+    dispatch(
+      saveEvent(
+        fields,
+        () => {
+          toast("Thêm thành công.");
+          setShowEventForm(false);
+        },
+        () => {
+          toast("Có lỗi xảy ra, vui lòng thử lại.");
+        }
+      )
+    );
   };
 
   return {
+    setFieldsValue,
     showEventForm,
-    today,
-    quantity,
-    productCode,
-    sizeCode,
-    typeCode,
-    workshop,
-    selectedDate,
-    note,
-    products,
     setShowEventForm,
-    setQuantity,
-    setProductCode,
-    setSizeCode,
-    setTypeCode,
-    setWorkshop,
-    setSelectedDate,
-    setNote,
+    fields,
+    products,
     submit,
   };
 };

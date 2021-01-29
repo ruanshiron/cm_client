@@ -1,6 +1,6 @@
+import { addFilteredEvent } from "../../utils/data";
 import { DispatchObject } from "../../utils/types";
 import { ACTIONS } from "../action.types";
-import { DataActionTypes } from "./data.actions";
 import { DataState } from "./data.state";
 
 const initialDiaryState: DataState = {
@@ -15,12 +15,6 @@ export const dataReducer = (
   action: DispatchObject
 ): DataState => {
   switch (action.type) {
-    case DataActionTypes.ADD_EVENT:
-      return {
-        ...state,
-        loading: false,
-        events: [action.payload, ...state.events],
-      };
     case ACTIONS.DATA.EVENT.GET.STARTED:
       return {
         ...state,
@@ -67,6 +61,23 @@ export const dataReducer = (
         loading: false,
       };
     case ACTIONS.DATA.PRODUCT.SAVE.FAILURE:
+      return {
+        ...state,
+        loading: false,
+      };
+    case ACTIONS.DATA.EVENT.SAVE.STARTED:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ACTIONS.DATA.EVENT.SAVE.SUCCESS:
+      return {
+        ...state,
+        events: [action.payload, ...state.events],
+        filteredEvents: addFilteredEvent(action.payload, state.filteredEvents),
+        loading: false,
+      };
+    case ACTIONS.DATA.EVENT.SAVE.FAILURE:
       return {
         ...state,
         loading: false,

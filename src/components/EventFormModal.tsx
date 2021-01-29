@@ -31,7 +31,7 @@ import { useEventForm } from "../hooks/useEventForm";
 
 interface EventFormModalrops {}
 
-const selectedDateLabelParser = (text: string) => {
+const selectedDateLabelParser = (text = "") => {
   const date = new Date(text);
   const today = new Date();
   if (
@@ -87,9 +87,9 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
               type="number"
               placeholder="Số lượng"
               style={{ textAlign: "right", fontSize: 36 }}
-              value={form.quantity}
+              value={form.fields?.quantity}
               onIonChange={(e) =>
-                form.setQuantity(parseInt(e.detail.value!, 0))
+                form.setFieldsValue({ quantity: parseInt(e.detail.value!, 0) })
               }
               required
             />
@@ -102,8 +102,10 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
               cancelText="Hủy"
               interface="action-sheet"
               placeholder="Sản phẩm"
-              value={form.productCode}
-              onIonChange={(e) => form.setProductCode(e.detail.value!)}
+              value={form.fields?.productCode}
+              onIonChange={(e) =>
+                form.setFieldsValue({ productCode: e.detail.value! })
+              }
             >
               {form.products?.map((item) => (
                 <IonSelectOption key={item.id} value={item.id}>
@@ -120,11 +122,13 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
               cancelText="Hủy"
               interface="action-sheet"
               placeholder="Kích cỡ"
-              value={form.sizeCode}
-              onIonChange={(e) => form.setSizeCode(e.detail.value!)}
+              value={form.fields?.sizeCode}
+              onIonChange={(e) =>
+                form.setFieldsValue({ sizeCode: e.detail.value! })
+              }
             >
               {form.products
-                ?.find((v) => v.id === form.productCode)
+                ?.find((v) => v.id === form.fields?.productCode)
                 ?.sizes?.map((item, index) => (
                   <IonSelectOption key={index} value={item}>
                     {item}
@@ -142,8 +146,10 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
               cancelText="Hủy"
               interface="action-sheet"
               placeholder="Nhóm"
-              value={form.typeCode}
-              onIonChange={(e) => form.setTypeCode(e.detail.value!)}
+              value={form.fields?.typeCode}
+              onIonChange={(e) =>
+                form.setFieldsValue({ typeCode: e.detail.value! })
+              }
             >
               <IonSelectOption value="sent">Gửi</IonSelectOption>
               <IonSelectOption value="received">Nhận</IonSelectOption>
@@ -159,8 +165,10 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
               cancelText="Hủy"
               interface="action-sheet"
               placeholder="Xưởng"
-              value={form.workshop}
-              onIonChange={(e) => form.setWorkshop(e.detail.value!)}
+              value={form.fields?.workshop}
+              onIonChange={(e) =>
+                form.setFieldsValue({ workshop: e.detail.value! })
+              }
             >
               <IonSelectOption value="Xưởng Hoa Đông">
                 Xưởng Hoa Đông
@@ -182,13 +190,15 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
           <IonItem lines="full">
             <IonIcon size="large" icon={calendarClearOutline} color="medium" />
             <IonLabel color="medium" style={{ paddingLeft: 8 }}>
-              {selectedDateLabelParser(form.selectedDate)}
+              {selectedDateLabelParser(form.fields?.selectedDate)}
             </IonLabel>
             <IonInput
               type="date"
               placeholder="ngày tháng"
-              value={form.selectedDate}
-              onIonChange={(e) => form.setSelectedDate(e.detail.value!)}
+              value={form.fields?.selectedDate}
+              onIonChange={(e) =>
+                form.setFieldsValue({ selectedDate: e.detail.value! })
+              }
               style={{ textAlign: "right" }}
             />
           </IonItem>
@@ -197,8 +207,10 @@ const EventFormModal: React.FC<EventFormModalrops> = () => {
             <IonLabel color="medium"></IonLabel>
             <IonInput
               placeholder="Ghi chú"
-              value={form.note}
-              onIonChange={(e) => form.setNote(e.detail.value!)}
+              value={form.fields?.note}
+              onIonChange={(e) =>
+                form.setFieldsValue({ note: e.detail.value! })
+              }
             />
           </IonItem>
 

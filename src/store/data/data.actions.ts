@@ -1,68 +1,93 @@
 import { AppDispatch } from "..";
 import { database } from "../../config/firebase";
-import { Event, EventGroup, Product } from "../../models";
+import { Event, Product } from "../../models";
 import _ from "lodash";
 import { ACTIONS } from "../action.types";
+import { DataState } from "./data.state";
 
-export const DataActionTypes = {
-  ADD_EVENT: "add_event",
-  GET_EVENTS_STARTED: "get_events_started",
-  GET_EVENTS_SUCCESS: "get_events_success",
-  GET_EVENTS_FAILURE: "get_events_failure",
+export const getEvents = (onSuccess = () => {}, onError = () => {}) => {
+  const getEventsStarted = () => ({
+    type: ACTIONS.DATA.EVENT.GET.STARTED,
+  });
+  const getEventsSuccess = (data: Partial<DataState>) => ({
+    type: ACTIONS.DATA.EVENT.GET.SUCCESS,
+    payload: data,
+  });
+  const getEventsFailure = () => ({
+    type: ACTIONS.DATA.EVENT.GET.FAILURE,
+  });
 
-  ADD_PRODUCT: "add_product",
-  GET_PRODUCTS_STARTED: "get_products_started",
-  GET_PRODUCTS_SUCCESS: "get_products_success",
-  GET_PRODUCTS_FAILURE: "get_products_failure",
-};
-
-export const addEvent = (event: Event) => ({
-  type: DataActionTypes.ADD_EVENT,
-  payload: event,
-});
-
-export const getEvents = () => {
-  return (dispatch: AppDispatch) => {
-    dispatch(getEventsStarted());
-    database
-      .collection("events")
-      .get()
-      .then((snap) => {
-        const events: Event[] = snap.docs.map((doc) => doc.data());
-        const groups = _.chain(events)
-          .groupBy((event) => {
-            const date = new Date(event.selectedDate!);
-            return `${date.getFullYear()}/${
-              date.getMonth() + 1
-            }/${date.getDate()}`;
-          })
-          .map((value, key) => ({ name: key, events: value }))
-          .value()
-          .sort(function (a, b) {
-            return +new Date(b.name) - +new Date(a.name);
-          });
-
-        dispatch(getEventsSuccess(events, groups));
+  const fitler = (events: Event[]) =>
+    _.chain(events)
+      .groupBy((event) => {
+        const date = new Date(event.selectedDate!);
+        return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
       })
-      .catch((snap) => {
-        dispatch(getEventsFailure());
+      .map((value, key) => ({ name: key, events: value }))
+      .value()
+      .sort(function (a, b) {
+        return +new Date(b.name) - +new Date(a.name);
       });
+
+  return async (dispatch: AppDispatch) => {
+    dispatch(getEventsStarted());
+    try {
+      const snap = await database.collection("events").get();
+      const events: Event[] = await snap.docs.map((doc) => doc.data());
+      const filteredEvents = fitler(events);
+      dispatch(getEventsSuccess({ events, filteredEvents }));
+      onSuccess();
+    } catch (error) {
+      dispatch(getEventsFailure());
+      onError();
+    }
   };
 };
 
-const getEventsStarted = () => ({ type: ACTIONS.DATA.EVENT.GET.STARTED });
+export const saveEvent = (
+  event: Event,
+  onSuccess = () => {},
+  onError = () => {}
+) => {
+  const saveEventStarted = () => ({
+    type: ACTIONS.DATA.EVENT.SAVE.STARTED,
+  });
+  const saveEventSuccess = (event: Event) => ({
+    type: ACTIONS.DATA.EVENT.SAVE.SUCCESS,
+    payload: event,
+  });
+  const saveEventFailure = () => ({
+    type: ACTIONS.DATA.EVENT.SAVE.FAILURE,
+  });
 
-const getEventsSuccess = (events: Event[], filteredEvents: EventGroup[]) => ({
-  type: ACTIONS.DATA.EVENT.GET.SUCCESS,
-  payload: {
-    events,
-    filteredEvents,
-  },
-});
-
-const getEventsFailure = () => ({ type: ACTIONS.DATA.EVENT.GET.FAILURE });
+  return async (dispatch: AppDispatch) => {
+    dispatch(saveEventStarted());
+    try {
+      const permittedEvent = _.pickBy(event, _.identity);
+      event.id
+        ? await database.collection("events").doc(event.id!).set(permittedEvent)
+        : await database.collection("events").add(permittedEvent);
+      dispatch(saveEventSuccess(event));
+      onSuccess();
+    } catch (error) {
+      dispatch(saveEventFailure());
+      onError();
+    }
+  };
+};
 
 export const getProducts = () => {
+  const getProductsStarted = () => ({
+    type: ACTIONS.DATA.PRODUCT.GET.STARTED,
+  });
+  const getProductsSuccess = (products: Product[]) => ({
+    type: ACTIONS.DATA.PRODUCT.GET.SUCCESS,
+    payload: [...products],
+  });
+  const getProductsFailure = () => ({
+    type: ACTIONS.DATA.PRODUCT.GET.FAILURE,
+  });
+
   return async (dispatch: AppDispatch) => {
     dispatch(getProductsStarted());
     try {
@@ -78,22 +103,21 @@ export const getProducts = () => {
   };
 };
 
-const getProductsStarted = () => ({
-  type: ACTIONS.DATA.PRODUCT.GET.STARTED,
-});
-const getProductsSuccess = (products: Product[]) => ({
-  type: ACTIONS.DATA.PRODUCT.GET.SUCCESS,
-  payload: [...products],
-});
-const getProductsFailure = () => ({
-  type: ACTIONS.DATA.PRODUCT.GET.FAILURE,
-});
-
 export const saveProduct = (
   product: Product,
   onSuccess = () => {},
   onError = () => {}
 ) => {
+  const saveProductStarted = () => ({
+    type: ACTIONS.DATA.PRODUCT.SAVE.STARTED,
+  });
+  const saveProductFailure = () => ({
+    type: ACTIONS.DATA.PRODUCT.SAVE.FAILURE,
+  });
+  const saveProductSuccess = (product: Product) => ({
+    type: ACTIONS.DATA.PRODUCT.SAVE.SUCCESS,
+    payload: product,
+  });
   return async (dispatch: AppDispatch) => {
     dispatch(saveProductStarted());
     try {
@@ -106,14 +130,3 @@ export const saveProduct = (
     }
   };
 };
-
-const saveProductStarted = () => ({
-  type: ACTIONS.DATA.PRODUCT.SAVE.STARTED,
-});
-const saveProductFailure = () => ({
-  type: ACTIONS.DATA.PRODUCT.SAVE.FAILURE,
-});
-const saveProductSuccess = (product: Product) => ({
-  type: ACTIONS.DATA.PRODUCT.SAVE.SUCCESS,
-  payload: product,
-});
