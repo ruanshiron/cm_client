@@ -20,7 +20,7 @@ export const WorkshopItem: React.FC<{ data: any }> = ({ data }) => {
             detail={false}
             lines="none"
             className="workshop-item"
-            routerLink={`/tabs/workshops/${data.id}`}
+            routerLink={`/tabs/workshop/${data.id}`}
           >
             <IonAvatar slot="start">
               <img
@@ -40,7 +40,7 @@ export const WorkshopItem: React.FC<{ data: any }> = ({ data }) => {
             {data.fields.map((field: any) => (
               <IonItem
                 detail={false}
-                routerLink={`/tabs/workshops/fields/${field.id}`}
+                routerLink={`/tabs/workshop/fields/${field.id}`}
                 key={field.name}
               >
                 <IonLabel>

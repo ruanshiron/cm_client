@@ -15,7 +15,7 @@ import {
 import { ellipsisVerticalSharp } from "ionicons/icons";
 import React from "react";
 import { WorkshopItem } from "../components/WorkshopItem";
-import "./AccountPage.scss"
+import "./WorkshopPage.scss"
 
 const workshops = [
   {
@@ -113,7 +113,7 @@ const workshops = [
 
 interface AccountPageProps {}
 
-const AccountPage: React.FC<AccountPageProps> = () => {
+const WorkshopPage: React.FC<AccountPageProps> = () => {
   return (
     <IonPage id="workshop-page">
       <IonHeader>
@@ -121,7 +121,7 @@ const AccountPage: React.FC<AccountPageProps> = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Tài khoản</IonTitle>
+          <IonTitle>Xưởng</IonTitle>
           <IonButtons slot="end">
             <IonButton>
               <IonIcon slot="icon-only" icon={ellipsisVerticalSharp} />
@@ -149,4 +149,4 @@ const AccountPage: React.FC<AccountPageProps> = () => {
   );
 };
 
-export default AccountPage;
+export default WorkshopPage;

@@ -18,7 +18,7 @@ import DiaryPage from "./DiaryPage";
 import EventDetail from "./EventDetail";
 import ProductPage from "./ProductPage";
 import OrderPage from "./OrderPage";
-import AccountPage from "./AccountPage";
+import AccountPage from "./WorkshopPage";
 import { WorkshopDetail } from "./WorkshopDetail";
 import { OrderDetail } from "./OrderDetail";
 import { ProductDetail } from "./ProductDetail";
@@ -35,10 +35,10 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         <Route path="/tabs/diary" render={() => <DiaryPage />} exact />
         <Route path="/tabs/product" render={() => <ProductPage />} exact />
         <Route path="/tabs/order" render={() => <OrderPage />} exact />
-        <Route path="/tabs/account" render={() => <AccountPage />} exact />
+        <Route path="/tabs/workshop" render={() => <AccountPage />} exact />
 
         <Route path="/tabs/diary/:id" component={EventDetail} />
-        <Route path="/tabs/workshops/:id" component={WorkshopDetail} />
+        <Route path="/tabs/workshop/:id" component={WorkshopDetail} />
         <Route path="/tabs/order/:id" component={OrderDetail} />
         <Route path="/tabs/product/:id" component={ProductDetail} />
 
@@ -58,9 +58,9 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           <IonIcon size="large" icon={checkmarkDoneCircleOutline} />
           <IonLabel>Đơn hàng</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="account" href="/tabs/account" layout="label-hide">
+        <IonTabButton tab="workshop" href="/tabs/workshop" layout="label-hide">
           <IonIcon size="large" icon={personCircleOutline} />
-          <IonLabel>Tài khoản</IonLabel>
+          <IonLabel>Xưởng</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

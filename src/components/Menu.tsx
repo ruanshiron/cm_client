@@ -48,8 +48,8 @@ const appPages: AppPage[] = [
     mdIcon: checkmarkDoneCircleOutline,
   },
   {
-    title: "Tài khoản",
-    url: "/tabs/account",
+    title: "Xưởng",
+    url: "/tabs/workshop",
     iosIcon: personCircleOutline,
     mdIcon: personCircleOutline,
   },
