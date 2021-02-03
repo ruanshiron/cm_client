@@ -1,5 +1,19 @@
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonPage, IonToolbar } from "@ionic/react";
-import { callOutline, callSharp, shareOutline, shareSharp } from "ionicons/icons";
+import {
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonPage,
+  IonToolbar,
+} from "@ionic/react";
+import {
+  callOutline,
+  callSharp,
+  shareOutline,
+  shareSharp,
+} from "ionicons/icons";
 import React from "react";
 
 import "./WorkshopDetail.scss";
@@ -7,7 +21,6 @@ import "./WorkshopDetail.scss";
 interface WorkshopDetailProps {}
 
 export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
-
   return (
     <>
       <IonPage id="workshop-detail">

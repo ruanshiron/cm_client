@@ -5,12 +5,11 @@ import {
   IonCardHeader,
   IonItem,
   IonLabel,
-  IonList,
-  IonNote,
 } from "@ionic/react";
 import React from "react";
+import { Workshop } from "../models";
 
-export const WorkshopItem: React.FC<{ data: any }> = ({ data }) => {
+export const WorkshopItem: React.FC<{ data: Workshop }> = ({ data }) => {
   return (
     <>
       <IonCard className="workshop-card">
@@ -30,13 +29,13 @@ export const WorkshopItem: React.FC<{ data: any }> = ({ data }) => {
             </IonAvatar>
             <IonLabel>
               <h2>{data.name}</h2>
-              <p>Tổng hợp từ {data.from}</p>
+              {/* <p>Tổng hợp từ {data.from}</p> */}
             </IonLabel>
           </IonItem>
         </IonCardHeader>
 
         <IonCardContent>
-          <IonList lines="none">
+          {/* <IonList lines="none">
             {data.fields.map((field: any) => (
               <IonItem
                 detail={false}
@@ -51,7 +50,7 @@ export const WorkshopItem: React.FC<{ data: any }> = ({ data }) => {
                 </IonNote>
               </IonItem>
             ))}
-          </IonList>
+          </IonList> */}
         </IonCardContent>
       </IonCard>
     </>

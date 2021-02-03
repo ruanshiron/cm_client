@@ -23,6 +23,7 @@ import { WorkshopDetail } from "./WorkshopDetail";
 import { OrderDetail } from "./OrderDetail";
 import { ProductDetail } from "./ProductDetail";
 import CreateProductPage from "./CreateProductPage";
+import CreateWorkshopPage from "./CreateWorkshopPage";
 
 interface MainTabsProps {}
 
@@ -43,6 +44,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         <Route path="/tabs/product/:id" component={ProductDetail} />
 
         <Route path="/tabs/product/new" component={CreateProductPage} exact />
+        <Route path="/tabs/workshop/new" component={CreateWorkshopPage} exact />
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom">
@@ -60,7 +62,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         </IonTabButton>
         <IonTabButton tab="workshop" href="/tabs/workshop" layout="label-hide">
           <IonIcon size="large" icon={personCircleOutline} />
-          <IonLabel>Xưởng May</IonLabel>
+          <IonLabel>Xưởng may</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

@@ -28,3 +28,9 @@ export interface Field {
   value: any;
 }
 
+export interface Workshop {
+  id?: string,
+  name?: string,
+  phoneNumber?: string,
+}
+

@@ -7,6 +7,7 @@ const initialDiaryState: DataState = {
   events: [],
   filteredEvents: [],
   products: [],
+  workshops: [],
   loading: false,
 };
 
@@ -77,7 +78,40 @@ export const dataReducer = (
         filteredEvents: addFilteredEvent(action.payload, state.filteredEvents),
         loading: false,
       };
+    case ACTIONS.DATA.WORKSHOP.GET.STARTED:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ACTIONS.DATA.WORKSHOP.GET.SUCCESS:
+      return {
+        ...state,
+        workshops: action.payload,
+        loading: false,
+      };
+    case ACTIONS.DATA.WORKSHOP.GET.FAILURE:
+      return {
+        ...state,
+        workshops: [],
+        loading: false,
+      };
     case ACTIONS.DATA.EVENT.SAVE.FAILURE:
+      return {
+        ...state,
+        loading: false,
+      };
+    case ACTIONS.DATA.WORKSHOP.SAVE.STARTED:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ACTIONS.DATA.WORKSHOP.SAVE.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        workshops: [...state.workshops, action.payload],
+      };
+    case ACTIONS.DATA.WORKSHOP.SAVE.FAILURE:
       return {
         ...state,
         loading: false,

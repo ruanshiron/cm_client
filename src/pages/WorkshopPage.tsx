@@ -8,112 +8,38 @@ import {
   IonIcon,
   IonMenuButton,
   IonPage,
+  IonPopover,
   IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { ellipsisVerticalSharp } from "ionicons/icons";
-import React from "react";
+import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { WorkshopItem } from "../components/WorkshopItem";
-import "./WorkshopPage.scss"
+import { WorkshopPagePopover } from "../components/WorkshopPagePopover";
+import { useSelector } from "../store";
+import { getWorkshops } from "../store/data/data.actions";
+import "./WorkshopPage.scss";
 
-const workshops = [
-  {
-    id: 0,
-    name: "Tất cả",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã thanh toán",
-        value: 20000,
-      },
-      {
-        name: "Còn lại",
-        value: 192,
-      }
-    ],
-  },
-  {
-    id: 1,
-    name: "Xưởng 1",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã thanh toán",
-        value: 1200,
-      },
-      {
-        name: "Còn lại",
-        value: 192,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Xưởng 2",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã thanh toán",
-        value: 1200,
-      },
-      {
-        name: "Còn lại",
-        value: 192,
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Xưởng 3",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã thanh toán",
-        value: 1200,
-      },
-      {
-        name: "Còn lại",
-        value: 192,
-      },
-    ],
-  },
-  {
-    id: 4,
-    name: "Xưởng 4",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã thanh toán",
-        value: 1200,
-      },
-      {
-        name: "Còn lại",
-        value: 192,
-      },
-    ],
-  },
-  {
-    id: 5,
-    name: "Xưởng 5",
-    from: "2019-12-12",
-    fields: [
-      {
-        name: "Đã thanh toán",
-        value: 1200,
-      },
-      {
-        name: "Còn lại",
-        value: 192,
-      },
-    ],
-  },
-];
+interface WorkshopPageProps {}
 
+const WorkshopPage: React.FC<WorkshopPageProps> = () => {
+  const dispatch = useDispatch();
+  const workshops = useSelector((state) => state.data.workshops);
 
-interface AccountPageProps {}
+  const [showPopover, setShowPopover] = useState(false);
+  const [popoverEvent, setPopoverEvent] = useState<any>();
 
-const WorkshopPage: React.FC<AccountPageProps> = () => {
+  const presentPopover = (e: React.MouseEvent) => {
+    setPopoverEvent(e.nativeEvent);
+    setShowPopover(true);
+  };
+
+  useEffect(() => {
+    dispatch(getWorkshops());
+  }, [dispatch]);
+
   return (
     <IonPage id="workshop-page">
       <IonHeader>
@@ -123,8 +49,12 @@ const WorkshopPage: React.FC<AccountPageProps> = () => {
           </IonButtons>
           <IonTitle>Xưởng</IonTitle>
           <IonButtons slot="end">
-            <IonButton>
-              <IonIcon slot="icon-only" icon={ellipsisVerticalSharp} />
+            <IonButton onClick={presentPopover}>
+              <IonIcon
+                slot="icon-only"
+                ios={ellipsisHorizontal}
+                md={ellipsisVertical}
+              ></IonIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -137,14 +67,22 @@ const WorkshopPage: React.FC<AccountPageProps> = () => {
         </IonHeader>
         <IonGrid fixed>
           <IonRow>
-            {workshops.map((product) => (
-              <IonCol size="12" size-md="6" key={product.id}>
-                <WorkshopItem data={product} />
+            {workshops.map((workshop) => (
+              <IonCol size="12" size-md="6" key={workshop.id}>
+                <WorkshopItem data={workshop} />
               </IonCol>
             ))}
           </IonRow>
         </IonGrid>
       </IonContent>
+
+      <IonPopover
+        isOpen={showPopover}
+        event={popoverEvent}
+        onDidDismiss={() => setShowPopover(false)}
+      >
+        <WorkshopPagePopover dismiss={() => setShowPopover(false)} />
+      </IonPopover>
     </IonPage>
   );
 };

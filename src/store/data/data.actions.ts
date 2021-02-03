@@ -1,6 +1,6 @@
 import { AppDispatch } from "..";
 import { database } from "../../config/firebase";
-import { Event, Product } from "../../models";
+import { Event, Product, Workshop } from "../../models";
 import _ from "lodash";
 import { ACTIONS } from "../action.types";
 import { DataState } from "./data.state";
@@ -126,6 +126,63 @@ export const saveProduct = (
       onSuccess();
     } catch (error) {
       dispatch(saveProductFailure());
+      onError();
+    }
+  };
+};
+
+export const getWorkshops = () => {
+  const getWorkshopsStarted = () => ({
+    type: ACTIONS.DATA.WORKSHOP.GET.STARTED,
+  });
+  const getWorkshopsSuccess = (workshops: Workshop[]) => ({
+    type: ACTIONS.DATA.WORKSHOP.GET.SUCCESS,
+    payload: [...workshops],
+  });
+  const getWorkshopsFailure = () => ({
+    type: ACTIONS.DATA.WORKSHOP.GET.FAILURE,
+  });
+
+  return async (dispatch: AppDispatch) => {
+    dispatch(getWorkshopsStarted());
+    try {
+      const snap = await database.collection("workshops").get();
+      const workshops = await snap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      dispatch(getWorkshopsSuccess(workshops));
+    } catch (error) {
+      dispatch(getWorkshopsFailure());
+    }
+  };
+};
+
+export const saveWorkshop = (
+  workshop: Workshop,
+  onSuccess = () => {},
+  onError = () => {}
+) => {
+  const saveWorkshopStarted = () => ({
+    type: ACTIONS.DATA.WORKSHOP.SAVE.STARTED,
+  });
+  const saveWorkshopFailure = () => ({
+    type: ACTIONS.DATA.WORKSHOP.SAVE.FAILURE,
+  });
+  const saveWorkshopSuccess = (workshop: Workshop) => ({
+    type: ACTIONS.DATA.WORKSHOP.SAVE.SUCCESS,
+    payload: workshop,
+  });
+  return async (dispatch: AppDispatch) => {
+    dispatch(saveWorkshopStarted());
+    try {
+      let a = await database.collection("workshops").add(workshop);
+      console.log(a.id);
+      
+      dispatch(saveWorkshopSuccess(workshop));
+      onSuccess();
+    } catch (error) {
+      dispatch(saveWorkshopFailure());
       onError();
     }
   };
