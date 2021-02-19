@@ -15,7 +15,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import EventFormModal from "../components/EventFormModal";
 import { EventList } from "../components/EventList";
-import { getEvents } from "../store/data/data.actions";
+import { fetchEvents } from "../store/dataSlice";
 
 interface DiaryPageProps {}
 
@@ -23,7 +23,7 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getEvents());
+    dispatch(fetchEvents());
   }, [dispatch]);
 
   return (

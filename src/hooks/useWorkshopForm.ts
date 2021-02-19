@@ -1,8 +1,7 @@
 import { useIonRouter } from "@ionic/react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { workshopAPI } from "../api";
 import { Workshop } from "../models";
-import { saveWorkshop } from "../store/data/data.actions";
 import { toast } from "../utils/toast";
 
 const initialWorkshop = { name: "", phoneNumber: "" };
@@ -11,24 +10,17 @@ export const useWorkshopForm = () => {
   const router = useIonRouter();
   const [fields, setFields] = useState<Workshop>(initialWorkshop);
 
-  const dispatch = useDispatch();
-
-  const submit = () => {
+  const submit = async () => {
     if (!fields?.name?.trim() || !fields?.phoneNumber?.trim()) return;
 
-    dispatch(
-      saveWorkshop(
-        fields,
-        () => {
-          setFields(initialWorkshop);
-          toast("Lưu thành công");
-          router.back();
-        },
-        () => {
-          toast("Có lỗi xảy ra, vui lòng thử lại.");
-        }
-      )
-    );
+    try {
+      await workshopAPI.save(fields);
+      setFields(initialWorkshop);
+      router.back();
+      toast("Lưu thành công.");
+    } catch {
+      toast("Có lỗi xảy ra, vui lòng thử lại.");
+    }
   };
 
   const setFieldsValue = (e: Partial<Workshop>) => {

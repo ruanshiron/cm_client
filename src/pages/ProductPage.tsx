@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { ProductItem } from "../components/ProductItem";
 import { ProductPagePopover } from "../components/ProductPagePopover";
 import { useSelector } from "../store";
-import { getProducts } from "../store/data/data.actions";
+import { fetchProducts } from "../store/dataSlice";
 import "./ProductPage.scss";
 
 interface ProductPageProps {}
@@ -37,7 +37,7 @@ const ProductPage: React.FC<ProductPageProps> = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(fetchProducts());
   }, [dispatch]);
 
   return (

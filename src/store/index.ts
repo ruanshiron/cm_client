@@ -1,25 +1,25 @@
-import { createStore, combineReducers, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
+import { configureStore, Action } from "@reduxjs/toolkit";
 import { createSelectorHook } from "react-redux";
-import { dataReducer } from "./data/data.reducer";
+import { ThunkAction } from "redux-thunk";
 
-declare global {
-  interface Window {
-    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
-  }
+import rootReducer, { RootState } from "./rootReducer";
+
+const store = configureStore({
+  reducer: rootReducer,
+});
+
+if (process.env.NODE_ENV === "development" && module.hot) {
+  module.hot.accept("./rootReducer", () => {
+    const newRootReducer = require("./rootReducer").default;
+    store.replaceReducer(newRootReducer);
+  });
 }
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const rootReducer = combineReducers({ data: dataReducer });
-
-const store = createStore(
-  rootReducer,
-  composeEnhancers(applyMiddleware(thunk))
-);
-
-export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
 
+export type AppThunk = ThunkAction<void, RootState, null, Action<string>>;
+
 export const useSelector = createSelectorHook<RootState>();
+
 
 export default store;

@@ -1,9 +1,10 @@
 import { Event } from "../models";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getProducts, saveEvent } from "../store/data/data.actions";
 import { toast } from "../utils/toast";
 import { useSelector } from "../store";
+import { fetchEvents, fetchProducts } from "../store/dataSlice";
+import { eventAPI } from "../api";
 
 export const useEventForm = () => {
   const dispatch = useDispatch();
@@ -15,7 +16,7 @@ export const useEventForm = () => {
   const products = useSelector((state) => state.data.products);
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(fetchProducts());
     setFields({ selectedDate: new Date().toISOString().substring(0, 10) });
   }, [dispatch, showEventForm]);
 
@@ -23,7 +24,7 @@ export const useEventForm = () => {
     setFields((fields) => ({ ...fields, ...e }));
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (
       !fields?.quantity ||
       !fields?.productCode?.trim() ||
@@ -36,18 +37,15 @@ export const useEventForm = () => {
 
     console.log(fields);
 
-    dispatch(
-      saveEvent(
-        fields,
-        () => {
-          toast("Thêm thành công.");
-          setShowEventForm(false);
-        },
-        () => {
-          toast("Có lỗi xảy ra, vui lòng thử lại.");
-        }
-      )
-    );
+    try {
+      await eventAPI.save(fields);
+      setShowEventForm(false);
+      toast("Lưu thành công.");
+      // TODO: Do not fetch again
+      dispatch(fetchEvents());
+    } catch {
+      toast("Có lỗi xảy ra, vui lòng thử lại.");
+    }
   };
 
   return {

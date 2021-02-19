@@ -1,16 +1,14 @@
 import { useIonRouter } from "@ionic/react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { productAPI } from "../api";
 import { Product } from "../models";
-import { saveProduct } from "../store/data/data.actions";
+import { toast } from "../utils/toast";
 
 export const useProductForm = () => {
   const router = useIonRouter();
   const [fields, setFields] = useState<Product>();
 
-  const dispatch = useDispatch();
-
-  const submit = () => {
+  const submit = async () => {
     if (
       !fields?.name?.trim() ||
       !fields?.code?.trim() ||
@@ -18,12 +16,14 @@ export const useProductForm = () => {
     )
       return;
 
-    dispatch(
-      saveProduct(fields, () => {
-        setFields(undefined);
-        router.back();
-      })
-    );
+    try {
+      await productAPI.save(fields);
+      setFields(undefined);
+      router.back();
+      toast("Lưu thành công.");
+    } catch {
+      toast("Có lỗi xảy ra, vui lòng thử lại.");
+    }
   };
 
   const setFieldsValue = (e: Partial<Product>) => {

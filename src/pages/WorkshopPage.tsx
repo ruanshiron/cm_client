@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { WorkshopItem } from "../components/WorkshopItem";
 import { WorkshopPagePopover } from "../components/WorkshopPagePopover";
 import { useSelector } from "../store";
-import { getWorkshops } from "../store/data/data.actions";
+import { fetchWorkshops } from "../store/dataSlice";
 import "./WorkshopPage.scss";
 
 interface WorkshopPageProps {}
@@ -37,7 +37,7 @@ const WorkshopPage: React.FC<WorkshopPageProps> = () => {
   };
 
   useEffect(() => {
-    dispatch(getWorkshops());
+    dispatch(fetchWorkshops());
   }, [dispatch]);
 
   return (
