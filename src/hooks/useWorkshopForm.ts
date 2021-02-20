@@ -14,8 +14,11 @@ export const useWorkshopForm = () => {
 
   const dispatch = useDispatch();
 
+  const isValidated = () =>
+    !fields?.name?.trim() || !fields?.phoneNumber?.trim();
+
   const submit = async () => {
-    if (!fields?.name?.trim() || !fields?.phoneNumber?.trim()) return;
+    if (isValidated()) return;
 
     try {
       await workshopAPI.save(fields);

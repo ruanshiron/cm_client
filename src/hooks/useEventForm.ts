@@ -6,34 +6,38 @@ import { useSelector } from "../store";
 import { fetchEvents, fetchProducts } from "../store/dataSlice";
 import { eventAPI } from "../api";
 
+const initalEvent: Event = {
+  selectedDate: new Date().toISOString().substring(0, 10),
+};
+
 export const useEventForm = () => {
   const dispatch = useDispatch();
 
   const [showEventForm, setShowEventForm] = useState<boolean>(false);
 
-  const [fields, setFields] = useState<Event>();
+  const [fields, setFields] = useState<Event>(initalEvent);
 
   const products = useSelector((state) => state.data.products);
 
   useEffect(() => {
     dispatch(fetchProducts());
-    setFields({ selectedDate: new Date().toISOString().substring(0, 10) });
+    setFields(initalEvent);
   }, [dispatch, showEventForm]);
 
   const setFieldsValue = (e: Partial<Event>) => {
     setFields((fields) => ({ ...fields, ...e }));
   };
 
+  const isValidated = () =>
+    !fields?.quantity ||
+    !fields?.productCode?.trim() ||
+    !fields?.sizeCode?.trim() ||
+    !fields?.typeCode?.trim() ||
+    !fields?.selectedDate ||
+    !fields?.workshop?.trim();
+
   const submit = async () => {
-    if (
-      !fields?.quantity ||
-      !fields?.productCode?.trim() ||
-      !fields?.sizeCode?.trim() ||
-      !fields?.typeCode?.trim() ||
-      !fields?.selectedDate ||
-      !fields?.workshop?.trim()
-    )
-      return;
+    if (isValidated()) return;
 
     console.log(fields);
 
