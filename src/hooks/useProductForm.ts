@@ -1,12 +1,16 @@
 import { useIonRouter } from "@ionic/react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { productAPI } from "../api";
 import { Product } from "../models";
+import { fetchProducts } from "../store/dataSlice";
 import { toast } from "../utils/toast";
 
 export const useProductForm = () => {
   const router = useIonRouter();
   const [fields, setFields] = useState<Product>();
+
+  const dispatch = useDispatch();
 
   const submit = async () => {
     if (
@@ -21,6 +25,8 @@ export const useProductForm = () => {
       setFields(undefined);
       router.back();
       toast("Lưu thành công.");
+      // TODO: Do not fetch again
+      dispatch(fetchProducts());
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
