@@ -1,10 +1,6 @@
 import Menu from "./components/Menu";
-import React from "react";
-import {
-  IonApp,
-  IonRouterOutlet,
-  IonSplitPane,
-} from "@ionic/react";
+import React, { useEffect } from "react";
+import { IonApp, IonRouterOutlet, IonSplitPane } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 
@@ -26,9 +22,18 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+
 import MainTabs from "./pages/MainTabs";
 
+import { useDispatch } from "react-redux";
+import { fetchEvents } from "./store/dataSlice";
+
 const App: React.FC = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchEvents());
+  }, [dispatch]);
   return (
     <IonApp>
       <IonReactRouter>

@@ -11,21 +11,13 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { ellipsisVerticalSharp } from "ionicons/icons";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
 import EventFormModal from "../components/EventFormModal";
 import { EventList } from "../components/EventList";
-import { fetchEvents } from "../store/dataSlice";
 
 interface DiaryPageProps {}
 
 const DiaryPage: React.FC<DiaryPageProps> = (props) => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchEvents());
-  }, [dispatch]);
-
   return (
     <IonPage>
       <EventFormModal />
