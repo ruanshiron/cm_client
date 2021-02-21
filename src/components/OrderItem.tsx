@@ -44,11 +44,11 @@ export const OrderItem: React.FC<{ data: any }> = ({ data }) => {
 
         <IonCardContent>
           <IonList lines="none">
-            {data.fields.map((field: any) => (
+            {data.fields.map((field: any, index: number) => (
               <IonItem
                 detail={false}
                 routerLink={`/tabs/order/fields/${field.id}`}
-                key={field.name}
+                key={index}
               >
                 <IonLabel>
                   <h3>{field.product.name}・{field.product.size}</h3>
