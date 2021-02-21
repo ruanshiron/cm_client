@@ -39,8 +39,6 @@ export const useEventForm = () => {
   const submit = async () => {
     if (isValidated()) return;
 
-    console.log(fields);
-
     try {
       await eventAPI.save(fields);
       setShowEventForm(false);

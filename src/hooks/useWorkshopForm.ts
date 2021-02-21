@@ -6,7 +6,7 @@ import { Workshop } from "../models";
 import { fetchWorkshops } from "../store/dataSlice";
 import { toast } from "../utils/toast";
 
-const initialWorkshop = { name: "", phoneNumber: "" };
+const initialWorkshop: Workshop = { name: "", phoneNumber: "" };
 
 export const useWorkshopForm = () => {
   const router = useIonRouter();

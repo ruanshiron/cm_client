@@ -7,6 +7,7 @@ export interface Event {
   workshop?: string;
   selectedDate?: string;
   note?: string;
+  createdAt?: any;
 }
 
 export interface EventGroup {
@@ -21,6 +22,7 @@ export interface Product {
   sizes?: string[];
   note?: string;
   reports?: Field[];
+  createdAt?: any;
 }
 
 export interface Field {
@@ -29,8 +31,8 @@ export interface Field {
 }
 
 export interface Workshop {
-  id?: string,
-  name?: string,
-  phoneNumber?: string,
+  id?: string;
+  name?: string;
+  phoneNumber?: string;
+  createdAt?: any;
 }
-

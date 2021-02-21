@@ -1,3 +1,4 @@
+import firebase from "firebase/app";
 import { database } from "../config/firebase";
 import { Event, Product, Workshop } from "../models";
 import _ from "lodash";
@@ -7,11 +8,21 @@ export const eventAPI = {
     return database
       .collection("events")
       .get()
-      .then((snap) => snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      .then((snap) =>
+        snap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate().toString(),
+        }))
+      );
   },
 
   save: (param: Partial<Event>) => {
-    const permittedParam = _.pickBy(param, _.identity);
+    const permittedParam = {
+      ..._.pickBy(param, _.identity),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    console.log(permittedParam);
     return param.id
       ? database.collection("events").doc(param.id!).set(permittedParam)
       : database.collection("events").add(permittedParam);
@@ -27,7 +38,10 @@ export const productAPI = {
   },
 
   save: (param: Partial<Product>) => {
-    const permittedParam = _.pickBy(param, _.identity);
+    const permittedParam = {
+      ..._.pickBy(param, _.identity),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
     return param.id
       ? database.collection("products").doc(param.id!).set(permittedParam)
       : database.collection("products").add(permittedParam);
@@ -43,7 +57,10 @@ export const workshopAPI = {
   },
 
   save: (param: Partial<Workshop>) => {
-    const permittedParam = _.pickBy(param, _.identity);
+    const permittedParam = {
+      ..._.pickBy(param, _.identity),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
     return param.id
       ? database.collection("workshops").doc(param.id!).set(permittedParam)
       : database.collection("workshops").add(permittedParam);
