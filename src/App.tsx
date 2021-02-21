@@ -27,6 +27,43 @@ import MainTabs from "./pages/MainTabs";
 
 import { useDispatch } from "react-redux";
 import { fetchEvents } from "./store/dataSlice";
+import WorkshopPage from "./pages/WorkshopPage";
+import { WorkshopDetail } from "./pages/WorkshopDetail";
+import CreateWorkshopPage from "./pages/CreateWorkshopPage";
+
+interface AppRoute {
+  url: string;
+  component: any;
+}
+
+const listPages: AppRoute[] = [
+  {
+    url: "/workshops",
+    component: <WorkshopPage />,
+  },
+  {
+    url: "/customers",
+    component: <WorkshopPage />,
+  },
+  {
+    url: "/employees",
+    component: <WorkshopPage />,
+  },
+];
+
+const detailPages: AppRoute[] = [
+  {
+    url: "/workshops/:id",
+    component: WorkshopDetail,
+  },
+];
+
+const createPages: AppRoute[] = [
+  {
+    url: "/workshops/new",
+    component: CreateWorkshopPage,
+  },
+];
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -41,6 +78,25 @@ const App: React.FC = () => {
           <Menu />
           <IonRouterOutlet id="main">
             <Route path="/tabs" render={() => <MainTabs />} />
+            {listPages.map((page, index) => (
+              <Route
+                key={index}
+                path={page.url}
+                render={() => page.component}
+                exact
+              />
+            ))}
+            {detailPages.map((page, index) => (
+              <Route key={index} path={page.url} component={page.component} />
+            ))}
+            {createPages.map((page, index) => (
+              <Route
+                key={index}
+                path={page.url}
+                component={page.component}
+                exact
+              />
+            ))}
             <Redirect from="/" to="/tabs/diary" exact />
           </IonRouterOutlet>
         </IonSplitPane>

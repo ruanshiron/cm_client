@@ -19,7 +19,7 @@ export const WorkshopPagePopover: React.FC<{
 
   return (
     <IonList>
-      <IonItem button onClick={(e) => open("/tabs/workshop/new")}>
+      <IonItem button onClick={(e) => open("/workshops/new")}>
         <IonLabel>Thêm xưởng may</IonLabel>
       </IonItem>
     </IonList>

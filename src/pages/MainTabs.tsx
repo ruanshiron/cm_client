@@ -12,18 +12,15 @@ import {
   calendar,
   shirtOutline,
   checkmarkDoneCircleOutline,
-  personCircleOutline,
 } from "ionicons/icons";
 import DiaryPage from "./DiaryPage";
 import EventDetail from "./EventDetail";
 import ProductPage from "./ProductPage";
 import OrderPage from "./OrderPage";
-import AccountPage from "./WorkshopPage";
 import { WorkshopDetail } from "./WorkshopDetail";
 import { OrderDetail } from "./OrderDetail";
 import { ProductDetail } from "./ProductDetail";
 import CreateProductPage from "./CreateProductPage";
-import CreateWorkshopPage from "./CreateWorkshopPage";
 
 interface MainTabsProps {}
 
@@ -36,7 +33,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         <Route path="/tabs/diary" render={() => <DiaryPage />} exact />
         <Route path="/tabs/product" render={() => <ProductPage />} exact />
         <Route path="/tabs/order" render={() => <OrderPage />} exact />
-        <Route path="/tabs/workshop" render={() => <AccountPage />} exact />
+        {/* <Route path="/tabs/workshop" render={() => <AccountPage />} exact /> */}
 
         <Route path="/tabs/diary/:id" component={EventDetail} />
         <Route path="/tabs/workshop/:id" component={WorkshopDetail} />
@@ -44,7 +41,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         <Route path="/tabs/product/:id" component={ProductDetail} />
 
         <Route path="/tabs/product/new" component={CreateProductPage} exact />
-        <Route path="/tabs/workshop/new" component={CreateWorkshopPage} exact />
+        {/* <Route path="/tabs/workshop/new" component={CreateWorkshopPage} exact /> */}
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom">
@@ -60,10 +57,10 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           <IonIcon size="large" icon={checkmarkDoneCircleOutline} />
           <IonLabel>Đơn hàng</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="workshop" href="/tabs/workshop" layout="label-hide">
+        {/* <IonTabButton tab="workshop" href="/tabs/workshop" layout="label-hide">
           <IonIcon size="large" icon={personCircleOutline} />
           <IonLabel>Xưởng may</IonLabel>
-        </IonTabButton>
+        </IonTabButton> */}
       </IonTabBar>
     </IonTabs>
   );

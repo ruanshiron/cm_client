@@ -19,7 +19,7 @@ export const WorkshopItem: React.FC<{ data: Workshop }> = ({ data }) => {
             detail={false}
             lines="none"
             className="workshop-item"
-            routerLink={`/tabs/workshop/${data.id}`}
+            routerLink={`/workshops/${data.id}`}
           >
             <IonAvatar slot="start">
               <img
