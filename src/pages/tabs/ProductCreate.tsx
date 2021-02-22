@@ -17,12 +17,12 @@ import {
 } from "@ionic/react";
 import { cameraOutline } from "ionicons/icons";
 import React from "react";
-import { useProductForm } from "../hooks/useProductForm";
-import "./CreateProductPage.scss";
+import { useProductForm } from "../../hooks/useProductForm";
+import "./ProductCreate.scss";
 
-interface CreateProductPageProps {}
+interface ProductCreateProps {}
 
-const CreateProductPage: React.FC<CreateProductPageProps> = () => {
+const ProductCreate: React.FC<ProductCreateProps> = () => {
   const form = useProductForm();
   return (
     <IonPage>
@@ -94,4 +94,4 @@ const CreateProductPage: React.FC<CreateProductPageProps> = () => {
   );
 };
 
-export default CreateProductPage;
+export default ProductCreate;

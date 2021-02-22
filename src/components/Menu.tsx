@@ -4,7 +4,11 @@ import {
   calendar,
   shirtOutline,
   checkmarkDoneCircleOutline,
-  personCircleOutline,
+  personOutline,
+  peopleOutline,
+  storefrontOutline,
+  settingsOutline,
+  cutOutline,
 } from "ionicons/icons";
 import {
   IonContent,
@@ -51,20 +55,35 @@ const listPages: AppPage[] = [
   {
     title: "Xưởng may",
     url: "/workshops",
-    iosIcon: personCircleOutline,
-    mdIcon: personCircleOutline,
+    iosIcon: storefrontOutline,
+    mdIcon: storefrontOutline,
   },
   {
     title: "Khách hàng",
     url: "/customers",
-    iosIcon: personCircleOutline,
-    mdIcon: personCircleOutline,
+    iosIcon: personOutline,
+    mdIcon: personOutline,
+  },
+  {
+    title: "Nguồn nguyên liệu",
+    url: "/materials",
+    iosIcon: cutOutline,
+    mdIcon: cutOutline,
   },
   {
     title: "Công nhân",
     url: "/employees",
-    iosIcon: personCircleOutline,
-    mdIcon: personCircleOutline,
+    iosIcon: peopleOutline,
+    mdIcon: peopleOutline,
+  },
+];
+
+const configPages: AppPage[] = [
+  {
+    title: "Cài đặt",
+    url: "/settings",
+    iosIcon: settingsOutline,
+    mdIcon: settingsOutline,
   },
 ];
 
@@ -106,6 +125,31 @@ const Menu: React.FC = () => {
             <IonLabel>Danh sách</IonLabel>
           </IonListHeader>
           {listPages.map((appPage, index) => {
+            return (
+              <IonMenuToggle key={index} autoHide={false}>
+                <IonItem
+                  className={
+                    location.pathname === appPage.url ? "selected" : ""
+                  }
+                  routerLink={appPage.url}
+                  routerDirection="none"
+                  lines="none"
+                  detail={false}
+                >
+                  <IonIcon
+                    slot="start"
+                    ios={appPage.iosIcon}
+                    md={appPage.mdIcon}
+                  />
+                  <IonLabel>{appPage.title}</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+            );
+          })}
+        </IonList>
+
+        <IonList id="config-list">
+          {configPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem

@@ -28,7 +28,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
           <IonHeader className="ion-no-border">
             <IonToolbar>
               <IonButtons slot="start">
-                <IonBackButton defaultHref="/tabs/workshop" />
+                <IonBackButton defaultHref="/workshops" />
               </IonButtons>
               <IonButtons slot="end">
                 <IonButton>

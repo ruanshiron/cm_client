@@ -17,10 +17,9 @@ import DiaryPage from "./DiaryPage";
 import EventDetail from "./EventDetail";
 import ProductPage from "./ProductPage";
 import OrderPage from "./OrderPage";
-import { WorkshopDetail } from "./WorkshopDetail";
 import { OrderDetail } from "./OrderDetail";
 import { ProductDetail } from "./ProductDetail";
-import CreateProductPage from "./CreateProductPage";
+import ProductCreate from "./ProductCreate";
 
 interface MainTabsProps {}
 
@@ -36,11 +35,10 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         {/* <Route path="/tabs/workshop" render={() => <AccountPage />} exact /> */}
 
         <Route path="/tabs/diary/:id" component={EventDetail} />
-        <Route path="/tabs/workshop/:id" component={WorkshopDetail} />
         <Route path="/tabs/order/:id" component={OrderDetail} />
         <Route path="/tabs/product/:id" component={ProductDetail} />
 
-        <Route path="/tabs/product/new" component={CreateProductPage} exact />
+        <Route path="/tabs/product/new" component={ProductCreate} exact />
         {/* <Route path="/tabs/workshop/new" component={CreateWorkshopPage} exact /> */}
       </IonRouterOutlet>
 

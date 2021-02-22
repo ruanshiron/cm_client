@@ -14,7 +14,7 @@ import {
 } from "@ionic/react";
 import { ellipsisVerticalSharp } from "ionicons/icons";
 import React from "react";
-import { OrderItem } from "../components/OrderItem";
+import { OrderItem } from "../../components/OrderItem";
 import "./OrderPage.scss"
 
 const orders = [

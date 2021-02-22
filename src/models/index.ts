@@ -36,3 +36,15 @@ export interface Workshop {
   phoneNumber?: string;
   createdAt?: any;
 }
+
+export interface Customer {
+  id?: string;
+  name?: string;
+  phoneNumber?: string;
+  createdAt?: any;
+}
+
+export interface Base {
+  id?: string;
+  createdAt?: any;
+}

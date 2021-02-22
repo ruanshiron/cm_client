@@ -1,6 +1,6 @@
 ion-menu#side-menu {
   ion-content {
-    --background:var(--ion-item-background, var(--ion-background-color, #fff));
+    --background: var(--ion-item-background, var(--ion-background-color, #fff));
   }
 
   ion-note {
@@ -11,10 +11,10 @@ ion-menu#side-menu {
 
   &.md {
     ion-content {
-      --padding-start:8px;
-      --padding-end:8px;
-      --padding-top:20px;
-      --padding-bottom:20px;
+      --padding-start: 8px;
+      --padding-end: 8px;
+      --padding-top: 20px;
+      --padding-bottom: 20px;
     }
 
     ion-list {
@@ -25,7 +25,8 @@ ion-menu#side-menu {
       margin-bottom: 30px;
     }
 
-    ion-list-header, ion-note {
+    ion-list-header,
+    ion-note {
       padding-left: 10px;
     }
 
@@ -40,21 +41,25 @@ ion-menu#side-menu {
         }
       }
 
-      &#labels-list ion-list-header {
-        font-size: 16px;
-        margin-bottom: 18px;
-        color: #757575;
-        min-height: 26px;
+      &#labels-list {
+        border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
+
+        ion-list-header {
+          font-size: 16px;
+          margin-bottom: 18px;
+          color: #757575;
+          min-height: 26px;
+        }
       }
     }
 
     ion-item {
-      --padding-start:10px;
-      --padding-end:10px;
+      --padding-start: 10px;
+      --padding-end: 10px;
       border-radius: 4px;
 
       &.selected {
-        --background:rgba(var(--ion-color-primary-rgb), 0.14);
+        --background: rgba(var(--ion-color-primary-rgb), 0.14);
 
         ion-icon {
           color: var(--ion-color-primary);
@@ -73,7 +78,7 @@ ion-menu#side-menu {
 
   &.ios {
     ion-content {
-      --padding-bottom:20px;
+      --padding-bottom: 20px;
     }
 
     ion-list {
@@ -86,9 +91,9 @@ ion-menu#side-menu {
     }
 
     ion-item {
-      --padding-start:16px;
-      --padding-end:16px;
-      --min-height:50px;
+      --padding-start: 16px;
+      --padding-end: 16px;
+      --min-height: 50px;
 
       ion-icon {
         font-size: 24px;
@@ -117,7 +122,6 @@ ion-menu#side-menu {
   }
 }
 
-
 ion-item.selected {
-  --color:var(--ion-color-primary);
+  --color: var(--ion-color-primary);
 }

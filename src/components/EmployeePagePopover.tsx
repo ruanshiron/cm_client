@@ -1,11 +1,11 @@
 import React from "react";
 import { IonList, IonItem, IonLabel, useIonRouter } from "@ionic/react";
 
-interface ProductPagePopoverProps {
+interface EmployeePagePopoverProps {
   dismiss: () => void;
 }
 
-export const ProductPagePopover: React.FC<ProductPagePopoverProps> = ({ dismiss }) => {
+export const EmployeePagePopover: React.FC<EmployeePagePopoverProps> = ({ dismiss }) => {
   const router = useIonRouter();
 
   // eslint-disable-next-line
@@ -21,7 +21,7 @@ export const ProductPagePopover: React.FC<ProductPagePopoverProps> = ({ dismiss 
 
   return (
     <IonList>
-      <IonItem button onClick={(e) => open("/tabs/product/new")}>
+      <IonItem button onClick={(e) => open("/employees/new")}>
         <IonLabel>Thêm sản phẩm</IonLabel>
       </IonItem>
     </IonList>

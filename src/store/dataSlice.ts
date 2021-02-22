@@ -1,21 +1,27 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { eventAPI, productAPI, workshopAPI } from "../api";
-import { Event, EventGroup, Product, Workshop } from "../models";
+import { customerAPI, eventAPI, productAPI, workshopAPI } from "../api";
+import { Customer, Event, EventGroup, Product, Workshop } from "../models";
 import { filter } from "../utils/data";
 
 interface DataState {
   loading: boolean;
+
   events: Event[];
   products: Product[];
   workshops: Workshop[];
+  customers: Customer[];
+
   filteredEvents: EventGroup[];
 }
 
 let initialState: DataState = {
   loading: false,
+
   events: [],
   products: [],
   workshops: [],
+  customers: [],
+
   filteredEvents: [],
 };
 
@@ -37,6 +43,13 @@ export const fetchWorkshops = createAsyncThunk(
   "data/fetchWorkshops",
   async (params, thunkAPI) => {
     return await workshopAPI.get();
+  }
+);
+
+export const fetchCustomers = createAsyncThunk(
+  "data/fetchCustomers",
+  async (params, thunkAPI) => {
+    return await customerAPI.get();
   }
 );
 
@@ -80,6 +93,18 @@ const dataSlice = createSlice({
       state.workshops = action.payload as Workshop[];
     });
     builder.addCase(fetchWorkshops.rejected, (state, action) => {
+      state.loading = false;
+    });
+
+    // CUSTOMER
+    builder.addCase(fetchCustomers.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchCustomers.fulfilled, (state, action) => {
+      state.loading = false;
+      state.customers = action.payload as Customer[];
+    });
+    builder.addCase(fetchCustomers.rejected, (state, action) => {
       state.loading = false;
     });
   },

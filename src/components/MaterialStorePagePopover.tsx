@@ -1,11 +1,9 @@
 import React from "react";
 import { IonList, IonItem, IonLabel, useIonRouter } from "@ionic/react";
 
-interface ProductPagePopoverProps {
+export const MaterialStorePagePopover: React.FC<{
   dismiss: () => void;
-}
-
-export const ProductPagePopover: React.FC<ProductPagePopoverProps> = ({ dismiss }) => {
+}> = ({ dismiss }) => {
   const router = useIonRouter();
 
   // eslint-disable-next-line
@@ -21,8 +19,8 @@ export const ProductPagePopover: React.FC<ProductPagePopoverProps> = ({ dismiss 
 
   return (
     <IonList>
-      <IonItem button onClick={(e) => open("/tabs/product/new")}>
-        <IonLabel>Thêm sản phẩm</IonLabel>
+      <IonItem button onClick={(e) => open("/materials/new")}>
+        <IonLabel>Thêm nguồn nguyên liệu</IonLabel>
       </IonItem>
     </IonList>
   );

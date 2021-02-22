@@ -15,9 +15,9 @@ import {
 import { shareOutline, shareSharp } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useSelector } from "../store";
 import _ from "lodash";
-import { Field } from "../models";
+import { Field } from "../../models";
+import { useSelector } from "../../store";
 
 const parseFieldName = (key: string) => {
   switch (key) {

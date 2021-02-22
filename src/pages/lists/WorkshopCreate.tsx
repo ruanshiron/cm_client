@@ -12,12 +12,12 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import React from "react";
-import { useWorkshopForm } from "../hooks/useWorkshopForm";
-import "./CreateWorkshopPage.scss";
+import { useWorkshopForm } from "../../hooks/useWorkshopForm";
+import "./WorkshopCreate.scss";
 
-interface CreateWorkshopPageProps {}
+interface WorkshopCreateProps {}
 
-const CreateWorkshopPage: React.FC<CreateWorkshopPageProps> = () => {
+const WorkshopCreate: React.FC<WorkshopCreateProps> = () => {
   const form = useWorkshopForm();
   return (
     <IonPage>
@@ -55,4 +55,4 @@ const CreateWorkshopPage: React.FC<CreateWorkshopPageProps> = () => {
   );
 };
 
-export default CreateWorkshopPage;
+export default WorkshopCreate;

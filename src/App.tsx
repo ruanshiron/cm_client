@@ -23,13 +23,18 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-import MainTabs from "./pages/MainTabs";
+import MainTabs from "./pages/tabs/MainTabs";
 
 import { useDispatch } from "react-redux";
 import { fetchEvents } from "./store/dataSlice";
-import WorkshopPage from "./pages/WorkshopPage";
-import { WorkshopDetail } from "./pages/WorkshopDetail";
-import CreateWorkshopPage from "./pages/CreateWorkshopPage";
+import WorkshopPage from "./pages/lists/WorkshopPage";
+import CustomerPage from "./pages/lists/CustomerPage";
+import EmployeePage from "./pages/lists/EmployeePage";
+import { WorkshopDetail } from "./pages/lists/WorkshopDetail";
+import WorkshopCreate from "./pages/lists/WorkshopCreate";
+import CustomerCreate from "./pages/lists/CustomerCreate";
+import { CustomerDetail } from "./pages/lists/CustomerDetail";
+import MaterialStorePage from "./pages/lists/MaterialStorePage";
 
 interface AppRoute {
   url: string;
@@ -43,11 +48,15 @@ const listPages: AppRoute[] = [
   },
   {
     url: "/customers",
-    component: <WorkshopPage />,
+    component: <CustomerPage />,
   },
   {
     url: "/employees",
-    component: <WorkshopPage />,
+    component: <EmployeePage />,
+  },
+  {
+    url: "/materials",
+    component: <MaterialStorePage />,
   },
 ];
 
@@ -56,12 +65,20 @@ const detailPages: AppRoute[] = [
     url: "/workshops/:id",
     component: WorkshopDetail,
   },
+  {
+    url: "/customers/:id",
+    component: CustomerDetail,
+  },
 ];
 
 const createPages: AppRoute[] = [
   {
     url: "/workshops/new",
-    component: CreateWorkshopPage,
+    component: WorkshopCreate,
+  },
+  {
+    url: "/customers/new",
+    component: CustomerCreate,
   },
 ];
 

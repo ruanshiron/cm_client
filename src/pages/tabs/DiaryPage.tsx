@@ -12,8 +12,8 @@ import {
 } from "@ionic/react";
 import { ellipsisVerticalSharp } from "ionicons/icons";
 import React from "react";
-import EventFormModal from "../components/EventFormModal";
-import { EventList } from "../components/EventList";
+import EventFormModal from "../../components/EventFormModal";
+import { EventList } from "../../components/EventList";
 
 interface DiaryPageProps {}
 
