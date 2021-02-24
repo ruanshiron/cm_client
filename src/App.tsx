@@ -23,6 +23,9 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
+/* SCSS */
+import "./theme/style.scss";
+
 import MainTabs from "./pages/tabs/MainTabs";
 
 import { useDispatch } from "react-redux";
@@ -36,6 +39,7 @@ import CustomerCreate from "./pages/lists/CustomerCreate";
 import { CustomerDetail } from "./pages/lists/CustomerDetail";
 import MaterialStorePage from "./pages/lists/MaterialStorePage";
 import MaterialStoreCreate from "./pages/lists/MaterialStoreCreate";
+import EmployeeCreate from "./pages/lists/EmployeeCreate";
 
 interface AppRoute {
   url: string;
@@ -80,6 +84,10 @@ const createPages: AppRoute[] = [
   {
     url: "/customers/new",
     component: CustomerCreate,
+  },
+  {
+    url: "/employees/new",
+    component: EmployeeCreate,
   },
   {
     url: "/materials/new",

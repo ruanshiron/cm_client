@@ -41,7 +41,7 @@ const ProductPage: React.FC<ProductPageProps> = () => {
   }, [dispatch]);
 
   return (
-    <IonPage id="product-page">
+    <IonPage id="list-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">

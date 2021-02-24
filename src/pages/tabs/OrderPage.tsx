@@ -66,7 +66,7 @@ interface OrderPageProps {}
 
 const OrderPage: React.FC<OrderPageProps> = () => {
   return (
-    <IonPage id="order-page">
+    <IonPage id="list-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">

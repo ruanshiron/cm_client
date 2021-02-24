@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   customerAPI,
+  employeeAPI,
   eventAPI,
   materialStoreAPI,
   productAPI,
@@ -8,6 +9,7 @@ import {
 } from "../api";
 import {
   Customer,
+  Employee,
   Event,
   EventGroup,
   MaterialStore,
@@ -23,6 +25,7 @@ interface DataState {
   products: Product[];
   workshops: Workshop[];
   customers: Customer[];
+  employees: Employee[];
   materialStores: MaterialStore[];
 
   filteredEvents: EventGroup[];
@@ -35,6 +38,7 @@ let initialState: DataState = {
   products: [],
   workshops: [],
   customers: [],
+  employees: [],
   materialStores: [],
 
   filteredEvents: [],
@@ -74,6 +78,14 @@ export const fetchMaterialStores = createAsyncThunk(
     return await materialStoreAPI.get();
   }
 );
+
+export const fetchEmployees = createAsyncThunk(
+  "data/fetchEmployees",
+  async (params, thunkAPI) => {
+    return await employeeAPI.get();
+  }
+);
+
 
 const dataSlice = createSlice({
   name: "data",
@@ -129,6 +141,19 @@ const dataSlice = createSlice({
     builder.addCase(fetchCustomers.rejected, (state, action) => {
       state.loading = false;
     });
+
+    // EMPLOYEE
+    builder.addCase(fetchEmployees.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchEmployees.fulfilled, (state, action) => {
+      state.loading = false;
+      state.employees = action.payload as Employee[];
+    });
+    builder.addCase(fetchEmployees.rejected, (state, action) => {
+      state.loading = false;
+    });
+    
 
     // MATERIAL STORE
     builder.addCase(fetchMaterialStores.pending, (state) => {

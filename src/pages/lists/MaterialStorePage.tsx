@@ -41,7 +41,7 @@ const MaterialStorePage: React.FC<MaterialStorePageProps> = () => {
   }, [dispatch]);
 
   return (
-    <IonPage id="workshop-page">
+    <IonPage id="list-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">

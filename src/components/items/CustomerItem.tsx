@@ -11,13 +11,13 @@ import React from "react";
 export const CustomerItem: React.FC<{ data: any }> = ({ data }) => {
   return (
     <>
-      <IonCard className="product-card">
+      <IonCard className="list-card">
         <IonCardHeader>
           <IonItem
             button
             detail={false}
             lines="none"
-            className="product-item"
+            className="list-item"
             routerLink={`/customers/${data.id}`}
           >
             <IonAvatar slot="start">

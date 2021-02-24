@@ -14,13 +14,13 @@ import React from "react";
 export const OrderItem: React.FC<{ data: any }> = ({ data }) => {
   return (
     <>
-      <IonCard className="order-card">
+      <IonCard className="list-card">
         <IonCardHeader>
           <IonItem
             button
             detail={false}
             lines="none"
-            className="order-item"
+            className="list-item"
             routerLink={`/tabs/order/${data.id}`}
           >
             <IonAvatar slot="start">

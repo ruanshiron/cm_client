@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { EmployeePagePopover } from "../../components/popovers/EmployeePagePopover";
 import { ProductItem } from "../../components/items/ProductItem";
 import { useSelector } from "../../store";
-import { fetchProducts } from "../../store/dataSlice";
+import { fetchEmployees } from "../../store/dataSlice";
 import "./EmployeePage.scss";
 
 interface EmployeePageProps {}
@@ -33,15 +33,15 @@ const EmployeePage: React.FC<EmployeePageProps> = () => {
     setShowPopover(true);
   };
 
-  const products = useSelector((state) => state.data.products);
+  const employees = useSelector((state) => state.data.employees);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(fetchEmployees());
   }, [dispatch]);
 
   return (
-    <IonPage id="product-page">
+    <IonPage id="list-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -62,14 +62,14 @@ const EmployeePage: React.FC<EmployeePageProps> = () => {
       <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Speakers</IonTitle>
+            <IonTitle size="large">Công nhân</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>
           <IonRow>
-            {products.map((product) => (
-              <IonCol size="12" size-md="6" key={product.id}>
-                <ProductItem data={product} />
+            {employees.map((employee) => (
+              <IonCol size="12" size-md="6" key={employee.id}>
+                <ProductItem data={employee} />
               </IonCol>
             ))}
           </IonRow>

@@ -12,13 +12,13 @@ import { Workshop } from "../../models";
 export const WorkshopItem: React.FC<{ data: Workshop }> = ({ data }) => {
   return (
     <>
-      <IonCard className="workshop-card">
+      <IonCard className="list-card">
         <IonCardHeader>
           <IonItem
             button
             detail={false}
             lines="none"
-            className="workshop-item"
+            className="list-item"
             routerLink={`/workshops/${data.id}`}
           >
             <IonAvatar slot="start">

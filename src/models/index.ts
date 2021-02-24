@@ -40,6 +40,11 @@ export interface Customer extends Base {
   phoneNumber?: string;
 }
 
+export interface Employee extends Base {
+  name?: string;
+  phoneNumber?: string;
+}
+
 export interface MaterialStore extends Base {
   name?: string;
   phoneNumber?: string;
