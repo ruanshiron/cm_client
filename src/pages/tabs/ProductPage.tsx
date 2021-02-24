@@ -16,8 +16,8 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ProductItem } from "../../components/ProductItem";
-import { ProductPagePopover } from "../../components/ProductPagePopover";
+import { ProductItem } from "../../components/items/ProductItem";
+import { ProductPagePopover } from "../../components/popovers/ProductPagePopover";
 import { useSelector } from "../../store";
 import { fetchProducts } from "../../store/dataSlice";
 import "./ProductPage.scss";

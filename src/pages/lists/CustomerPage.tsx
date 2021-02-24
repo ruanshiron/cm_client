@@ -16,8 +16,8 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { CustomerItem } from "../../components/CustomerItem";
-import { CustomerPagePopover } from "../../components/CustomerPagePopover";
+import { CustomerItem } from "../../components/items/CustomerItem";
+import { CustomerPagePopover } from "../../components/popovers/CustomerPagePopover";
 import { useSelector } from "../../store";
 import { fetchCustomers } from "../../store/dataSlice";
 import "./CustomerPage.scss";

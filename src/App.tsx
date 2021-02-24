@@ -35,6 +35,7 @@ import WorkshopCreate from "./pages/lists/WorkshopCreate";
 import CustomerCreate from "./pages/lists/CustomerCreate";
 import { CustomerDetail } from "./pages/lists/CustomerDetail";
 import MaterialStorePage from "./pages/lists/MaterialStorePage";
+import MaterialStoreCreate from "./pages/lists/MaterialStoreCreate";
 
 interface AppRoute {
   url: string;
@@ -79,6 +80,10 @@ const createPages: AppRoute[] = [
   {
     url: "/customers/new",
     component: CustomerCreate,
+  },
+  {
+    url: "/materials/new",
+    component: MaterialStoreCreate,
   },
 ];
 

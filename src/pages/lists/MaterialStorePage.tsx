@@ -16,17 +16,17 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { WorkshopItem } from "../../components/WorkshopItem";
-import { MaterialStorePagePopover } from "../../components/MaterialStorePagePopover";
+import { WorkshopItem } from "../../components/items/WorkshopItem";
+import { MaterialStorePagePopover } from "../../components/popovers/MaterialStorePagePopover";
 import { useSelector } from "../../store";
-import { fetchWorkshops } from "../../store/dataSlice";
+import { fetchMaterialStores } from "../../store/dataSlice";
 import "./MaterialStorePage.scss";
 
 interface MaterialStorePageProps {}
 
 const MaterialStorePage: React.FC<MaterialStorePageProps> = () => {
   const dispatch = useDispatch();
-  const workshops = useSelector((state) => state.data.workshops);
+  const materialStores = useSelector((state) => state.data.materialStores);
 
   const [showPopover, setShowPopover] = useState(false);
   const [popoverEvent, setPopoverEvent] = useState<any>();
@@ -37,7 +37,7 @@ const MaterialStorePage: React.FC<MaterialStorePageProps> = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchWorkshops());
+    dispatch(fetchMaterialStores());
   }, [dispatch]);
 
   return (
@@ -67,9 +67,9 @@ const MaterialStorePage: React.FC<MaterialStorePageProps> = () => {
         </IonHeader>
         <IonGrid fixed>
           <IonRow>
-            {workshops.map((workshop) => (
-              <IonCol size="12" size-md="6" key={workshop.id}>
-                <WorkshopItem data={workshop} />
+            {materialStores.map((materialStore) => (
+              <IonCol size="12" size-md="6" key={materialStore.id}>
+                <WorkshopItem data={materialStore} />
               </IonCol>
             ))}
           </IonRow>

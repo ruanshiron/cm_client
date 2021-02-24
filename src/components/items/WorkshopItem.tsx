@@ -7,7 +7,7 @@ import {
   IonLabel,
 } from "@ionic/react";
 import React from "react";
-import { Workshop } from "../models";
+import { Workshop } from "../../models";
 
 export const WorkshopItem: React.FC<{ data: Workshop }> = ({ data }) => {
   return (

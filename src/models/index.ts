@@ -1,5 +1,8 @@
-export interface Event {
-  id?: any;
+export interface Base {
+  id?: string;
+  createdAt?: any;
+}
+export interface Event extends Base {
   quantity?: number;
   productCode?: string;
   sizeCode?: string;
@@ -7,7 +10,6 @@ export interface Event {
   workshop?: string;
   selectedDate?: string;
   note?: string;
-  createdAt?: any;
 }
 
 export interface EventGroup {
@@ -15,14 +17,12 @@ export interface EventGroup {
   events: Event[];
 }
 
-export interface Product {
-  id?: any;
+export interface Product extends Base {
   code?: string;
   name?: string;
   sizes?: string[];
   note?: string;
   reports?: Field[];
-  createdAt?: any;
 }
 
 export interface Field {
@@ -30,21 +30,18 @@ export interface Field {
   value: any;
 }
 
-export interface Workshop {
-  id?: string;
+export interface Workshop extends Base {
   name?: string;
   phoneNumber?: string;
-  createdAt?: any;
 }
 
-export interface Customer {
-  id?: string;
+export interface Customer extends Base {
   name?: string;
   phoneNumber?: string;
-  createdAt?: any;
 }
 
-export interface Base {
-  id?: string;
-  createdAt?: any;
+export interface MaterialStore extends Base {
+  name?: string;
+  phoneNumber?: string;
+  types?: string[];
 }

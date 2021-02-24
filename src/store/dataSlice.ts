@@ -1,6 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { customerAPI, eventAPI, productAPI, workshopAPI } from "../api";
-import { Customer, Event, EventGroup, Product, Workshop } from "../models";
+import {
+  customerAPI,
+  eventAPI,
+  materialStoreAPI,
+  productAPI,
+  workshopAPI,
+} from "../api";
+import {
+  Customer,
+  Event,
+  EventGroup,
+  MaterialStore,
+  Product,
+  Workshop,
+} from "../models";
 import { filter } from "../utils/data";
 
 interface DataState {
@@ -10,6 +23,7 @@ interface DataState {
   products: Product[];
   workshops: Workshop[];
   customers: Customer[];
+  materialStores: MaterialStore[];
 
   filteredEvents: EventGroup[];
 }
@@ -21,6 +35,7 @@ let initialState: DataState = {
   products: [],
   workshops: [],
   customers: [],
+  materialStores: [],
 
   filteredEvents: [],
 };
@@ -50,6 +65,13 @@ export const fetchCustomers = createAsyncThunk(
   "data/fetchCustomers",
   async (params, thunkAPI) => {
     return await customerAPI.get();
+  }
+);
+
+export const fetchMaterialStores = createAsyncThunk(
+  "data/fetchMaterialStores",
+  async (params, thunkAPI) => {
+    return await materialStoreAPI.get();
   }
 );
 
@@ -105,6 +127,18 @@ const dataSlice = createSlice({
       state.customers = action.payload as Customer[];
     });
     builder.addCase(fetchCustomers.rejected, (state, action) => {
+      state.loading = false;
+    });
+
+    // MATERIAL STORE
+    builder.addCase(fetchMaterialStores.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchMaterialStores.fulfilled, (state, action) => {
+      state.loading = false;
+      state.materialStores = action.payload as MaterialStore[];
+    });
+    builder.addCase(fetchMaterialStores.rejected, (state, action) => {
       state.loading = false;
     });
   },

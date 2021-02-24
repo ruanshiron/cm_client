@@ -1,6 +1,6 @@
 import React from "react";
 import { IonAvatar, IonItem, IonLabel, IonNote } from "@ionic/react";
-import { Event } from "../models";
+import { Event } from "../../models";
 
 const EventListItem: React.FC<{ data: Event }> = ({ data }) => {
   return (

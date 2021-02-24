@@ -1,6 +1,6 @@
 import React from "react";
 import { IonList, IonLabel, IonListHeader, IonItem } from "@ionic/react";
-import EventListItem from "./EventListItem";
+import EventListItem from "./items/EventListItem";
 import "./EventList.scss";
 import { useSelector } from "../store";
 import { Event, EventGroup } from "../models";

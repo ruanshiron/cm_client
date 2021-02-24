@@ -16,8 +16,8 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { WorkshopItem } from "../../components/WorkshopItem";
-import { WorkshopPagePopover } from "../../components/WorkshopPagePopover";
+import { WorkshopItem } from "../../components/items/WorkshopItem";
+import { WorkshopPagePopover } from "../../components/popovers/WorkshopPagePopover";
 import { useSelector } from "../../store";
 import { fetchWorkshops } from "../../store/dataSlice";
 import "./WorkshopPage.scss";

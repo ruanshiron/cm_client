@@ -134,3 +134,5 @@ export const customerAPI = {
       : database.collection("customers").add(permittedParam);
   },
 };
+
+export const materialStoreAPI = useAPI("materialStores");
