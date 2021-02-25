@@ -28,26 +28,9 @@ import {
   shirtOutline,
 } from "ionicons/icons";
 import { useEventForm } from "../hooks/useEventForm";
+import { selectedDateLabelParser } from "../utils/date";
 
 interface EventFormModalrops {}
-
-const selectedDateLabelParser = (text = "") => {
-  const date = new Date(text);
-  const today = new Date();
-  if (
-    date.getDate() === today.getDate() &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
-  )
-    return "Hôm nay";
-  else if (
-    date.getDate() === today.getDate() - 1 &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
-  )
-    return "Hôm qua";
-  return "";
-};
 
 const EventFormModal: React.FC<EventFormModalrops> = () => {
   const form = useEventForm();

@@ -10,19 +10,19 @@ const initalEvent: Event = {
   selectedDate: new Date().toISOString().substring(0, 10),
 };
 
-export const useEventForm = () => {
+export const useEventForm = (event: Event = initalEvent) => {
   const dispatch = useDispatch();
 
   const [showEventForm, setShowEventForm] = useState<boolean>(false);
 
-  const [fields, setFields] = useState<Event>(initalEvent);
+  const [fields, setFields] = useState<Event>(event);
 
   const products = useSelector((state) => state.data.products);
 
   useEffect(() => {
     dispatch(fetchProducts());
-    setFields(initalEvent);
-  }, [dispatch, showEventForm]);
+    setFields(event);
+  }, [dispatch, showEventForm, event]);
 
   const setFieldsValue = (e: Partial<Event>) => {
     setFields((fields) => ({ ...fields, ...e }));
