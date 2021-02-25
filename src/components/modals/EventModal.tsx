@@ -45,7 +45,7 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
               <IonIcon slot="icon-only" icon={closeOutline} />
             </IonButton>
           </IonButtons>
-          <IonTitle>Thêm vào nhật ký</IonTitle>
+          <IonTitle>{form.fields.id ? "Cập nhật" : "Thêm mới"}</IonTitle>
           <IonButtons slot="end">
             <IonButton type="submit" onClick={form.submit}>
               Lưu
