@@ -4,6 +4,10 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
   IonMenuButton,
   IonPage,
   IonSearchbar,
@@ -12,15 +16,21 @@ import {
 } from "@ionic/react";
 import { ellipsisVerticalSharp } from "ionicons/icons";
 import React from "react";
-import EventFormModal from "../../components/EventFormModal";
-import { EventList } from "../../components/EventList";
+import EventFab from "../../components/EventFab";
+import EventItem from "../../components/items/EventItem";
+import { EventGroup } from "../../models";
+import { useSelector } from "../../store";
 
 interface DiaryPageProps {}
 
 const DiaryPage: React.FC<DiaryPageProps> = (props) => {
+  const groups: EventGroup[] = useSelector(
+    (state) => state.data.filteredEvents
+  );
+
   return (
     <IonPage>
-      <EventFormModal />
+      <EventFab />
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -43,7 +53,22 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
             <IonSearchbar placeholder="Search"></IonSearchbar>
           </IonToolbar>
         </IonHeader>
-        <EventList />
+        <IonList lines="none">
+          {groups.map((group, i) => (
+            <React.Fragment key={i}>
+              <IonItem color="light" />
+
+              <IonListHeader>
+                <IonLabel>{group.name}</IonLabel>
+              </IonListHeader>
+              {group.events.map((item, j) => (
+                <EventItem data={item} key={j} />
+              ))}
+            </React.Fragment>
+          ))}
+
+          <IonItem color="light" />
+        </IonList>
       </IonContent>
     </IonPage>
   );
