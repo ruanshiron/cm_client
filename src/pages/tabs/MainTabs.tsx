@@ -9,9 +9,9 @@ import {
 } from "@ionic/react";
 import { Route, Redirect } from "react-router";
 import {
-  calendar,
   shirtOutline,
   checkmarkDoneCircleOutline,
+  todayOutline,
 } from "ionicons/icons";
 import DiaryPage from "./DiaryPage";
 import EventDetail from "./EventDetail";
@@ -44,7 +44,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
 
       <IonTabBar slot="bottom">
         <IonTabButton tab="diary" href="/tabs/diary" layout="label-hide">
-          <IonIcon size="large" icon={calendar} />
+          <IonIcon size="large" icon={todayOutline} />
           <IonLabel>Nhật ký</IonLabel>
         </IonTabButton>
         <IonTabButton tab="product" href="/tabs/product" layout="label-hide">

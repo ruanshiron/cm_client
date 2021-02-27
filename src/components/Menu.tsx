@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import {
-  calendar,
   shirtOutline,
   checkmarkDoneCircleOutline,
   personOutline,
@@ -9,6 +8,7 @@ import {
   storefrontOutline,
   settingsOutline,
   cutOutline,
+  todayOutline,
 } from "ionicons/icons";
 import {
   IonContent,
@@ -34,8 +34,8 @@ const appPages: AppPage[] = [
   {
     title: "Nhật ký",
     url: "/tabs/diary",
-    iosIcon: calendar,
-    mdIcon: calendar,
+    iosIcon: todayOutline,
+    mdIcon: todayOutline,
   },
   {
     title: "Sản phẩm",
