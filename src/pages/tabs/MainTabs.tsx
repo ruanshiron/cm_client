@@ -27,7 +27,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Redirect from="/tabs" to="/tabs/diary" exact />
+        <Redirect exact path="/tabs" to="/tabs/diary" />
 
         <Route path="/tabs/diary" render={() => <DiaryPage />} exact />
         <Route path="/tabs/product" render={() => <ProductPage />} exact />

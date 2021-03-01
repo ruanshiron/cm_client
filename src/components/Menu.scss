@@ -64,6 +64,10 @@ ion-menu#side-menu {
         ion-icon {
           color: var(--ion-color-primary);
         }
+
+        ion-label {
+          font-weight: 900;
+        }
       }
 
       ion-icon {
@@ -128,4 +132,31 @@ ion-item.selected {
 
 ion-split-pane {
   --side-max-width: 304px;
+}
+
+@media (prefers-color-scheme: dark) {
+  ion-menu#side-menu {
+    &.md {
+      ion-item {
+        &.selected {
+          ion-icon {
+            color: var(--ion-color-primary-contrast);
+          }
+
+          ion-label {
+            color: var(--ion-color-primary-contrast);
+          }
+        }
+
+        ion-icon {
+          color: #616e7e;
+        }
+
+        ion-label {
+          font-weight: 500;
+          color: #616e7e;
+        }
+      }
+    }
+  }
 }

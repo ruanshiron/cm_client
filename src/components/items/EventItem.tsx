@@ -1,5 +1,5 @@
 import React from "react";
-import { IonAvatar, IonNote, IonItem, IonLabel } from "@ionic/react";
+import { IonNote, IonItem, IonLabel, IonSkeletonText } from "@ionic/react";
 import { Event } from "../../models";
 import { useEventForm } from "../../hooks/useEventForm";
 import { EventModal } from "../modals/EventModal";
@@ -18,23 +18,26 @@ const EventItem: React.FC<EventItemProps> = ({ data }) => {
         button
         detail={false}
       >
-        <IonAvatar slot="start">
-          <img
-            alt=""
-            src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"
-          />
-        </IonAvatar>
-        <IonLabel>
-          <h2>
-            {data.workshop}・<b>{data.typeCode}</b>
-          </h2>
-          <p>
-            {data.productCode} / {data.sizeCode}
-          </p>
-        </IonLabel>
-        <IonNote slot="end" color="success">
-          <h4>{data.quantity}</h4>
-        </IonNote>
+        {data ? (
+          <>
+            <IonLabel>
+              <h2>
+                {data.workshop}・<b>{data.typeCode}</b>
+              </h2>
+              <p>
+                {data.productCode} / {data.sizeCode}
+              </p>
+            </IonLabel>
+            <IonNote slot="end" color="success">
+              <h4>{data.quantity}</h4>
+            </IonNote>
+          </>
+        ) : (
+          <>
+            <IonSkeletonText animated style={{ width: "60%" }} />
+            <IonSkeletonText animated />
+          </>
+        )}
       </IonItem>
 
       <EventModal form={form} />

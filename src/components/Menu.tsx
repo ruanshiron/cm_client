@@ -104,7 +104,6 @@ const Menu: React.FC = () => {
                     location.pathname === appPage.url ? "selected" : ""
                   }
                   routerLink={appPage.url}
-                  routerDirection="none"
                   lines="none"
                   detail={false}
                 >
@@ -132,7 +131,6 @@ const Menu: React.FC = () => {
                     location.pathname === appPage.url ? "selected" : ""
                   }
                   routerLink={appPage.url}
-                  routerDirection="none"
                   lines="none"
                   detail={false}
                 >

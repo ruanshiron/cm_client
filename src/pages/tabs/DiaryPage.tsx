@@ -5,9 +5,9 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
+  IonItemDivider,
   IonLabel,
   IonList,
-  IonListHeader,
   IonMenuButton,
   IonPage,
   IonSearchbar,
@@ -53,14 +53,12 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
             <IonSearchbar placeholder="Search"></IonSearchbar>
           </IonToolbar>
         </IonHeader>
-        <IonList lines="none">
+        <IonList>
           {groups.map((group, i) => (
             <React.Fragment key={i}>
-              <IonItem color="light" />
-
-              <IonListHeader>
+              <IonItemDivider sticky>
                 <IonLabel>{group.name}</IonLabel>
-              </IonListHeader>
+              </IonItemDivider>
               {group.events.map((item, j) => (
                 <EventItem data={item} key={j} />
               ))}

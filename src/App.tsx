@@ -2,7 +2,7 @@ import Menu from "./components/Menu";
 import React, { useEffect } from "react";
 import { IonApp, IonRouterOutlet, IonSplitPane } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -40,6 +40,7 @@ import { CustomerDetail } from "./pages/lists/CustomerDetail";
 import MaterialStorePage from "./pages/lists/MaterialStorePage";
 import MaterialStoreCreate from "./pages/lists/MaterialStoreCreate";
 import EmployeeCreate from "./pages/lists/EmployeeCreate";
+import HomeOrTutorial from "./components/HomeOrTutorial";
 
 interface AppRoute {
   url: string;
@@ -127,7 +128,8 @@ const App: React.FC = () => {
                 exact
               />
             ))}
-            <Redirect from="/" to="/tabs/diary" exact />
+            
+            <Route path="/" component={HomeOrTutorial} exact />
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>
