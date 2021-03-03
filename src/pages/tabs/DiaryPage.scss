@@ -1,0 +1,43 @@
+#diary-page {
+  .last-item {
+    padding: 25vh;
+    background: var(--ion-background-color, #fff);
+    border-top: 1px solid
+      var(
+        --ion-item-border-color,
+        var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+      );
+  }
+
+  .bulkhead {
+    padding: 12px;
+    background: var(
+      --ion-item-border-color,
+      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+    );
+  }
+
+  ion-list.list-md {
+    padding: 0px;
+  }
+
+  ion-item-divider.top-divider {
+    border-bottom: 1px solid
+      var(
+        --ion-item-border-color,
+        var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.01)))
+      );
+    border-top: 1px solid
+      var(
+        --ion-item-border-color,
+        var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+      );
+  }
+
+  ion-item {
+    ion-label {
+      border-left: 2px solid var(--ion-color-medium);
+      padding-left: 10px;
+    }
+  }
+}

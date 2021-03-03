@@ -1,6 +1,6 @@
 import Menu from "./components/Menu";
 import React, { useEffect } from "react";
-import { IonApp, IonRouterOutlet, IonSplitPane } from "@ionic/react";
+import { IonApp, IonRouterOutlet, IonSplitPane, setupConfig } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Route } from "react-router-dom";
 
@@ -95,6 +95,11 @@ const createPages: AppRoute[] = [
     component: MaterialStoreCreate,
   },
 ];
+
+setupConfig({
+  rippleEffect: false,
+  mode: 'md',
+});
 
 const App: React.FC = () => {
   const dispatch = useDispatch();

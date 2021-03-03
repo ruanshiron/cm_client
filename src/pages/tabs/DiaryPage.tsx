@@ -4,7 +4,6 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonItem,
   IonItemDivider,
   IonLabel,
   IonList,
@@ -20,6 +19,7 @@ import EventFab from "../../components/EventFab";
 import EventItem from "../../components/items/EventItem";
 import { EventGroup } from "../../models";
 import { useSelector } from "../../store";
+import "./DiaryPage.scss"
 
 interface DiaryPageProps {}
 
@@ -29,7 +29,7 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
   );
 
   return (
-    <IonPage>
+    <IonPage id="diary-page">
       <EventFab />
       <IonHeader>
         <IonToolbar>
@@ -53,10 +53,10 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
             <IonSearchbar placeholder="Search"></IonSearchbar>
           </IonToolbar>
         </IonHeader>
-        <IonList>
+        <IonList lines="none">
           {groups.map((group, i) => (
             <React.Fragment key={i}>
-              <IonItemDivider sticky>
+              <IonItemDivider className="top-divider">
                 <IonLabel>{group.name}</IonLabel>
               </IonItemDivider>
               {group.events.map((item, j) => (
@@ -64,8 +64,8 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
               ))}
             </React.Fragment>
           ))}
-
-          <IonItem color="light" />
+          <div className="last-item">
+          </div>
         </IonList>
       </IonContent>
     </IonPage>
