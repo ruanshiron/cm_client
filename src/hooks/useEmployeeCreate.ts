@@ -23,7 +23,7 @@ export const useEmployeeCreate = () => {
     try {
       await employeeAPI.save(fields);
       setFields(initialEmployee);
-      router.back();
+      router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
       dispatch(fetchEmployees());

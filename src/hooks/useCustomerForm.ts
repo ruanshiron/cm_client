@@ -23,7 +23,7 @@ export const useCustomerForm = () => {
     try {
       await customerAPI.save(fields);
       setFields(initialCustomer);
-      router.back();
+      router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
       dispatch(fetchCustomers());

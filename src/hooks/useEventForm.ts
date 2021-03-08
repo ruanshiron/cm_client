@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "../utils/toast";
 import { useSelector } from "../store";
-import { fetchEvents, fetchProducts } from "../store/dataSlice";
+import { fetchEvents } from "../store/dataSlice";
 import { eventAPI } from "../api";
 
 const initalEvent: Event = {
@@ -20,9 +20,9 @@ export const useEventForm = (event: Event = initalEvent) => {
   const products = useSelector((state) => state.data.products);
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    // dispatch(fetchProducts());
     setFields(event);
-  }, [dispatch, showEventForm, event]);
+  }, [showEventForm, event]);
 
   const setFieldsValue = (e: Partial<Event>) => {
     setFields((fields) => ({ ...fields, ...e }));

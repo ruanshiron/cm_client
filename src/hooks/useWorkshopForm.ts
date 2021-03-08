@@ -23,7 +23,7 @@ export const useWorkshopForm = () => {
     try {
       await workshopAPI.save(fields);
       setFields(initialWorkshop);
-      router.back();
+      router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
       dispatch(fetchWorkshops());

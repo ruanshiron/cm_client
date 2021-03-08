@@ -23,7 +23,7 @@ export const useProductForm = () => {
     try {
       await productAPI.save(fields);
       setFields(initalProduct);
-      router.back();
+      router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
       dispatch(fetchProducts());

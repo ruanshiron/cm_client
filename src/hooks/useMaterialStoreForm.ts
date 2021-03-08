@@ -27,7 +27,7 @@ export const useMaterialStoreForm = () => {
     try {
       await materialStoreAPI.save(fields);
       setFields(initialMaterialStore);
-      router.back();
+      router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
       dispatch(fetchMaterialStores());

@@ -1,6 +1,12 @@
 import Menu from "./components/Menu";
 import React, { useEffect } from "react";
-import { IonApp, IonRouterOutlet, IonSplitPane, setupConfig } from "@ionic/react";
+import {
+  IonApp,
+  IonProgressBar,
+  IonRouterOutlet,
+  IonSplitPane,
+  setupConfig,
+} from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Route } from "react-router-dom";
 
@@ -29,7 +35,7 @@ import "./theme/style.scss";
 import MainTabs from "./pages/tabs/MainTabs";
 
 import { useDispatch } from "react-redux";
-import { fetchEvents } from "./store/dataSlice";
+import { fetchEvents, fetchProducts } from "./store/dataSlice";
 import WorkshopPage from "./pages/lists/WorkshopPage";
 import CustomerPage from "./pages/lists/CustomerPage";
 import EmployeePage from "./pages/lists/EmployeePage";
@@ -41,6 +47,7 @@ import MaterialStorePage from "./pages/lists/MaterialStorePage";
 import MaterialStoreCreate from "./pages/lists/MaterialStoreCreate";
 import EmployeeCreate from "./pages/lists/EmployeeCreate";
 import HomeOrTutorial from "./components/HomeOrTutorial";
+import { useSelector } from "./store";
 
 interface AppRoute {
   url: string;
@@ -98,7 +105,7 @@ const createPages: AppRoute[] = [
 
 setupConfig({
   rippleEffect: false,
-  mode: 'md',
+  mode: "md",
 });
 
 const App: React.FC = () => {
@@ -106,9 +113,18 @@ const App: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchEvents());
+    dispatch(fetchProducts());
   }, [dispatch]);
+
+  const loading = useSelector((state) => state.data.loading);
   return (
     <IonApp>
+      {loading && (
+        <IonProgressBar
+          style={{ zIndex: 999 }}
+          type="indeterminate"
+        ></IonProgressBar>
+      )}
       <IonReactRouter>
         <IonSplitPane contentId="main">
           <Menu />
@@ -133,7 +149,7 @@ const App: React.FC = () => {
                 exact
               />
             ))}
-            
+
             <Route path="/" component={HomeOrTutorial} exact />
           </IonRouterOutlet>
         </IonSplitPane>
