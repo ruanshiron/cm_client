@@ -62,7 +62,7 @@ const CustomerPage: React.FC<CustomerPageProps> = () => {
       <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Speakers</IonTitle>
+            <IonTitle size="large">Khách hàng</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>

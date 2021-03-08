@@ -105,7 +105,7 @@ const createPages: AppRoute[] = [
 
 setupConfig({
   rippleEffect: false,
-  mode: "md",
+  mode: "ios",
 });
 
 const App: React.FC = () => {

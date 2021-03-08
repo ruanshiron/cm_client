@@ -83,7 +83,7 @@ const OrderPage: React.FC<OrderPageProps> = () => {
       <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Speakers</IonTitle>
+            <IonTitle size="large">Đơn Hàng</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>

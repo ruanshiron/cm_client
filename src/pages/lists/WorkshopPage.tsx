@@ -62,7 +62,7 @@ const WorkshopPage: React.FC<WorkshopPageProps> = () => {
       <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Speakers</IonTitle>
+            <IonTitle size="large">Xưởng</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>
