@@ -20,6 +20,7 @@ import OrderPage from "./OrderPage";
 import { OrderDetail } from "./OrderDetail";
 import { ProductDetail } from "./ProductDetail";
 import ProductCreate from "./ProductCreate";
+import OrderCreate from "./OrderCreate";
 
 interface MainTabsProps {}
 
@@ -39,7 +40,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         <Route path="/tabs/product/:id" component={ProductDetail} />
 
         <Route path="/tabs/product/new" component={ProductCreate} exact />
-        {/* <Route path="/tabs/workshop/new" component={CreateWorkshopPage} exact /> */}
+        <Route path="/tabs/order/new" component={OrderCreate} exact />
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom">

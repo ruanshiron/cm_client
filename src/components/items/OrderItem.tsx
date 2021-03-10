@@ -7,22 +7,28 @@ import {
   IonLabel,
   IonList,
   IonNote,
-  IonThumbnail,
 } from "@ionic/react";
 import React from "react";
+import { Order } from "../../models";
+import { useSelector } from "../../store";
+import { formatDate } from "../../utils/date";
 
-export const OrderItem: React.FC<{ data: any }> = ({ data }) => {
+export const OrderItem: React.FC<{ data: Order }> = ({ data }) => {
+  const customer = useSelector((state) =>
+    state.data.customers.find((i) => i.id === data.customer)
+  );
+
+  const products = useSelector((state) => state.data.products);
+
   return (
     <>
-      <IonCard className="list-card">
+      <IonCard
+        button
+        className="list-card"
+        routerLink={`/tabs/order/${data.id}`}
+      >
         <IonCardHeader>
-          <IonItem
-            button
-            detail={false}
-            lines="none"
-            className="list-item"
-            routerLink={`/tabs/order/${data.id}`}
-          >
+          <IonItem detail={false} lines="none" className="list-item">
             <IonAvatar slot="start">
               <img
                 src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"
@@ -30,31 +36,24 @@ export const OrderItem: React.FC<{ data: any }> = ({ data }) => {
               />
             </IonAvatar>
             <IonLabel>
-              <h2>{data.name}</h2>
-              <p>{data.date}</p>
+              <h2>{customer?.name}</h2>
+              <p>{formatDate(data.createdAt)}</p>
             </IonLabel>
-            <IonThumbnail slot="end">
-              <img
-                src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"
-                alt="Speaker profile pic"
-              />
-            </IonThumbnail>
           </IonItem>
         </IonCardHeader>
 
         <IonCardContent>
           <IonList lines="none">
-            {data.fields.map((field: any, index: number) => (
-              <IonItem
-                detail={false}
-                routerLink={`/tabs/order/fields/${field.id}`}
-                key={index}
-              >
+            {data.lines.map((line, index) => (
+              <IonItem detail={false} key={index}>
                 <IonLabel>
-                  <h3>{field.product.name}・{field.product.size}</h3>
+                  {products.find((i) => i.id === line.product)?.code}
+                </IonLabel>
+                <IonLabel slot="end">
+                  <p> {line.size}</p>
                 </IonLabel>
                 <IonNote slot="end">
-                  <h3>{field.value}</h3>
+                  <h3>{line.quantity}</h3>
                 </IonNote>
               </IonItem>
             ))}

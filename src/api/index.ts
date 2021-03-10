@@ -40,3 +40,4 @@ export const workshopAPI = useAPI("workshops");
 export const customerAPI = useAPI("customers");
 export const employeeAPI = useAPI("employees");
 export const materialStoreAPI = useAPI("materialStores");
+export const orderAPI = useAPI("orders");

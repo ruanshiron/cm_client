@@ -8,63 +8,31 @@ import {
   IonIcon,
   IonMenuButton,
   IonPage,
+  IonPopover,
   IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { ellipsisVerticalSharp } from "ionicons/icons";
-import React from "react";
+import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
+import React, { useState } from "react";
 import { OrderItem } from "../../components/items/OrderItem";
-import "./OrderPage.scss"
-
-const orders = [
-  {
-    id: 0,
-    name: "Khách hàng 1",
-    date: "2020-12-12",
-    fields: [
-      {
-        product: {
-          name: "Sản phẩm 1",
-          size: "XL"
-        },
-        value: 200,
-      },
-      {
-        product: {
-          name: "Sản phẩm 2",
-          size: "L"
-        },
-        value: 120,
-      },
-    ],
-  },
-  {
-    id: 1,
-    name: "Khách hàng 2",
-    date: "2020-12-12",
-    fields: [
-      {
-        product: {
-          name: "Sản phẩm 1",
-          size: "XL"
-        },
-        value: 200,
-      },
-      {
-        product: {
-          name: "Sản phẩm 2",
-          size: "L"
-        },
-        value: 120,
-      },
-    ],
-  },
-];
+import { OrderPagePopover } from "../../components/popovers/OrderPagePopover";
+import { useSelector } from "../../store";
+import "./OrderPage.scss";
 
 interface OrderPageProps {}
 
 const OrderPage: React.FC<OrderPageProps> = () => {
+  const [showPopover, setShowPopover] = useState(false);
+  const [popoverEvent, setPopoverEvent] = useState<any>();
+
+  const presentPopover = (e: React.MouseEvent) => {
+    setPopoverEvent(e.nativeEvent);
+    setShowPopover(true);
+  };
+
+  const orders = useSelector((state) => state.data.orders);
+
   return (
     <IonPage id="list-page">
       <IonHeader>
@@ -73,9 +41,14 @@ const OrderPage: React.FC<OrderPageProps> = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Đơn Hàng</IonTitle>
+
           <IonButtons slot="end">
-            <IonButton>
-              <IonIcon slot="icon-only" icon={ellipsisVerticalSharp} />
+            <IonButton onClick={presentPopover}>
+              <IonIcon
+                slot="icon-only"
+                ios={ellipsisHorizontal}
+                md={ellipsisVertical}
+              ></IonIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -96,6 +69,14 @@ const OrderPage: React.FC<OrderPageProps> = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
+
+      <IonPopover
+        isOpen={showPopover}
+        event={popoverEvent}
+        onDidDismiss={() => setShowPopover(false)}
+      >
+        <OrderPagePopover dismiss={() => setShowPopover(false)} />
+      </IonPopover>
     </IonPage>
   );
 };

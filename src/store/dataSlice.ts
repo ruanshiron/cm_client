@@ -4,6 +4,7 @@ import {
   employeeAPI,
   eventAPI,
   materialStoreAPI,
+  orderAPI,
   productAPI,
   workshopAPI,
 } from "../api";
@@ -13,6 +14,7 @@ import {
   Event,
   EventGroup,
   MaterialStore,
+  Order,
   Product,
   Workshop,
 } from "../models";
@@ -27,6 +29,7 @@ interface DataState {
   customers: Customer[];
   employees: Employee[];
   materialStores: MaterialStore[];
+  orders: Order[];
 
   filteredEvents: EventGroup[];
 }
@@ -40,6 +43,7 @@ let initialState: DataState = {
   customers: [],
   employees: [],
   materialStores: [],
+  orders: [],
 
   filteredEvents: [],
 };
@@ -85,6 +89,15 @@ export const fetchEmployees = createAsyncThunk(
     return await employeeAPI.get();
   }
 );
+
+export const fetchOrders = createAsyncThunk(
+  "data/fetchOrders",
+  async (params, thunkAPI) => {
+    return await orderAPI.get();
+  }
+);
+
+
 
 
 const dataSlice = createSlice({
@@ -164,6 +177,18 @@ const dataSlice = createSlice({
       state.materialStores = action.payload as MaterialStore[];
     });
     builder.addCase(fetchMaterialStores.rejected, (state, action) => {
+      state.loading = false;
+    });
+
+    // ORDER
+    builder.addCase(fetchOrders.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchOrders.fulfilled, (state, action) => {
+      state.loading = false;
+      state.orders = action.payload as Order[];
+    });
+    builder.addCase(fetchOrders.rejected, (state, action) => {
       state.loading = false;
     });
   },

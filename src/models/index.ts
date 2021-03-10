@@ -50,3 +50,14 @@ export interface MaterialStore extends Base {
   phoneNumber?: string;
   types?: string[];
 }
+
+interface LineOrder {
+  product?: string;
+  size?: string;
+  quantity?: number;
+}
+export interface Order extends Base {
+  customer?: string;
+  lines: LineOrder[];
+  note?: string;
+}

@@ -35,7 +35,12 @@ import "./theme/style.scss";
 import MainTabs from "./pages/tabs/MainTabs";
 
 import { useDispatch } from "react-redux";
-import { fetchEvents, fetchProducts } from "./store/dataSlice";
+import {
+  fetchCustomers,
+  fetchEvents,
+  fetchOrders,
+  fetchProducts,
+} from "./store/dataSlice";
 import WorkshopPage from "./pages/lists/WorkshopPage";
 import CustomerPage from "./pages/lists/CustomerPage";
 import EmployeePage from "./pages/lists/EmployeePage";
@@ -105,7 +110,7 @@ const createPages: AppRoute[] = [
 
 setupConfig({
   rippleEffect: false,
-  mode: "ios",
+  mode: "md",
 });
 
 const App: React.FC = () => {
@@ -114,6 +119,8 @@ const App: React.FC = () => {
   useEffect(() => {
     dispatch(fetchEvents());
     dispatch(fetchProducts());
+    dispatch(fetchCustomers());
+    dispatch(fetchOrders());
   }, [dispatch]);
 
   const loading = useSelector((state) => state.data.loading);
