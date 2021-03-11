@@ -23,7 +23,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
     <>
       <IonCard>
         <IonCardContent>
-          <IonItem>
+          <IonItem lines="none">
             <IonLabel>Khách hàng</IonLabel>
             <IonSelect
               okText="Chọn"
@@ -47,7 +47,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
 
       <IonCard>
         <IonCardContent>
-          <IonItem>
+          <IonItem lines="none">
             <IonLabel position="floating">Ghi chú</IonLabel>
             <IonTextarea
               onIonChange={(e) =>
@@ -95,24 +95,6 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
                 </IonItem>
 
                 <IonItem>
-                  <IonLabel>Số lượng</IonLabel>
-                  <IonInput
-                    type="number"
-                    value={form.fields.lines[index].quantity || undefined}
-                    style={{ textAlign: "right" }}
-                    onIonChange={(e) =>
-                      form.setFieldsValue({
-                        lines: form.fields.lines.map((line, i) =>
-                          i === index
-                            ? { ...line, quantity: parseInt(e.detail.value!) }
-                            : line
-                        ),
-                      })
-                    }
-                  ></IonInput>
-                </IonItem>
-
-                <IonItem>
                   <IonLabel>Kích cỡ</IonLabel>
                   <IonSelect
                     okText="Chọn"
@@ -139,6 +121,25 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
                       ))}
                   </IonSelect>
                 </IonItem>
+
+                <IonItem>
+                  <IonLabel>Số lượng</IonLabel>
+                  <IonInput
+                    type="number"
+                    value={form.fields.lines[index].quantity || undefined}
+                    style={{ textAlign: "right" }}
+                    onIonChange={(e) =>
+                      form.setFieldsValue({
+                        lines: form.fields.lines.map((line, i) =>
+                          i === index
+                            ? { ...line, quantity: parseInt(e.detail.value!) }
+                            : line
+                        ),
+                      })
+                    }
+                  ></IonInput>
+                </IonItem>
+
                 {form.fields.lines.length > 1 && (
                   <IonItem
                     button

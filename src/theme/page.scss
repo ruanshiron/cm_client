@@ -46,3 +46,18 @@
     padding: 0;
   }
 }
+
+ion-router-outlet {
+  ion-content {
+    --ion-item-background: #ffffff;
+    --ion-card-background: #ffffff;
+    --ion-background-color: var(--ion-color-light);
+
+    @media (prefers-color-scheme: dark) {
+      --ion-item-background: #1c1c1d;
+      --ion-card-background: #1c1c1d;
+      --ion-background-color: #131313;
+    }
+  }
+}
+

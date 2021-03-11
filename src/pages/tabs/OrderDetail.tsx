@@ -13,6 +13,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonListHeader,
   IonNote,
   IonPage,
   IonRow,
@@ -81,6 +82,7 @@ export const OrderDetail: React.FC<OrderDetailProps> = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   <IonList>
+                    <IonListHeader lines="full">Danh sách sản phẩm và só lượng</IonListHeader>
                     {order?.lines.map((line, index) => (
                       <IonItem key={index}>
                         <IonLabel>
@@ -95,16 +97,12 @@ export const OrderDetail: React.FC<OrderDetailProps> = () => {
                       </IonItem>
                     ))}
 
-                    <IonItem lines="inset">
-                      <IonLabel position="stacked">Ghi chú</IonLabel>
-                      <IonTextarea readonly>
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Saepe vel libero praesentium quidem optio
-                        distinctio eum laudantium! Eveniet ab nam veritatis
-                        provident dignissimos voluptatibus placeat optio, quas,
-                        repellat, nulla ratione!
-                      </IonTextarea>
-                    </IonItem>
+                    {order?.note && (
+                      <IonItem lines="inset">
+                        <IonLabel position="stacked">Ghi chú</IonLabel>
+                        <IonTextarea readonly>{order?.note}</IonTextarea>
+                      </IonItem>
+                    )}
                   </IonList>
                 </IonCardContent>
               </IonCard>
