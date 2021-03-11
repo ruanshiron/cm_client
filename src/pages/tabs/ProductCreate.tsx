@@ -2,13 +2,16 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonInput,
   IonItem,
   IonLabel,
   IonPage,
+  IonRow,
   IonSelect,
   IonSelectOption,
   IonThumbnail,
@@ -17,6 +20,7 @@ import {
 } from "@ionic/react";
 import { cameraOutline } from "ionicons/icons";
 import React from "react";
+import ProductForm from "../../components/forms/ProductForm";
 import { useProductForm } from "../../hooks/useProductForm";
 import "./ProductCreate.scss";
 
@@ -40,7 +44,7 @@ const ProductCreate: React.FC<ProductCreateProps> = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent color="light">
-        <div className="ion-padding-top ion-padding-start"></div>
+        {/* <div className="ion-padding-top ion-padding-start"></div>
         <IonItem>
           <IonLabel position="floating">Tên</IonLabel>
           <IonInput
@@ -85,7 +89,14 @@ const ProductCreate: React.FC<ProductCreateProps> = () => {
         <IonItem button>
           <IonLabel position="floating">Ghi chú</IonLabel>
           <IonInput></IonInput>
-        </IonItem>
+        </IonItem> */}
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12" size-md="8" offsetMd="2">
+              <ProductForm form={form} />
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );
