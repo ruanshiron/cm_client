@@ -62,16 +62,13 @@ const ProductCreate: React.FC<ProductCreateProps> = () => {
             cancelText="Hủy"
             okText="Ok!"
           >
-            <IonSelectOption value="bacon">Bacon</IonSelectOption>
-            <IonSelectOption value="olives">Black Olives</IonSelectOption>
-            <IonSelectOption value="xcheese">Extra Cheese</IonSelectOption>
-            <IonSelectOption value="peppers">Green Peppers</IonSelectOption>
-            <IonSelectOption value="mushrooms">Mushrooms</IonSelectOption>
-            <IonSelectOption value="onions">Onions</IonSelectOption>
-            <IonSelectOption value="pepperoni">Pepperoni</IonSelectOption>
-            <IonSelectOption value="pineapple">Pineapple</IonSelectOption>
-            <IonSelectOption value="sausage">Sausage</IonSelectOption>
-            <IonSelectOption value="Spinach">Spinach</IonSelectOption>
+            <IonSelectOption value="XS">XS</IonSelectOption>
+            <IonSelectOption value="S">S</IonSelectOption>
+            <IonSelectOption value="M">M</IonSelectOption>
+            <IonSelectOption value="L">L</IonSelectOption>
+            <IonSelectOption value="XL">XL</IonSelectOption>
+            <IonSelectOption value="XXL">XXL</IonSelectOption>
+            <IonSelectOption value="XXXL">XXXL</IonSelectOption>
           </IonSelect>
         </IonItem>
         <div className="ion-padding-top ion-padding-start"></div>

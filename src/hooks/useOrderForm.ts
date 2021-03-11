@@ -2,7 +2,7 @@ import { useIonRouter } from "@ionic/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { orderAPI } from "../api";
-import { Order } from "../models";
+import { Order, LineOrder } from "../models";
 import { useSelector } from "../store";
 import { fetchOrders } from "../store/dataSlice";
 import { toast } from "../utils/toast";
@@ -23,10 +23,26 @@ export const useOrderForm = () => {
   const products = useSelector((state) => state.data.products);
   const customers = useSelector((state) => state.data.customers);
 
-  const isValidated = () => !fields?.customer?.trim();
+  const isInvalid = () => {
+    const isInvalidLine = (line: LineOrder) =>
+      !line.product?.trim() ||
+      !line.size?.trim() ||
+      !line.quantity ||
+      !(line.quantity > 0);
+
+    const isInvalidLines = (lines: LineOrder[]) => {
+      return lines.map((line) => isInvalidLine(line)).reduce((p, c) => p || c);
+    };
+
+    return (
+      !fields?.customer?.trim() ||
+      !(fields.lines.length > 0) ||
+      isInvalidLines(fields.lines)
+    );
+  };
 
   const submit = async () => {
-    if (isValidated()) return;
+    if (isInvalid()) return;
 
     try {
       await orderAPI.save(fields);

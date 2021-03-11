@@ -51,7 +51,7 @@ export interface MaterialStore extends Base {
   types?: string[];
 }
 
-interface LineOrder {
+export interface LineOrder {
   product?: string;
   size?: string;
   quantity?: number;

@@ -18,11 +18,11 @@ export const useMaterialStoreForm = () => {
 
   const dispatch = useDispatch();
 
-  const isValidated = () =>
+  const isInvalid = () =>
     !fields?.name?.trim() || !fields?.phoneNumber?.trim();
 
   const submit = async () => {
-    if (isValidated()) return;
+    if (isInvalid()) return;
 
     try {
       await materialStoreAPI.save(fields);

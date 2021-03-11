@@ -28,8 +28,9 @@ export const useEventForm = (event: Event = initalEvent) => {
     setFields((fields) => ({ ...fields, ...e }));
   };
 
-  const isValidated = () =>
+  const isInvalid = () =>
     !fields?.quantity ||
+    !(fields?.quantity > 0) ||
     !fields?.productCode?.trim() ||
     !fields?.sizeCode?.trim() ||
     !fields?.typeCode?.trim() ||
@@ -37,7 +38,7 @@ export const useEventForm = (event: Event = initalEvent) => {
     !fields?.workshop?.trim();
 
   const submit = async () => {
-    if (isValidated()) return;
+    if (isInvalid()) return;
 
     try {
       await eventAPI.save(fields);

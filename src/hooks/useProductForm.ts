@@ -14,11 +14,11 @@ export const useProductForm = () => {
 
   const dispatch = useDispatch();
 
-  const isValidated = () =>
+  const isInvalid = () =>
     !fields?.name?.trim() || !fields?.code?.trim() || !fields?.sizes?.length;
 
   const submit = async () => {
-    if (isValidated()) return;
+    if (isInvalid()) return;
 
     try {
       await productAPI.save(fields);
