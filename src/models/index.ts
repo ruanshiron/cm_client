@@ -22,6 +22,7 @@ export interface Product extends Base {
   name?: string;
   sizes?: string[];
   note?: string;
+  processes?: string[];
   reports?: Field[];
 }
 

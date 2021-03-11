@@ -36,12 +36,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
               }
             ></IonInput>
           </IonItem>
-        </IonCardContent>
-      </IonCard>
-
-      <IonCard>
-        <IonCardContent>
-          <IonItem>
+          <IonItem lines="none">
             <IonLabel position="floating">Kích cỡ</IonLabel>
             <IonSelect
               onIonChange={(e) =>
@@ -65,23 +60,21 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
 
       <IonCard>
         <IonCardContent>
-          <IonItem>
+          <IonItem lines="none">
             <IonLabel position="floating">Quy trình sản xuất</IonLabel>
             <IonSelect
               onIonChange={(e) =>
-                form.setFieldsValue({ sizes: e.detail.value! })
+                form.setFieldsValue({ processes: e.detail.value! })
               }
               multiple={true}
               cancelText="Hủy"
               okText="Ok!"
             >
-              <IonSelectOption value="XS">XS</IonSelectOption>
-              <IonSelectOption value="S">S</IonSelectOption>
-              <IonSelectOption value="M">M</IonSelectOption>
-              <IonSelectOption value="L">L</IonSelectOption>
-              <IonSelectOption value="XL">XL</IonSelectOption>
-              <IonSelectOption value="XXL">XXL</IonSelectOption>
-              <IonSelectOption value="XXXL">XXXL</IonSelectOption>
+              <IonSelectOption value="process_1">Hoàn thiện</IonSelectOption>
+              <IonSelectOption value="process_2">In</IonSelectOption>
+              <IonSelectOption value="process_3">Thêu</IonSelectOption>
+              <IonSelectOption value="process_4">Sửa lỗi</IonSelectOption>
+              <IonSelectOption value="process_5">Nhập kho</IonSelectOption>
             </IonSelect>
           </IonItem>
         </IonCardContent>
@@ -97,7 +90,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
       </IonItem> */}
       <IonCard>
         <IonCardContent>
-          <IonItem>
+          <IonItem lines="none">
             <IonLabel position="floating">Ghi chú</IonLabel>
             <IonTextarea
               onIonChange={(e) =>

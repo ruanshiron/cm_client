@@ -34,7 +34,7 @@ const OrderPage: React.FC<OrderPageProps> = () => {
   const orders = useSelector((state) => state.data.orders);
 
   return (
-    <IonPage id="list-page">
+    <IonPage className="list-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">

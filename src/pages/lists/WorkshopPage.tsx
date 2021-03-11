@@ -41,7 +41,7 @@ const WorkshopPage: React.FC<WorkshopPageProps> = () => {
   }, [dispatch]);
 
   return (
-    <IonPage id="list-page">
+    <IonPage className="list-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">

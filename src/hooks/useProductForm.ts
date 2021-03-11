@@ -6,7 +6,7 @@ import { Product } from "../models";
 import { fetchProducts } from "../store/dataSlice";
 import { toast } from "../utils/toast";
 
-const initalProduct: Product = { name: "", code: "", sizes: [], note: "" };
+const initalProduct: Product = { name: "", code: "", sizes: [], note: "", processes: [] };
 
 export const useProductForm = () => {
   const router = useIonRouter();
