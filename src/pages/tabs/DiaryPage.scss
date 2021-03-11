@@ -11,10 +11,15 @@
 
   .bulkhead {
     padding: 12px;
-    background: var(
-      --ion-item-border-color,
-      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
-    );
+    background: var(--ion-background-color);
+  }
+
+  .border-full {
+    border: 1px solid
+      var(
+        --ion-item-border-color,
+        var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+      );
   }
 
   ion-list.list-md {
@@ -26,11 +31,6 @@
       var(
         --ion-item-border-color,
         var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.01)))
-      );
-    border-top: 1px solid
-      var(
-        --ion-item-border-color,
-        var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
       );
   }
 
