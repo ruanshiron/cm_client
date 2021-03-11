@@ -8,9 +8,10 @@ import { toast } from "../utils/toast";
 
 const initalProduct: Product = { name: "", code: "", sizes: [], note: "", processes: [] };
 
-export const useProductForm = () => {
+export const useProductForm = (product = initalProduct, option: "readonly" | undefined = undefined) => {
   const router = useIonRouter();
-  const [fields, setFields] = useState<Product>(initalProduct);
+  const [fields, setFields] = useState<Product>(product);
+  const [readonly, setReadonly] = useState(option === "readonly")
 
   const dispatch = useDispatch();
 
@@ -22,7 +23,7 @@ export const useProductForm = () => {
 
     try {
       await productAPI.save(fields);
-      setFields(initalProduct);
+      setFields(product);
       router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
@@ -40,5 +41,8 @@ export const useProductForm = () => {
     fields,
     setFieldsValue,
     submit,
+    setFields,
+    readonly,
+    setReadonly
   };
 };

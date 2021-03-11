@@ -2,13 +2,18 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonItem,
   IonLabel,
   IonNote,
   IonPage,
+  IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -18,6 +23,8 @@ import { useParams } from "react-router";
 import _ from "lodash";
 import { Field } from "../../models";
 import { useSelector } from "../../store";
+import ProductForm from "../../components/forms/ProductForm";
+import { useProductForm } from "../../hooks/useProductForm";
 
 const parseFieldName = (key: string) => {
   switch (key) {
@@ -68,6 +75,12 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const form = useProductForm(product, "readonly");
+
+  useEffect(() => {
+    if (product) form.setFields(product);
+  }, [product, form])
+
   return (
     <>
       <IonPage>
@@ -89,16 +102,29 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          {fields?.map((field: any) => (
-            <IonItem detail={false} key={field.name}>
-              <IonLabel>
-                <h3>{parseFieldName(field.name)}</h3>
-              </IonLabel>
-              <IonNote slot="end">
-                <h3>{field.value}</h3>
-              </IonNote>
-            </IonItem>
-          ))}
+          <IonGrid>
+            <IonRow>
+              <IonCol size="12" size-md="8" offsetMd="2">
+                {fields && fields?.length > 0 && (
+                  <IonCard>
+                    <IonCardContent>
+                      {fields?.map((field: any) => (
+                        <IonItem detail={false} key={field.name}>
+                          <IonLabel>
+                            <h3>{parseFieldName(field.name)}</h3>
+                          </IonLabel>
+                          <IonNote slot="end">
+                            <h3>{field.value}</h3>
+                          </IonNote>
+                        </IonItem>
+                      ))}
+                    </IonCardContent>
+                  </IonCard>
+                )}
+                <ProductForm form={form} />
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         </IonContent>
       </IonPage>
     </>

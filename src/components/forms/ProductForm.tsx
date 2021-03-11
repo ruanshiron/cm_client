@@ -23,28 +23,34 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
           <IonItem>
             <IonLabel position="floating">Tên</IonLabel>
             <IonInput
+              value={form.fields.name}
               onIonChange={(e) =>
                 form.setFieldsValue({ name: e.detail.value! })
               }
+              readonly={form.readonly}
             ></IonInput>
           </IonItem>
           <IonItem>
             <IonLabel position="floating">Mã</IonLabel>
             <IonInput
+              value={form.fields.code}
               onIonChange={(e) =>
                 form.setFieldsValue({ code: e.detail.value! })
               }
-            ></IonInput>
+              readonly={form.readonly}
+              ></IonInput>
           </IonItem>
           <IonItem lines="none">
             <IonLabel position="floating">Kích cỡ</IonLabel>
             <IonSelect
+              value={form.fields.sizes}
               onIonChange={(e) =>
                 form.setFieldsValue({ sizes: e.detail.value! })
               }
               multiple={true}
               cancelText="Hủy"
               okText="Ok!"
+              disabled={form.readonly}
             >
               <IonSelectOption value="XS">XS</IonSelectOption>
               <IonSelectOption value="S">S</IonSelectOption>
@@ -63,12 +69,14 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
           <IonItem lines="none">
             <IonLabel position="floating">Quy trình sản xuất</IonLabel>
             <IonSelect
+              value={form.fields.processes}
               onIonChange={(e) =>
                 form.setFieldsValue({ processes: e.detail.value! })
               }
               multiple={true}
               cancelText="Hủy"
               okText="Ok!"
+              disabled={form.readonly}
             >
               <IonSelectOption value="process_1">Hoàn thiện</IonSelectOption>
               <IonSelectOption value="process_2">In</IonSelectOption>
@@ -93,10 +101,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
           <IonItem lines="none">
             <IonLabel position="floating">Ghi chú</IonLabel>
             <IonTextarea
+              value={form.fields.note}
               onIonChange={(e) =>
                 form.setFieldsValue({ note: e.detail.value! })
               }
-            ></IonTextarea>
+              readonly={form.readonly}
+              ></IonTextarea>
           </IonItem>
         </IonCardContent>
       </IonCard>
