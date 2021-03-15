@@ -6,12 +6,11 @@ import { Product } from "../models";
 import { fetchProducts } from "../store/dataSlice";
 import { toast } from "../utils/toast";
 
-const initalProduct: Product = { name: "", code: "", sizes: [], note: "", processes: [] };
+export const initalProduct: Product = { name: "", code: "", sizes: [], note: "", processes: [] };
 
-export const useProductForm = (product = initalProduct, option: "readonly" | undefined = undefined) => {
+export const useProductForm = (product = initalProduct) => {
   const router = useIonRouter();
   const [fields, setFields] = useState<Product>(product);
-  const [readonly, setReadonly] = useState(option === "readonly")
 
   const dispatch = useDispatch();
 
@@ -42,7 +41,5 @@ export const useProductForm = (product = initalProduct, option: "readonly" | und
     setFieldsValue,
     submit,
     setFields,
-    readonly,
-    setReadonly
   };
 };

@@ -18,7 +18,7 @@ import {
 } from "@ionic/react";
 import { ellipsisVerticalSharp } from "ionicons/icons";
 import React from "react";
-import EventFab from "../../components/EventFab";
+import EventFab from "../../components/fabs/EventFab";
 import EventItem from "../../components/items/EventItem";
 import { EventGroup } from "../../models";
 import { useSelector } from "../../store";

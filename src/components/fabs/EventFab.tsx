@@ -1,8 +1,8 @@
 import React from "react";
 import { IonFab, IonFabButton, IonIcon } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { useEventForm } from "../hooks/useEventForm";
-import { EventModal } from "./modals/EventModal";
+import { EventModal } from "../modals/EventModal";
+import { useEventForm } from "../../hooks/useEventForm";
 
 interface EventFabProps {}
 

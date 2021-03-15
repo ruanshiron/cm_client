@@ -80,26 +80,26 @@ const MainTabs: React.FC<MainTabsProps> = () => {
 
         {tabPages
           .filter((tab) => !!tab.index)
-          .map((tab) => (
-            <Route path={tab.path} render={() => tab.index} exact />
+          .map((tab, i) => (
+            <Route key={i} path={tab.path} render={() => tab.index} exact />
           ))}
 
         {tabPages
           .filter((tab) => !!tab.detail)
-          .map((tab) => (
-            <Route path={tab.path + "/:id"} component={tab.detail} />
+          .map((tab, i) => (
+            <Route key={i} path={tab.path + "/:id"} component={tab.detail} />
           ))}
 
         {tabPages
           .filter((tab) => !!tab.create)
-          .map((tab) => (
-            <Route path={tab.path + "/new"} component={tab.create} />
+          .map((tab, i) => (
+            <Route key={i} path={tab.path + "/new"} component={tab.create} />
           ))}
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom">
-        {tabPages.map((tab) => (
-          <IonTabButton tab={tab.name} href={tab.path} layout="label-hide">
+        {tabPages.map((tab, i) => (
+          <IonTabButton key={i}  tab={tab.name} href={tab.path} layout="label-hide">
             <IonIcon size="large" icon={tab.icon} />
             <IonLabel>{tab.title}</IonLabel>
           </IonTabButton>

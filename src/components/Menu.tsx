@@ -113,6 +113,7 @@ const Menu: React.FC = () => {
                   routerLink={appPage.url}
                   lines="none"
                   detail={false}
+                  routerDirection="none"
                 >
                   <IonIcon
                     slot="start"

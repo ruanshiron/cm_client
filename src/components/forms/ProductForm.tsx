@@ -27,7 +27,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
               onIonChange={(e) =>
                 form.setFieldsValue({ name: e.detail.value! })
               }
-              readonly={form.readonly}
             ></IonInput>
           </IonItem>
           <IonItem>
@@ -37,7 +36,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
               onIonChange={(e) =>
                 form.setFieldsValue({ code: e.detail.value! })
               }
-              readonly={form.readonly}
               ></IonInput>
           </IonItem>
           <IonItem lines="none">
@@ -50,7 +48,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
               multiple={true}
               cancelText="Hủy"
               okText="Ok!"
-              disabled={form.readonly}
             >
               <IonSelectOption value="XS">XS</IonSelectOption>
               <IonSelectOption value="S">S</IonSelectOption>
@@ -76,7 +73,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
               multiple={true}
               cancelText="Hủy"
               okText="Ok!"
-              disabled={form.readonly}
             >
               <IonSelectOption value="process_1">Hoàn thiện</IonSelectOption>
               <IonSelectOption value="process_2">In</IonSelectOption>
@@ -105,7 +101,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
               onIonChange={(e) =>
                 form.setFieldsValue({ note: e.detail.value! })
               }
-              readonly={form.readonly}
               ></IonTextarea>
           </IonItem>
         </IonCardContent>
