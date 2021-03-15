@@ -23,6 +23,7 @@ import { ProductDetail } from "./ProductDetail";
 import ProductCreate from "./ProductCreate";
 import OrderCreate from "./OrderCreate";
 import DashboardPage from "./DashboardPage";
+import { ProductUpdate } from "./ProductUpdate";
 
 interface TabPage {
   name: string;
@@ -31,6 +32,7 @@ interface TabPage {
   path: string;
   index?: ReactElement;
   create?: React.FC;
+  update?: React.FC;
   detail?: React.FC;
 }
 
@@ -58,6 +60,7 @@ const tabPages: TabPage[] = [
     index: <ProductPage />,
     create: ProductCreate,
     detail: ProductDetail,
+    update: ProductUpdate,
   },
   {
     name: "order",
@@ -87,19 +90,30 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         {tabPages
           .filter((tab) => !!tab.detail)
           .map((tab, i) => (
-            <Route key={i} path={tab.path + "/:id"} component={tab.detail} />
+            <Route key={i} path={tab.path + "/:id"} component={tab.detail} exact />
+          ))}
+
+        {tabPages
+          .filter((tab) => !!tab.detail)
+          .map((tab, i) => (
+            <Route key={i} path={tab.path + "/:id/update"} component={tab.update} />
           ))}
 
         {tabPages
           .filter((tab) => !!tab.create)
           .map((tab, i) => (
-            <Route key={i} path={tab.path + "/new"} component={tab.create} />
+            <Route key={i} path={tab.path + "/create"} component={tab.create} />
           ))}
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom">
         {tabPages.map((tab, i) => (
-          <IonTabButton key={i}  tab={tab.name} href={tab.path} layout="label-hide">
+          <IonTabButton
+            key={i}
+            tab={tab.name}
+            href={tab.path}
+            layout="label-hide"
+          >
             <IonIcon size="large" icon={tab.icon} />
             <IonLabel>{tab.title}</IonLabel>
           </IonTabButton>

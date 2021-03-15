@@ -21,7 +21,7 @@ export const OrderPagePopover: React.FC<OrderPagePopoverProps> = ({ dismiss }) =
 
   return (
     <IonList>
-      <IonItem button onClick={(e) => open("/tabs/order/new")}>
+      <IonItem button onClick={(e) => open("/tabs/order/create")}>
         <IonLabel>Thêm đơn hàng</IonLabel>
       </IonItem>
     </IonList>

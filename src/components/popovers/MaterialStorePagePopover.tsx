@@ -19,7 +19,7 @@ export const MaterialStorePagePopover: React.FC<{
 
   return (
     <IonList>
-      <IonItem button onClick={(e) => open("/materials/new")}>
+      <IonItem button onClick={(e) => open("/materials/create")}>
         <IonLabel>Thêm nguồn nguyên liệu</IonLabel>
       </IonItem>
     </IonList>

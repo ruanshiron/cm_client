@@ -21,7 +21,7 @@ export const EmployeePagePopover: React.FC<EmployeePagePopoverProps> = ({ dismis
 
   return (
     <IonList>
-      <IonItem button onClick={(e) => open("/employees/new")}>
+      <IonItem button onClick={(e) => open("/employees/create")}>
         <IonLabel>Thêm sản phẩm</IonLabel>
       </IonItem>
     </IonList>

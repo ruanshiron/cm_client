@@ -91,19 +91,19 @@ const detailPages: AppRoute[] = [
 
 const createPages: AppRoute[] = [
   {
-    url: "/workshops/new",
+    url: "/workshops/create",
     component: WorkshopCreate,
   },
   {
-    url: "/customers/new",
+    url: "/customers/create",
     component: CustomerCreate,
   },
   {
-    url: "/employees/new",
+    url: "/employees/create",
     component: EmployeeCreate,
   },
   {
-    url: "/materials/new",
+    url: "/materials/create",
     component: MaterialStoreCreate,
   },
 ];
