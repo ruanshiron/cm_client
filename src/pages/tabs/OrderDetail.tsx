@@ -22,13 +22,10 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import {
-  caretForwardCircle,
   checkmarkDoneSharp,
   close,
-  heart,
   listSharp,
   pencil,
-  share,
   trash,
 } from "ionicons/icons";
 import React, { useState } from "react";
