@@ -6,7 +6,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonNote,
+  IonText,
 } from "@ionic/react";
 import React from "react";
 import { Order } from "../../models";
@@ -43,18 +43,16 @@ export const OrderItem: React.FC<{ data: Order }> = ({ data }) => {
         </IonCardHeader>
 
         <IonCardContent>
-          <IonList lines="none">
+          <IonList lines="inset">
             {data.lines.map((line, index) => (
               <IonItem detail={false} key={index}>
                 <IonLabel>
                   {products.find((i) => i.id === line.product)?.code}
                 </IonLabel>
-                <IonLabel slot="end">
-                  <p> {line.size}</p>
-                </IonLabel>
-                <IonNote slot="end">
-                  <h3>{line.quantity}</h3>
-                </IonNote>
+                <IonLabel slot="end">{line.size}</IonLabel>
+                <IonText slot="end">
+                  <p>{line.quantity}</p>
+                </IonText>
               </IonItem>
             ))}
           </IonList>
