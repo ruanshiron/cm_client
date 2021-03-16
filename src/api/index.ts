@@ -41,3 +41,4 @@ export const customerAPI = useAPI("customers");
 export const employeeAPI = useAPI("employees");
 export const materialStoreAPI = useAPI("materialStores");
 export const orderAPI = useAPI("orders");
+export const processAPI = useAPI("processes");

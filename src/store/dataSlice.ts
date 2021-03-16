@@ -5,6 +5,7 @@ import {
   eventAPI,
   materialStoreAPI,
   orderAPI,
+  processAPI,
   productAPI,
   workshopAPI,
 } from "../api";
@@ -15,6 +16,7 @@ import {
   EventGroup,
   MaterialStore,
   Order,
+  Process,
   Product,
   Workshop,
 } from "../models";
@@ -30,6 +32,7 @@ interface DataState {
   employees: Employee[];
   materialStores: MaterialStore[];
   orders: Order[];
+  processes: Process[];
 
   filteredEvents: EventGroup[];
 }
@@ -44,6 +47,7 @@ let initialState: DataState = {
   employees: [],
   materialStores: [],
   orders: [],
+  processes: [],
 
   filteredEvents: [],
 };
@@ -97,8 +101,12 @@ export const fetchOrders = createAsyncThunk(
   }
 );
 
-
-
+export const fetchProcesses = createAsyncThunk(
+  "data/fetchProcesses",
+  async (params, thunkAPI) => {
+    return await processAPI.get();
+  }
+);
 
 const dataSlice = createSlice({
   name: "data",
@@ -166,7 +174,6 @@ const dataSlice = createSlice({
     builder.addCase(fetchEmployees.rejected, (state, action) => {
       state.loading = false;
     });
-    
 
     // MATERIAL STORE
     builder.addCase(fetchMaterialStores.pending, (state) => {
@@ -189,6 +196,18 @@ const dataSlice = createSlice({
       state.orders = action.payload as Order[];
     });
     builder.addCase(fetchOrders.rejected, (state, action) => {
+      state.loading = false;
+    });
+
+    // PROCESS
+    builder.addCase(fetchProcesses.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchProcesses.fulfilled, (state, action) => {
+      state.loading = false;
+      state.processes = action.payload as Process[];
+    });
+    builder.addCase(fetchProcesses.rejected, (state, action) => {
       state.loading = false;
     });
   },

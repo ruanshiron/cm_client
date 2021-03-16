@@ -39,6 +39,7 @@ import {
   fetchCustomers,
   fetchEvents,
   fetchOrders,
+  fetchProcesses,
   fetchProducts,
 } from "./store/dataSlice";
 import WorkshopPage from "./pages/lists/WorkshopPage";
@@ -53,6 +54,8 @@ import MaterialStoreCreate from "./pages/lists/MaterialStoreCreate";
 import EmployeeCreate from "./pages/lists/EmployeeCreate";
 import HomeOrTutorial from "./components/HomeOrTutorial";
 import { useSelector } from "./store";
+import SettingsPage from "./pages/settings/SettingsPage";
+import ProcessesPage from "./pages/settings/ProcessesPage";
 
 interface AppRoute {
   url: string;
@@ -75,6 +78,10 @@ const listPages: AppRoute[] = [
   {
     url: "/materials",
     component: <MaterialStorePage />,
+  },
+  {
+    url: "/settings",
+    component: <SettingsPage />,
   },
 ];
 
@@ -108,6 +115,13 @@ const createPages: AppRoute[] = [
   },
 ];
 
+const settingPages: AppRoute[] = [
+  {
+    url: "/settings/processes",
+    component: ProcessesPage,
+  },
+];
+
 setupConfig({
   rippleEffect: true,
   mode: "md",
@@ -121,6 +135,7 @@ const App: React.FC = () => {
     dispatch(fetchProducts());
     dispatch(fetchCustomers());
     dispatch(fetchOrders());
+    dispatch(fetchProcesses());
   }, [dispatch]);
 
   const loading = useSelector((state) => state.data.loading);
@@ -149,6 +164,14 @@ const App: React.FC = () => {
               <Route key={index} path={page.url} component={page.component} />
             ))}
             {createPages.map((page, index) => (
+              <Route
+                key={index}
+                path={page.url}
+                component={page.component}
+                exact
+              />
+            ))}
+            {settingPages.map((page, index) => (
               <Route
                 key={index}
                 path={page.url}
