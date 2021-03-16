@@ -18,8 +18,8 @@ export const useEventForm = (event: Event = initalEvent) => {
   const [fields, setFields] = useState<Event>(event);
 
   const products = useSelector((state) => state.data.products);
-
   const processes = useSelector((state) => state.data.processes);
+  const workshops = useSelector((state) => state.data.workshops);
 
   useEffect(() => {
     // dispatch(fetchProducts());
@@ -61,5 +61,6 @@ export const useEventForm = (event: Event = initalEvent) => {
     products,
     submit,
     processes,
+    workshops,
   };
 };

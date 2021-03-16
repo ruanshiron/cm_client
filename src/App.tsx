@@ -41,6 +41,7 @@ import {
   fetchOrders,
   fetchProcesses,
   fetchProducts,
+  fetchWorkshops,
 } from "./store/dataSlice";
 import WorkshopPage from "./pages/lists/WorkshopPage";
 import CustomerPage from "./pages/lists/CustomerPage";
@@ -136,6 +137,7 @@ const App: React.FC = () => {
     dispatch(fetchCustomers());
     dispatch(fetchOrders());
     dispatch(fetchProcesses());
+    dispatch(fetchWorkshops());
   }, [dispatch]);
 
   const loading = useSelector((state) => state.data.loading);

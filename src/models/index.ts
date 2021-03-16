@@ -69,3 +69,13 @@ export interface Process extends Base {
   fulfilled?: string;
   pending?: string;
 }
+
+export const ProcessEnum: { [key: string]: string } = {
+  pending: "đang ",
+  fulfilled: "đã ",
+  rejected: "lỗi ",
+};
+
+
+
+

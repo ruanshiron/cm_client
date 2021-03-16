@@ -26,16 +26,12 @@ import {
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import _ from "lodash";
-import { Field } from "../../models";
+import { Field, ProcessEnum } from "../../models";
 import { useSelector } from "../../store";
 import { useProductForm } from "../../hooks/useProductForm";
 import { pencil } from "ionicons/icons";
 
-const processEnum: { [key: string]: string } = {
-  pending: "đang ",
-  fulfilled: "đã ",
-  rejected: "lỗi ",
-};
+
 
 interface ProductDetailProps {}
 
@@ -110,7 +106,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                           <IonItem detail={false} key={field.name}>
                             <IonLabel>
                               <h3>
-                                {processEnum[type] +
+                                {ProcessEnum[type] +
                                   processes.find((i) => i.id === id)?.name}
                               </h3>
                             </IonLabel>

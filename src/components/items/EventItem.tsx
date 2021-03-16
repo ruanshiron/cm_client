@@ -1,8 +1,9 @@
 import React from "react";
-import { IonNote, IonItem, IonLabel, IonSkeletonText } from "@ionic/react";
-import { Event } from "../../models";
+import { IonNote, IonItem, IonLabel } from "@ionic/react";
+import { Event, ProcessEnum } from "../../models";
 import { useEventForm } from "../../hooks/useEventForm";
 import { EventModal } from "../modals/EventModal";
+import { useSelector } from "../../store";
 
 interface EventItemProps {
   data: Event;
@@ -11,6 +12,16 @@ interface EventItemProps {
 const EventItem: React.FC<EventItemProps> = ({ data }) => {
   const form = useEventForm(data);
 
+  const product = useSelector((state) =>
+    state.data.products.find((v) => v.id === data.product)
+  );
+  const process = useSelector((state) =>
+    state.data.processes.find((v) => v.id === data.process?.split("/")[0])
+  );
+  const workshop = useSelector((state) =>
+    state.data.workshops.find((v) => v.id === data.workshop)
+  );
+
   return (
     <>
       <IonItem
@@ -18,26 +29,19 @@ const EventItem: React.FC<EventItemProps> = ({ data }) => {
         button
         detail={false}
       >
-        {data ? (
-          <>
-            <IonLabel>
-              <h2>
-                {data.workshop}・<b>{data.process}</b>
-              </h2>
-              <p>
-                {data.product} / {data.size}
-              </p>
-            </IonLabel>
-            <IonNote slot="end" color="success">
-              <h4>{data.quantity}</h4>
-            </IonNote>
-          </>
-        ) : (
-          <>
-            <IonSkeletonText animated style={{ width: "60%" }} />
-            <IonSkeletonText animated />
-          </>
-        )}
+        <>
+          <IonLabel>
+            <h2>
+              {workshop?.name}・<b>{ProcessEnum[data.process?.split("/")[1]!] + process?.name}</b>
+            </h2>
+            <p>
+              {product?.name} / {data.size}
+            </p>
+          </IonLabel>
+          <IonNote slot="end" color="success">
+            <h4>{data.quantity}</h4>
+          </IonNote>
+        </>
       </IonItem>
 
       <EventModal form={form} />

@@ -156,19 +156,11 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
               form.setFieldsValue({ workshop: e.detail.value! })
             }
           >
-            <IonSelectOption value="Xưởng Hoa Đông">
-              Xưởng Hoa Đông
-            </IonSelectOption>
-            <IonSelectOption value="Xưởng Trung Châu">
-              Xưởng Trung Châu
-            </IonSelectOption>
-            <IonSelectOption value="Xưởng Sơn Tây">
-              Xưởng Sơn Tây
-            </IonSelectOption>
-            <IonSelectOption value="Xưởng Ngọc Tảo">
-              Xưởng Ngọc Tảo
-            </IonSelectOption>
-            <IonSelectOption value="Xưởng Hạ">Xưởng Hạ</IonSelectOption>
+            {form.workshops.map((workshop, i) => (
+              <IonSelectOption key={i} value={workshop.id}>
+                {workshop.name}
+              </IonSelectOption>
+            ))}
           </IonSelect>
         </IonItem>
 
