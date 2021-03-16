@@ -8,7 +8,7 @@ import { toast } from "../utils/toast";
 
 const initialMaterialStore: MaterialStore = {
   name: "",
-  phoneNumber: "",
+  phonenumber: "",
   types: [],
 };
 
@@ -19,7 +19,7 @@ export const useMaterialStoreForm = () => {
   const dispatch = useDispatch();
 
   const isInvalid = () =>
-    !fields?.name?.trim() || !fields?.phoneNumber?.trim();
+    !fields?.name?.trim() || !fields?.phonenumber?.trim();
 
   const submit = async () => {
     if (isInvalid()) return;

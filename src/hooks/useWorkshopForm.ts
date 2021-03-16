@@ -6,7 +6,7 @@ import { Workshop } from "../models";
 import { fetchWorkshops } from "../store/dataSlice";
 import { toast } from "../utils/toast";
 
-const initialWorkshop: Workshop = { name: "", phoneNumber: "" };
+const initialWorkshop: Workshop = { name: "", phonenumber: "" };
 
 export const useWorkshopForm = () => {
   const router = useIonRouter();
@@ -15,7 +15,7 @@ export const useWorkshopForm = () => {
   const dispatch = useDispatch();
 
   const isInvalid = () =>
-    !fields?.name?.trim() || !fields?.phoneNumber?.trim();
+    !fields?.name?.trim() || !fields?.phonenumber?.trim();
 
   const submit = async () => {
     if (isInvalid()) return;

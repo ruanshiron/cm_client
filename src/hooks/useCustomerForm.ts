@@ -6,7 +6,7 @@ import { Customer } from "../models";
 import { fetchCustomers } from "../store/dataSlice";
 import { toast } from "../utils/toast";
 
-const initialCustomer: Customer = { name: "", phoneNumber: "" };
+const initialCustomer: Customer = { name: "", phonenumber: "" };
 
 export const useCustomerForm = () => {
   const router = useIonRouter();
@@ -15,7 +15,7 @@ export const useCustomerForm = () => {
   const dispatch = useDispatch();
 
   const isInvalid = () =>
-    !fields?.name?.trim() || !fields?.phoneNumber?.trim();
+    !fields?.name?.trim() || !fields?.phonenumber?.trim();
 
   const submit = async () => {
     if (isInvalid()) return;

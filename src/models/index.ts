@@ -33,33 +33,33 @@ export interface Field {
 
 export interface Workshop extends Base {
   name?: string;
-  phoneNumber?: string;
+  phonenumber?: string;
 }
 
 export interface Customer extends Base {
   name?: string;
-  phoneNumber?: string;
+  phonenumber?: string;
 }
 
 export interface Employee extends Base {
   name?: string;
-  phoneNumber?: string;
+  phonenumber?: string;
 }
 
 export interface MaterialStore extends Base {
   name?: string;
-  phoneNumber?: string;
+  phonenumber?: string;
   types?: string[];
 }
 
-export interface LineOrder {
+export interface Line {
   product?: string;
   size?: string;
   quantity?: number;
 }
 export interface Order extends Base {
   customer?: string;
-  lines: LineOrder[];
+  lines: Line[];
   note?: string;
 }
 

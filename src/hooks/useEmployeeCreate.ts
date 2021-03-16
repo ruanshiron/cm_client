@@ -6,7 +6,7 @@ import { Employee } from "../models";
 import { fetchEmployees } from "../store/dataSlice";
 import { toast } from "../utils/toast";
 
-const initialEmployee: Employee = { name: "", phoneNumber: "" };
+const initialEmployee: Employee = { name: "", phonenumber: "" };
 
 export const useEmployeeCreate = () => {
   const router = useIonRouter();
@@ -15,7 +15,7 @@ export const useEmployeeCreate = () => {
   const dispatch = useDispatch();
 
   const isInvalid = () =>
-    !fields?.name?.trim() || !fields?.phoneNumber?.trim();
+    !fields?.name?.trim() || !fields?.phonenumber?.trim();
 
   const submit = async () => {
     if (isInvalid()) return;

@@ -46,7 +46,7 @@ const WorkshopCreate: React.FC<WorkshopCreateProps> = () => {
           <IonLabel position="floating">Số điện thoại</IonLabel>
           <IonInput
             onIonChange={(e) =>
-              form.setFieldsValue({ phoneNumber: e.detail.value! })
+              form.setFieldsValue({ phonenumber: e.detail.value! })
             }
           ></IonInput>
         </IonItem>
