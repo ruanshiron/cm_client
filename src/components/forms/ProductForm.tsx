@@ -88,7 +88,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
         <IonThumbnail slot="end">
           <img
             alt=""
-            src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"
+            src="/assets/icon/icon.png"
           />
         </IonThumbnail>
       </IonItem> */}

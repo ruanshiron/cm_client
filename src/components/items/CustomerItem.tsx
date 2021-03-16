@@ -21,10 +21,7 @@ export const CustomerItem: React.FC<{ data: any }> = ({ data }) => {
             routerLink={`/customers/${data.id}`}
           >
             <IonAvatar slot="start">
-              <img
-                src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"
-                alt="Speaker profile pic"
-              />
+              <img src="/assets/icon/icon.png" alt="Speaker profile pic" />
             </IonAvatar>
             <IonLabel>
               <h2>{data.name}</h2>
