@@ -46,7 +46,7 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
         <IonGrid style={{ padding: 0 }}>
           <IonRow>
             <IonCol size="12" size-md="8" offsetMd="2" style={{ padding: 0 }}>
-              <IonList inset lines="full">
+              <IonList inset lines="full" style={{ padding: 0 }}>
                 {processes.map((process, i) => (
                   <IonItem
                     key={i}
