@@ -46,7 +46,11 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
         <IonGrid style={{ padding: 0 }}>
           <IonRow>
             <IonCol size="12" size-md="8" offsetMd="2" style={{ padding: 0 }}>
-              <IonList inset lines="full" style={{ padding: 0 }}>
+              <IonList
+                inset
+                lines="full"
+                style={{ padding: 0, borderRadius: 12 }}
+              >
                 {processes.map((process, i) => (
                   <IonItem
                     key={i}
@@ -127,19 +131,49 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
                   <IonLabel position="floating">
                     {"đang " + form.fields.name}
                   </IonLabel>
-                  <IonInput></IonInput>
+                  <IonInput
+                    value={form.fields.pending}
+                    onIonChange={(e) =>
+                      form.setFieldsValue({ pending: e.detail.value! })
+                    }
+                    onIonBlur={(e) =>
+                      form.setFieldsValue({
+                        pending: form.fields.pending?.toLocaleLowerCase(),
+                      })
+                    }
+                  ></IonInput>
                 </IonItem>
                 <IonItem>
                   <IonLabel position="floating">
                     {"đã " + form.fields.name}
                   </IonLabel>
-                  <IonInput></IonInput>
+                  <IonInput
+                    value={form.fields.fulfilled}
+                    onIonChange={(e) =>
+                      form.setFieldsValue({ fulfilled: e.detail.value! })
+                    }
+                    onIonBlur={(e) =>
+                      form.setFieldsValue({
+                        fulfilled: form.fields.fulfilled?.toLocaleLowerCase(),
+                      })
+                    }
+                  ></IonInput>
                 </IonItem>
                 <IonItem>
                   <IonLabel position="floating">
                     {form.fields.name + " lỗi"}
                   </IonLabel>
-                  <IonInput></IonInput>
+                  <IonInput
+                    value={form.fields.rejected}
+                    onIonChange={(e) =>
+                      form.setFieldsValue({ rejected: e.detail.value! })
+                    }
+                    onIonBlur={(e) =>
+                      form.setFieldsValue({
+                        rejected: form.fields.rejected?.toLocaleLowerCase(),
+                      })
+                    }
+                  ></IonInput>
                 </IonItem>
               </>
             )}
