@@ -1,4 +1,5 @@
 import {
+  IonActionSheet,
   IonAvatar,
   IonBackButton,
   IonButton,
@@ -11,17 +12,26 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
+  IonItemDivider,
   IonLabel,
   IonList,
-  IonListHeader,
   IonNote,
   IonPage,
   IonRow,
   IonTextarea,
   IonToolbar,
 } from "@ionic/react";
-import { shareOutline, shareSharp } from "ionicons/icons";
-import React from "react";
+import {
+  caretForwardCircle,
+  checkmarkDoneSharp,
+  close,
+  heart,
+  listSharp,
+  pencil,
+  share,
+  trash,
+} from "ionicons/icons";
+import React, { useState } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../store";
 import { formatDate } from "../../utils/date";
@@ -32,6 +42,7 @@ interface OrderDetailProps {}
 
 export const OrderDetail: React.FC<OrderDetailProps> = () => {
   const { id } = useParams<{ id: string }>();
+  const [showActionSheet, setShowActionSheet] = useState(false);
 
   const order = useSelector((state) =>
     state.data.orders.find((i) => i.id === id)
@@ -45,19 +56,15 @@ export const OrderDetail: React.FC<OrderDetailProps> = () => {
 
   return (
     <>
-      <IonPage>
+      <IonPage className="list-page">
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
               <IonBackButton defaultHref="/tabs/order" />
             </IonButtons>
             <IonButtons slot="end">
-              <IonButton>
-                <IonIcon
-                  slot="icon-only"
-                  ios={shareOutline}
-                  md={shareSharp}
-                ></IonIcon>
+              <IonButton onClick={() => setShowActionSheet(true)}>
+                <IonIcon slot="icon-only" icon={listSharp}></IonIcon>
               </IonButton>
             </IonButtons>
           </IonToolbar>
@@ -65,7 +72,11 @@ export const OrderDetail: React.FC<OrderDetailProps> = () => {
         <IonContent>
           <IonRow>
             <IonCol size="12" size-md="8" offsetMd="2">
-              <IonCard>
+              <IonButton expand="block" fill="clear" color="danger" style={{ margin: 10}}>
+                <IonIcon slot="start" icon={checkmarkDoneSharp}></IonIcon>
+                <IonLabel> Bạn đã hoàn thành đơn hàng này</IonLabel>
+              </IonButton>
+              <IonCard className="list-card">
                 <IonCardHeader>
                   <IonItem detail={false} lines="none" className="list-item">
                     <IonAvatar slot="start">
@@ -82,7 +93,9 @@ export const OrderDetail: React.FC<OrderDetailProps> = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   <IonList>
-                    <IonListHeader lines="full">Danh sách sản phẩm và só lượng</IonListHeader>
+                    <IonItemDivider>
+                      Danh sách sản phẩm và só lượng
+                    </IonItemDivider>
                     {order?.lines.map((line, index) => (
                       <IonItem key={index}>
                         <IonLabel>
@@ -98,7 +111,7 @@ export const OrderDetail: React.FC<OrderDetailProps> = () => {
                     ))}
 
                     {order?.note && (
-                      <IonItem lines="inset">
+                      <IonItem lines="full">
                         <IonLabel position="stacked">Ghi chú</IonLabel>
                         <IonTextarea readonly>{order?.note}</IonTextarea>
                       </IonItem>
@@ -109,6 +122,43 @@ export const OrderDetail: React.FC<OrderDetailProps> = () => {
             </IonCol>
           </IonRow>
         </IonContent>
+        <IonActionSheet
+          isOpen={showActionSheet}
+          onDidDismiss={() => setShowActionSheet(false)}
+          cssClass="my-custom-class"
+          buttons={[
+            {
+              text: "Xóa",
+              role: "destructive",
+              icon: trash,
+              handler: () => {
+                console.log("Delete clicked");
+              },
+            },
+            {
+              text: "Sửa",
+              icon: pencil,
+              handler: () => {
+                console.log("Share clicked");
+              },
+            },
+            {
+              text: "Chốt",
+              icon: checkmarkDoneSharp,
+              handler: () => {
+                console.log("Share clicked");
+              },
+            },
+            {
+              text: "Hủy",
+              icon: close,
+              role: "cancel",
+              handler: () => {
+                console.log("Cancel clicked");
+              },
+            },
+          ]}
+        ></IonActionSheet>
       </IonPage>
     </>
   );
