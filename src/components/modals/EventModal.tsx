@@ -97,9 +97,7 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
             interface="action-sheet"
             placeholder="Kích cỡ"
             value={form.fields?.size}
-            onIonChange={(e) =>
-              form.setFieldsValue({ size: e.detail.value! })
-            }
+            onIonChange={(e) => form.setFieldsValue({ size: e.detail.value! })}
           >
             {form.products
               ?.find((v) => v.id === form.fields?.product)
@@ -125,10 +123,24 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
               form.setFieldsValue({ process: e.detail.value! })
             }
           >
-            <IonSelectOption value="sent">Gửi</IonSelectOption>
-            <IonSelectOption value="received">Nhận</IonSelectOption>
-            <IonSelectOption value="failure">Sửa Lỗi</IonSelectOption>
-            <IonSelectOption value="fixed">Đã Sửa</IonSelectOption>
+            {form.products
+              ?.find((v) => v.id === form.fields?.product)
+              ?.processes?.map((process, i) => {
+                const p = form.processes.find((v) => v.id === process);
+                return (
+                  <React.Fragment key={i}>
+                    <IonSelectOption value={`${p?.id}/pending`}>
+                      {p?.pending ? p?.pending : "đang " + p?.name}
+                    </IonSelectOption>
+                    <IonSelectOption value={`${p?.id}/fulfilled`}>
+                      {p?.fulfilled ? p?.fulfilled : "đã " + p?.name}
+                    </IonSelectOption>
+                    <IonSelectOption value={`${p?.id}/rejected`}>
+                      {p?.rejected ? p?.rejected : p?.name + " lỗi"}
+                    </IonSelectOption>
+                  </React.Fragment>
+                );
+              })}
           </IonSelect>
         </IonItem>
         <IonItem lines="full">
@@ -170,9 +182,7 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
             type="date"
             placeholder="ngày tháng"
             value={form.fields?.date}
-            onIonChange={(e) =>
-              form.setFieldsValue({ date: e.detail.value! })
-            }
+            onIonChange={(e) => form.setFieldsValue({ date: e.detail.value! })}
             style={{ textAlign: "right" }}
           />
         </IonItem>

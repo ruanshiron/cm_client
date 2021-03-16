@@ -36,7 +36,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
               onIonChange={(e) =>
                 form.setFieldsValue({ code: e.detail.value! })
               }
-              ></IonInput>
+            ></IonInput>
           </IonItem>
           <IonItem lines="none">
             <IonLabel position="floating">Kích cỡ</IonLabel>
@@ -74,11 +74,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
               cancelText="Hủy"
               okText="Ok!"
             >
-              <IonSelectOption value="process_1">Hoàn thiện</IonSelectOption>
-              <IonSelectOption value="process_2">In</IonSelectOption>
-              <IonSelectOption value="process_3">Thêu</IonSelectOption>
-              <IonSelectOption value="process_4">Sửa lỗi</IonSelectOption>
-              <IonSelectOption value="process_5">Nhập kho</IonSelectOption>
+              {form.processes.map((process, i) => (
+                <IonSelectOption key={i} value={process.id}>
+                  {process.name}
+                </IonSelectOption>
+              ))}
             </IonSelect>
           </IonItem>
         </IonCardContent>
@@ -101,7 +101,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
               onIonChange={(e) =>
                 form.setFieldsValue({ note: e.detail.value! })
               }
-              ></IonTextarea>
+            ></IonTextarea>
           </IonItem>
         </IonCardContent>
       </IonCard>

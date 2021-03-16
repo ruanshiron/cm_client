@@ -31,23 +31,10 @@ import { useSelector } from "../../store";
 import { useProductForm } from "../../hooks/useProductForm";
 import { pencil } from "ionicons/icons";
 
-const parseFieldName = (key: string) => {
-  switch (key) {
-    case "sent":
-      return "Đã sản xuất";
-
-    case "failure":
-      return "Lỗi";
-
-    case "received":
-      return "Trong kho";
-
-    case "fixed":
-      return "Đã sửa";
-
-    default:
-      return "???";
-  }
+const processEnum: { [key: string]: string } = {
+  pending: "đang ",
+  fulfilled: "đã ",
+  rejected: "lỗi ",
 };
 
 interface ProductDetailProps {}
@@ -60,6 +47,8 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
     state.data.products.find((x) => x.id === id)
   );
 
+  const processes = useSelector((state) => state.data.processes);
+
   const events = useSelector((state) =>
     state.data.events.filter((x) => x.product === id)
   );
@@ -67,7 +56,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
   useEffect(() => {
     if (!product || !events) return;
 
-    const result = _.groupBy(events, "typeCode");
+    const result = _.groupBy(events, "process");
 
     const newFields = Object.keys(result).map((key) => {
       return {
@@ -115,16 +104,22 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                 {fields && fields?.length > 0 && (
                   <IonCard>
                     <IonCardContent>
-                      {fields?.map((field: any) => (
-                        <IonItem detail={false} key={field.name}>
-                          <IonLabel>
-                            <h3>{parseFieldName(field.name)}</h3>
-                          </IonLabel>
-                          <IonNote slot="end">
-                            <h3>{field.value}</h3>
-                          </IonNote>
-                        </IonItem>
-                      ))}
+                      {fields?.map((field: any) => {
+                        const [id, type] = field.name.split("/");
+                        return (
+                          <IonItem detail={false} key={field.name}>
+                            <IonLabel>
+                              <h3>
+                                {processEnum[type] +
+                                  processes.find((i) => i.id === id)?.name}
+                              </h3>
+                            </IonLabel>
+                            <IonNote slot="end">
+                              <h3>{field.value}</h3>
+                            </IonNote>
+                          </IonItem>
+                        );
+                      })}
                     </IonCardContent>
                   </IonCard>
                 )}
@@ -156,7 +151,9 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                       ))}
                       <IonItemDivider>Quy trình sản xuất</IonItemDivider>
                       {product?.processes?.map((process, i) => (
-                        <IonItem>{process}</IonItem>
+                        <IonItem key={i}>
+                          {processes.find((p) => process === p.id)?.name}
+                        </IonItem>
                       ))}
                     </IonList>
                   </IonCardContent>
