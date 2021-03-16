@@ -5,7 +5,7 @@ import _ from "lodash";
 // TODO: Should use a faster sort
 
 export function addFilteredEvent(event: Event, filteredEvents: EventGroup[]) {
-  const date = formatDate(event.selectedDate!);
+  const date = formatDate(event.date!);
   const selectedItem = filteredEvents.find((item) => item.name === date);
 
   if (selectedItem) {
@@ -22,7 +22,7 @@ export function addFilteredEvent(event: Event, filteredEvents: EventGroup[]) {
 export const filter = (events: Event[]) =>
   _.chain(events)
     .groupBy((event) => {
-      const date = new Date(event.selectedDate!);
+      const date = new Date(event.date!);
       return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
     })
     .map((value, key) => ({ name: key, events: value }))

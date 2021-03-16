@@ -22,10 +22,10 @@ const EventItem: React.FC<EventItemProps> = ({ data }) => {
           <>
             <IonLabel>
               <h2>
-                {data.workshop}・<b>{data.typeCode}</b>
+                {data.workshop}・<b>{data.process}</b>
               </h2>
               <p>
-                {data.productCode} / {data.sizeCode}
+                {data.product} / {data.size}
               </p>
             </IonLabel>
             <IonNote slot="end" color="success">

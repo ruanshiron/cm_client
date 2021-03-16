@@ -7,7 +7,7 @@ import { fetchEvents } from "../store/dataSlice";
 import { eventAPI } from "../api";
 
 const initalEvent: Event = {
-  selectedDate: new Date().toISOString().substring(0, 10),
+  date: new Date().toISOString().substring(0, 10),
 };
 
 export const useEventForm = (event: Event = initalEvent) => {
@@ -31,10 +31,10 @@ export const useEventForm = (event: Event = initalEvent) => {
   const isInvalid = () =>
     !fields?.quantity ||
     !(fields?.quantity > 0) ||
-    !fields?.productCode?.trim() ||
-    !fields?.sizeCode?.trim() ||
-    !fields?.typeCode?.trim() ||
-    !fields?.selectedDate ||
+    !fields?.product?.trim() ||
+    !fields?.size?.trim() ||
+    !fields?.process?.trim() ||
+    !fields?.date ||
     !fields?.workshop?.trim();
 
   const submit = async () => {

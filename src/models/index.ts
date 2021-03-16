@@ -4,11 +4,11 @@ export interface Base {
 }
 export interface Event extends Base {
   quantity?: number;
-  productCode?: string;
-  sizeCode?: string;
-  typeCode?: string;
+  product?: string;
+  size?: string;
+  process?: string;
   workshop?: string;
-  selectedDate?: string;
+  date?: string;
   note?: string;
 }
 
@@ -61,4 +61,11 @@ export interface Order extends Base {
   customer?: string;
   lines: LineOrder[];
   note?: string;
+}
+
+export interface Process extends Base {
+  name?: string;
+  rejected?: string;
+  fulfilled?: string;
+  pending?: string;
 }

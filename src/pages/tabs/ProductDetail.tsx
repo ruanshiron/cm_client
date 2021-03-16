@@ -61,7 +61,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
   );
 
   const events = useSelector((state) =>
-    state.data.events.filter((x) => x.productCode === id)
+    state.data.events.filter((x) => x.product === id)
   );
 
   useEffect(() => {

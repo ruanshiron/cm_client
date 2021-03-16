@@ -76,9 +76,9 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
             cancelText="Hủy"
             interface="action-sheet"
             placeholder="Sản phẩm"
-            value={form.fields?.productCode}
+            value={form.fields?.product}
             onIonChange={(e) =>
-              form.setFieldsValue({ productCode: e.detail.value! })
+              form.setFieldsValue({ product: e.detail.value! })
             }
           >
             {form.products?.map((item) => (
@@ -96,13 +96,13 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
             cancelText="Hủy"
             interface="action-sheet"
             placeholder="Kích cỡ"
-            value={form.fields?.sizeCode}
+            value={form.fields?.size}
             onIonChange={(e) =>
-              form.setFieldsValue({ sizeCode: e.detail.value! })
+              form.setFieldsValue({ size: e.detail.value! })
             }
           >
             {form.products
-              ?.find((v) => v.id === form.fields?.productCode)
+              ?.find((v) => v.id === form.fields?.product)
               ?.sizes?.map((item, index) => (
                 <IonSelectOption key={index} value={item}>
                   {item}
@@ -120,9 +120,9 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
             cancelText="Hủy"
             interface="action-sheet"
             placeholder="Nhóm"
-            value={form.fields?.typeCode}
+            value={form.fields?.process}
             onIonChange={(e) =>
-              form.setFieldsValue({ typeCode: e.detail.value! })
+              form.setFieldsValue({ process: e.detail.value! })
             }
           >
             <IonSelectOption value="sent">Gửi</IonSelectOption>
@@ -164,14 +164,14 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
         <IonItem lines="full">
           <IonIcon size="large" icon={calendarClearOutline} color="medium" />
           <IonLabel color="medium" style={{ paddingLeft: 8 }}>
-            {selectedDateLabelParser(form.fields?.selectedDate)}
+            {selectedDateLabelParser(form.fields?.date)}
           </IonLabel>
           <IonInput
             type="date"
             placeholder="ngày tháng"
-            value={form.fields?.selectedDate}
+            value={form.fields?.date}
             onIonChange={(e) =>
-              form.setFieldsValue({ selectedDate: e.detail.value! })
+              form.setFieldsValue({ date: e.detail.value! })
             }
             style={{ textAlign: "right" }}
           />
