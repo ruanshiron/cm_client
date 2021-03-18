@@ -31,26 +31,30 @@ export const FulfilledsItem: React.FC = () => {
   });
 
   return (
-    <IonCard className="list-card">
-      <IonCardHeader style={{ padding: 16 }}>
-        <IonCardSubtitle>Sản phẩm sẵn sàng</IonCardSubtitle>
-      </IonCardHeader>
+    <>
+      {items.length > 0 && (
+        <IonCard className="list-card">
+          <IonCardHeader style={{ padding: 16 }}>
+            <IonCardSubtitle>Sản phẩm sẵn sàng</IonCardSubtitle>
+          </IonCardHeader>
 
-      <IonCardContent>
-        <IonList lines="full">
-          {items.map(
-            (item) =>
-              item.fulfilled !== 0 && (
-                <IonItem>
-                  <IonLabel slot="start">{`${item.product.name} (${item.product.code})`}</IonLabel>
-                  <IonNote slot="end">
-                    <p>{item.fulfilled}</p>
-                  </IonNote>
-                </IonItem>
-              )
-          )}
-        </IonList>
-      </IonCardContent>
-    </IonCard>
+          <IonCardContent>
+            <IonList lines="full">
+              {items.map(
+                (item, i) =>
+                  item.fulfilled !== 0 && (
+                    <IonItem key={i}>
+                      <IonLabel slot="start">{`${item.product.name} (${item.product.code})`}</IonLabel>
+                      <IonNote slot="end">
+                        <p>{item.fulfilled}</p>
+                      </IonNote>
+                    </IonItem>
+                  )
+              )}
+            </IonList>
+          </IonCardContent>
+        </IonCard>
+      )}
+    </>
   );
 };

@@ -21,6 +21,7 @@ import { RejectedsItem } from "../../components/items/RejectedsItem";
 import { useSelector } from "../../store";
 import "./DashboardPage.scss";
 
+
 interface DashboardPageProps {}
 
 const DashboardPage: React.FC<DashboardPageProps> = () => {

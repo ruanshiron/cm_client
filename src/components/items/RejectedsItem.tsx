@@ -31,23 +31,27 @@ export const RejectedsItem: React.FC = () => {
   });
 
   return (
-    <IonCard className="list-card">
-      <IonCardHeader style={{ padding: 16 }}>
-        <IonCardSubtitle>Sản phẩm lỗi</IonCardSubtitle>
-      </IonCardHeader>
+    <>
+      {items.length > 0 && (
+        <IonCard className="list-card">
+          <IonCardHeader style={{ padding: 16 }}>
+            <IonCardSubtitle>Sản phẩm lỗi</IonCardSubtitle>
+          </IonCardHeader>
 
-      <IonCardContent>
-        <IonList lines="full">
-          {items.map((item) => (
-            <IonItem>
-              <IonLabel slot="start">{`${item.product.name} (${item.product.code})`}</IonLabel>
-              <IonNote slot="end">
-                <p>{item.fulfilled}</p>
-              </IonNote>
-            </IonItem>
-          ))}
-        </IonList>
-      </IonCardContent>
-    </IonCard>
+          <IonCardContent>
+            <IonList lines="full">
+              {items.map((item, i) => (
+                <IonItem key={i}>
+                  <IonLabel slot="start">{`${item.product.name} (${item.product.code})`}</IonLabel>
+                  <IonNote slot="end">
+                    <p>{item.fulfilled}</p>
+                  </IonNote>
+                </IonItem>
+              ))}
+            </IonList>
+          </IonCardContent>
+        </IonCard>
+      )}
+    </>
   );
 };

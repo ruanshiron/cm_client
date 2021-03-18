@@ -51,31 +51,35 @@ export const ProcessingsItem: React.FC<Props> = () => {
   });
 
   return (
-    <IonCard className="list-card">
-      <IonCardHeader style={{padding: 16}}>
-        <IonCardSubtitle>Đang trong quá trình sản xuất</IonCardSubtitle>
-      </IonCardHeader>
+    <>
+      {items.length > 0 && (
+        <IonCard className="list-card">
+          <IonCardHeader style={{ padding: 16 }}>
+            <IonCardSubtitle>Đang trong quá trình sản xuất</IonCardSubtitle>
+          </IonCardHeader>
 
-      <IonCardContent>
-        <IonList lines="full">
-          {items.map((item) => (
-            <React.Fragment>
-              <IonItemDivider>{item.workshop.name}</IonItemDivider>
-              {item.products.map(
-                (p) =>
-                  p.now_pending !== 0 && (
-                    <IonItem>
-                      <IonLabel slot="start">{`${p.product.name} (${p.product.code})`}</IonLabel>
-                      <IonNote slot="end">
-                        <p>{p.now_pending}</p>
-                      </IonNote>
-                    </IonItem>
-                  )
-              )}
-            </React.Fragment>
-          ))}
-        </IonList>
-      </IonCardContent>
-    </IonCard>
+          <IonCardContent>
+            <IonList lines="full">
+              {items.map((item, i) => (
+                <React.Fragment key={i}>
+                  <IonItemDivider>{item.workshop.name}</IonItemDivider>
+                  {item.products.map(
+                    (p, j) =>
+                      p.now_pending !== 0 && (
+                        <IonItem key={j}>
+                          <IonLabel slot="start">{`${p.product.name} (${p.product.code})`}</IonLabel>
+                          <IonNote slot="end">
+                            <p>{p.now_pending}</p>
+                          </IonNote>
+                        </IonItem>
+                      )
+                  )}
+                </React.Fragment>
+              ))}
+            </IonList>
+          </IonCardContent>
+        </IonCard>
+      )}
+    </>
   );
 };
