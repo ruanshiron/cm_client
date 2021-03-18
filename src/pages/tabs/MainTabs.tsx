@@ -79,7 +79,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Redirect exact path="/tabs" to="/tabs/diary" />
+        <Redirect exact path="/tabs" to="/tabs/dashboard" />
 
         {tabPages
           .filter((tab) => !!tab.index)
