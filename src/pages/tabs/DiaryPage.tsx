@@ -13,15 +13,18 @@ import {
   IonPage,
   IonRow,
   IonSearchbar,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { ellipsisVerticalSharp } from "ionicons/icons";
-import React from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import EventFab from "../../components/fabs/EventFab";
 import EventItem from "../../components/items/EventItem";
 import { EventGroup } from "../../models";
 import { useSelector } from "../../store";
+import { formatDate, getDatesBetweenDates } from "../../utils/date";
 import "./DiaryPage.scss";
 
 interface DiaryPageProps {}
@@ -30,6 +33,18 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
   const groups: EventGroup[] = useSelector(
     (state) => state.data.filteredEvents
   );
+
+  const segments = useRef<HTMLIonSegmentButtonElement[]>([]);
+  const days = getDatesBetweenDates("2021/1/1", "2021/3/1");
+
+  useLayoutEffect(() => {
+    segments.current[12].scrollIntoView({
+      block: "end",
+      behavior: "smooth",
+    });
+
+    console.log("scrolled");
+  });
 
   return (
     <IonPage id="diary-page">
@@ -47,6 +62,35 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
+
+      <IonHeader>
+        <IonToolbar>
+          <IonSegment
+            scrollable
+            value="2021/2/28"
+            onIonChange={(e) => {
+              console.log("Segment selected", e.detail.value);
+              segments.current[
+                days.findIndex((day) => formatDate(day) === e.detail.value)
+              ].scrollIntoView({
+                block: "end",
+                behavior: "smooth",
+              });
+            }}
+          >
+            {days.map((day, i) => (
+              <IonSegmentButton
+                key={i}
+                ref={(ref) => (segments.current[i] = ref!)}
+                value={formatDate(day)}
+              >
+                <IonLabel>{formatDate(day)}</IonLabel>
+              </IonSegmentButton>
+            ))}
+          </IonSegment>
+        </IonToolbar>
+      </IonHeader>
+
       <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>

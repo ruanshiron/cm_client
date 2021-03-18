@@ -20,3 +20,19 @@ export const selectedDateLabelParser = (text = "") => {
     return "Hôm qua";
   return "";
 };
+
+export const getDatesBetweenDates = (
+  startDate: Date | string | number,
+  endDate: Date | string | number
+) => {
+  let dates: Date[] = [];
+  endDate = new Date(endDate);
+  //to avoid modifying the original date
+  const theDate = new Date(startDate);
+  while (theDate < endDate) {
+    dates = [...dates, new Date(theDate)];
+    theDate.setDate(theDate.getDate() + 1);
+  }
+  dates = [...dates, endDate];
+  return dates;
+};
