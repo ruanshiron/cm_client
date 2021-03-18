@@ -14,8 +14,10 @@ import {
 } from "@ionic/react";
 import { ellipsisVerticalSharp } from "ionicons/icons";
 import React from "react";
+import { FulfilledsItem } from "../../components/items/FulfilledsItem";
 import { ProcessAggregateItem } from "../../components/items/ProcessAggregateItem";
 import { ProcessingsItem } from "../../components/items/ProcessingsItem";
+import { RejectedsItem } from "../../components/items/RejectedsItem";
 import { useSelector } from "../../store";
 import "./DashboardPage.scss";
 
@@ -45,16 +47,22 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
               <IonCol
                 key={process.id}
                 sizeXl="3"
-                sizeMd="6"
-                size="6"
+                sizeMd="4"
+                size="4"
                 style={{ padding: 0 }}
               >
                 <ProcessAggregateItem process={process} />
               </IonCol>
             ))}
 
-            <IonCol size="12" style={{ padding: 0 }}>
+            <IonCol size="12" sizeMd="6" style={{ padding: 0 }}>
+              <FulfilledsItem />
+            </IonCol>
+            <IonCol size="12" sizeMd="6" style={{ padding: 0 }}>
               <ProcessingsItem />
+            </IonCol>
+            <IonCol size="12" sizeMd="6" style={{ padding: 0 }}>
+              <RejectedsItem />
             </IonCol>
           </IonRow>
         </IonGrid>

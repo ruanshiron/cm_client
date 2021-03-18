@@ -7,9 +7,9 @@
   /* Due to the fact the cards are inside of columns the margins don't overlap
    * properly so we want to remove the extra margin between cards
    */
-  ion-col:not(:last-of-type) .list-card {
-    margin-bottom: 0;
-  }
+  // ion-col:not(:last-of-type) .list-card {
+  //   margin-bottom: 0;
+  // }
 
   .list-card .list-item {
     --min-height: 85px;
