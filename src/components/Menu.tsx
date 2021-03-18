@@ -33,16 +33,16 @@ interface AppPage {
 
 const appPages: AppPage[] = [
   {
-    title: "Nhật ký",
-    url: "/tabs/diary",
-    iosIcon: todayOutline,
-    mdIcon: todayOutline,
-  },
-  {
     title: "Tổng hợp",
     url: "/tabs/dashboard",
     iosIcon: gridOutline,
     mdIcon: gridOutline,
+  },
+  {
+    title: "Nhật ký",
+    url: "/tabs/diary",
+    iosIcon: todayOutline,
+    mdIcon: todayOutline,
   },
   {
     title: "Sản phẩm",

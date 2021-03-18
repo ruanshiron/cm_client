@@ -19,6 +19,10 @@
     --min-height: 60px;
   }
 
+  .list-card .transparent {
+    --background: none;
+  }
+
   .list-card .list-item h2 {
     font-size: 18px;
     font-weight: 500;

@@ -28,12 +28,14 @@ export const OrderItem: React.FC<{ data: Order }> = ({ data }) => {
         routerLink={`/tabs/order/${data.id}`}
       >
         <IonCardHeader>
-          <IonItem button detail={false} lines="none" className="list-item">
+          <IonItem
+            detail={false}
+            lines="none"
+            className="list-item transparent"
+            style={{ background: "none" }}
+          >
             <IonAvatar slot="start">
-              <img
-                src="/assets/icon/icon.png"
-                alt="Speaker profile pic"
-              />
+              <img src="/assets/icon/icon.png" alt="Speaker profile pic" />
             </IonAvatar>
             <IonLabel>
               <h2>{customer?.name}</h2>

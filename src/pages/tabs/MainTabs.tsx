@@ -38,19 +38,19 @@ interface TabPage {
 
 const tabPages: TabPage[] = [
   {
+    name: "dashboard",
+    title: "Tổng hợp",
+    icon: gridSharp,
+    path: "/tabs/dashboard",
+    index: <DashboardPage />,
+  },
+  {
     name: "diary",
     title: "Nhật ký",
     icon: calendarSharp,
     path: "/tabs/diary",
     index: <DiaryPage />,
     detail: EventDetail,
-  },
-  {
-    name: "dashboard",
-    title: "Tổng hợp",
-    icon: gridSharp,
-    path: "/tabs/dashboard",
-    index: <DashboardPage />,
   },
   {
     name: "product",
