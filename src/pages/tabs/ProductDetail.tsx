@@ -23,21 +23,18 @@ import {
   IonToolbar,
   useIonRouter,
 } from "@ionic/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import _ from "lodash";
-import { Field, ProcessEnum } from "../../models";
+import { ProcessEnum } from "../../models";
 import { useSelector } from "../../store";
 import { useProductForm } from "../../hooks/useProductForm";
 import { pencil } from "ionicons/icons";
-
-
 
 interface ProductDetailProps {}
 
 export const ProductDetail: React.FC<ProductDetailProps> = () => {
   const { id } = useParams<{ id: string }>();
-  const [fields, setFields] = useState<Field[]>();
 
   const product = useSelector((state) =>
     state.data.products.find((x) => x.id === id)
@@ -45,25 +42,16 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
 
   const processes = useSelector((state) => state.data.processes);
 
-  const events = useSelector((state) =>
-    state.data.events.filter((x) => x.product === id)
-  );
+  const fields = useSelector((state) => {
+    const result = _.groupBy(state.data.events, "process");
 
-  useEffect(() => {
-    if (!product || !events) return;
-
-    const result = _.groupBy(events, "process");
-
-    const newFields = Object.keys(result).map((key) => {
+    return Object.keys(result).map((key) => {
       return {
         name: key,
         value: result[key].reduce((a, b) => a + (b ? b?.quantity! : 0), 0),
       };
     });
-
-    setFields(newFields);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   const router = useIonRouter();
 
@@ -98,24 +86,24 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
             <IonRow>
               <IonCol size="12" size-md="8" offsetMd="2">
                 {fields && fields?.length > 0 && (
-                  <IonCard>
+                  <IonCard className="list-card">
                     <IonCardContent>
-                      {fields?.map((field: any) => {
-                        const [id, type] = field.name.split("/");
-                        return (
-                          <IonItem detail={false} key={field.name}>
-                            <IonLabel>
-                              <h3>
+                      <IonList lines="full" style={{ borderTop: "none" }}>
+                        {fields?.map((field: any) => {
+                          const [id, type] = field.name.split("/");
+                          return (
+                            <IonItem detail={false} key={field.name}>
+                              <IonLabel>
                                 {ProcessEnum[type] +
                                   processes.find((i) => i.id === id)?.name}
-                              </h3>
-                            </IonLabel>
-                            <IonNote slot="end">
-                              <h3>{field.value}</h3>
-                            </IonNote>
-                          </IonItem>
-                        );
-                      })}
+                              </IonLabel>
+                              <IonNote slot="end">
+                                <p>{field.value}</p>
+                              </IonNote>
+                            </IonItem>
+                          );
+                        })}
+                      </IonList>
                     </IonCardContent>
                   </IonCard>
                 )}
