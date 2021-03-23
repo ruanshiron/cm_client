@@ -18,7 +18,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { ellipsisVerticalSharp } from "ionicons/icons";
+import { ellipsisVerticalSharp, searchSharp } from "ionicons/icons";
 import React, { useLayoutEffect, useRef } from "react";
 import EventFab from "../../components/fabs/EventFab";
 import EventItem from "../../components/items/EventItem";
@@ -57,6 +57,9 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
           <IonTitle>Nhật ký</IonTitle>
           <IonButtons slot="end">
             <IonButton>
+              <IonIcon slot="icon-only" icon={searchSharp} />
+            </IonButton>
+            <IonButton>
               <IonIcon slot="icon-only" icon={ellipsisVerticalSharp} />
             </IonButton>
           </IonButtons>
@@ -82,7 +85,7 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
               <IonSegmentButton
                 key={i}
                 ref={(ref) => (segments.current[i] = ref!)}
-                value={formatDate(day)}
+                value={formatDate(day)} 
               >
                 <IonLabel>{formatDate(day)}</IonLabel>
               </IonSegmentButton>
