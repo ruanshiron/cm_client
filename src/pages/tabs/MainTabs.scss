@@ -1,0 +1,9 @@
+.tab-bar {
+  display: none;
+}
+
+@media screen and (max-width: 991px) {
+  .tab-bar {
+    display: flex;
+  }
+}

@@ -38,12 +38,11 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
   const days = getDatesBetweenDates("2021/1/1", "2021/3/1");
 
   useLayoutEffect(() => {
-    segments.current[12].scrollIntoView({
-      block: "end",
+    if (segments.current[12]) segments.current[12].scrollIntoView({
+      block: "center",
+      inline: "center",
       behavior: "smooth",
     });
-
-    console.log("scrolled");
   });
 
   return (
@@ -76,7 +75,8 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
               segments.current[
                 days.findIndex((day) => formatDate(day) === e.detail.value)
               ].scrollIntoView({
-                block: "end",
+                block: "center",
+                inline: "center",
                 behavior: "smooth",
               });
             }}
@@ -85,7 +85,7 @@ const DiaryPage: React.FC<DiaryPageProps> = (props) => {
               <IonSegmentButton
                 key={i}
                 ref={(ref) => (segments.current[i] = ref!)}
-                value={formatDate(day)} 
+                value={formatDate(day)}
               >
                 <IonLabel>{formatDate(day)}</IonLabel>
               </IonSegmentButton>

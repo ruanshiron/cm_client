@@ -24,6 +24,7 @@ import ProductCreate from "./ProductCreate";
 import OrderCreate from "./OrderCreate";
 import DashboardPage from "./DashboardPage";
 import { ProductUpdate } from "./ProductUpdate";
+import "./MainTabs.scss";
 
 interface TabPage {
   name: string;
@@ -90,13 +91,22 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         {tabPages
           .filter((tab) => !!tab.detail)
           .map((tab, i) => (
-            <Route key={i} path={tab.path + "/:id"} component={tab.detail} exact />
+            <Route
+              key={i}
+              path={tab.path + "/:id"}
+              component={tab.detail}
+              exact
+            />
           ))}
 
         {tabPages
           .filter((tab) => !!tab.detail)
           .map((tab, i) => (
-            <Route key={i} path={tab.path + "/:id/update"} component={tab.update} />
+            <Route
+              key={i}
+              path={tab.path + "/:id/update"}
+              component={tab.update}
+            />
           ))}
 
         {tabPages
@@ -106,7 +116,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           ))}
       </IonRouterOutlet>
 
-      <IonTabBar slot="bottom">
+      <IonTabBar slot="bottom" className="tab-bar">
         {tabPages.map((tab, i) => (
           <IonTabButton
             key={i}
