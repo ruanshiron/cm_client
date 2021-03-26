@@ -50,8 +50,8 @@ import { WorkshopDetail } from "./pages/lists/WorkshopDetail";
 import WorkshopCreate from "./pages/lists/WorkshopCreate";
 import CustomerCreate from "./pages/lists/CustomerCreate";
 import { CustomerDetail } from "./pages/lists/CustomerDetail";
-import MaterialStorePage from "./pages/lists/MaterialStorePage";
-import MaterialStoreCreate from "./pages/lists/MaterialStoreCreate";
+import SupplierPage from "./pages/lists/SupplierPage";
+import SupplierCreate from "./pages/lists/SupplierCreate";
 import EmployeeCreate from "./pages/lists/EmployeeCreate";
 import HomeOrTutorial from "./components/HomeOrTutorial";
 import { useSelector } from "./store";
@@ -78,7 +78,7 @@ const listPages: AppRoute[] = [
   },
   {
     url: "/materials",
-    component: <MaterialStorePage />,
+    component: <SupplierPage />,
   },
   {
     url: "/settings",
@@ -112,7 +112,7 @@ const createPages: AppRoute[] = [
   },
   {
     url: "/materials/create",
-    component: MaterialStoreCreate,
+    component: SupplierCreate,
   },
 ];
 

@@ -1,40 +1,27 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  customerAPI,
-  employeeAPI,
-  eventAPI,
-  materialStoreAPI,
-  orderAPI,
-  processAPI,
-  productAPI,
-  workshopAPI,
-} from "../api";
-import {
-  Customer,
-  Employee,
-  Event,
-  EventGroup,
-  MaterialStore,
-  Order,
-  Process,
-  Product,
-  Workshop,
-} from "../models";
+import * as Customer from "../models/customer";
+import * as Workshop from "../models/workshop";
+import * as Supplier from "../models/supplier";
+import * as Employee from "../models/employee";
+import * as Product from "../models/product";
+import * as Process from "../models/process";
+import * as Event from "../models/event";
+import * as Order from "../models/order";
 import { filter } from "../utils/data";
 
 interface DataState {
   loading: boolean;
 
-  events: Event[];
-  products: Product[];
-  workshops: Workshop[];
-  customers: Customer[];
-  employees: Employee[];
-  materialStores: MaterialStore[];
-  orders: Order[];
-  processes: Process[];
+  events: Event.Skeleton[];
+  products: Product.Skeleton[];
+  workshops: Workshop.Skeleton[];
+  customers: Customer.Skeleton[];
+  employees: Employee.Skeleton[];
+  materialStores: Supplier.Skeleton[];
+  orders: Order.Skeleton[];
+  processes: Process.Skeleton[];
 
-  filteredEvents: EventGroup[];
+  filteredEvents: Event.Group[];
 }
 
 let initialState: DataState = {
@@ -55,56 +42,56 @@ let initialState: DataState = {
 export const fetchEvents = createAsyncThunk(
   "data/fetchEvents",
   async (params, thunkAPI) => {
-    return await eventAPI.get();
+    return await Event.get();
   }
 );
 
 export const fetchProducts = createAsyncThunk(
   "data/fetchProducts",
   async (params, thunkAPI) => {
-    return await productAPI.get();
+    return await Product.get();
   }
 );
 
 export const fetchWorkshops = createAsyncThunk(
   "data/fetchWorkshops",
   async (params, thunkAPI) => {
-    return await workshopAPI.get();
+    return await Workshop.get();
   }
 );
 
 export const fetchCustomers = createAsyncThunk(
   "data/fetchCustomers",
   async (params, thunkAPI) => {
-    return await customerAPI.get();
+    return await Customer.get();
   }
 );
 
-export const fetchMaterialStores = createAsyncThunk(
-  "data/fetchMaterialStores",
+export const fetchSuppliers = createAsyncThunk(
+  "data/fetchSuppliers",
   async (params, thunkAPI) => {
-    return await materialStoreAPI.get();
+    return await Supplier.get();
   }
 );
 
 export const fetchEmployees = createAsyncThunk(
   "data/fetchEmployees",
   async (params, thunkAPI) => {
-    return await employeeAPI.get();
+    return await Employee.get();
   }
 );
 
 export const fetchOrders = createAsyncThunk(
   "data/fetchOrders",
   async (params, thunkAPI) => {
-    return await orderAPI.get();
+    return await Order.get();
   }
 );
 
 export const fetchProcesses = createAsyncThunk(
   "data/fetchProcesses",
   async (params, thunkAPI) => {
-    return await processAPI.get();
+    return await Process.get();
   }
 );
 
@@ -119,7 +106,7 @@ const dataSlice = createSlice({
     });
     builder.addCase(fetchEvents.fulfilled, (state, action) => {
       state.loading = false;
-      let events = action.payload as Event[];
+      let events = action.payload as Event.Skeleton[];
       state.events = events;
       state.filteredEvents = filter(events);
     });
@@ -133,7 +120,7 @@ const dataSlice = createSlice({
     });
     builder.addCase(fetchProducts.fulfilled, (state, action) => {
       state.loading = false;
-      state.products = action.payload as Product[];
+      state.products = action.payload as Product.Skeleton[];
     });
     builder.addCase(fetchProducts.rejected, (state, action) => {
       state.loading = false;
@@ -145,7 +132,7 @@ const dataSlice = createSlice({
     });
     builder.addCase(fetchWorkshops.fulfilled, (state, action) => {
       state.loading = false;
-      state.workshops = action.payload as Workshop[];
+      state.workshops = action.payload as Workshop.Skeleton[];
     });
     builder.addCase(fetchWorkshops.rejected, (state, action) => {
       state.loading = false;
@@ -157,7 +144,7 @@ const dataSlice = createSlice({
     });
     builder.addCase(fetchCustomers.fulfilled, (state, action) => {
       state.loading = false;
-      state.customers = action.payload as Customer[];
+      state.customers = action.payload as Customer.Skeleton[];
     });
     builder.addCase(fetchCustomers.rejected, (state, action) => {
       state.loading = false;
@@ -169,21 +156,21 @@ const dataSlice = createSlice({
     });
     builder.addCase(fetchEmployees.fulfilled, (state, action) => {
       state.loading = false;
-      state.employees = action.payload as Employee[];
+      state.employees = action.payload as Employee.Skeleton[];
     });
     builder.addCase(fetchEmployees.rejected, (state, action) => {
       state.loading = false;
     });
 
     // MATERIAL STORE
-    builder.addCase(fetchMaterialStores.pending, (state) => {
+    builder.addCase(fetchSuppliers.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchMaterialStores.fulfilled, (state, action) => {
+    builder.addCase(fetchSuppliers.fulfilled, (state, action) => {
       state.loading = false;
-      state.materialStores = action.payload as MaterialStore[];
+      state.materialStores = action.payload as Supplier.Skeleton[];
     });
-    builder.addCase(fetchMaterialStores.rejected, (state, action) => {
+    builder.addCase(fetchSuppliers.rejected, (state, action) => {
       state.loading = false;
     });
 
@@ -193,7 +180,7 @@ const dataSlice = createSlice({
     });
     builder.addCase(fetchOrders.fulfilled, (state, action) => {
       state.loading = false;
-      state.orders = action.payload as Order[];
+      state.orders = action.payload as Order.Skeleton[];
     });
     builder.addCase(fetchOrders.rejected, (state, action) => {
       state.loading = false;
@@ -205,7 +192,7 @@ const dataSlice = createSlice({
     });
     builder.addCase(fetchProcesses.fulfilled, (state, action) => {
       state.loading = false;
-      state.processes = action.payload as Process[];
+      state.processes = action.payload as Process.Skeleton[];
     });
     builder.addCase(fetchProcesses.rejected, (state, action) => {
       state.loading = false;

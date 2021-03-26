@@ -22,7 +22,7 @@ import { ellipsisVerticalSharp, searchSharp } from "ionicons/icons";
 import React, { useLayoutEffect, useRef } from "react";
 import EventFab from "../../components/fabs/EventFab";
 import EventItem from "../../components/items/EventItem";
-import { EventGroup } from "../../models";
+import * as Event from "../../models/event";
 import { useSelector } from "../../store";
 import { formatDate, getDatesBetweenDates } from "../../utils/date";
 import "./DiaryPage.scss";
@@ -30,7 +30,7 @@ import "./DiaryPage.scss";
 interface DiaryPageProps {}
 
 const DiaryPage: React.FC<DiaryPageProps> = (props) => {
-  const groups: EventGroup[] = useSelector(
+  const groups: Event.Group[] = useSelector(
     (state) => state.data.filteredEvents
   );
 

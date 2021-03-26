@@ -9,11 +9,11 @@ import {
   IonText,
 } from "@ionic/react";
 import React from "react";
-import { Order } from "../../models";
+import * as Order from "../../models/order";
 import { useSelector } from "../../store";
 import { formatDate } from "../../utils/date";
 
-export const OrderItem: React.FC<{ data: Order }> = ({ data }) => {
+export const OrderItem: React.FC<{ data: Order.Skeleton }> = ({ data }) => {
   const customer = useSelector((state) =>
     state.data.customers.find((i) => i.id === data.customer)
   );

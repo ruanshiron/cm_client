@@ -26,7 +26,7 @@ import {
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import _ from "lodash";
-import { ProcessEnum } from "../../models";
+import * as Process from "../../models/process";
 import { useSelector } from "../../store";
 import { useProductForm } from "../../hooks/useProductForm";
 import { pencil } from "ionicons/icons";
@@ -64,7 +64,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
 
   return (
     <>
-      <IonPage class="list-page">
+      <IonPage className="list-page">
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton routerLink={router.routeInfo.pathname + "/update"}>
             <IonIcon icon={pencil}></IonIcon>
@@ -94,7 +94,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                           return (
                             <IonItem detail={false} key={field.name}>
                               <IonLabel>
-                                {ProcessEnum[type] +
+                                {Process.ProcessEnum[type] +
                                   processes.find((i) => i.id === id)?.name}
                               </IonLabel>
                               <IonNote slot="end">
@@ -131,7 +131,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                     <IonList>
                       <IonItemDivider>Kích cỡ</IonItemDivider>
                       {product?.sizes?.map((size, i) => (
-                        <IonItem>{size}</IonItem>
+                        <IonItem key={i}>{size}</IonItem>
                       ))}
                       <IonItemDivider>Quy trình sản xuất</IonItemDivider>
                       {product?.processes?.map((process, i) => (

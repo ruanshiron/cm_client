@@ -1,28 +1,22 @@
 import { useIonRouter } from "@ionic/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { employeeAPI } from "../api";
-import { Employee } from "../models";
+import * as Employee from "../models/employee";
 import { fetchEmployees } from "../store/dataSlice";
 import { toast } from "../utils/toast";
 
-const initialEmployee: Employee = { name: "", phonenumber: "" };
-
 export const useEmployeeCreate = () => {
   const router = useIonRouter();
-  const [fields, setFields] = useState<Employee>(initialEmployee);
+  const [fields, setFields] = useState<Employee.Skeleton>(Employee.initial);
 
   const dispatch = useDispatch();
 
-  const isInvalid = () =>
-    !fields?.name?.trim() || !fields?.phonenumber?.trim();
-
   const submit = async () => {
-    if (isInvalid()) return;
+    if (Employee.permit(fields)) return;
 
     try {
-      await employeeAPI.save(fields);
-      setFields(initialEmployee);
+      await Employee.save(fields);
+      setFields(Employee.initial);
       router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
@@ -32,7 +26,7 @@ export const useEmployeeCreate = () => {
     }
   };
 
-  const setFieldsValue = (e: Partial<Employee>) => {
+  const setFieldsValue = (e: Partial<Employee.Skeleton>) => {
     setFields((fields) => ({ ...fields, ...e }));
   };
 

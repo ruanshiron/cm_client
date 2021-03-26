@@ -20,6 +20,12 @@ try {
   }
 }
 
+firebase.firestore().settings({
+  cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+});
+
+firebase.firestore().enablePersistence()
+
 export const database = firebase.firestore();
 
 export const storage = firebase.storage();

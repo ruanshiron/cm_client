@@ -6,11 +6,11 @@ import {
   IonText,
 } from "@ionic/react";
 import React from "react";
-import { Process, ProcessEnum } from "../../models";
+import * as Process from "../../models/process";
 import { useSelector } from "../../store";
 
 interface Props {
-  process: Process;
+  process: Process.Skeleton;
 }
 
 export const ProcessAggregateItem: React.FC<Props> = ({ process }) => {
@@ -28,7 +28,7 @@ export const ProcessAggregateItem: React.FC<Props> = ({ process }) => {
   return (
     <IonCard>
       <IonCardHeader>
-        <IonCardSubtitle>{`${ProcessEnum["fulfilled"]}${process.name}`}</IonCardSubtitle>
+        <IonCardSubtitle>{`${Process.ProcessEnum["fulfilled"]}${process.name}`}</IonCardSubtitle>
       </IonCardHeader>
       <IonCardContent>
         <IonText color="dark">

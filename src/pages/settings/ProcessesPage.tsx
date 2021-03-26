@@ -22,7 +22,8 @@ import {
 } from "@ionic/react";
 import { add, closeOutline } from "ionicons/icons";
 import React from "react";
-import { initalProcess, useProcessForm } from "../../hooks/useProcessForm";
+import { useProcessForm } from "../../hooks/useProcessForm";
+import * as Process from "../../models/process";
 import { useSelector } from "../../store";
 
 interface ProcessesPageProps {}
@@ -72,7 +73,7 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
       <IonFab vertical="bottom" horizontal="end" slot="fixed">
         <IonFabButton
           onClick={() => {
-            form.setFields(initalProcess);
+            form.setFields(Process.initial);
             form.setShowModal(true);
           }}
         >

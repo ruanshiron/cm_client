@@ -17,14 +17,14 @@ import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { WorkshopItem } from "../../components/items/WorkshopItem";
-import { MaterialStorePagePopover } from "../../components/popovers/MaterialStorePagePopover";
+import { SupplierPagePopover } from "../../components/popovers/SupplierPagePopover";
 import { useSelector } from "../../store";
-import { fetchMaterialStores } from "../../store/dataSlice";
-import "./MaterialStorePage.scss";
+import { fetchSuppliers } from "../../store/dataSlice";
+import "./SupplierPage.scss";
 
-interface MaterialStorePageProps {}
+interface SupplierPageProps {}
 
-const MaterialStorePage: React.FC<MaterialStorePageProps> = () => {
+const SupplierPage: React.FC<SupplierPageProps> = () => {
   const dispatch = useDispatch();
   const materialStores = useSelector((state) => state.data.materialStores);
 
@@ -37,7 +37,7 @@ const MaterialStorePage: React.FC<MaterialStorePageProps> = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchMaterialStores());
+    dispatch(fetchSuppliers());
   }, [dispatch]);
 
   return (
@@ -81,10 +81,10 @@ const MaterialStorePage: React.FC<MaterialStorePageProps> = () => {
         event={popoverEvent}
         onDidDismiss={() => setShowPopover(false)}
       >
-        <MaterialStorePagePopover dismiss={() => setShowPopover(false)} />
+        <SupplierPagePopover dismiss={() => setShowPopover(false)} />
       </IonPopover>
     </IonPage>
   );
 };
 
-export default MaterialStorePage;
+export default SupplierPage;

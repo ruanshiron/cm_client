@@ -1,22 +1,14 @@
 import { useIonRouter } from "@ionic/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { orderAPI } from "../api";
-import { Order, Line } from "../models";
+import * as Order from "../models/order";
 import { useSelector } from "../store";
 import { fetchOrders } from "../store/dataSlice";
 import { toast } from "../utils/toast";
 
-const initalOrder: Order = {
-  customer: "",
-  lines: [{ product: "", size: "" }],
-};
-
-const initialLine = { product: "", size: "" };
-
 export const useOrderForm = () => {
   const router = useIonRouter();
-  const [fields, setFields] = useState<Order>(initalOrder);
+  const [fields, setFields] = useState<Order.Skeleton>(Order.initial);
 
   const dispatch = useDispatch();
 
@@ -24,13 +16,13 @@ export const useOrderForm = () => {
   const customers = useSelector((state) => state.data.customers);
 
   const isInvalid = () => {
-    const isInvalidLine = (line: Line) =>
+    const isInvalidLine = (line: Order.Line) =>
       !line.product?.trim() ||
       !line.size?.trim() ||
       !line.quantity ||
       !(line.quantity > 0);
 
-    const isInvalidLines = (lines: Line[]) => {
+    const isInvalidLines = (lines: Order.Line[]) => {
       return lines.map((line) => isInvalidLine(line)).reduce((p, c) => p || c);
     };
 
@@ -45,8 +37,8 @@ export const useOrderForm = () => {
     if (isInvalid()) return;
 
     try {
-      await orderAPI.save(fields);
-      setFields(initalOrder);
+      await Order.save(fields);
+      setFields(Order.initial);
       router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
@@ -56,14 +48,14 @@ export const useOrderForm = () => {
     }
   };
 
-  const setFieldsValue = (e: Partial<Order>) => {
+  const setFieldsValue = (e: Partial<Order.Skeleton>) => {
     setFields((fields) => ({ ...fields, ...e }));
   };
 
   const addLine = () => {
     setFields((fields) => ({
       ...fields,
-      lines: [...fields.lines, initialLine],
+      lines: [...fields.lines, Order.initialLine],
     }));
   };
 

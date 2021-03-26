@@ -1,7 +1,7 @@
 import React from "react";
 import { IonList, IonItem, IonLabel, useIonRouter } from "@ionic/react";
 
-export const MaterialStorePagePopover: React.FC<{
+export const SupplierPagePopover: React.FC<{
   dismiss: () => void;
 }> = ({ dismiss }) => {
   const router = useIonRouter();

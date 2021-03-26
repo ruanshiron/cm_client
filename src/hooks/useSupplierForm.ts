@@ -1,32 +1,32 @@
 import { useIonRouter } from "@ionic/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import * as Customer from "../models/customer";
-import { fetchCustomers } from "../store/dataSlice";
+import * as Supplier from "../models/supplier";
+import { fetchSuppliers } from "../store/dataSlice";
 import { toast } from "../utils/toast";
 
-export const useCustomerForm = () => {
+export const useSupplierForm = () => {
   const router = useIonRouter();
-  const [fields, setFields] = useState<Customer.Skeleton>(Customer.initial);
+  const [fields, setFields] = useState<Supplier.Skeleton>(Supplier.initial);
 
   const dispatch = useDispatch();
 
   const submit = async () => {
-    if (Customer.permit(fields)) return;
+    if (Supplier.permit(fields)) return;
 
     try {
-      await Customer.save(fields);
-      setFields(Customer.initial);
+      await Supplier.save(fields);
+      setFields(Supplier.initial);
       router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
-      dispatch(fetchCustomers());
+      dispatch(fetchSuppliers());
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
   };
 
-  const setFieldsValue = (e: Partial<Customer.Skeleton>) => {
+  const setFieldsValue = (e: Partial<Supplier.Skeleton>) => {
     setFields((fields) => ({ ...fields, ...e }));
   };
 

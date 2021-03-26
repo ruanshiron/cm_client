@@ -1,21 +1,16 @@
-import { Event } from "../models";
+import * as Event from "../models/event";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "../utils/toast";
 import { useSelector } from "../store";
 import { fetchEvents } from "../store/dataSlice";
-import { eventAPI } from "../api";
 
-const initalEvent: Event = {
-  date: new Date().toISOString().substring(0, 10),
-};
-
-export const useEventForm = (event: Event = initalEvent) => {
+export const useEventForm = (event = Event.initial) => {
   const dispatch = useDispatch();
 
   const [showEventForm, setShowEventForm] = useState<boolean>(false);
 
-  const [fields, setFields] = useState<Event>(event);
+  const [fields, setFields] = useState<Event.Skeleton>(event);
 
   const products = useSelector((state) => state.data.products);
   const processes = useSelector((state) => state.data.processes);
@@ -26,24 +21,15 @@ export const useEventForm = (event: Event = initalEvent) => {
     setFields(event);
   }, [showEventForm, event]);
 
-  const setFieldsValue = (e: Partial<Event>) => {
+  const setFieldsValue = (e: Partial<Event.Skeleton>) => {
     setFields((fields) => ({ ...fields, ...e }));
   };
 
-  const isInvalid = () =>
-    !fields?.quantity ||
-    !(fields?.quantity > 0) ||
-    !fields?.product?.trim() ||
-    !fields?.size?.trim() ||
-    !fields?.process?.trim() ||
-    !fields?.date ||
-    !fields?.workshop?.trim();
-
   const submit = async () => {
-    if (isInvalid()) return;
+    if (Event.permit(fields)) return;
 
     try {
-      await eventAPI.save(fields);
+      await Event.save(fields);
       setShowEventForm(false);
       toast("Lưu thành công.");
       // TODO: Do not fetch again

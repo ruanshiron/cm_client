@@ -1,12 +1,13 @@
 import React from "react";
 import { IonNote, IonItem, IonLabel } from "@ionic/react";
-import { Event, ProcessEnum } from "../../models";
+import * as Event from "../../models/event";
+import * as Process from "../../models/process";
 import { useEventForm } from "../../hooks/useEventForm";
 import { EventModal } from "../modals/EventModal";
 import { useSelector } from "../../store";
 
 interface EventItemProps {
-  data: Event;
+  data: Event.Skeleton;
 }
 
 const EventItem: React.FC<EventItemProps> = ({ data }) => {
@@ -32,7 +33,11 @@ const EventItem: React.FC<EventItemProps> = ({ data }) => {
         <>
           <IonLabel>
             <h2>
-              {workshop?.name}・<b>{ProcessEnum[data.process?.split("/")[1]!] + process?.name}</b>
+              {workshop?.name}・
+              <b>
+                {Process.ProcessEnum[data.process?.split("/")[1]!] +
+                  process?.name}
+              </b>
             </h2>
             <p>
               {product?.name} / {data.size}

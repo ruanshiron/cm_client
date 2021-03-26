@@ -14,13 +14,13 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import React from "react";
-import { useMaterialStoreForm } from "../../hooks/useMaterialStoreForm";
-import "./MaterialStoreCreate.scss";
+import { useSupplierForm } from "../../hooks/useSupplierForm";
+import "./SupplierCreate.scss";
 
-interface MaterialStoreCreateProps {}
+interface SupplierCreateProps {}
 
-const MaterialStoreCreate: React.FC<MaterialStoreCreateProps> = () => {
-  const form = useMaterialStoreForm();
+const SupplierCreate: React.FC<SupplierCreateProps> = () => {
+  const form = useSupplierForm();
   return (
     <IonPage>
       <IonHeader>
@@ -72,4 +72,4 @@ const MaterialStoreCreate: React.FC<MaterialStoreCreateProps> = () => {
   );
 };
 
-export default MaterialStoreCreate;
+export default SupplierCreate;

@@ -58,12 +58,10 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
 
             <IonCol size="12" sizeMd="6" style={{ padding: 0 }}>
               <FulfilledsItem />
+              <RejectedsItem />
             </IonCol>
             <IonCol size="12" sizeMd="6" style={{ padding: 0 }}>
               <ProcessingsItem />
-            </IonCol>
-            <IonCol size="12" sizeMd="6" style={{ padding: 0 }}>
-              <RejectedsItem />
             </IonCol>
           </IonRow>
         </IonGrid>

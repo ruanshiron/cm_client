@@ -1,23 +1,14 @@
 import { useIonRouter } from "@ionic/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { productAPI } from "../api";
-import { Product } from "../models";
+import * as Product from "../models/product";
 import { useSelector } from "../store";
 import { fetchProducts } from "../store/dataSlice";
 import { toast } from "../utils/toast";
 
-export const initalProduct: Product = {
-  name: "",
-  code: "",
-  sizes: [],
-  note: "",
-  processes: [],
-};
-
-export const useProductForm = (product = initalProduct) => {
+export const useProductForm = (product = Product.initial) => {
   const router = useIonRouter();
-  const [fields, setFields] = useState<Product>(product);
+  const [fields, setFields] = useState<Product.Skeleton>(product);
 
   const dispatch = useDispatch();
 
@@ -30,7 +21,7 @@ export const useProductForm = (product = initalProduct) => {
     if (isInvalid()) return;
 
     try {
-      await productAPI.save(fields);
+      await Product.save(fields);
       setFields(product);
       router.goBack();
       toast("Lưu thành công.");
@@ -41,7 +32,7 @@ export const useProductForm = (product = initalProduct) => {
     }
   };
 
-  const setFieldsValue = (e: Partial<Product>) => {
+  const setFieldsValue = (e: Partial<Product.Skeleton>) => {
     setFields((fields) => ({ ...fields, ...e }));
   };
 

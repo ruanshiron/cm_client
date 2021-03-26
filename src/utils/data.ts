@@ -1,10 +1,13 @@
-import { Event, EventGroup } from "../models";
+import * as Event from "../models/event";
 import { formatDate } from "./date";
 import _ from "lodash";
 
 // TODO: Should use a faster sort
 
-export function addFilteredEvent(event: Event, filteredEvents: EventGroup[]) {
+export function addFilteredEvent(
+  event: Event.Skeleton,
+  filteredEvents: Event.Group[]
+) {
   const date = formatDate(event.date!);
   const selectedItem = filteredEvents.find((item) => item.name === date);
 
@@ -19,7 +22,7 @@ export function addFilteredEvent(event: Event, filteredEvents: EventGroup[]) {
   });
 }
 
-export const filter = (events: Event[]) =>
+export const filter = (events: Event.Skeleton[]) =>
   _.chain(events)
     .groupBy((event) => {
       const date = new Date(event.date!);

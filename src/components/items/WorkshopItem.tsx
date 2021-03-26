@@ -7,9 +7,11 @@ import {
   IonLabel,
 } from "@ionic/react";
 import React from "react";
-import { Workshop } from "../../models";
+import * as Workshop from "../../models/workshop";
 
-export const WorkshopItem: React.FC<{ data: Workshop }> = ({ data }) => {
+export const WorkshopItem: React.FC<{ data: Workshop.Skeleton }> = ({
+  data,
+}) => {
   return (
     <>
       <IonCard className="list-card">
@@ -22,10 +24,7 @@ export const WorkshopItem: React.FC<{ data: Workshop }> = ({ data }) => {
             routerLink={`/workshops/${data.id}`}
           >
             <IonAvatar slot="start">
-              <img
-                src="/assets/icon/icon.png"
-                alt="Speaker profile pic"
-              />
+              <img src="/assets/icon/icon.png" alt="Speaker profile pic" />
             </IonAvatar>
             <IonLabel>
               <h2>{data.name}</h2>
