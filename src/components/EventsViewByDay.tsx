@@ -65,8 +65,10 @@ export const EventsViewByDay: React.FC<Props> = () => {
 
   const handleSlideChange = async (e: any) => {
     let index: number = 0;
-    await e.target?.getActiveIndex().then((value: any) => (index = value));
-    setSelected("" + index);
+    await e.target?.getActiveIndex().then((value: any) => {
+      index = value;
+      setSelected("" + index);
+    });
   };
 
   useLayoutEffect(() => {
@@ -109,7 +111,7 @@ export const EventsViewByDay: React.FC<Props> = () => {
             speed: 400,
             loop: false,
             pagination: {
-              el: null
+              el: null,
             },
           }}
         >
