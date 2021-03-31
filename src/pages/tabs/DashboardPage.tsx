@@ -21,7 +21,6 @@ import { RejectedsItem } from "../../components/items/RejectedsItem";
 import { useSelector } from "../../store";
 import "./DashboardPage.scss";
 
-
 interface DashboardPageProps {}
 
 const DashboardPage: React.FC<DashboardPageProps> = () => {
@@ -55,9 +54,12 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
                 <ProcessAggregateItem process={process} />
               </IonCol>
             ))}
-
+          </IonRow>
+          <IonRow>
             <IonCol size="12" sizeMd="6" style={{ padding: 0 }}>
               <FulfilledsItem />
+            </IonCol>
+            <IonCol size="12" sizeMd="6" style={{ padding: 0 }}>
               <RejectedsItem />
             </IonCol>
             <IonCol size="12" sizeMd="6" style={{ padding: 0 }}>
