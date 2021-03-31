@@ -1,3 +1,5 @@
+import { formatISO } from "date-fns";
+
 export function formatDate(raw: Date | string | number) {
   const date = new Date(raw);
   return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
@@ -21,18 +23,28 @@ export const selectedDateLabelParser = (text = "") => {
   return "";
 };
 
-export const getDatesBetweenDates = (
+export const getDates = (
   startDate: Date | string | number,
   endDate: Date | string | number
 ) => {
-  let dates: Date[] = [];
+  let dates: string[] = [];
   endDate = new Date(endDate);
+  endDate = new Date(
+    endDate.getFullYear(),
+    endDate.getMonth(),
+    endDate.getDate()
+  );
   //to avoid modifying the original date
-  const theDate = new Date(startDate);
+  startDate = new Date(startDate);
+  const theDate = new Date(
+    startDate.getFullYear(),
+    startDate.getMonth(),
+    startDate.getDate()
+  );
   while (theDate < endDate) {
-    dates = [...dates, new Date(theDate)];
+    dates = [...dates, formatISO(theDate, { representation: "date" })];
     theDate.setDate(theDate.getDate() + 1);
   }
-  dates = [...dates, endDate];
+  dates = [...dates, formatISO(theDate, { representation: "date" })];
   return dates;
 };

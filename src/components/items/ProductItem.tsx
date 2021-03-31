@@ -1,7 +1,6 @@
 import {
   IonAvatar,
   IonCard,
-  IonCardContent,
   IonCardHeader,
   IonItem,
   IonLabel,
@@ -32,25 +31,6 @@ export const ProductItem: React.FC<{ data: any }> = ({ data }) => {
             </IonLabel>
           </IonItem>
         </IonCardHeader>
-
-        <IonCardContent>
-          {/* <IonList lines="none">
-            {data.fields.map((field: any) => (
-              <IonItem
-                detail={false}
-                routerLink={`/tabs/product/fields/${field.id}`}
-                key={field.name}
-              >
-                <IonLabel>
-                  <h3>{field.name}</h3>
-                </IonLabel>
-                <IonNote slot="end">
-                  <h3>{field.value}</h3>
-                </IonNote>
-              </IonItem>
-            ))}
-          </IonList> */}
-        </IonCardContent>
       </IonCard>
     </>
   );

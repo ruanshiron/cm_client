@@ -69,3 +69,8 @@ ion-router-outlet {
   }
 }
 
+ion-list {
+  ion-item:last-child {
+    --inner-border-width: 0;
+  }
+}

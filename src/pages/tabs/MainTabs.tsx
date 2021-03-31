@@ -15,7 +15,6 @@ import {
   gridSharp,
 } from "ionicons/icons";
 import DiaryPage from "./DiaryPage";
-import EventDetail from "./EventDetail";
 import ProductPage from "./ProductPage";
 import OrderPage from "./OrderPage";
 import { OrderDetail } from "./OrderDetail";
@@ -51,7 +50,6 @@ const tabPages: TabPage[] = [
     icon: calendarSharp,
     path: "/tabs/diary",
     index: <DiaryPage />,
-    detail: EventDetail,
   },
   {
     name: "product",
@@ -85,7 +83,12 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         {tabPages
           .filter((tab) => !!tab.index)
           .map((tab, i) => (
-            <Route key={i} path={tab.path} render={() => tab.index} exact />
+            <Route
+              key={i}
+              path={tab.path}
+              render={() => tab.index}
+              exact={!!(tab.detail || tab.create || tab.update)}
+            />
           ))}
 
         {tabPages

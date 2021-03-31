@@ -96,6 +96,7 @@ const configPages: AppPage[] = [
 
 const Menu: React.FC = () => {
   const location = useLocation();
+  
 
   return (
     <IonMenu id="side-menu" contentId="main" type="overlay" swipeGesture>
@@ -108,7 +109,7 @@ const Menu: React.FC = () => {
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem
                   className={
-                    location.pathname === appPage.url ? "selected" : ""
+                    location.pathname.includes(appPage.url) ? "selected" : ""
                   }
                   routerLink={appPage.url}
                   lines="none"
@@ -136,7 +137,7 @@ const Menu: React.FC = () => {
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem
                   className={
-                    location.pathname === appPage.url ? "selected" : ""
+                    location.pathname.includes(appPage.url) ? "selected" : ""
                   }
                   routerLink={appPage.url}
                   lines="none"
