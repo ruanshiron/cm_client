@@ -5,7 +5,7 @@ interface DiaryState {
 }
 
 let initialState: DiaryState = {
-  mode: "day",
+  mode: "all",
 };
 
 const diarySlice = createSlice({
