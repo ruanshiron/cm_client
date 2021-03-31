@@ -77,7 +77,7 @@ export const EventsViewByDay: React.FC<Props> = () => {
       });
 
       slider.current!.slideTo(parseInt(selected), 0);
-    }, 200);
+    }, 500);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -107,6 +107,10 @@ export const EventsViewByDay: React.FC<Props> = () => {
           options={{
             initialSlide: 1,
             speed: 400,
+            loop: false,
+            pagination: {
+              el: null
+            },
           }}
         >
           {dates.map((date, i) => (
