@@ -50,7 +50,7 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
               <IonList
                 inset
                 lines="full"
-                style={{ padding: 0, borderRadius: 12 }}
+                className="flat-list"
               >
                 {processes.map((process, i) => (
                   <IonItem
@@ -119,7 +119,7 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
             <IonItem>
               <IonToggle
                 checked={form.defaultName}
-                slot="start"
+                slot="end"
                 onIonChange={(e) => {
                   form.setDefaultName(e.detail.checked);
                 }}

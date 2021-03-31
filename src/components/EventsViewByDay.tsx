@@ -93,7 +93,7 @@ export const EventsViewByDay: React.FC<Props> = () => {
           >
             {dates.map((date, i) => (
               <IonSegmentButton key={i} value={`${i}`} id={`segment/${i}`}>
-                <IonLabel>{format(new Date(date), "dd 'thg' MM")}</IonLabel>
+                <IonLabel>{format(new Date(date), "dd 'Thg' MM")}</IonLabel>
               </IonSegmentButton>
             ))}
           </IonSegment>

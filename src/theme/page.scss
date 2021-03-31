@@ -74,3 +74,13 @@ ion-list {
     --inner-border-width: 0;
   }
 }
+
+.flat-list {
+  padding: 0;
+  border-radius: 12px !important;
+  border: 1px solid
+    var(
+      --ion-item-border-color,
+      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+    );
+}
