@@ -1,8 +1,6 @@
 import {
   IonCol,
   IonContent,
-  IonFab,
-  IonFabButton,
   IonGrid,
   IonHeader,
   IonIcon,
@@ -16,7 +14,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { add, format, formatISO } from "date-fns";
-import { fileTrayOutline, playForward } from "ionicons/icons";
+import { fileTrayOutline } from "ionicons/icons";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { useSelector } from "../store";
 import { getDates } from "../utils/date";
@@ -101,12 +99,6 @@ export const EventsViewByDay: React.FC<Props> = () => {
           </IonSegment>
         </IonToolbar>
       </IonHeader>
-
-      <IonFab style={{ top: 82 }} vertical="top" horizontal="end" slot="fixed">
-        <IonFabButton size="small">
-          <IonIcon icon={playForward} />
-        </IonFabButton>
-      </IonFab>
 
       <IonContent>
         <IonSlides
