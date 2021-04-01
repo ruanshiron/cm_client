@@ -63,11 +63,11 @@ export const EventsViewByDay: React.FC<Props> = () => {
     slider.current!.slideTo(parseInt(value));
   };
 
-  const handleSlideChange = async (e: any) => {
-    let index: number = 0;
-    await e.target?.getActiveIndex().then((value: any) => {
-      index = value;
-      setSelected("" + index);
+  const handleSlideChange = (e: any) => {
+    e.target?.getActiveIndex().then((value: any) => {
+      setSelected("" + value);
+      console.log(value);
+      
     });
   };
 
@@ -78,7 +78,6 @@ export const EventsViewByDay: React.FC<Props> = () => {
         inline: "center",
       });
 
-      slider.current!.slideTo(parseInt(selected), 0);
     }, 500);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,10 +103,10 @@ export const EventsViewByDay: React.FC<Props> = () => {
 
       <IonContent>
         <IonSlides
-          onIonSlideDidChange={handleSlideChange}
+          onIonSlideTransitionEnd={handleSlideChange}
           ref={slider}
           options={{
-            initialSlide: 1,
+            initialSlide: todayIndex,
             speed: 400,
             loop: false,
             pagination: {
