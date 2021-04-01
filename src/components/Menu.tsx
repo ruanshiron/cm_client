@@ -23,6 +23,7 @@ import {
   IonNote,
 } from "@ionic/react";
 import "./Menu.scss";
+import { useSelector } from "../store";
 
 interface AppPage {
   url: string;
@@ -96,14 +97,19 @@ const configPages: AppPage[] = [
 
 const Menu: React.FC = () => {
   const location = useLocation();
-  
+  const { displayName, isLoggedIn } = useSelector((state) => state.user);
 
   return (
     <IonMenu id="side-menu" contentId="main" type="overlay" swipeGesture>
       <IonContent>
         <IonList id="tab-list">
           <IonListHeader>Trang Quản Lý</IonListHeader>
-          <IonNote>chào quản trị viên</IonNote>
+          {isLoggedIn ? (
+            <IonNote>chào {displayName}</IonNote>
+          ) : (
+            <IonNote>chào quản trị viên</IonNote>
+          )}
+
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>

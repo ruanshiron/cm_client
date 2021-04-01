@@ -84,3 +84,21 @@ ion-list {
       var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
     );
 }
+
+.social-login-btn {
+  min-height: 70px;
+  max-width: 500px;
+  border-bottom: 3px solid var(--ion-color-primary-tint);
+  ion-title {
+    margin-top: 24px;
+    margin-left: 48px;
+    font-size: var(--ion-font-size-14);
+    padding: 0;
+  }
+  ion-icon {
+    font-size: 24px;
+    top: 22px;
+    left: 13px;
+    position: absolute;
+  }
+}

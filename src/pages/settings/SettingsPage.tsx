@@ -15,8 +15,9 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { optionsOutline } from "ionicons/icons";
+import { logOutOutline, optionsOutline } from "ionicons/icons";
 import React from "react";
+import { signOut } from "../../helpers/firebaseHelper";
 
 interface SettingsPageProps {}
 
@@ -47,6 +48,22 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
                     <IonIcon icon={optionsOutline} slot="start"></IonIcon>
                     <IonLabel slot="start">
                       <h2>Quy trình</h2>
+                    </IonLabel>
+                  </IonItem>
+                </IonCardHeader>
+              </IonCard>
+              <IonCard className="list-card">
+                <IonCardHeader>
+                  <IonItem
+                    button
+                    detail={false}
+                    lines="none"
+                    className="list-item small"
+                    onClick={() => signOut()}
+                  >
+                    <IonIcon icon={logOutOutline} slot="start" color="danger"></IonIcon>
+                    <IonLabel slot="start" color="danger">
+                      <h2>Đăng xuất</h2>
                     </IonLabel>
                   </IonItem>
                 </IonCardHeader>

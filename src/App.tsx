@@ -57,6 +57,8 @@ import HomeOrTutorial from "./components/HomeOrTutorial";
 import { useSelector } from "./store";
 import SettingsPage from "./pages/settings/SettingsPage";
 import ProcessesPage from "./pages/settings/ProcessesPage";
+import { useAuth } from "./hooks/useAuth";
+import LoginPage from "./pages/login/LoginPage";
 
 interface AppRoute {
   url: string;
@@ -131,6 +133,8 @@ setupConfig({
 const App: React.FC = () => {
   const dispatch = useDispatch();
 
+  useAuth();
+
   useEffect(() => {
     dispatch(fetchEvents());
     dispatch(fetchProducts());
@@ -141,51 +145,64 @@ const App: React.FC = () => {
   }, [dispatch]);
 
   const loading = useSelector((state) => state.data.loading);
+  const { isLoggedIn, loading: userLoading } = useSelector(
+    (state) => state.user
+  );
   return (
     <IonApp>
-      {loading && (
-        <IonProgressBar
-          style={{ zIndex: 999 }}
-          type="indeterminate"
-        ></IonProgressBar>
-      )}
-      <IonReactRouter>
-        <IonSplitPane contentId="main">
-          <Menu />
-          <IonRouterOutlet id="main">
-            <Route path="/tabs" render={() => <MainTabs />} />
-            {listPages.map((page, index) => (
-              <Route
-                key={index}
-                path={page.url}
-                render={() => page.component}
-                exact
-              />
-            ))}
-            {detailPages.map((page, index) => (
-              <Route key={index} path={page.url} component={page.component} />
-            ))}
-            {createPages.map((page, index) => (
-              <Route
-                key={index}
-                path={page.url}
-                component={page.component}
-                exact
-              />
-            ))}
-            {settingPages.map((page, index) => (
-              <Route
-                key={index}
-                path={page.url}
-                component={page.component}
-                exact
-              />
-            ))}
+      {loading ||
+        (userLoading && (
+          <IonProgressBar
+            style={{ zIndex: 999 }}
+            type="indeterminate"
+          ></IonProgressBar>
+        ))}
+      {!userLoading &&
+        (isLoggedIn ? (
+          <IonReactRouter>
+            <IonSplitPane contentId="main">
+              <Menu />
+              <IonRouterOutlet id="main">
+                <Route path="/tabs" render={() => <MainTabs />} />
+                {listPages.map((page, index) => (
+                  <Route
+                    key={index}
+                    path={page.url}
+                    render={() => page.component}
+                    exact
+                  />
+                ))}
+                {detailPages.map((page, index) => (
+                  <Route
+                    key={index}
+                    path={page.url}
+                    component={page.component}
+                  />
+                ))}
+                {createPages.map((page, index) => (
+                  <Route
+                    key={index}
+                    path={page.url}
+                    component={page.component}
+                    exact
+                  />
+                ))}
+                {settingPages.map((page, index) => (
+                  <Route
+                    key={index}
+                    path={page.url}
+                    component={page.component}
+                    exact
+                  />
+                ))}
 
-            <Route path="/" component={HomeOrTutorial} exact />
-          </IonRouterOutlet>
-        </IonSplitPane>
-      </IonReactRouter>
+                <Route path="/" component={HomeOrTutorial} exact />
+              </IonRouterOutlet>
+            </IonSplitPane>
+          </IonReactRouter>
+        ) : (
+          <LoginPage />
+        ))}
     </IonApp>
   );
 };
