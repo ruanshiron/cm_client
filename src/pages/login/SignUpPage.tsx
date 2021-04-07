@@ -11,21 +11,35 @@ import {
 } from "@ionic/react";
 import { keyOutline, mailOutline } from "ionicons/icons";
 import { toast } from "../../utils/toast";
-import { loginWithEmail } from "../../helpers/firebaseHelper";
+import { createUserWithEmail } from "../../helpers/firebaseHelper";
 
-const LoginPage = () => {
+function validateEmail(email: string) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
+const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const login = async () => {
-    if (email.trim() === "" || password.trim() === "") {
+  const submit = async () => {
+    if (email.trim() === "" || password.trim() === "" || confirmPassword.trim() === "") {
       return toast("Hãy nhập email và mật khẩu");
     }
 
-    const res = await loginWithEmail(email, password);
+    if (!validateEmail(email)) {
+      return toast("Hãy nhập đúng email")
+    }
+
+    if (password !== confirmPassword) {
+      return toast("Nhập lại mật khẩu")
+    }
+
+    const res = await createUserWithEmail(email, password);
 
     if (res) {
-      toast("Đăng nhập thành công");
+      toast("Đăng ký thành công");
     } else {
       toast("Email hoặc mật khẩu không chính xác");
       setPassword("");
@@ -60,14 +74,23 @@ const LoginPage = () => {
                   type="password"
                 ></IonInput>
               </IonItem>
+              <IonItem>
+                <IonIcon icon={keyOutline} slot="start"></IonIcon>
+                <IonInput
+                  value={confirmPassword}
+                  onIonChange={(e) => setConfirmPassword(e.detail.value!)}
+                  type="password"
+                ></IonInput>
+              </IonItem>
             </IonCard>
             <IonButton
-              onClick={() => login()}
+              onClick={() => submit()}
               style={{ margin: 10 }}
               fill="solid"
               expand="block"
+              type="submit"
             >
-              Đăng nhập
+              Đăng Ký
             </IonButton>
           </div>
         </IonGrid>
@@ -76,4 +99,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;

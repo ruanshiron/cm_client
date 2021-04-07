@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { onAuthStateChanged, signOut } from "../helpers/firebaseHelper";
+import { onAuthStateChanged, signOut as firebaseSignOut } from "../helpers/firebaseHelper";
 
 interface UserState {
   isLoggedIn: boolean;
@@ -22,7 +22,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     signOut: (state) => {
-      signOut();
+      firebaseSignOut();
       state.isLoggedIn = false;
       state.displayName = "";
       state.loading = false;
@@ -46,6 +46,6 @@ const userSlice = createSlice({
   },
 });
 
-// export const {} = userSlice.actions;
+export const { signOut } = userSlice.actions;
 
 export default userSlice.reducer;

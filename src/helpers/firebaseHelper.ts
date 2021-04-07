@@ -35,6 +35,29 @@ export async function loginWithGoogle() {
   }
 }
 
+export async function loginWithEmail(email: string, password: string) {
+  try {
+    await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    await firebase.auth().signInWithEmailAndPassword(email, password);
+    window.location.replace("/");
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function createUserWithEmail(email: string, password: string) {
+  try {
+    await firebase.auth().createUserWithEmailAndPassword(email, password);
+    window.location.replace("/");
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 export async function signOut() {
   await firebase.auth().signOut();
 }

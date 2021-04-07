@@ -17,11 +17,14 @@ import {
 } from "@ionic/react";
 import { logOutOutline, optionsOutline } from "ionicons/icons";
 import React from "react";
-import { signOut } from "../../helpers/firebaseHelper";
+import { useDispatch } from "react-redux";
+
+import { signOut } from "../../store/userSlice";
 
 interface SettingsPageProps {}
 
 const SettingsPage: React.FC<SettingsPageProps> = () => {
+  const dispatch = useDispatch();
   return (
     <IonPage className="list-page">
       <IonHeader>
@@ -59,9 +62,13 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
                     detail={false}
                     lines="none"
                     className="list-item small"
-                    onClick={() => signOut()}
+                    onClick={() => dispatch(signOut())}
                   >
-                    <IonIcon icon={logOutOutline} slot="start" color="danger"></IonIcon>
+                    <IonIcon
+                      icon={logOutOutline}
+                      slot="start"
+                      color="danger"
+                    ></IonIcon>
                     <IonLabel slot="start" color="danger">
                       <h2>Đăng xuất</h2>
                     </IonLabel>

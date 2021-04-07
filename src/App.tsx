@@ -8,7 +8,7 @@ import {
   setupConfig,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -59,6 +59,7 @@ import SettingsPage from "./pages/settings/SettingsPage";
 import ProcessesPage from "./pages/settings/ProcessesPage";
 import { useAuth } from "./hooks/useAuth";
 import LoginPage from "./pages/login/LoginPage";
+import SignUpPage from "./pages/login/SignUpPage";
 
 interface AppRoute {
   url: string;
@@ -157,9 +158,9 @@ const App: React.FC = () => {
             type="indeterminate"
           ></IonProgressBar>
         ))}
-      {!userLoading &&
-        (isLoggedIn ? (
-          <IonReactRouter>
+      <IonReactRouter>
+        {!userLoading &&
+          (isLoggedIn ? (
             <IonSplitPane contentId="main">
               <Menu />
               <IonRouterOutlet id="main">
@@ -199,10 +200,17 @@ const App: React.FC = () => {
                 <Route path="/" component={HomeOrTutorial} exact />
               </IonRouterOutlet>
             </IonSplitPane>
-          </IonReactRouter>
-        ) : (
-          <LoginPage />
-        ))}
+          ) : (
+            <IonRouterOutlet>
+              <Switch>
+                <Route path="/" render={() => <Redirect to="/login" />} exact />
+                <Route path="/login" component={LoginPage} exact />
+                <Route path="/signup" component={SignUpPage} exact />
+                <Redirect from="*" to="/" />
+              </Switch>
+            </IonRouterOutlet>
+          ))}
+      </IonReactRouter>
     </IonApp>
   );
 };
