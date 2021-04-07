@@ -17,10 +17,10 @@ import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { EmployeePagePopover } from "../../components/popovers/EmployeePagePopover";
-import { ProductItem } from "../../components/items/ProductItem";
 import { useSelector } from "../../store";
 import { fetchEmployees } from "../../store/dataSlice";
 import "./EmployeePage.scss";
+import { Item } from "../../components/items/Item";
 
 interface EmployeePageProps {}
 
@@ -69,7 +69,12 @@ const EmployeePage: React.FC<EmployeePageProps> = () => {
           <IonRow>
             {employees.map((employee) => (
               <IonCol size="12" size-md="6" key={employee.id}>
-                <ProductItem data={employee} />
+                <Item
+                  title={employee.name!}
+                  subtitle={employee.phonenumber!}
+                  id={employee.id}
+                  baseUrl="/employees"
+                />
               </IonCol>
             ))}
           </IonRow>

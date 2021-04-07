@@ -16,7 +16,7 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { WorkshopItem } from "../../components/items/WorkshopItem";
+import { Item } from "../../components/items/Item";
 import { SupplierPagePopover } from "../../components/popovers/SupplierPagePopover";
 import { useSelector } from "../../store";
 import { fetchSuppliers } from "../../store/dataSlice";
@@ -67,9 +67,14 @@ const SupplierPage: React.FC<SupplierPageProps> = () => {
         </IonHeader>
         <IonGrid fixed>
           <IonRow>
-            {materialStores.map((materialStore) => (
-              <IonCol size="12" size-md="6" key={materialStore.id}>
-                <WorkshopItem data={materialStore} />
+            {materialStores.map((supplier) => (
+              <IonCol size="12" size-md="6" key={supplier.id}>
+                <Item
+                  title={supplier.name!}
+                  subtitle={supplier.phonenumber!}
+                  id={supplier.id}
+                  baseUrl="/suppliers"
+                />
               </IonCol>
             ))}
           </IonRow>

@@ -60,6 +60,8 @@ import ProcessesPage from "./pages/settings/ProcessesPage";
 import { useAuth } from "./hooks/useAuth";
 import LoginPage from "./pages/login/LoginPage";
 import SignUpPage from "./pages/login/SignUpPage";
+import { SupplierDetail } from "./pages/lists/SupplierDetail";
+import { EmployeeDetail } from "./pages/lists/EmployeeDetail";
 
 interface AppRoute {
   url: string;
@@ -80,7 +82,7 @@ const listPages: AppRoute[] = [
     component: <EmployeePage />,
   },
   {
-    url: "/materials",
+    url: "/suppliers",
     component: <SupplierPage />,
   },
   {
@@ -98,6 +100,14 @@ const detailPages: AppRoute[] = [
     url: "/customers/:id",
     component: CustomerDetail,
   },
+  {
+    url: "/suppliers/:id",
+    component: SupplierDetail,
+  },
+  {
+    url: "/employees/:id",
+    component: EmployeeDetail,
+  },
 ];
 
 const createPages: AppRoute[] = [
@@ -114,7 +124,7 @@ const createPages: AppRoute[] = [
     component: EmployeeCreate,
   },
   {
-    url: "/materials/create",
+    url: "/suppliers/create",
     component: SupplierCreate,
   },
 ];

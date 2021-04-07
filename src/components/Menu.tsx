@@ -74,7 +74,7 @@ const listPages: AppPage[] = [
   },
   {
     title: "Nguồn nguyên liệu",
-    url: "/materials",
+    url: "/suppliers",
     iosIcon: cutOutline,
     mdIcon: cutOutline,
   },

@@ -26,7 +26,7 @@ const SupplierCreate: React.FC<SupplierCreateProps> = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/materials"></IonBackButton>
+            <IonBackButton defaultHref="/suppliers"></IonBackButton>
           </IonButtons>
           <IonTitle>Thêm nguồn nguyên liệu</IonTitle>
           <IonButtons slot="end">
