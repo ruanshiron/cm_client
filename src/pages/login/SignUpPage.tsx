@@ -92,6 +92,14 @@ const SignUpPage = () => {
             >
               Đăng Ký
             </IonButton>
+            <IonButton
+              style={{ margin: 10 }}
+              fill="default"
+              expand="block"
+              href="/login"
+            >
+              Đăng nhập
+            </IonButton>
           </div>
         </IonGrid>
       </IonContent>
