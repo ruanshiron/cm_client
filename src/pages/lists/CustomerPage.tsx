@@ -16,7 +16,7 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { CustomerItem } from "../../components/items/CustomerItem";
+import { Item } from "../../components/items/Item";
 import { CustomerPagePopover } from "../../components/popovers/CustomerPagePopover";
 import { useSelector } from "../../store";
 import { fetchCustomers } from "../../store/dataSlice";
@@ -69,7 +69,12 @@ const CustomerPage: React.FC<CustomerPageProps> = () => {
           <IonRow>
             {customers.map((customer) => (
               <IonCol size="12" size-md="6" key={customer.id}>
-                <CustomerItem data={customer} />
+                <Item
+                  title={customer.name!}
+                  subtitle={customer.phonenumber!}
+                  id={customer.id}
+                  baseUrl="/customers"
+                />
               </IonCol>
             ))}
           </IonRow>
