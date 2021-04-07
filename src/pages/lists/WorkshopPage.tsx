@@ -16,7 +16,7 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { WorkshopItem } from "../../components/items/WorkshopItem";
+import { Item } from "../../components/items/Item";
 import { WorkshopPagePopover } from "../../components/popovers/WorkshopPagePopover";
 import { useSelector } from "../../store";
 import { fetchWorkshops } from "../../store/dataSlice";
@@ -69,7 +69,12 @@ const WorkshopPage: React.FC<WorkshopPageProps> = () => {
           <IonRow>
             {workshops.map((workshop) => (
               <IonCol size="12" size-md="6" key={workshop.id}>
-                <WorkshopItem data={workshop} />
+                <Item
+                  title={workshop.name!}
+                  subtitle={workshop.phonenumber!}
+                  id={workshop.id}
+                  baseUrl="/workshops"
+                />
               </IonCol>
             ))}
           </IonRow>
