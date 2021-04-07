@@ -164,6 +164,7 @@ const App: React.FC = () => {
             <IonSplitPane contentId="main">
               <Menu />
               <IonRouterOutlet id="main">
+                <Redirect from="*" to="/tabs" />
                 <Route path="/tabs" render={() => <MainTabs />} />
                 {listPages.map((page, index) => (
                   <Route
