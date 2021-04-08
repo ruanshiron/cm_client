@@ -42,7 +42,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
     <>
       <IonPage id="customer-detail">
         <IonContent>
-          <IonHeader>
+          <IonHeader className="ion-no-border">
             <IonToolbar>
               <IonButtons slot="start">
                 <IonBackButton defaultHref="/customers" />

@@ -12,6 +12,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonNote,
   IonPage,
   IonRow,
   IonTitle,
@@ -25,6 +26,7 @@ import {
   shareOutline,
   shareSharp,
 } from "ionicons/icons";
+import { chain, sum } from "lodash";
 import React from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../store";
@@ -38,6 +40,16 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   const workshop = useSelector((state) =>
     state.data.workshops.find((v) => v.id === id)
   );
+  const events = useSelector((state) => {
+    const e = state.data.events.filter((v) => v.workshop === id);
+    return chain(e)
+      .groupBy("product")
+      .map((value, key) => ({
+        name: state.data.products.find((v) => v.id === key)?.name,
+        aggregate: sum(value.map((v) => v.quantity)),
+      }))
+      .value();
+  });
   return (
     <>
       <IonPage id="workshop-detail">
@@ -85,6 +97,21 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                           {workshop?.phonenumber}
                         </IonLabel>
                       </IonItem>
+                    </IonList>
+                  </IonCardContent>
+                </IonCard>
+
+                <IonCard>
+                  <IonCardContent>
+                    <IonList lines="full">
+                      {events.map((e) => (
+                        <IonItem>
+                          <IonLabel slot="start">{e.name}</IonLabel>
+                          <IonNote slot="end">
+                            <p>{e.aggregate}</p>
+                          </IonNote>
+                        </IonItem>
+                      ))}
                     </IonList>
                   </IonCardContent>
                 </IonCard>

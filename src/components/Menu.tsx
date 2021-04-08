@@ -95,9 +95,11 @@ const configPages: AppPage[] = [
   },
 ];
 
+const kaomoji = ["(o^▽^o)", "(⌒▽⌒)☆", "＼(＾▽＾)／"];
+
 const Menu: React.FC = () => {
   const location = useLocation();
-  const { displayName, isLoggedIn } = useSelector((state) => state.user);
+  const { isLoggedIn } = useSelector((state) => state.user);
 
   return (
     <IonMenu id="side-menu" contentId="main" type="overlay" swipeGesture>
@@ -105,7 +107,9 @@ const Menu: React.FC = () => {
         <IonList id="tab-list">
           <IonListHeader>Trang Quản Lý</IonListHeader>
           {isLoggedIn ? (
-            <IonNote>chào {displayName}</IonNote>
+            <IonNote>
+              {kaomoji[Math.floor(Math.random() * kaomoji.length)]}
+            </IonNote>
           ) : (
             <IonNote>chào quản trị viên</IonNote>
           )}
