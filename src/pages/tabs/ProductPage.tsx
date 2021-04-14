@@ -16,7 +16,7 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ProductItem } from "../../components/items/ProductItem";
+import { Item } from "../../components/items/Item";
 import { ProductPagePopover } from "../../components/popovers/ProductPagePopover";
 import { useSelector } from "../../store";
 import { fetchProducts } from "../../store/dataSlice";
@@ -69,7 +69,12 @@ const ProductPage: React.FC<ProductPageProps> = () => {
           <IonRow>
             {products.map((product) => (
               <IonCol size="12" size-md="6" key={product.id}>
-                <ProductItem data={product} />
+                <Item
+                  title={product.name}
+                  subtitle={product.code}
+                  baseUrl="/tabs/product"
+                  id={product.id}
+                />
               </IonCol>
             ))}
           </IonRow>
