@@ -24,17 +24,20 @@ import {
   IonToolbar,
   useIonRouter,
 } from "@ionic/react";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router";
 import _ from "lodash";
 import * as Process from "../../models/process";
 import { useSelector } from "../../store";
 import { analyticsOutline, pencil } from "ionicons/icons";
+import { ProductModal } from "../../components/modals/ProductModal";
 
 interface ProductDetailProps {}
 
 export const ProductDetail: React.FC<ProductDetailProps> = () => {
   const { id } = useParams<{ id: string }>();
+
+  const [showReportModal, setShowReportModal] = useState(false);
 
   const { product, processes, fields } = useSelector((state) => {
     const _product = state.data.products.find((x) => x.id === id);
@@ -69,6 +72,11 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
           </IonFabButton>
         </IonFab>
 
+        <ProductModal
+          showModal={showReportModal}
+          onDismiss={() => setShowReportModal(false)}
+        />
+
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
@@ -77,7 +85,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
             <IonTitle>{product?.name}</IonTitle>
 
             <IonButtons slot="end">
-              <IonButton>
+              <IonButton onClick={() => setShowReportModal(true)}>
                 <IonIcon slot="icon-only" icon={analyticsOutline} />
               </IonButton>
             </IonButtons>

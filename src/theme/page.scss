@@ -102,3 +102,45 @@ ion-list {
     position: absolute;
   }
 }
+
+.report-modal {
+  --min-height: calc(100vh - 40px);
+  --min-width: calc(100vw - 40px);
+}
+
+.stat {
+  /* Center the content */
+  align-items: center;
+  display: inline-flex;
+  flex-grow: 1;
+  flex-direction: column;
+  border: 1px solid
+    var(
+      --ion-item-border-color,
+      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+    );
+  padding: 10px;
+  margin: 5px 5px;
+}
+
+.stats__container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.stat__value {
+  /* Big font size */
+  font-size: 4rem;
+  font-weight: 500;
+}
+
+.stat__label {
+  /* Smaller font size */
+  font-size: 1rem;
+  font-weight: 700;
+
+  /* Uppercase the label */
+  text-transform: uppercase;
+}
