@@ -12,6 +12,11 @@ export const initial: Skeleton = {
   processes: [],
 };
 
+interface ReportCache {
+  from: any;
+  to: any;
+  fields: { name: string; value: number }[];
+}
 export interface Skeleton {
   id?: string;
   code: string;
@@ -19,6 +24,8 @@ export interface Skeleton {
   sizes: string[];
   note: string;
   processes: string[];
+  report_cache?: ReportCache;
+  updated?: any;
   createdAt?: any;
 }
 
@@ -31,6 +38,7 @@ export const get = () => {
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate().toString(),
+        updated: doc.data().updated?.toDate().toString(),
       }));
     });
 };
@@ -51,3 +59,10 @@ export const destroy = (id: string) => {
 
 export const permit = (fields: Skeleton) =>
   !fields?.name?.trim() || !fields?.code?.trim() || !fields?.sizes?.length;
+
+export const cache = (productId: string, reportCache: ReportCache) => {
+  return database.collection(collection).doc(productId).update({
+    report_cache: reportCache,
+    updated: firebase.firestore.FieldValue.serverTimestamp(),
+  });
+};

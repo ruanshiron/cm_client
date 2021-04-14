@@ -1,6 +1,7 @@
 import {
   IonAvatar,
   IonBackButton,
+  IonButton,
   IonButtons,
   IonCard,
   IonCardContent,
@@ -23,13 +24,12 @@ import {
   IonToolbar,
   useIonRouter,
 } from "@ionic/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router";
 import _ from "lodash";
 import * as Process from "../../models/process";
 import { useSelector } from "../../store";
-import { useProductForm } from "../../hooks/useProductForm";
-import { pencil } from "ionicons/icons";
+import { analyticsOutline, pencil } from "ionicons/icons";
 
 interface ProductDetailProps {}
 
@@ -43,24 +43,22 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
   const processes = useSelector((state) => state.data.processes);
 
   const fields = useSelector((state) => {
-    const result = _.groupBy(state.data.events, "process");
+    // logic here
+    const events = state.data.events.filter((v) => v.product === id);
+    const result = _.groupBy(events, "process");
 
     return Object.keys(result).map((key) => {
+      const [id, type] = key.split("/");
       return {
-        name: key,
+        name:
+          Process.ProcessEnum[type] +
+          state.data.processes.find((i) => i.id === id)?.name,
         value: result[key].reduce((a, b) => a + (b ? b?.quantity! : 0), 0),
       };
     });
   });
 
   const router = useIonRouter();
-
-  const form = useProductForm();
-
-  useEffect(() => {
-    if (product) form.setFieldsValue(product);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product]);
 
   return (
     <>
@@ -78,43 +76,20 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
             </IonButtons>
             <IonTitle>{product?.name}</IonTitle>
 
-            <IonButtons slot="end"></IonButtons>
+            <IonButtons slot="end">
+              <IonButton>
+                <IonIcon slot="icon-only" icon={analyticsOutline} />
+              </IonButton>
+            </IonButtons>
           </IonToolbar>
         </IonHeader>
         <IonContent>
           <IonGrid>
             <IonRow>
               <IonCol size="12" size-md="8" offsetMd="2">
-                {fields && fields?.length > 0 && (
-                  <IonCard className="list-card">
-                    <IonCardContent>
-                      <IonList lines="full" style={{ borderTop: "none" }}>
-                        {fields?.map((field: any) => {
-                          const [id, type] = field.name.split("/");
-                          return (
-                            <IonItem detail={false} key={field.name}>
-                              <IonLabel>
-                                {Process.ProcessEnum[type] +
-                                  processes.find((i) => i.id === id)?.name}
-                              </IonLabel>
-                              <IonNote slot="end">
-                                <p>{field.value}</p>
-                              </IonNote>
-                            </IonItem>
-                          );
-                        })}
-                      </IonList>
-                    </IonCardContent>
-                  </IonCard>
-                )}
                 <IonCard className="list-card">
                   <IonCardHeader>
-                    <IonItem
-                      button
-                      detail={false}
-                      lines="none"
-                      className="list-item"
-                    >
+                    <IonItem detail={false} lines="none" className="list-item">
                       <IonAvatar slot="start">
                         <img
                           src="/assets/icon/icon.png"
@@ -129,6 +104,19 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                   </IonCardHeader>
                   <IonCardContent>
                     <IonList>
+                      <IonItemDivider>Thống kê tự động</IonItemDivider>
+                      {fields &&
+                        fields?.length > 0 &&
+                        fields?.map((field: any, i) => {
+                          return (
+                            <IonItem detail={false} key={i}>
+                              <IonLabel>{field.name}</IonLabel>
+                              <IonNote slot="end">
+                                <p>{field.value}</p>
+                              </IonNote>
+                            </IonItem>
+                          );
+                        })}
                       <IonItemDivider>Kích cỡ</IonItemDivider>
                       {product?.sizes?.map((size, i) => (
                         <IonItem key={i}>{size}</IonItem>

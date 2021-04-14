@@ -9,7 +9,12 @@ export function onAuthStateChanged() {
   return new Promise((resolve) => {
     const unsubcribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        resolve(user);
+        const userState = {
+          displayName: user.displayName,
+          uid: user.uid,
+          email: user.email,
+        };
+        resolve(userState);
       } else {
         resolve(null);
       }

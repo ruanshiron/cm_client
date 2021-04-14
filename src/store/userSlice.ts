@@ -1,16 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { onAuthStateChanged, signOut as firebaseSignOut } from "../helpers/firebaseHelper";
+import {
+  onAuthStateChanged,
+  signOut as firebaseSignOut,
+} from "../helpers/firebaseHelper";
 
 interface UserState {
   isLoggedIn: boolean;
   loading: boolean;
   displayName: string;
+  email: string;
 }
 
 let initialState: UserState = {
   isLoggedIn: false,
   loading: false,
   displayName: "",
+  email: "",
 };
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
@@ -23,9 +28,7 @@ const userSlice = createSlice({
   reducers: {
     signOut: (state) => {
       firebaseSignOut();
-      state.isLoggedIn = false;
-      state.displayName = "";
-      state.loading = false;
+      state = { ...initialState };
     },
   },
   extraReducers: (builder) => {
@@ -36,12 +39,13 @@ const userSlice = createSlice({
       state.loading = false;
       state.isLoggedIn = action.payload ? true : false;
       state.displayName = action.payload?.displayName || "";
-      console.log(action.payload);
+      state.email = action.payload?.email || "";
+      // console.log(action.payload);
     });
     builder.addCase(fetchUser.rejected, (state, action) => {
       state.loading = false;
       state.isLoggedIn = false;
-      console.log(action.payload);
+      // console.log(action.payload);
     });
   },
 });
