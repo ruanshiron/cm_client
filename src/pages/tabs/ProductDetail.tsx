@@ -36,26 +36,26 @@ interface ProductDetailProps {}
 export const ProductDetail: React.FC<ProductDetailProps> = () => {
   const { id } = useParams<{ id: string }>();
 
-  const product = useSelector((state) =>
-    state.data.products.find((x) => x.id === id)
-  );
+  const { product, processes, fields } = useSelector((state) => {
+    const _product = state.data.products.find((x) => x.id === id);
+    const _processes = state.data.processes;
 
-  const processes = useSelector((state) => state.data.processes);
-
-  const fields = useSelector((state) => {
-    // logic here
     const events = state.data.events.filter((v) => v.product === id);
     const result = _.groupBy(events, "process");
 
-    return Object.keys(result).map((key) => {
-      const [id, type] = key.split("/");
-      return {
-        name:
-          Process.ProcessEnum[type] +
-          state.data.processes.find((i) => i.id === id)?.name,
-        value: result[key].reduce((a, b) => a + (b ? b?.quantity! : 0), 0),
-      };
-    });
+    return {
+      product: _product,
+      processes: _processes,
+      fields: Object.keys(result).map((key) => {
+        const [id, type] = key.split("/");
+        return {
+          name:
+            Process.ProcessEnum[type] +
+            state.data.processes.find((i) => i.id === id)?.name,
+          value: result[key].reduce((a, b) => a + (b ? b?.quantity! : 0), 0),
+        };
+      }),
+    };
   });
 
   const router = useIonRouter();
