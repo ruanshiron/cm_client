@@ -19,16 +19,16 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import {
+  analyticsOutline,
   callOutline,
   callSharp,
   personOutline,
   phonePortraitOutline,
-  shareOutline,
-  shareSharp,
 } from "ionicons/icons";
 import { chain, sum } from "lodash";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router";
+import { WorkshopModal } from "../../components/modals/WorkshopModal";
 import { useSelector } from "../../store";
 
 import "./WorkshopDetail.scss";
@@ -36,6 +36,7 @@ import "./WorkshopDetail.scss";
 interface WorkshopDetailProps {}
 
 export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
+  const [showReportModal, setShowReportModal] = useState(false);
   const { id } = useParams<{ id: string }>();
   const workshop = useSelector((state) =>
     state.data.workshops.find((v) => v.id === id)
@@ -53,6 +54,10 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   return (
     <>
       <IonPage id="workshop-detail">
+        <WorkshopModal
+          showModal={showReportModal}
+          onDismiss={() => setShowReportModal(false)}
+        />
         <IonContent>
           <IonHeader className="ion-no-border">
             <IonToolbar>
@@ -68,12 +73,8 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                     md={callSharp}
                   ></IonIcon>
                 </IonButton>
-                <IonButton>
-                  <IonIcon
-                    slot="icon-only"
-                    ios={shareOutline}
-                    md={shareSharp}
-                  ></IonIcon>
+                <IonButton onClick={() => setShowReportModal(true)}>
+                  <IonIcon slot="icon-only" icon={analyticsOutline}></IonIcon>
                 </IonButton>
               </IonButtons>
             </IonToolbar>
@@ -104,8 +105,8 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                 <IonCard>
                   <IonCardContent>
                     <IonList lines="full">
-                      {events.map((e) => (
-                        <IonItem>
+                      {events.map((e, i) => (
+                        <IonItem key={i}>
                           <IonLabel slot="start">{e.name}</IonLabel>
                           <IonNote slot="end">
                             <p>{e.aggregate}</p>

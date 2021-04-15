@@ -42,19 +42,11 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
       </IonHeader>
       <IonContent>
         <IonGrid>
-          <IonRow>
+          <div className="stats__container">
             {processes.map((process) => (
-              <IonCol
-                key={process.id}
-                sizeXl="3"
-                sizeMd="4"
-                size="4"
-                style={{ padding: 0 }}
-              >
-                <ProcessAggregateItem process={process} />
-              </IonCol>
+              <ProcessAggregateItem process={process} />
             ))}
-          </IonRow>
+          </div>
           <IonRow>
             <IonCol size="12" sizeMd="6" style={{ padding: 0 }}>
               <FulfilledsItem />

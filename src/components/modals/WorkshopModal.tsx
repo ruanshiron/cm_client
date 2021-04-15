@@ -9,7 +9,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { closeOutline } from "ionicons/icons";
-import { groupBy } from "lodash";
+import { filter, forEach, groupBy, map } from "lodash";
 import React from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../store";
@@ -32,38 +32,37 @@ interface Props {
   showModal: boolean;
 }
 
-export const ProductModal: React.FC<Props> = ({
+export const WorkshopModal: React.FC<Props> = ({
   onDismiss,
   showModal = false,
 }) => {
   const { id } = useParams<{ id: string }>();
 
   const { title, fields, data } = useSelector((state) => {
-    const events = state.data.events.filter((v) => v.product === id);
-    const result = groupBy(events, "process");
+    const events = state.data.events.filter((v) => v.workshop === id);
+
+    let _events = filter(state.data.events, (v) => v.workshop === id);
+    let _groups: any = groupBy(_events, (v) => v.product);
+    let _r = forEach(_groups, (_, key) => {
+      _groups[key] = groupBy(_groups[key], function (item) {
+        return item.process;
+      });
+    });
 
     return {
-      title: state.data.products.find((x) => x.id === id)?.name,
+      title: state.data.workshops.find((v) => v.id === id)?.name,
       data: events.map((e) => {
         const [id, type] = e.process?.split("/") || ["", ""];
         return {
           ...e,
-          workshop: state.data.workshops.find((v) => v.id === e.workshop)?.name,
+          product: state.data.products.find((v) => v.id === e.product)?.name,
           process:
             Process.ProcessEnum[type] +
             state.data.processes.find((i) => i.id === id)?.name,
           note: e.note || "_",
         };
       }),
-      fields: Object.keys(result).map((key) => {
-        const [id, type] = key.split("/");
-        return {
-          name:
-            Process.ProcessEnum[type] +
-            state.data.processes.find((i) => i.id === id)?.name,
-          value: result[key].reduce((a, b) => a + (b ? b?.quantity! : 0), 0),
-        };
-      }),
+      fields: _r,
     };
   });
 
@@ -86,11 +85,13 @@ export const ProductModal: React.FC<Props> = ({
       </IonHeader>
       <IonContent>
         <div className="stats__container">
-          {fields &&
-            fields?.length > 0 &&
-            fields?.map(({ name, value }, i) => {
-              return <StatisticItem key={i} label={name} value={value} />;
-            })}
+          {map(fields, (field) => map(field, (value) => value)).map(
+            (item, index) => {
+              console.log(item);
+              
+              return <StatisticItem key={index} value={"..."} label={item[0][0].product} />;
+            }
+          )}
         </div>
         <div className="table__container">
           <table>
@@ -98,8 +99,8 @@ export const ProductModal: React.FC<Props> = ({
             <thead>
               <tr>
                 <th scope="col">Ngày</th>
-                <th scope="col">Xưởng</th>
                 <th scope="col">Giao dịch</th>
+                <th scope="col">Sản phẩm</th>
                 <th scope="col">Kích cỡ</th>
                 <th scope="col">Ghi chú</th>
               </tr>
@@ -108,8 +109,8 @@ export const ProductModal: React.FC<Props> = ({
               {data.map((e, i) => (
                 <tr key={i}>
                   <td data-label="Ngày">{e.date}</td>
-                  <td data-label="Xưởng">{e.workshop}</td>
                   <td data-label="Giao dịch">{e.process}</td>
+                  <td data-label="Sản phẩm">{e.product}</td>
                   <td data-label="Kích cỡ">{e.size}</td>
                   <td data-label="Ghi chú">{e.note}</td>
                 </tr>
