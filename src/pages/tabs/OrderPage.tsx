@@ -18,7 +18,6 @@ import React, { useState } from "react";
 import { OrderItem } from "../../components/items/OrderItem";
 import { OrderPagePopover } from "../../components/popovers/OrderPagePopover";
 import { useSelector } from "../../store";
-import "./OrderPage.scss";
 
 interface OrderPageProps {}
 

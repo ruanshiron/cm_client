@@ -13,7 +13,6 @@ import {
 } from "@ionic/react";
 import React from "react";
 import { useWorkshopForm } from "../../hooks/useWorkshopForm";
-import "./WorkshopCreate.scss";
 
 interface WorkshopCreateProps {}
 

@@ -20,7 +20,6 @@ import { Item } from "../../components/items/Item";
 import { SupplierPagePopover } from "../../components/popovers/SupplierPagePopover";
 import { useSelector } from "../../store";
 import { fetchSuppliers } from "../../store/dataSlice";
-import "./SupplierPage.scss";
 
 interface SupplierPageProps {}
 

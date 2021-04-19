@@ -15,7 +15,6 @@ import {
 } from "@ionic/react";
 import React from "react";
 import { useSupplierForm } from "../../hooks/useSupplierForm";
-import "./SupplierCreate.scss";
 
 interface SupplierCreateProps {}
 

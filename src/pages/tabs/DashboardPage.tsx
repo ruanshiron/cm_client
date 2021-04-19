@@ -19,7 +19,6 @@ import { ProcessAggregateItem } from "../../components/items/ProcessAggregateIte
 import { ProcessingsItem } from "../../components/items/ProcessingsItem";
 import { RejectedsItem } from "../../components/items/RejectedsItem";
 import { useSelector } from "../../store";
-import "./DashboardPage.scss";
 
 interface DashboardPageProps {}
 

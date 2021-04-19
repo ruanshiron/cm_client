@@ -31,8 +31,6 @@ import { useParams } from "react-router";
 import { WorkshopModal } from "../../components/modals/WorkshopModal";
 import { useSelector } from "../../store";
 
-import "./WorkshopDetail.scss";
-
 interface WorkshopDetailProps {}
 
 export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {

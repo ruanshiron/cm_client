@@ -20,7 +20,6 @@ import { Item } from "../../components/items/Item";
 import { ProductPagePopover } from "../../components/popovers/ProductPagePopover";
 import { useSelector } from "../../store";
 import { fetchProducts } from "../../store/dataSlice";
-import "./ProductPage.scss";
 
 interface ProductPageProps {}
 

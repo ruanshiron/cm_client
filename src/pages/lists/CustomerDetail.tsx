@@ -33,8 +33,6 @@ import React from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../store";
 
-import "./CustomerDetail.scss";
-
 interface CustomerDetailProps {}
 
 export const CustomerDetail: React.FC<CustomerDetailProps> = () => {

@@ -14,7 +14,6 @@ import {
 import React from "react";
 import OrderForm from "../../components/forms/OrderForm";
 import { useOrderForm } from "../../hooks/useOrderForm";
-import "./OrderCreate.scss";
 
 interface OrderCreateProps {}
 

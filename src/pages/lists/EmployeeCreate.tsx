@@ -13,7 +13,6 @@ import {
 } from "@ionic/react";
 import React from "react";
 import { useEmployeeCreate } from "../../hooks/useEmployeeCreate";
-import "./EmployeeCreate.scss";
 
 interface EmployeeCreateProps {}
 

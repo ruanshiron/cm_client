@@ -23,7 +23,6 @@ import ProductCreate from "./ProductCreate";
 import OrderCreate from "./OrderCreate";
 import DashboardPage from "./DashboardPage";
 import { ProductUpdate } from "./ProductUpdate";
-import "./MainTabs.scss";
 
 interface TabPage {
   name: string;

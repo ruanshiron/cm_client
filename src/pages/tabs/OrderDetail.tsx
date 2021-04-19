@@ -33,8 +33,6 @@ import { useParams } from "react-router";
 import { useSelector } from "../../store";
 import { formatDate } from "../../utils/date";
 
-import "./OrderDetail.scss";
-
 interface OrderDetailProps {}
 
 export const OrderDetail: React.FC<OrderDetailProps> = () => {

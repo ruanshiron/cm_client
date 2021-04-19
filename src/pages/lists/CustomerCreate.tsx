@@ -13,7 +13,6 @@ import {
 } from "@ionic/react";
 import React from "react";
 import { useCustomerForm } from "../../hooks/useCustomerForm";
-import "./CustomerCreate.scss";
 
 interface CustomerCreateProps {}
 

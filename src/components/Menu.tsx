@@ -22,7 +22,6 @@ import {
   IonMenuToggle,
   IonNote,
 } from "@ionic/react";
-import "./Menu.scss";
 import { useSelector } from "../store";
 
 interface AppPage {

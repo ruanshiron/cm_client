@@ -19,7 +19,6 @@ import { useDispatch } from "react-redux";
 import { EmployeePagePopover } from "../../components/popovers/EmployeePagePopover";
 import { useSelector } from "../../store";
 import { fetchEmployees } from "../../store/dataSlice";
-import "./EmployeePage.scss";
 import { Item } from "../../components/items/Item";
 
 interface EmployeePageProps {}

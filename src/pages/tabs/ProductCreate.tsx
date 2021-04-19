@@ -14,7 +14,6 @@ import {
 import React from "react";
 import ProductForm from "../../components/forms/ProductForm";
 import { useProductForm } from "../../hooks/useProductForm";
-import "./ProductCreate.scss";
 
 interface ProductCreateProps {}
 

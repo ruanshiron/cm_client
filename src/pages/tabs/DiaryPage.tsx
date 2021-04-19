@@ -16,7 +16,6 @@ import { EventsViewByDay } from "../../components/EventsViewByDay";
 import EventFab from "../../components/fabs/EventFab";
 import { DiaryPagePopover } from "../../components/popovers/DiaryPagePopover";
 import { useSelector } from "../../store";
-import "./DiaryPage.scss";
 
 interface DiaryPageProps {}
 

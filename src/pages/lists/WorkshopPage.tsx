@@ -20,7 +20,6 @@ import { Item } from "../../components/items/Item";
 import { WorkshopPagePopover } from "../../components/popovers/WorkshopPagePopover";
 import { useSelector } from "../../store";
 import { fetchWorkshops } from "../../store/dataSlice";
-import "./WorkshopPage.scss";
 
 interface WorkshopPageProps {}
 
