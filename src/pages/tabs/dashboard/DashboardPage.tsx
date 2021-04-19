@@ -14,11 +14,11 @@ import {
 } from "@ionic/react";
 import { ellipsisVerticalSharp } from "ionicons/icons";
 import React from "react";
-import { FulfilledsItem } from "../../components/items/FulfilledsItem";
-import { ProcessAggregateItem } from "../../components/items/ProcessAggregateItem";
-import { ProcessingsItem } from "../../components/items/ProcessingsItem";
-import { RejectedsItem } from "../../components/items/RejectedsItem";
-import { useSelector } from "../../store";
+import { FulfilledsItem } from "../../../components/items/FulfilledsItem";
+import { ProcessAggregateItem } from "../../../components/items/ProcessAggregateItem";
+import { ProcessingsItem } from "../../../components/items/ProcessingsItem";
+import { RejectedsItem } from "../../../components/items/RejectedsItem";
+import { useSelector } from "../../../store";
 
 interface DashboardPageProps {}
 

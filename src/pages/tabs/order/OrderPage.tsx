@@ -14,16 +14,14 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Item } from "../../components/items/Item";
-import { ProductPagePopover } from "../../components/popovers/ProductPagePopover";
-import { useSelector } from "../../store";
-import { fetchProducts } from "../../store/dataSlice";
+import React, { useState } from "react";
+import { OrderItem } from "../../../components/items/OrderItem";
+import { OrderPagePopover } from "../../../components/popovers/OrderPagePopover";
+import { useSelector } from "../../../store";
 
-interface ProductPageProps {}
+interface OrderPageProps {}
 
-const ProductPage: React.FC<ProductPageProps> = () => {
+const OrderPage: React.FC<OrderPageProps> = () => {
   const [showPopover, setShowPopover] = useState(false);
   const [popoverEvent, setPopoverEvent] = useState<any>();
 
@@ -32,12 +30,7 @@ const ProductPage: React.FC<ProductPageProps> = () => {
     setShowPopover(true);
   };
 
-  const products = useSelector((state) => state.data.products);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+  const orders = useSelector((state) => state.data.orders);
 
   return (
     <IonPage className="list-page">
@@ -46,7 +39,8 @@ const ProductPage: React.FC<ProductPageProps> = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Sản phẩm</IonTitle>
+          <IonTitle>Đơn Hàng</IonTitle>
+
           <IonButtons slot="end">
             <IonButton onClick={presentPopover}>
               <IonIcon
@@ -61,33 +55,29 @@ const ProductPage: React.FC<ProductPageProps> = () => {
       <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Sản phẩm</IonTitle>
+            <IonTitle size="large">Đơn Hàng</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>
           <IonRow>
-            {products.map((product) => (
+            {orders.map((product) => (
               <IonCol size="12" size-md="6" key={product.id}>
-                <Item
-                  title={product.name}
-                  subtitle={product.code}
-                  baseUrl="/tabs/product"
-                  id={product.id}
-                />
+                <OrderItem data={product} />
               </IonCol>
             ))}
           </IonRow>
         </IonGrid>
       </IonContent>
+
       <IonPopover
         isOpen={showPopover}
         event={popoverEvent}
         onDidDismiss={() => setShowPopover(false)}
       >
-        <ProductPagePopover dismiss={() => setShowPopover(false)} />
+        <OrderPagePopover dismiss={() => setShowPopover(false)} />
       </IonPopover>
     </IonPage>
   );
 };
 
-export default ProductPage;
+export default OrderPage;

@@ -14,15 +14,15 @@ import {
   calendarSharp,
   gridSharp,
 } from "ionicons/icons";
-import DiaryPage from "./DiaryPage";
-import ProductPage from "./ProductPage";
-import OrderPage from "./OrderPage";
-import { OrderDetail } from "./OrderDetail";
-import { ProductDetail } from "./ProductDetail";
-import ProductCreate from "./ProductCreate";
-import OrderCreate from "./OrderCreate";
-import DashboardPage from "./DashboardPage";
-import { ProductUpdate } from "./ProductUpdate";
+import DiaryPage from "./diary/DiaryPage";
+import ProductPage from "./product/ProductPage";
+import OrderPage from "./order/OrderPage";
+import { OrderDetail } from "./order/OrderDetail";
+import { ProductDetail } from "./product/ProductDetail";
+import ProductCreate from "./product/ProductCreate";
+import OrderCreate from "./order/OrderCreate";
+import DashboardPage from "./dashboard/DashboardPage";
+import { ProductUpdate } from "./product/ProductUpdate";
 
 interface TabPage {
   name: string;

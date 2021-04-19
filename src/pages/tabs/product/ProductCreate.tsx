@@ -12,8 +12,8 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import React from "react";
-import ProductForm from "../../components/forms/ProductForm";
-import { useProductForm } from "../../hooks/useProductForm";
+import ProductForm from "../../../components/forms/ProductForm";
+import { useProductForm } from "../../../hooks/useProductForm";
 
 interface ProductCreateProps {}
 

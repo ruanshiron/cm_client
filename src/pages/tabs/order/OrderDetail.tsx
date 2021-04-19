@@ -30,8 +30,8 @@ import {
 } from "ionicons/icons";
 import React, { useState } from "react";
 import { useParams } from "react-router";
-import { useSelector } from "../../store";
-import { formatDate } from "../../utils/date";
+import { useSelector } from "../../../store";
+import { formatDate } from "../../../utils/date";
 
 interface OrderDetailProps {}
 

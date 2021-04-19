@@ -15,9 +15,9 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useSelector } from "../../store";
-import ProductForm from "../../components/forms/ProductForm";
-import { useProductForm } from "../../hooks/useProductForm";
+import { useSelector } from "../../../store";
+import ProductForm from "../../../components/forms/ProductForm";
+import { useProductForm } from "../../../hooks/useProductForm";
 import { closeOutline } from "ionicons/icons";
 
 interface ProductUpdateProps {}

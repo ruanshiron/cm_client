@@ -11,11 +11,11 @@ import {
 } from "@ionic/react";
 import { ellipsisVerticalSharp, searchSharp } from "ionicons/icons";
 import React, { useState } from "react";
-import { EventsViewAll } from "../../components/EventsViewAll";
-import { EventsViewByDay } from "../../components/EventsViewByDay";
-import EventFab from "../../components/fabs/EventFab";
-import { DiaryPagePopover } from "../../components/popovers/DiaryPagePopover";
-import { useSelector } from "../../store";
+import { EventsViewAll } from "../../../components/EventsViewAll";
+import { EventsViewByDay } from "../../../components/EventsViewByDay";
+import EventFab from "../../../components/fabs/EventFab";
+import { DiaryPagePopover } from "../../../components/popovers/DiaryPagePopover";
+import { useSelector } from "../../../store";
 
 interface DiaryPageProps {}
 

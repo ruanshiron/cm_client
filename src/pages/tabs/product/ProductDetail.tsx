@@ -27,10 +27,10 @@ import {
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import _ from "lodash";
-import * as Process from "../../models/process";
-import { useSelector } from "../../store";
+import * as Process from "../../../models/process";
+import { useSelector } from "../../../store";
 import { analyticsOutline, pencil } from "ionicons/icons";
-import { ProductModal } from "../../components/modals/ProductModal";
+import { ProductModal } from "../../../components/modals/ProductModal";
 
 interface ProductDetailProps {}
 
