@@ -4,6 +4,8 @@ import {
   IonButtons,
   IonCard,
   IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
   IonCol,
   IonContent,
   IonGrid,
@@ -12,6 +14,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonNote,
   IonPage,
   IonRow,
   IonTitle,
@@ -25,27 +28,41 @@ import {
   shareOutline,
   shareSharp,
 } from "ionicons/icons";
+import { chain, sum } from "lodash";
 import React from "react";
 import { useParams } from "react-router";
-import { useSelector } from "../../store";
+import { useSelector } from "../../../store";
 
-interface EmployeeDetailProps {}
+interface CustomerDetailProps {}
 
-export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
+export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
   const { id } = useParams<{ id: string }>();
-  const workshop = useSelector((state) =>
-    state.data.employees.find((v) => v.id === id)
+  const customer = useSelector((state) =>
+    state.data.customers.find((v) => v.id === id)
   );
+
+  const data = useSelector((state) => {
+    const orders = state.data.orders
+      .filter((v) => v.customer === id)
+      .flatMap((v) => v.lines);
+    return chain(orders)
+      .groupBy("product")
+      .map((value, key) => ({
+        name: state.data.products.find((v) => v.id === key)?.name,
+        aggregate: sum(value.map((v) => v.quantity)),
+      }))
+      .value();
+  });
   return (
     <>
-      <IonPage id="workshop-detail">
+      <IonPage id="customer-detail">
         <IonContent>
           <IonHeader className="ion-no-border">
             <IonToolbar>
               <IonButtons slot="start">
-                <IonBackButton defaultHref="/workshops" />
+                <IonBackButton defaultHref="/customers" />
               </IonButtons>
-              <IonTitle>Công nhân</IonTitle>
+              <IonTitle>Khách hàng</IonTitle>
               <IonButtons slot="end">
                 <IonButton>
                   <IonIcon
@@ -72,7 +89,7 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
                     <IonList lines="full">
                       <IonItem>
                         <IonIcon icon={personOutline} slot="start"></IonIcon>
-                        <IonLabel slot="start">{workshop?.name}</IonLabel>
+                        <IonLabel slot="start">{customer?.name}</IonLabel>
                       </IonItem>
                       <IonItem>
                         <IonIcon
@@ -80,9 +97,26 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
                           slot="start"
                         ></IonIcon>
                         <IonLabel slot="start">
-                          {workshop?.phonenumber}
+                          {customer?.phonenumber}
                         </IonLabel>
                       </IonItem>
+                    </IonList>
+                  </IonCardContent>
+                </IonCard>
+                <IonCard>
+                  <IonCardHeader>
+                    <IonCardSubtitle>Sản phẩm đã đặt hàng</IonCardSubtitle>
+                  </IonCardHeader>
+                  <IonCardContent>
+                    <IonList lines="full">
+                      {data.map((e) => (
+                        <IonItem>
+                          <IonLabel slot="start">{e.name}</IonLabel>
+                          <IonNote slot="end">
+                            <p>{e.aggregate}</p>
+                          </IonNote>
+                        </IonItem>
+                      ))}
                     </IonList>
                   </IonCardContent>
                 </IonCard>

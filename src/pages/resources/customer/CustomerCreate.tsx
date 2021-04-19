@@ -12,7 +12,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import React from "react";
-import { useCustomerForm } from "../../hooks/useCustomerForm";
+import { useCustomerForm } from "../../../hooks/useCustomerForm";
 
 interface CustomerCreateProps {}
 

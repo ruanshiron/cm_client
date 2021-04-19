@@ -16,14 +16,14 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Item } from "../../components/items/Item";
-import { CustomerPagePopover } from "../../components/popovers/CustomerPagePopover";
-import { useSelector } from "../../store";
-import { fetchCustomers } from "../../store/dataSlice";
+import { EmployeePagePopover } from "../../../components/popovers/EmployeePagePopover";
+import { useSelector } from "../../../store";
+import { fetchEmployees } from "../../../store/dataSlice";
+import { Item } from "../../../components/items/Item";
 
-interface CustomerPageProps {}
+interface EmployeePageProps {}
 
-const CustomerPage: React.FC<CustomerPageProps> = () => {
+const EmployeePage: React.FC<EmployeePageProps> = () => {
   const [showPopover, setShowPopover] = useState(false);
   const [popoverEvent, setPopoverEvent] = useState<any>();
 
@@ -32,11 +32,11 @@ const CustomerPage: React.FC<CustomerPageProps> = () => {
     setShowPopover(true);
   };
 
-  const customers = useSelector((state) => state.data.customers);
+  const employees = useSelector((state) => state.data.employees);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchCustomers());
+    dispatch(fetchEmployees());
   }, [dispatch]);
 
   return (
@@ -46,7 +46,7 @@ const CustomerPage: React.FC<CustomerPageProps> = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Khách hàng</IonTitle>
+          <IonTitle>Công nhân</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={presentPopover}>
               <IonIcon
@@ -61,18 +61,18 @@ const CustomerPage: React.FC<CustomerPageProps> = () => {
       <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Khách hàng</IonTitle>
+            <IonTitle size="large">Công nhân</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>
           <IonRow>
-            {customers.map((customer) => (
-              <IonCol size="12" size-md="6" key={customer.id}>
+            {employees.map((employee) => (
+              <IonCol size="12" size-md="6" key={employee.id}>
                 <Item
-                  title={customer.name!}
-                  subtitle={customer.phonenumber!}
-                  id={customer.id}
-                  baseUrl="/customers"
+                  title={employee.name!}
+                  subtitle={employee.phonenumber!}
+                  id={employee.id}
+                  baseUrl="/employees"
                 />
               </IonCol>
             ))}
@@ -84,10 +84,10 @@ const CustomerPage: React.FC<CustomerPageProps> = () => {
         event={popoverEvent}
         onDidDismiss={() => setShowPopover(false)}
       >
-        <CustomerPagePopover dismiss={() => setShowPopover(false)} />
+        <EmployeePagePopover dismiss={() => setShowPopover(false)} />
       </IonPopover>
     </IonPage>
   );
 };
 
-export default CustomerPage;
+export default EmployeePage;

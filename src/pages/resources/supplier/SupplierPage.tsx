@@ -16,14 +16,17 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { EmployeePagePopover } from "../../components/popovers/EmployeePagePopover";
-import { useSelector } from "../../store";
-import { fetchEmployees } from "../../store/dataSlice";
-import { Item } from "../../components/items/Item";
+import { Item } from "../../../components/items/Item";
+import { SupplierPagePopover } from "../../../components/popovers/SupplierPagePopover";
+import { useSelector } from "../../../store";
+import { fetchSuppliers } from "../../../store/dataSlice";
 
-interface EmployeePageProps {}
+interface SupplierPageProps {}
 
-const EmployeePage: React.FC<EmployeePageProps> = () => {
+const SupplierPage: React.FC<SupplierPageProps> = () => {
+  const dispatch = useDispatch();
+  const materialStores = useSelector((state) => state.data.materialStores);
+
   const [showPopover, setShowPopover] = useState(false);
   const [popoverEvent, setPopoverEvent] = useState<any>();
 
@@ -32,11 +35,8 @@ const EmployeePage: React.FC<EmployeePageProps> = () => {
     setShowPopover(true);
   };
 
-  const employees = useSelector((state) => state.data.employees);
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(fetchEmployees());
+    dispatch(fetchSuppliers());
   }, [dispatch]);
 
   return (
@@ -46,7 +46,7 @@ const EmployeePage: React.FC<EmployeePageProps> = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Công nhân</IonTitle>
+          <IonTitle>Nguồn nguyên liệu</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={presentPopover}>
               <IonIcon
@@ -61,33 +61,34 @@ const EmployeePage: React.FC<EmployeePageProps> = () => {
       <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Công nhân</IonTitle>
+            <IonTitle size="large">Nguồn nguyên liệu</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>
           <IonRow>
-            {employees.map((employee) => (
-              <IonCol size="12" size-md="6" key={employee.id}>
+            {materialStores.map((supplier) => (
+              <IonCol size="12" size-md="6" key={supplier.id}>
                 <Item
-                  title={employee.name!}
-                  subtitle={employee.phonenumber!}
-                  id={employee.id}
-                  baseUrl="/employees"
+                  title={supplier.name!}
+                  subtitle={supplier.phonenumber!}
+                  id={supplier.id}
+                  baseUrl="/suppliers"
                 />
               </IonCol>
             ))}
           </IonRow>
         </IonGrid>
       </IonContent>
+
       <IonPopover
         isOpen={showPopover}
         event={popoverEvent}
         onDidDismiss={() => setShowPopover(false)}
       >
-        <EmployeePagePopover dismiss={() => setShowPopover(false)} />
+        <SupplierPagePopover dismiss={() => setShowPopover(false)} />
       </IonPopover>
     </IonPage>
   );
 };
 
-export default EmployeePage;
+export default SupplierPage;

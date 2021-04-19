@@ -12,7 +12,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import React from "react";
-import { useWorkshopForm } from "../../hooks/useWorkshopForm";
+import { useWorkshopForm } from "../../../hooks/useWorkshopForm";
 
 interface WorkshopCreateProps {}
 

@@ -12,40 +12,57 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonNote,
   IonPage,
   IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import {
+  analyticsOutline,
   callOutline,
   callSharp,
   personOutline,
   phonePortraitOutline,
-  shareOutline,
-  shareSharp,
 } from "ionicons/icons";
-import React from "react";
+import { chain, sum } from "lodash";
+import React, { useState } from "react";
 import { useParams } from "react-router";
-import { useSelector } from "../../store";
+import { WorkshopModal } from "../../../components/modals/WorkshopModal";
+import { useSelector } from "../../../store";
 
-interface SupplierDetailProps {}
+interface WorkshopDetailProps {}
 
-export const SupplierDetail: React.FC<SupplierDetailProps> = () => {
+export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
+  const [showReportModal, setShowReportModal] = useState(false);
   const { id } = useParams<{ id: string }>();
   const workshop = useSelector((state) =>
-    state.data.materialStores.find((v) => v.id === id)
+    state.data.workshops.find((v) => v.id === id)
   );
+  const events = useSelector((state) => {
+    const e = state.data.events.filter((v) => v.workshop === id);
+    return chain(e)
+      .groupBy("product")
+      .map((value, key) => ({
+        name: state.data.products.find((v) => v.id === key)?.name,
+        aggregate: sum(value.map((v) => v.quantity)),
+      }))
+      .value();
+  });
   return (
     <>
       <IonPage id="workshop-detail">
+        <WorkshopModal
+          showModal={showReportModal}
+          onDismiss={() => setShowReportModal(false)}
+        />
         <IonContent>
           <IonHeader className="ion-no-border">
             <IonToolbar>
               <IonButtons slot="start">
                 <IonBackButton defaultHref="/workshops" />
               </IonButtons>
-              <IonTitle>Nguồn nguyên liệu</IonTitle>
+              <IonTitle>Xưởng</IonTitle>
               <IonButtons slot="end">
                 <IonButton>
                   <IonIcon
@@ -54,12 +71,8 @@ export const SupplierDetail: React.FC<SupplierDetailProps> = () => {
                     md={callSharp}
                   ></IonIcon>
                 </IonButton>
-                <IonButton>
-                  <IonIcon
-                    slot="icon-only"
-                    ios={shareOutline}
-                    md={shareSharp}
-                  ></IonIcon>
+                <IonButton onClick={() => setShowReportModal(true)}>
+                  <IonIcon slot="icon-only" icon={analyticsOutline}></IonIcon>
                 </IonButton>
               </IonButtons>
             </IonToolbar>
@@ -83,6 +96,21 @@ export const SupplierDetail: React.FC<SupplierDetailProps> = () => {
                           {workshop?.phonenumber}
                         </IonLabel>
                       </IonItem>
+                    </IonList>
+                  </IonCardContent>
+                </IonCard>
+
+                <IonCard>
+                  <IonCardContent>
+                    <IonList lines="full">
+                      {events.map((e, i) => (
+                        <IonItem key={i}>
+                          <IonLabel slot="start">{e.name}</IonLabel>
+                          <IonNote slot="end">
+                            <p>{e.aggregate}</p>
+                          </IonNote>
+                        </IonItem>
+                      ))}
                     </IonList>
                   </IonCardContent>
                 </IonCard>

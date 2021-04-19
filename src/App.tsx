@@ -43,16 +43,16 @@ import {
   fetchProducts,
   fetchWorkshops,
 } from "./store/dataSlice";
-import WorkshopPage from "./pages/lists/WorkshopPage";
-import CustomerPage from "./pages/lists/CustomerPage";
-import EmployeePage from "./pages/lists/EmployeePage";
-import { WorkshopDetail } from "./pages/lists/WorkshopDetail";
-import WorkshopCreate from "./pages/lists/WorkshopCreate";
-import CustomerCreate from "./pages/lists/CustomerCreate";
-import { CustomerDetail } from "./pages/lists/CustomerDetail";
-import SupplierPage from "./pages/lists/SupplierPage";
-import SupplierCreate from "./pages/lists/SupplierCreate";
-import EmployeeCreate from "./pages/lists/EmployeeCreate";
+import WorkshopPage from "./pages/resources/workshop/WorkshopPage";
+import CustomerPage from "./pages/resources/customer/CustomerPage";
+import EmployeePage from "./pages/resources/employee/EmployeePage";
+import { WorkshopDetail } from "./pages/resources/workshop/WorkshopDetail";
+import WorkshopCreate from "./pages/resources/workshop/WorkshopCreate";
+import CustomerCreate from "./pages/resources/customer/CustomerCreate";
+import { CustomerDetail } from "./pages/resources/customer/CustomerDetail";
+import SupplierPage from "./pages/resources/supplier/SupplierPage";
+import SupplierCreate from "./pages/resources/supplier/SupplierCreate";
+import EmployeeCreate from "./pages/resources/employee/EmployeeCreate";
 import HomeOrTutorial from "./components/HomeOrTutorial";
 import { useSelector } from "./store";
 import SettingsPage from "./pages/settings/SettingsPage";
@@ -60,8 +60,8 @@ import ProcessesPage from "./pages/settings/ProcessesPage";
 import { useAuth } from "./hooks/useAuth";
 import LoginPage from "./pages/login/LoginPage";
 import SignUpPage from "./pages/login/SignUpPage";
-import { SupplierDetail } from "./pages/lists/SupplierDetail";
-import { EmployeeDetail } from "./pages/lists/EmployeeDetail";
+import { SupplierDetail } from "./pages/resources/supplier/SupplierDetail";
+import { EmployeeDetail } from "./pages/resources/employee/EmployeeDetail";
 
 interface AppRoute {
   url: string;

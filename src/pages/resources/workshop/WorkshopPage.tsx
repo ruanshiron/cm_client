@@ -16,16 +16,16 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Item } from "../../components/items/Item";
-import { SupplierPagePopover } from "../../components/popovers/SupplierPagePopover";
-import { useSelector } from "../../store";
-import { fetchSuppliers } from "../../store/dataSlice";
+import { Item } from "../../../components/items/Item";
+import { WorkshopPagePopover } from "../../../components/popovers/WorkshopPagePopover";
+import { useSelector } from "../../../store";
+import { fetchWorkshops } from "../../../store/dataSlice";
 
-interface SupplierPageProps {}
+interface WorkshopPageProps {}
 
-const SupplierPage: React.FC<SupplierPageProps> = () => {
+const WorkshopPage: React.FC<WorkshopPageProps> = () => {
   const dispatch = useDispatch();
-  const materialStores = useSelector((state) => state.data.materialStores);
+  const workshops = useSelector((state) => state.data.workshops);
 
   const [showPopover, setShowPopover] = useState(false);
   const [popoverEvent, setPopoverEvent] = useState<any>();
@@ -36,7 +36,7 @@ const SupplierPage: React.FC<SupplierPageProps> = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchSuppliers());
+    dispatch(fetchWorkshops());
   }, [dispatch]);
 
   return (
@@ -46,7 +46,7 @@ const SupplierPage: React.FC<SupplierPageProps> = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Nguồn nguyên liệu</IonTitle>
+          <IonTitle>Xưởng</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={presentPopover}>
               <IonIcon
@@ -61,18 +61,18 @@ const SupplierPage: React.FC<SupplierPageProps> = () => {
       <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Nguồn nguyên liệu</IonTitle>
+            <IonTitle size="large">Xưởng</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>
           <IonRow>
-            {materialStores.map((supplier) => (
-              <IonCol size="12" size-md="6" key={supplier.id}>
+            {workshops.map((workshop) => (
+              <IonCol size="12" size-md="6" key={workshop.id}>
                 <Item
-                  title={supplier.name!}
-                  subtitle={supplier.phonenumber!}
-                  id={supplier.id}
-                  baseUrl="/suppliers"
+                  title={workshop.name!}
+                  subtitle={workshop.phonenumber!}
+                  id={workshop.id}
+                  baseUrl="/workshops"
                 />
               </IonCol>
             ))}
@@ -85,10 +85,10 @@ const SupplierPage: React.FC<SupplierPageProps> = () => {
         event={popoverEvent}
         onDidDismiss={() => setShowPopover(false)}
       >
-        <SupplierPagePopover dismiss={() => setShowPopover(false)} />
+        <WorkshopPagePopover dismiss={() => setShowPopover(false)} />
       </IonPopover>
     </IonPage>
   );
 };
 
-export default SupplierPage;
+export default WorkshopPage;
