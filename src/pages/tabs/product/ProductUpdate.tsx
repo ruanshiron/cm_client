@@ -27,7 +27,7 @@ export const ProductUpdate: React.FC<ProductUpdateProps> = () => {
   const [showCancelAlert, setShowCancelAlert] = useState(false);
 
   const product = useSelector((state) =>
-    state.data.products.find((x) => x.id === id)
+    state.products.find((x) => x.id === id)
   );
   
   const form = useProductForm();

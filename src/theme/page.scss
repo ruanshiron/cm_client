@@ -144,3 +144,18 @@ ion-list {
   /* Uppercase the label */
   text-transform: uppercase;
 }
+
+.options__container {
+  border: 1px solid
+    var(
+      --ion-item-border-color,
+      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+    );
+
+  margin: 5px 10px;
+
+  ion-item:last-child {
+    --inner-border-width: 0;
+    --border-width: 0 0 0 0;
+  }
+}

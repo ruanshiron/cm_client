@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   onAuthStateChanged,
   signOut as firebaseSignOut,
-} from "../helpers/firebaseHelper";
+} from "../../helpers/firebaseHelper";
 
 interface UserState {
   isLoggedIn: boolean;

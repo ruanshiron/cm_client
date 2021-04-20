@@ -30,7 +30,7 @@ const OrderPage: React.FC<OrderPageProps> = () => {
     setShowPopover(true);
   };
 
-  const orders = useSelector((state) => state.data.orders);
+  const orders = useSelector((state) => state.orders);
 
   return (
     <IonPage className="list-page">

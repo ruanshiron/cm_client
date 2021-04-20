@@ -34,7 +34,7 @@ interface SupplierDetailProps {}
 export const SupplierDetail: React.FC<SupplierDetailProps> = () => {
   const { id } = useParams<{ id: string }>();
   const workshop = useSelector((state) =>
-    state.data.materialStores.find((v) => v.id === id)
+    state.suppliers.find((v) => v.id === id)
   );
   return (
     <>

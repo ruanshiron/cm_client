@@ -18,8 +18,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { EmployeePagePopover } from "../../../components/popovers/EmployeePagePopover";
 import { useSelector } from "../../../store";
-import { fetchEmployees } from "../../../store/dataSlice";
 import { Item } from "../../../components/items/Item";
+import { fetchAllEmployees } from "../../../store/data/employeeSlice";
 
 interface EmployeePageProps {}
 
@@ -32,11 +32,11 @@ const EmployeePage: React.FC<EmployeePageProps> = () => {
     setShowPopover(true);
   };
 
-  const employees = useSelector((state) => state.data.employees);
+  const employees = useSelector((state) => state.employees);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchEmployees());
+    dispatch(fetchAllEmployees());
   }, [dispatch]);
 
   return (

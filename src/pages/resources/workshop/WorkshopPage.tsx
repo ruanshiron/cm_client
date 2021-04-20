@@ -14,18 +14,15 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import { Item } from "../../../components/items/Item";
 import { WorkshopPagePopover } from "../../../components/popovers/WorkshopPagePopover";
 import { useSelector } from "../../../store";
-import { fetchWorkshops } from "../../../store/dataSlice";
 
 interface WorkshopPageProps {}
 
 const WorkshopPage: React.FC<WorkshopPageProps> = () => {
-  const dispatch = useDispatch();
-  const workshops = useSelector((state) => state.data.workshops);
+  const workshops = useSelector((state) => state.workshops);
 
   const [showPopover, setShowPopover] = useState(false);
   const [popoverEvent, setPopoverEvent] = useState<any>();
@@ -34,10 +31,6 @@ const WorkshopPage: React.FC<WorkshopPageProps> = () => {
     setPopoverEvent(e.nativeEvent);
     setShowPopover(true);
   };
-
-  useEffect(() => {
-    dispatch(fetchWorkshops());
-  }, [dispatch]);
 
   return (
     <IonPage className="list-page">

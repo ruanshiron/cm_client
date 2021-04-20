@@ -4,16 +4,16 @@ import _ from "lodash";
 
 const collection = "employees";
 
-export const initial: Skeleton = { name: "", phonenumber: "" };
+export const initialEmployee: Employee = { name: "", phonenumber: "" };
 
-export interface Skeleton {
+export interface Employee {
   id?: string;
-  name?: string;
-  phonenumber?: string;
+  name: string;
+  phonenumber: string;
   createdAt?: any;
 }
 
-export const get = () => {
+export const getAllEmployees = () => {
   return database
     .collection(collection)
     .get()
@@ -26,7 +26,7 @@ export const get = () => {
     });
 };
 
-export const save = (param: Partial<Skeleton>) => {
+export const saveEmployee = (param: Partial<Employee>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -36,9 +36,9 @@ export const save = (param: Partial<Skeleton>) => {
     : database.collection(collection).add(permittedParam);
 };
 
-export const destroy = (id: string) => {
+export const destroyEmployee = (id: string) => {
   return database.collection(collection).doc(id).delete();
 };
 
-export const permit = (fields: Skeleton) =>
-  !fields?.name?.trim() || !fields?.phonenumber?.trim();
+export const isInvalidEmployee = (fields: Employee) =>
+  !fields.name.trim() || !fields.phonenumber.trim();

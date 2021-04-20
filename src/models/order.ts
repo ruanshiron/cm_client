@@ -4,28 +4,28 @@ import _ from "lodash";
 
 const collection = "orders";
 
-export const initial: Skeleton = {
+export const initialOrder: Order = {
   customer: "",
-  lines: [{ product: "", size: "" }],
+  lines: [{ product: "", size: "", quantity: NaN }],
 };
 
-export const initialLine: Line = { product: "", size: "" };
+export const initialLine: Line = { product: "", size: "", quantity: NaN };
 
 export interface Line {
-  product?: string;
-  size?: string;
-  quantity?: number;
+  product: string;
+  size: string;
+  quantity: number;
 }
 
-export interface Skeleton {
+export interface Order {
   id?: string;
-  createdAt?: any;
-  customer?: string;
+  customer: string;
   lines: Line[];
   note?: string;
+  createdAt?: any;
 }
 
-export const get = () => {
+export const getAllOrders = () => {
   return database
     .collection(collection)
     .get()
@@ -38,7 +38,7 @@ export const get = () => {
     });
 };
 
-export const save = (param: Partial<Skeleton>) => {
+export const saveOrder = (param: Partial<Order>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -48,14 +48,14 @@ export const save = (param: Partial<Skeleton>) => {
     : database.collection(collection).add(permittedParam);
 };
 
-export const destroy = (id: string) => {
+export const destroyOrder = (id: string) => {
   return database.collection(collection).doc(id).delete();
 };
 
-export const permit = (fields: Skeleton) => {
+export const isInvalidOrder = (fields: Order) => {
   const isInvalidLine = (line: Line) =>
-    !line.product?.trim() ||
-    !line.size?.trim() ||
+    !line.product.trim() ||
+    !line.size.trim() ||
     !line.quantity ||
     !(line.quantity > 0);
 
@@ -64,7 +64,7 @@ export const permit = (fields: Skeleton) => {
   };
 
   return (
-    !fields?.customer?.trim() ||
+    !fields.customer.trim() ||
     !(fields.lines.length > 0) ||
     isInvalidLines(fields.lines)
   );

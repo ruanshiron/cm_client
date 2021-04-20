@@ -2,19 +2,23 @@ import { database } from "../config/firebase";
 import firebase from "firebase/app";
 import _ from "lodash";
 
-const collection = "materialStores";
+const collection = "suppliers";
 
-export const initial: Skeleton = { name: "", phonenumber: "" };
+export const initialSupplier: Supplier = {
+  name: "",
+  phonenumber: "",
+  types: [],
+};
 
-export interface Skeleton {
+export interface Supplier {
   id?: string;
-  name?: string;
-  phonenumber?: string;
-  types?: string[];
+  name: string;
+  phonenumber: string;
+  types: string[];
   createdAt?: any;
 }
 
-export const get = () => {
+export const getAllSuppliers = () => {
   return database
     .collection(collection)
     .get()
@@ -27,7 +31,7 @@ export const get = () => {
     });
 };
 
-export const save = (param: Partial<Skeleton>) => {
+export const saveSupplier = (param: Partial<Supplier>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -37,9 +41,9 @@ export const save = (param: Partial<Skeleton>) => {
     : database.collection(collection).add(permittedParam);
 };
 
-export const destroy = (id: string) => {
+export const destroySupplier = (id: string) => {
   return database.collection(collection).doc(id).delete();
 };
 
-export const permit = (fields: Skeleton) =>
-  !fields?.name?.trim() || !fields?.phonenumber?.trim();
+export const isInvalidSupplier = (fields: Supplier) =>
+  !fields.name.trim() || !fields.phonenumber.trim();

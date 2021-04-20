@@ -13,8 +13,8 @@ import { useSelector } from "../../store";
 
 export const FulfilledsItem: React.FC = () => {
   const items = useSelector((state) => {
-    return state.data.products.map((p) => {
-      const filtered = state.data.events.filter(
+    return state.products.map((p) => {
+      const filtered = state.stages.filter(
         (e) => e.product?.split("/")[0] === p.id
       );
       const fulfilled =

@@ -2,10 +2,15 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonDatetime,
   IonGrid,
   IonHeader,
   IonIcon,
+  IonItem,
+  IonLabel,
   IonModal,
+  IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -13,7 +18,7 @@ import { closeOutline } from "ionicons/icons";
 import React from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../store";
-import { reportForProduct } from "../../store/dataSlice";
+import { reportForProduct } from "../../store/data/productSlice";
 
 const StatisticItem: React.FC<{ value: string | number; label: string }> = ({
   value,
@@ -38,9 +43,11 @@ export const ProductModal: React.FC<Props> = ({
 }) => {
   const { id } = useParams<{ id: string }>();
 
-  const { title, fields, data } = useSelector((state) =>
+  const { product, fields, data } = useSelector((state) =>
     reportForProduct(state, id)
   );
+
+  const processes = useSelector((state) => state.processes);
 
   return (
     <IonModal
@@ -56,11 +63,45 @@ export const ProductModal: React.FC<Props> = ({
               <IonIcon slot="icon-only" icon={closeOutline} />
             </IonButton>
           </IonButtons>
-          <IonTitle>{title} | thống kê</IonTitle>
+          <IonTitle>{product?.name} | thống kê</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <IonGrid fixed>
+          <div className="options__container">
+            <IonItem>
+              <IonLabel>Từ ngày</IonLabel>
+              <IonDatetime
+                displayFormat="YYYY-MM-DD"
+                doneText="OK!"
+                cancelText="Hủy"
+                value={product?.report_cache?.from}
+              ></IonDatetime>
+            </IonItem>
+            <IonItem>
+              <IonLabel>Đến ngày</IonLabel>
+              <IonDatetime
+                displayFormat="YYYY-MM-DD"
+                doneText="OK!"
+                cancelText="Hủy"
+                value={product?.report_cache?.to}
+              ></IonDatetime>
+            </IonItem>
+            <IonItem>
+              <IonLabel>Theo quy trình</IonLabel>
+              <IonSelect
+                okText="Chọn"
+                cancelText="Hủy"
+                interface="action-sheet"
+                placeholder="Quy trình"
+                value={product?.report_cache?.for}
+              >
+                {processes.map((item, index) => (
+                  <IonSelectOption key={index}>{item.name}</IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem>
+          </div>
           <div className="stats__container">
             {fields &&
               fields?.length > 0 &&
@@ -70,7 +111,6 @@ export const ProductModal: React.FC<Props> = ({
           </div>
           <div className="table__container">
             <table>
-              <caption>Thống kê chi tiết</caption>
               <thead>
                 <tr>
                   <th scope="col">Ngày</th>

@@ -14,14 +14,13 @@ import {
 import React from "react";
 import { useSelector } from "../store";
 import EventItem from "./items/EventItem";
-import * as Event from "../models/event";
+import * as Event from "../models/stage";
+import { filteredStages } from "../store/data/stageSlice";
 
 interface Props {}
 
 export const EventsViewAll: React.FC<Props> = () => {
-  const groups: Event.Group[] = useSelector(
-    (state) => state.data.filteredEvents
-  );
+  const groups: Event.Group[] = useSelector(filteredStages);
 
   return (
     <>

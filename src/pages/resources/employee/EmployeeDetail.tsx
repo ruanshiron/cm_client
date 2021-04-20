@@ -34,7 +34,7 @@ interface EmployeeDetailProps {}
 export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
   const { id } = useParams<{ id: string }>();
   const workshop = useSelector((state) =>
-    state.data.employees.find((v) => v.id === id)
+    state.employees.find((v) => v.id === id)
   );
   return (
     <>

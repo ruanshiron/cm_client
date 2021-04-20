@@ -1,26 +1,26 @@
 import React from "react";
 import { IonNote, IonItem, IonLabel } from "@ionic/react";
-import * as Event from "../../models/event";
+import * as Event from "../../models/stage";
 import * as Process from "../../models/process";
 import { useEventForm } from "../../hooks/useEventForm";
 import { EventModal } from "../modals/EventModal";
 import { useSelector } from "../../store";
 
 interface EventItemProps {
-  data: Event.Skeleton;
+  data: Event.Stage;
 }
 
 const EventItem: React.FC<EventItemProps> = ({ data }) => {
   const form = useEventForm(data);
 
   const product = useSelector((state) =>
-    state.data.products.find((v) => v.id === data.product)
+    state.products.find((v) => v.id === data.product)
   );
   const process = useSelector((state) =>
-    state.data.processes.find((v) => v.id === data.process?.split("/")[0])
+    state.processes.find((v) => v.id === data.process?.split("/")[0])
   );
   const workshop = useSelector((state) =>
-    state.data.workshops.find((v) => v.id === data.workshop)
+    state.workshops.find((v) => v.id === data.workshop)
   );
 
   return (

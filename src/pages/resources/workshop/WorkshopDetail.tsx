@@ -37,14 +37,14 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   const [showReportModal, setShowReportModal] = useState(false);
   const { id } = useParams<{ id: string }>();
   const workshop = useSelector((state) =>
-    state.data.workshops.find((v) => v.id === id)
+    state.workshops.find((v) => v.id === id)
   );
   const events = useSelector((state) => {
-    const e = state.data.events.filter((v) => v.workshop === id);
+    const e = state.stages.filter((v) => v.workshop === id);
     return chain(e)
       .groupBy("product")
       .map((value, key) => ({
-        name: state.data.products.find((v) => v.id === key)?.name,
+        name: state.products.find((v) => v.id === key)?.name,
         aggregate: sum(value.map((v) => v.quantity)),
       }))
       .value();

@@ -81,7 +81,7 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
               form.setFieldsValue({ product: e.detail.value! })
             }
           >
-            {form.products?.map((item) => (
+            {form.products.map((item) => (
               <IonSelectOption key={item.id} value={item.id}>
                 {item.name}
               </IonSelectOption>
@@ -101,7 +101,7 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
           >
             {form.products
               ?.find((v) => v.id === form.fields?.product)
-              ?.sizes?.map((item, index) => (
+              ?.sizes.map((item, index) => (
                 <IonSelectOption key={index} value={item}>
                   {item}
                 </IonSelectOption>

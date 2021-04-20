@@ -19,11 +19,11 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import { useSelector } from "../store";
 import { getDates } from "../utils/date";
 import EventItem from "./items/EventItem";
-import * as Event from "../models/event";
+import * as Event from "../models/stage";
 
 interface Props {}
 
-const EventList: React.FC<{ events: Event.Skeleton[] }> = ({ events }) => {
+const EventList: React.FC<{ events: Event.Stage[] }> = ({ events }) => {
   return events.length ? (
     <IonList lines="inset">
       {events.map((item, j) => (
@@ -42,7 +42,7 @@ const EventList: React.FC<{ events: Event.Skeleton[] }> = ({ events }) => {
 };
 
 export const EventsViewByDay: React.FC<Props> = () => {
-  const events = useSelector((state) => state.data.events);
+  const events = useSelector((state) => state.stages);
 
   const slider = useRef<HTMLIonSlidesElement>(null);
 
@@ -67,7 +67,6 @@ export const EventsViewByDay: React.FC<Props> = () => {
     e.target?.getActiveIndex().then((value: any) => {
       setSelected("" + value);
       console.log(value);
-      
     });
   };
 
@@ -77,7 +76,6 @@ export const EventsViewByDay: React.FC<Props> = () => {
         block: "center",
         inline: "center",
       });
-
     }, 500);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

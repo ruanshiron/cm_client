@@ -35,7 +35,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
                 form.setFieldsValue({ customer: e.detail.value! })
               }
             >
-              {form.customers?.map((item) => (
+              {form.customers.map((item) => (
                 <IonSelectOption key={item.id} value={item.id}>
                   {item.name}
                 </IonSelectOption>
@@ -86,7 +86,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
                       })
                     }
                   >
-                    {form.products?.map((item) => (
+                    {form.products.map((item) => (
                       <IonSelectOption key={item.id} value={item.id}>
                         {item.name}
                       </IonSelectOption>
@@ -113,7 +113,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
                     }
                   >
                     {form.products
-                      ?.find((v) => v.id === line.product)
+                      .find((v) => v.id === line.product)
                       ?.sizes?.map((item, index) => (
                         <IonSelectOption key={index} value={item}>
                           {item}

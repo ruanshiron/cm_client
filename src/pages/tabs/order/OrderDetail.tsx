@@ -40,14 +40,14 @@ export const OrderDetail: React.FC<OrderDetailProps> = () => {
   const [showActionSheet, setShowActionSheet] = useState(false);
 
   const order = useSelector((state) =>
-    state.data.orders.find((i) => i.id === id)
+    state.orders.find((i) => i.id === id)
   );
 
   const customer = useSelector((state) =>
-    state.data.customers.find((i) => i.id === order?.customer)
+    state.customers.find((i) => i.id === order?.customer)
   );
 
-  const products = useSelector((state) => state.data.products);
+  const products = useSelector((state) => state.products);
 
   return (
     <>

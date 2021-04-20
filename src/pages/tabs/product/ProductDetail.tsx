@@ -40,10 +40,10 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
   const [showReportModal, setShowReportModal] = useState(false);
 
   const { product, processes, fields } = useSelector((state) => {
-    const _product = state.data.products.find((x) => x.id === id);
-    const _processes = state.data.processes;
+    const _product = state.products.find((x) => x.id === id);
+    const _processes = state.processes;
 
-    const events = state.data.events.filter((v) => v.product === id);
+    const events = state.stages.filter((v) => v.product === id);
     const result = _.groupBy(events, "process");
 
     return {
@@ -54,7 +54,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
         return {
           name:
             Process.ProcessEnum[type] +
-            state.data.processes.find((i) => i.id === id)?.name,
+            state.processes.find((i) => i.id === id)?.name,
           value: result[key].reduce((a, b) => a + (b ? b?.quantity! : 0), 0),
         };
       }),

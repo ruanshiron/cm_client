@@ -1,38 +1,40 @@
 import { useIonRouter } from "@ionic/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import * as Product from "../models/product";
+import {
+  Product,
+  initialProduct,
+  isInvalidProduct,
+  saveProduct,
+} from "../models/product";
 import { useSelector } from "../store";
-import { fetchProducts } from "../store/dataSlice";
+import { fetchAllProducts } from "../store/data/productSlice";
 import { toast } from "../utils/toast";
 
-export const useProductForm = (product = Product.initial) => {
+export const useProductForm = (product = initialProduct) => {
   const router = useIonRouter();
-  const [fields, setFields] = useState<Product.Skeleton>(product);
+  const [fields, setFields] = useState<Product>(product);
 
   const dispatch = useDispatch();
 
-  const processes = useSelector((state) => state.data.processes);
-
-  const isInvalid = () =>
-    !fields?.name?.trim() || !fields?.code?.trim() || !fields?.sizes?.length;
+  const processes = useSelector((state) => state.processes);
 
   const submit = async () => {
-    if (isInvalid()) return;
+    if (isInvalidProduct(fields)) return;
 
     try {
-      await Product.save(fields);
+      await saveProduct(fields);
       setFields(product);
       router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
-      dispatch(fetchProducts());
+      dispatch(fetchAllProducts());
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
   };
 
-  const setFieldsValue = (e: Partial<Product.Skeleton>) => {
+  const setFieldsValue = (e: Partial<Product>) => {
     setFields((fields) => ({ ...fields, ...e }));
   };
 

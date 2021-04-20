@@ -65,4 +65,5 @@ export async function createUserWithEmail(email: string, password: string) {
 
 export async function signOut() {
   await firebase.auth().signOut();
+  window.location.replace("/");
 }

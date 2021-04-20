@@ -1,39 +1,44 @@
-import * as Event from "../models/event";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "../utils/toast";
 import { useSelector } from "../store";
-import { fetchEvents } from "../store/dataSlice";
+import {
+  initialStage,
+  isInvalidStage,
+  Stage,
+  saveStage,
+} from "../models/stage";
+import { fetchAllStages } from "../store/data/stageSlice";
 
-export const useEventForm = (event = Event.initial) => {
+export const useEventForm = (event = initialStage) => {
   const dispatch = useDispatch();
 
   const [showEventForm, setShowEventForm] = useState<boolean>(false);
 
-  const [fields, setFields] = useState<Event.Skeleton>(event);
+  const [fields, setFields] = useState<Stage>(event);
 
-  const products = useSelector((state) => state.data.products);
-  const processes = useSelector((state) => state.data.processes);
-  const workshops = useSelector((state) => state.data.workshops);
+  const products = useSelector((state) => state.products);
+  const processes = useSelector((state) => state.processes);
+  const workshops = useSelector((state) => state.workshops);
 
   useEffect(() => {
     // dispatch(fetchProducts());
     setFields(event);
   }, [showEventForm, event]);
 
-  const setFieldsValue = (e: Partial<Event.Skeleton>) => {
+  const setFieldsValue = (e: Partial<Stage>) => {
     setFields((fields) => ({ ...fields, ...e }));
   };
 
   const submit = async () => {
-    if (Event.permit(fields)) return;
+    if (isInvalidStage(fields)) return;
 
     try {
-      await Event.save(fields);
+      await saveStage(fields);
       setShowEventForm(false);
       toast("Lưu thành công.");
       // TODO: Do not fetch again
-      dispatch(fetchEvents());
+      dispatch(fetchAllStages());
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }

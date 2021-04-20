@@ -40,9 +40,9 @@ export const WorkshopModal: React.FC<Props> = ({
   const { id } = useParams<{ id: string }>();
 
   const { title, fields, data } = useSelector((state) => {
-    const events = state.data.events.filter((v) => v.workshop === id);
+    const events = state.stages.filter((v) => v.workshop === id);
 
-    let _events = filter(state.data.events, (v) => v.workshop === id);
+    let _events = filter(state.stages, (v) => v.workshop === id);
     let _groups: any = groupBy(_events, (v) => v.product);
     let _r = forEach(_groups, (_, key) => {
       _groups[key] = groupBy(_groups[key], function (item) {
@@ -51,15 +51,15 @@ export const WorkshopModal: React.FC<Props> = ({
     });
 
     return {
-      title: state.data.workshops.find((v) => v.id === id)?.name,
+      title: state.workshops.find((v) => v.id === id)?.name,
       data: events.map((e) => {
         const [id, type] = e.process?.split("/") || ["", ""];
         return {
           ...e,
-          product: state.data.products.find((v) => v.id === e.product)?.name,
+          product: state.products.find((v) => v.id === e.product)?.name,
           process:
             Process.ProcessEnum[type] +
-            state.data.processes.find((i) => i.id === id)?.name,
+            state.processes.find((i) => i.id === id)?.name,
           note: e.note || "_",
         };
       }),

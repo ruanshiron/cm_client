@@ -35,14 +35,6 @@ import "./theme/style.scss";
 import MainTabs from "./pages/tabs/MainTabs";
 
 import { useDispatch } from "react-redux";
-import {
-  fetchCustomers,
-  fetchEvents,
-  fetchOrders,
-  fetchProcesses,
-  fetchProducts,
-  fetchWorkshops,
-} from "./store/dataSlice";
 import WorkshopPage from "./pages/resources/workshop/WorkshopPage";
 import CustomerPage from "./pages/resources/customer/CustomerPage";
 import EmployeePage from "./pages/resources/employee/EmployeePage";
@@ -62,6 +54,12 @@ import LoginPage from "./pages/login/LoginPage";
 import SignUpPage from "./pages/login/SignUpPage";
 import { SupplierDetail } from "./pages/resources/supplier/SupplierDetail";
 import { EmployeeDetail } from "./pages/resources/employee/EmployeeDetail";
+import { fetchAllProducts } from "./store/data/productSlice";
+import { fetchAllStages } from "./store/data/stageSlice";
+import { fetchAllWorkshops } from "./store/data/workshopSlice";
+import { fetchAllOrders } from "./store/data/orderSlice";
+import { fetchAllCustomers } from "./store/data/customerSlice";
+import { fetchAllProcesses } from "./store/data/processSlice";
 
 interface AppRoute {
   url: string;
@@ -147,27 +145,26 @@ const App: React.FC = () => {
   useAuth();
 
   useEffect(() => {
-    dispatch(fetchEvents());
-    dispatch(fetchProducts());
-    dispatch(fetchCustomers());
-    dispatch(fetchOrders());
-    dispatch(fetchProcesses());
-    dispatch(fetchWorkshops());
+    dispatch(fetchAllStages());
+    dispatch(fetchAllProducts());
+    dispatch(fetchAllWorkshops());
+    dispatch(fetchAllOrders());
+    dispatch(fetchAllCustomers());
+    dispatch(fetchAllProcesses());
   }, [dispatch]);
 
-  const loading = useSelector((state) => state.data.loading);
+  const loading = useSelector((state) => state.loading.isLoading);
   const { isLoggedIn, loading: userLoading } = useSelector(
     (state) => state.user
   );
   return (
     <IonApp>
-      {loading ||
-        (userLoading && (
-          <IonProgressBar
-            style={{ zIndex: 999 }}
-            type="indeterminate"
-          ></IonProgressBar>
-        ))}
+      {loading && (
+        <IonProgressBar
+          style={{ zIndex: 999 }}
+          type="indeterminate"
+        ></IonProgressBar>
+      )}
       <IonReactRouter>
         {!userLoading &&
           (isLoggedIn ? (

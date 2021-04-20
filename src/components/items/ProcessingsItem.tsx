@@ -16,9 +16,9 @@ interface Props {}
 
 export const ProcessingsItem: React.FC<Props> = () => {
   const items = useSelector((state) => {
-    return state.data.workshops.map((w) => {
-      const products = state.data.products.map((p) => {
-        const filtered = state.data.events.filter(
+    return state.workshops.map((w) => {
+      const products = state.products.map((p) => {
+        const filtered = state.stages.filter(
           (e) => e.workshop === w.id && e.product?.split("/")[0] === p.id
         );
         const fulfilled =

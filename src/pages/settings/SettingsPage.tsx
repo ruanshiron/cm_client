@@ -19,7 +19,7 @@ import { logOutOutline, optionsOutline } from "ionicons/icons";
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import { signOut } from "../../store/userSlice";
+import { signOut } from "../../store/user/userSlice";
 
 interface SettingsPageProps {}
 

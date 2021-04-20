@@ -4,7 +4,7 @@ import _ from "lodash";
 
 const collection = "products";
 
-export const initial: Skeleton = {
+export const initialProduct: Product = {
   name: "",
   code: "",
   sizes: [],
@@ -15,9 +15,10 @@ export const initial: Skeleton = {
 interface ReportCache {
   from: any;
   to: any;
+  for: any;
   fields: { name: string; value: number }[];
 }
-export interface Skeleton {
+export interface Product {
   id?: string;
   code: string;
   name: string;
@@ -29,7 +30,7 @@ export interface Skeleton {
   createdAt?: any;
 }
 
-export const get = () => {
+export const getAllProducts = () => {
   return database
     .collection(collection)
     .get()
@@ -38,12 +39,11 @@ export const get = () => {
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate().toString(),
-        updated: doc.data().updated?.toDate().toString(),
       }));
     });
 };
 
-export const save = (param: Partial<Skeleton>) => {
+export const saveProduct = (param: Partial<Product>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -53,12 +53,12 @@ export const save = (param: Partial<Skeleton>) => {
     : database.collection(collection).add(permittedParam);
 };
 
-export const destroy = (id: string) => {
+export const destroyProduct = (id: string) => {
   return database.collection(collection).doc(id).delete();
 };
 
-export const permit = (fields: Skeleton) =>
-  !fields?.name?.trim() || !fields?.code?.trim() || !fields?.sizes?.length;
+export const isInvalidProduct = (fields: Product) =>
+  !fields.name.trim() || !fields.code.trim() || !fields.sizes.length;
 
 export const cache = (productId: string, reportCache: ReportCache) => {
   return database.collection(collection).doc(productId).update({

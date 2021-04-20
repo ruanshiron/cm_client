@@ -23,7 +23,7 @@ import {
 import { add, closeOutline } from "ionicons/icons";
 import React from "react";
 import { useProcessForm } from "../../hooks/useProcessForm";
-import * as Process from "../../models/process";
+import { initialProcess } from "../../models/process";
 import { useSelector } from "../../store";
 
 interface ProcessesPageProps {}
@@ -31,7 +31,7 @@ interface ProcessesPageProps {}
 const ProcessesPage: React.FC<ProcessesPageProps> = () => {
   const form = useProcessForm();
 
-  const processes = useSelector((state) => state.data.processes);
+  const processes = useSelector((state) => state.processes);
 
   return (
     <IonPage>
@@ -47,11 +47,7 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
         <IonGrid style={{ padding: 0 }}>
           <IonRow>
             <IonCol size="12" size-md="8" offsetMd="2" style={{ padding: 0 }}>
-              <IonList
-                inset
-                lines="full"
-                className="flat-list"
-              >
+              <IonList inset lines="full" className="flat-list">
                 {processes.map((process, i) => (
                   <IonItem
                     key={i}
@@ -73,7 +69,7 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
       <IonFab vertical="bottom" horizontal="end" slot="fixed">
         <IonFabButton
           onClick={() => {
-            form.setFields(Process.initial);
+            form.setFields(initialProcess);
             form.setShowModal(true);
           }}
         >

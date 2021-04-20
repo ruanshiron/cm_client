@@ -10,18 +10,18 @@ export const ProcessEnum: { [key: string]: string } = {
   rejected: "lỗi ",
 };
 
-export const initial: Skeleton = { name: "" };
+export const initialProcess: Process = { name: "" };
 
-export interface Skeleton {
+export interface Process {
   id?: string;
   createdAt?: any;
-  name?: string;
+  name: string;
   rejected?: string;
   fulfilled?: string;
   pending?: string;
 }
 
-export const get = () => {
+export const getAllProcesses = () => {
   return database
     .collection(collection)
     .get()
@@ -34,7 +34,7 @@ export const get = () => {
     });
 };
 
-export const save = (param: Partial<Skeleton>) => {
+export const saveProcess = (param: Partial<Process>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -44,8 +44,8 @@ export const save = (param: Partial<Skeleton>) => {
     : database.collection(collection).add(permittedParam);
 };
 
-export const destroy = (id: string) => {
+export const destroyProcess = (id: string) => {
   return database.collection(collection).doc(id).delete();
 };
 
-export const permit = (fields: Skeleton) => !fields?.name?.trim();
+export const isInvalidProcess = (fields: Process) => !fields.name.trim();

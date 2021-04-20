@@ -38,17 +38,17 @@ interface CustomerDetailProps {}
 export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
   const { id } = useParams<{ id: string }>();
   const customer = useSelector((state) =>
-    state.data.customers.find((v) => v.id === id)
+    state.customers.find((v) => v.id === id)
   );
 
   const data = useSelector((state) => {
-    const orders = state.data.orders
+    const orders = state.orders
       .filter((v) => v.customer === id)
       .flatMap((v) => v.lines);
     return chain(orders)
       .groupBy("product")
       .map((value, key) => ({
-        name: state.data.products.find((v) => v.id === key)?.name,
+        name: state.products.find((v) => v.id === key)?.name,
         aggregate: sum(value.map((v) => v.quantity)),
       }))
       .value();

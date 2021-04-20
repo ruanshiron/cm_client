@@ -23,7 +23,7 @@ import { useSelector } from "../../../store";
 interface DashboardPageProps {}
 
 const DashboardPage: React.FC<DashboardPageProps> = () => {
-  const processes = useSelector((state) => state.data.processes);
+  const processes = useSelector((state) => state.processes);
   return (
     <IonPage className="list-page">
       <IonHeader>

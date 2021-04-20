@@ -1,34 +1,37 @@
 import { useIonRouter } from "@ionic/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import * as Workshop from "../models/workshop";
-import { fetchWorkshops } from "../store/dataSlice";
+import {
+  initialWorkshop,
+  Workshop,
+  saveWorkshop,
+  isInvalidWorkshop,
+} from "../models/workshop";
+import { fetchAllWorkshops } from "../store/data/workshopSlice";
 import { toast } from "../utils/toast";
 
 export const useWorkshopForm = () => {
   const router = useIonRouter();
-  const [fields, setFields] = useState<Workshop.Skeleton>(Workshop.initial);
+  const [fields, setFields] = useState<Workshop>(initialWorkshop);
 
   const dispatch = useDispatch();
 
-  const isInvalid = () => !fields?.name?.trim() || !fields?.phonenumber?.trim();
-
   const submit = async () => {
-    if (isInvalid()) return;
+    if (isInvalidWorkshop(fields)) return;
 
     try {
-      await Workshop.save(fields);
-      setFields(Workshop.initial);
+      await saveWorkshop(fields);
+      setFields(initialWorkshop);
       router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
-      dispatch(fetchWorkshops());
+      dispatch(fetchAllWorkshops());
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
   };
 
-  const setFieldsValue = (e: Partial<Workshop.Skeleton>) => {
+  const setFieldsValue = (e: Partial<Workshop>) => {
     setFields((fields) => ({ ...fields, ...e }));
   };
 

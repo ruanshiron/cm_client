@@ -19,13 +19,13 @@ import { useDispatch } from "react-redux";
 import { Item } from "../../../components/items/Item";
 import { SupplierPagePopover } from "../../../components/popovers/SupplierPagePopover";
 import { useSelector } from "../../../store";
-import { fetchSuppliers } from "../../../store/dataSlice";
+import { fetchAllSuppliers } from "../../../store/data/supplierSlice";
 
 interface SupplierPageProps {}
 
 const SupplierPage: React.FC<SupplierPageProps> = () => {
   const dispatch = useDispatch();
-  const materialStores = useSelector((state) => state.data.materialStores);
+  const materialStores = useSelector((state) => state.suppliers);
 
   const [showPopover, setShowPopover] = useState(false);
   const [popoverEvent, setPopoverEvent] = useState<any>();
@@ -36,7 +36,7 @@ const SupplierPage: React.FC<SupplierPageProps> = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchSuppliers());
+    dispatch(fetchAllSuppliers());
   }, [dispatch]);
 
   return (

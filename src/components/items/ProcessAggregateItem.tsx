@@ -6,16 +6,16 @@ import {
   IonText,
 } from "@ionic/react";
 import React from "react";
-import * as Process from "../../models/process";
+import { Process, ProcessEnum } from "../../models/process";
 import { useSelector } from "../../store";
 
 interface Props {
-  process: Process.Skeleton;
+  process: Process;
 }
 
 export const ProcessAggregateItem: React.FC<Props> = ({ process }) => {
   const aggregate = useSelector((state) =>
-    state.data.events
+    state.stages
       .filter(
         (v) =>
           v.process?.split("/")[0] === process.id &&
@@ -28,7 +28,7 @@ export const ProcessAggregateItem: React.FC<Props> = ({ process }) => {
   return (
     <IonCard className="stat" style={{ border: "none" }}>
       <IonCardHeader>
-        <IonCardSubtitle>{`${Process.ProcessEnum["fulfilled"]}${process.name}`}</IonCardSubtitle>
+        <IonCardSubtitle>{`${ProcessEnum["fulfilled"]}${process.name}`}</IonCardSubtitle>
       </IonCardHeader>
       <IonCardContent>
         <IonText color="dark">
