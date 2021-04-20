@@ -10,11 +10,10 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { closeOutline } from "ionicons/icons";
-import { groupBy } from "lodash";
 import React from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../store";
-import * as Process from "../../models/process";
+import { reportForProduct } from "../../store/dataSlice";
 
 const StatisticItem: React.FC<{ value: string | number; label: string }> = ({
   value,
@@ -39,34 +38,9 @@ export const ProductModal: React.FC<Props> = ({
 }) => {
   const { id } = useParams<{ id: string }>();
 
-  const { title, fields, data } = useSelector((state) => {
-    const events = state.data.events.filter((v) => v.product === id);
-    const result = groupBy(events, "process");
-
-    return {
-      title: state.data.products.find((x) => x.id === id)?.name,
-      data: events.map((e) => {
-        const [id, type] = e.process?.split("/") || ["", ""];
-        return {
-          ...e,
-          workshop: state.data.workshops.find((v) => v.id === e.workshop)?.name,
-          process:
-            Process.ProcessEnum[type] +
-            state.data.processes.find((i) => i.id === id)?.name,
-          note: e.note || "_",
-        };
-      }),
-      fields: Object.keys(result).map((key) => {
-        const [id, type] = key.split("/");
-        return {
-          name:
-            Process.ProcessEnum[type] +
-            state.data.processes.find((i) => i.id === id)?.name,
-          value: result[key].reduce((a, b) => a + (b ? b?.quantity! : 0), 0),
-        };
-      }),
-    };
-  });
+  const { title, fields, data } = useSelector((state) =>
+    reportForProduct(state, id)
+  );
 
   return (
     <IonModal

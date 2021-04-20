@@ -26,7 +26,7 @@ export const ProcessAggregateItem: React.FC<Props> = ({ process }) => {
   );
 
   return (
-    <IonCard className="stat">
+    <IonCard className="stat" style={{ border: "none" }}>
       <IonCardHeader>
         <IonCardSubtitle>{`${Process.ProcessEnum["fulfilled"]}${process.name}`}</IonCardSubtitle>
       </IonCardHeader>

@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import * as Customer from "../models/customer";
 import * as Workshop from "../models/workshop";
 import * as Supplier from "../models/supplier";
@@ -8,6 +12,8 @@ import * as Process from "../models/process";
 import * as Event from "../models/event";
 import * as Order from "../models/order";
 import { filter } from "../utils/data";
+import { RootState } from "./rootReducer";
+import { groupBy } from "lodash";
 
 interface DataState {
   loading: boolean;
@@ -201,5 +207,40 @@ const dataSlice = createSlice({
 });
 
 // export const {} = dataSlice.actions;
+
+export const reportForProduct = createSelector(
+  (state: RootState) => state.data,
+  (_: any, id: string) => id,
+  (data, id) => {
+    const events = data.events.filter((v) => v.product === id);
+    const result = groupBy(events, "process");
+
+    return {
+      title: data.products.find((x) => x.id === id)?.name,
+      data: events
+        .sort((a, b) => a.date?.localeCompare(b.date || "") || 0)
+        .map((e) => {
+          const [id, type] = e.process?.split("/") || ["", ""];
+          return {
+            ...e,
+            workshop: data.workshops.find((v) => v.id === e.workshop)?.name,
+            process:
+              Process.ProcessEnum[type] +
+              data.processes.find((i) => i.id === id)?.name,
+            note: e.note || "_",
+          };
+        }),
+      fields: Object.keys(result).map((key) => {
+        const [id, type] = key.split("/");
+        return {
+          name:
+            Process.ProcessEnum[type] +
+            data.processes.find((i) => i.id === id)?.name,
+          value: result[key].reduce((a, b) => a + (b ? b?.quantity! : 0), 0),
+        };
+      }),
+    };
+  }
+);
 
 export default dataSlice.reducer;

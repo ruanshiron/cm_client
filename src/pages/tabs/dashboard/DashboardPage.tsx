@@ -42,8 +42,8 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
       <IonContent>
         <IonGrid fixed>
           <div className="stats__container">
-            {processes.map((process) => (
-              <ProcessAggregateItem process={process} />
+            {processes.map((process, index) => (
+              <ProcessAggregateItem key={index} process={process} />
             ))}
           </div>
           <IonRow>

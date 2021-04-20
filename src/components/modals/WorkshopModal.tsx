@@ -2,6 +2,7 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonModal,
@@ -84,41 +85,48 @@ export const WorkshopModal: React.FC<Props> = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <div className="stats__container">
-          {map(fields, (field) => map(field, (value) => value)).map(
-            (item, index) => {
-              console.log(item);
-              
-              return <StatisticItem key={index} value={"..."} label={item[0][0].product} />;
-            }
-          )}
-        </div>
-        <div className="table__container">
-          <table>
-            <caption>Thống kê chi tiết</caption>
-            <thead>
-              <tr>
-                <th scope="col">Ngày</th>
-                <th scope="col">Giao dịch</th>
-                <th scope="col">Sản phẩm</th>
-                <th scope="col">Kích cỡ</th>
-                <th scope="col">Ghi chú</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((e, i) => (
-                <tr key={i}>
-                  <td data-label="Ngày">{e.date}</td>
-                  <td data-label="Giao dịch">{e.process}</td>
-                  <td data-label="Sản phẩm">{e.product}</td>
-                  <td data-label="Kích cỡ">{e.size}</td>
-                  <td data-label="Ghi chú">{e.note}</td>
+        <IonGrid fixed>
+          <div className="stats__container">
+            {map(fields, (field) => map(field, (value) => value)).map(
+              (item, index) => {
+                console.log(item);
+
+                return (
+                  <StatisticItem
+                    key={index}
+                    value={"..."}
+                    label={item[0][0].product}
+                  />
+                );
+              }
+            )}
+          </div>
+          <div className="table__container">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Ngày</th>
+                  <th scope="col">Giao dịch</th>
+                  <th scope="col">Sản phẩm</th>
+                  <th scope="col">Kích cỡ</th>
+                  <th scope="col">Ghi chú</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </IonContent>{" "}
+              </thead>
+              <tbody>
+                {data.map((e, i) => (
+                  <tr key={i}>
+                    <td data-label="Ngày">{e.date}</td>
+                    <td data-label="Giao dịch">{e.process}</td>
+                    <td data-label="Sản phẩm">{e.product}</td>
+                    <td data-label="Kích cỡ">{e.size}</td>
+                    <td data-label="Ghi chú">{e.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </IonGrid>
+      </IonContent>
     </IonModal>
   );
 };
