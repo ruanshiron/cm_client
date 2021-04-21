@@ -17,6 +17,8 @@ export const useEventForm = (event = initialStage) => {
 
   const [fields, setFields] = useState<Stage>(event);
 
+  const [submitted, setSubmitted] = useState(false);
+
   const products = useSelector((state) => state.products);
   const processes = useSelector((state) => state.processes);
   const workshops = useSelector((state) => state.workshops);
@@ -31,8 +33,10 @@ export const useEventForm = (event = initialStage) => {
   };
 
   const submit = async () => {
+    if (submitted) return;
     if (isInvalidStage(fields)) return;
 
+    setSubmitted(true);
     try {
       await saveStage(fields);
       setShowEventForm(false);

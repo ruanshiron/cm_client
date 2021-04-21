@@ -109,8 +109,8 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
                   </IonCardHeader>
                   <IonCardContent>
                     <IonList lines="full">
-                      {data.map((e) => (
-                        <IonItem>
+                      {data.map((e, index) => (
+                        <IonItem key={index}>
                           <IonLabel slot="start">{e.name}</IonLabel>
                           <IonNote slot="end">
                             <p>{e.aggregate}</p>

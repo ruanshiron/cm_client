@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import _ from "lodash";
 import { formatISO } from "date-fns";
 
-const collection = "stages";
+const collection = "events";
 
 export const initialStage: Stage = {
   quantity: NaN,

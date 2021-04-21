@@ -10,24 +10,13 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { closeOutline } from "ionicons/icons";
-import { filter, forEach, groupBy, map } from "lodash";
 import React from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../store";
-import * as Process from "../../models/process";
-
-const StatisticItem: React.FC<{ value: string | number; label: string }> = ({
-  value,
-  label,
-}) => {
-  return (
-    <div className="stat">
-      <div className="stat__value">{value}</div>
-      <div className="stat__label">{label}</div>
-    </div>
-  );
-};
-
+import {
+  stagesByWorkshop,
+  statisticsForWorkshop,
+} from "../../store/data/workshopSlice";
 interface Props {
   onDismiss: ReturnType<any>;
   showModal: boolean;
@@ -39,33 +28,13 @@ export const WorkshopModal: React.FC<Props> = ({
 }) => {
   const { id } = useParams<{ id: string }>();
 
-  const { title, fields, data } = useSelector((state) => {
-    const events = state.stages.filter((v) => v.workshop === id);
+  const statistics = useSelector((state) => statisticsForWorkshop(state, id));
 
-    let _events = filter(state.stages, (v) => v.workshop === id);
-    let _groups: any = groupBy(_events, (v) => v.product);
-    let _r = forEach(_groups, (_, key) => {
-      _groups[key] = groupBy(_groups[key], function (item) {
-        return item.process;
-      });
-    });
+  const workshop = useSelector((state) =>
+    state.workshops.find((item) => item.id === id)
+  );
 
-    return {
-      title: state.workshops.find((v) => v.id === id)?.name,
-      data: events.map((e) => {
-        const [id, type] = e.process?.split("/") || ["", ""];
-        return {
-          ...e,
-          product: state.products.find((v) => v.id === e.product)?.name,
-          process:
-            Process.ProcessEnum[type] +
-            state.processes.find((i) => i.id === id)?.name,
-          note: e.note || "_",
-        };
-      }),
-      fields: _r,
-    };
-  });
+  const stages = useSelector((state) => stagesByWorkshop(state, id));
 
   return (
     <IonModal
@@ -81,45 +50,52 @@ export const WorkshopModal: React.FC<Props> = ({
               <IonIcon slot="icon-only" icon={closeOutline} />
             </IonButton>
           </IonButtons>
-          <IonTitle>{title} | thống kê</IonTitle>
+          <IonTitle>{workshop?.name}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <IonGrid fixed>
-          <div className="stats__container">
-            {map(fields, (field) => map(field, (value) => value)).map(
-              (item, index) => {
-                console.log(item);
-
-                return (
-                  <StatisticItem
-                    key={index}
-                    value={"..."}
-                    label={item[0][0].product}
-                  />
-                );
-              }
-            )}
+          <div className="table__container">
+            <table>
+              <caption>Thống kê</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Sản phẩm</th>
+                  <th scope="col">Công đoạn</th>
+                  <th scope="col">Tổng</th>
+                </tr>
+              </thead>
+              <tbody>
+                {statistics.map((item, index) => (
+                  <tr key={index}>
+                    <td data-label="Sản phẩm">{item.product}</td>
+                    <td data-label="Công đoạn">{item.process}</td>
+                    <td data-label="Tổng">{item.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
           <div className="table__container">
             <table>
+              <caption>Chi tiết</caption>
               <thead>
                 <tr>
                   <th scope="col">Ngày</th>
-                  <th scope="col">Giao dịch</th>
+                  <th scope="col">Công đoạn</th>
                   <th scope="col">Sản phẩm</th>
                   <th scope="col">Kích cỡ</th>
                   <th scope="col">Ghi chú</th>
                 </tr>
               </thead>
               <tbody>
-                {data.map((e, i) => (
+                {stages.map((stage, i) => (
                   <tr key={i}>
-                    <td data-label="Ngày">{e.date}</td>
-                    <td data-label="Giao dịch">{e.process}</td>
-                    <td data-label="Sản phẩm">{e.product}</td>
-                    <td data-label="Kích cỡ">{e.size}</td>
-                    <td data-label="Ghi chú">{e.note}</td>
+                    <td data-label="Ngày">{stage.date}</td>
+                    <td data-label="Công đoạn">{stage.process}</td>
+                    <td data-label="Sản phẩm">{stage.product}</td>
+                    <td data-label="Kích cỡ">{stage.size}</td>
+                    <td data-label="Ghi chú">{stage.note}</td>
                   </tr>
                 ))}
               </tbody>
