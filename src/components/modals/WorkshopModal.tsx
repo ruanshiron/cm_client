@@ -9,7 +9,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { closeOutline } from "ionicons/icons";
+import { closeOutline, downloadOutline } from "ionicons/icons";
 import React from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../store";
@@ -51,6 +51,11 @@ export const WorkshopModal: React.FC<Props> = ({
             </IonButton>
           </IonButtons>
           <IonTitle>{workshop?.name}</IonTitle>
+          <IonButtons slot="end">
+            <IonButton>
+              <IonIcon slot="icon-only" icon={downloadOutline} />
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -83,6 +88,7 @@ export const WorkshopModal: React.FC<Props> = ({
                 <tr>
                   <th scope="col">Ngày</th>
                   <th scope="col">Công đoạn</th>
+                  <th scope="col">Số lượng</th>
                   <th scope="col">Sản phẩm</th>
                   <th scope="col">Kích cỡ</th>
                   <th scope="col">Ghi chú</th>
@@ -93,6 +99,7 @@ export const WorkshopModal: React.FC<Props> = ({
                   <tr key={i}>
                     <td data-label="Ngày">{stage.date}</td>
                     <td data-label="Công đoạn">{stage.process}</td>
+                    <td data-label="Số lượng">{stage.quantity}</td>
                     <td data-label="Sản phẩm">{stage.product}</td>
                     <td data-label="Kích cỡ">{stage.size}</td>
                     <td data-label="Ghi chú">{stage.note}</td>

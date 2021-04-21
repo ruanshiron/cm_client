@@ -83,6 +83,7 @@ export const stagesByWorkshop = createSelector(
     return filteredStages.map((item) => {
       const [processId, processType] = item.process.split("/");
       return {
+        ...item,
         date: item.date,
         product: products.find((i) => i.id === item.product)?.name,
         process:

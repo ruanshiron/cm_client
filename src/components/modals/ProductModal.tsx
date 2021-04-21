@@ -18,7 +18,10 @@ import { closeOutline } from "ionicons/icons";
 import React from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../store";
-import { reportForProduct } from "../../store/data/productSlice";
+import {
+  stagesByProductAndProcess,
+  statisticsForProduct,
+} from "../../store/data/productSlice";
 
 const StatisticItem: React.FC<{ value: string | number; label: string }> = ({
   value,
@@ -43,8 +46,16 @@ export const ProductModal: React.FC<Props> = ({
 }) => {
   const { id } = useParams<{ id: string }>();
 
-  const { product, fields, data } = useSelector((state) =>
-    reportForProduct(state, id)
+  const product = useSelector((state) =>
+    state.products.find((item) => item.id === id)
+  );
+
+  const statistics = useSelector((state) =>
+    statisticsForProduct(state, id, "W93MR3awL2jvV0cnuG8T", "2021-01-01", "2021-05-30")
+  );
+
+  const stages = useSelector((state) =>
+    stagesByProductAndProcess(state, id, "W93MR3awL2jvV0cnuG8T", "2021-03-15", "2021-05-30")
   );
 
   const processes = useSelector((state) => state.processes);
@@ -103,11 +114,9 @@ export const ProductModal: React.FC<Props> = ({
             </IonItem>
           </div>
           <div className="stats__container">
-            {fields &&
-              fields?.length > 0 &&
-              fields?.map(({ name, value }, i) => {
-                return <StatisticItem key={i} label={name} value={value} />;
-              })}
+            {statistics.map(({ label, value }, i) => {
+              return <StatisticItem key={i} label={label} value={value} />;
+            })}
           </div>
           <div className="table__container">
             <table>
@@ -115,17 +124,19 @@ export const ProductModal: React.FC<Props> = ({
                 <tr>
                   <th scope="col">Ngày</th>
                   <th scope="col">Xưởng</th>
-                  <th scope="col">Giao dịch</th>
+                  <th scope="col">Công đoạn</th>
+                  <th scope="col">Số lượng</th>
                   <th scope="col">Kích cỡ</th>
                   <th scope="col">Ghi chú</th>
                 </tr>
               </thead>
               <tbody>
-                {data.map((e, i) => (
+                {stages.map((e, i) => (
                   <tr key={i}>
                     <td data-label="Ngày">{e.date}</td>
                     <td data-label="Xưởng">{e.workshop}</td>
-                    <td data-label="Giao dịch">{e.process}</td>
+                    <td data-label="Công đoạn">{e.process}</td>
+                    <td data-label="Số lượng">{e.quantity}</td>
                     <td data-label="Kích cỡ">{e.size}</td>
                     <td data-label="Ghi chú">{e.note}</td>
                   </tr>

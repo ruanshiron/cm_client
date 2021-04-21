@@ -1,5 +1,10 @@
-import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit";
-import { groupBy } from "lodash";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
+import { compareDesc } from "date-fns";
+import { forEach } from "lodash";
 import { ProcessEnum } from "../../models/process";
 import { getAllProducts, Product } from "../../models/product";
 import { RootState } from "../rootReducer";
@@ -48,38 +53,82 @@ const productSlice = createSlice({
 
 export default productSlice;
 
+export const statisticsForProduct = createSelector(
+  (state: RootState) => state.stages,
+  (state: RootState) => state.processes,
+  (_state: RootState, productId: string, processId: string) => ({
+    productId,
+    processId,
+  }),
+  (stages, processes, { productId, processId }) => {
+    const filteredStages = stages.filter(
+      (item) => item.product === productId && item.process.startsWith(processId)
+    );
 
-export const reportForProduct = createSelector(
-  (state: RootState) => state,
-  (_: any, id: string) => id,
-  (data, id) => {
-    const stages = data.stages.filter((v) => v.product === id);
-    const result = groupBy(stages, "process");
+    const tmp: any = {};
 
-    return {
-      product: data.products.find((x) => x.id === id),
-      data: stages
-        .sort((a, b) => a.date?.localeCompare(b.date || "") || 0)
-        .map((e) => {
-          const [id, type] = e.process?.split("/") || ["", ""];
-          return {
-            ...e,
-            workshop: data.workshops.find((v) => v.id === e.workshop)?.name,
-            process:
-              ProcessEnum[type] +
-              data.processes.find((i) => i.id === id)?.name,
-            note: e.note || "_",
-          };
-        }),
-      fields: Object.keys(result).map((key) => {
-        const [id, type] = key.split("/");
+    forEach(filteredStages, (value) => {
+      if (value.process in tmp) {
+        tmp[value.process] += value.quantity;
+      } else {
+        tmp[value.process] = value.quantity;
+      }
+    });
+
+    const statistics: { label: string; value: number }[] = Object.keys(tmp).map(
+      (key) => {
+        const [processId, processType] = key.split("/");
         return {
-          name:
-            ProcessEnum[type] +
-            data.processes.find((i) => i.id === id)?.name,
-          value: result[key].reduce((a, b) => a + (b ? b?.quantity! : 0), 0),
+          label:
+            ProcessEnum[processType] +
+            processes.find((i) => i.id === processId)?.name,
+          value: tmp[key],
         };
-      }),
-    };
+      }
+    );
+
+    return statistics;
+  }
+);
+
+export const stagesByProductAndProcess = createSelector(
+  (state: RootState) => state.stages,
+  (state: RootState) => state.processes,
+  (state: RootState) => state.workshops,
+  (
+    _state: RootState,
+    productId: string,
+    processId: string,
+    from: string,
+    to: string
+  ) => ({
+    productId,
+    processId,
+    from,
+    to,
+  }),
+  (stages, processes, workshops, { productId, processId, from, to }) => {
+    const filteredStages = stages
+      .filter(
+        (item) =>
+          item.product === productId &&
+          item.process.startsWith(processId) &&
+          compareDesc(new Date(from), new Date(item.date)) >= 0 &&
+          compareDesc(new Date(to), new Date(item.date)) <= 0
+      )
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .map((item) => {
+        const [processId, processType] = item.process.split("/");
+        return {
+          ...item,
+          process:
+            ProcessEnum[processType] +
+            processes.find((i) => i.id === processId)?.name,
+          workshop: workshops.find((i) => i.id === item.workshop)?.name,
+          note: item.note || "_",
+        };
+      });
+
+    return filteredStages;
   }
 );
