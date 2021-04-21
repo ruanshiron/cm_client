@@ -15,7 +15,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { closeOutline } from "ionicons/icons";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../store";
 import {
@@ -46,16 +46,32 @@ export const ProductModal: React.FC<Props> = ({
 }) => {
   const { id } = useParams<{ id: string }>();
 
+  const [selectedProcess, setSelectedProcess] = useState<string>();
+  const [selectedFrom, setSelectedFrom] = useState<string>();
+  const [selectedTo, setSelectedTo] = useState<string>();
+
   const product = useSelector((state) =>
     state.products.find((item) => item.id === id)
   );
 
   const statistics = useSelector((state) =>
-    statisticsForProduct(state, id, "W93MR3awL2jvV0cnuG8T", "2021-01-01", "2021-05-30")
+    statisticsForProduct(
+      state,
+      id,
+      selectedProcess,
+      selectedFrom,
+      selectedTo
+    )
   );
 
   const stages = useSelector((state) =>
-    stagesByProductAndProcess(state, id, "W93MR3awL2jvV0cnuG8T", "2021-03-15", "2021-05-30")
+    stagesByProductAndProcess(
+      state,
+      id,
+      selectedProcess,
+      selectedFrom,
+      selectedTo
+    )
   );
 
   const processes = useSelector((state) => state.processes);
@@ -86,7 +102,8 @@ export const ProductModal: React.FC<Props> = ({
                 displayFormat="YYYY-MM-DD"
                 doneText="OK!"
                 cancelText="Hủy"
-                value={product?.report_cache?.from}
+                value={selectedFrom}
+                onIonChange={(e) => setSelectedFrom(e.detail.value!)}
               ></IonDatetime>
             </IonItem>
             <IonItem>
@@ -95,7 +112,8 @@ export const ProductModal: React.FC<Props> = ({
                 displayFormat="YYYY-MM-DD"
                 doneText="OK!"
                 cancelText="Hủy"
-                value={product?.report_cache?.to}
+                value={selectedTo}
+                onIonChange={(e) => setSelectedTo(e.detail.value!)}
               ></IonDatetime>
             </IonItem>
             <IonItem>
@@ -105,10 +123,11 @@ export const ProductModal: React.FC<Props> = ({
                 cancelText="Hủy"
                 interface="action-sheet"
                 placeholder="Quy trình"
-                value={product?.report_cache?.for}
+                value={selectedProcess}
+                onIonChange={(e) => setSelectedProcess(e.detail.value)}
               >
                 {processes.map((item, index) => (
-                  <IonSelectOption key={index}>{item.name}</IonSelectOption>
+                  <IonSelectOption key={index} value={item.id}>{item.name}</IonSelectOption>
                 ))}
               </IonSelect>
             </IonItem>

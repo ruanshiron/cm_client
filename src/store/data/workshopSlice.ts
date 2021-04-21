@@ -4,8 +4,8 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 import { filter, forEach } from "lodash";
-import { ProcessEnum } from "../../models/process";
 import { getAllWorkshops, Workshop } from "../../models/workshop";
+import { processParser } from "../../utils/data";
 import { RootState } from "../rootReducer";
 
 let initialState: Workshop[] = [];
@@ -59,9 +59,7 @@ export const statisticsForWorkshop = createSelector(
         const keys = key.split("/");
         return {
           product: state.products.find((item) => item.id === keys[0])?.name,
-          process:
-            ProcessEnum[keys[2]] +
-            state.processes.find((i) => i.id === keys[1])?.name,
+          process: processParser(keys[1] + "/" + keys[2], state.processes),
           value: result[key],
         };
       });
@@ -81,14 +79,11 @@ export const stagesByWorkshop = createSelector(
       .sort((a, b) => a.date.localeCompare(b.date));
 
     return filteredStages.map((item) => {
-      const [processId, processType] = item.process.split("/");
       return {
         ...item,
         date: item.date,
         product: products.find((i) => i.id === item.product)?.name,
-        process:
-          ProcessEnum[processType] +
-          processes.find((i) => i.id === processId)?.name,
+        process: processParser(item.process, processes),
         size: item.size,
         note: item.note || "_",
       };

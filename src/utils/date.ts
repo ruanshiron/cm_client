@@ -1,4 +1,4 @@
-import { formatISO } from "date-fns";
+import { compareDesc, formatISO } from "date-fns";
 
 export function formatDate(raw: Date | string | number) {
   const date = new Date(raw);
@@ -47,4 +47,20 @@ export const getDates = (
   }
   dates = [...dates, formatISO(theDate, { representation: "date" })];
   return dates;
+};
+
+export const isBetween = (date: string, from?: string, to?: string) => {
+  if (!from && !to) return true;
+
+  if (from && !to)
+    return compareDesc(new Date(from.substring(0, 10)), new Date(date)) >= 0;
+
+  if (!from && to)
+    return compareDesc(new Date(to.substring(0, 10)), new Date(date)) <= 0;
+
+  if (from && to)
+    return (
+      compareDesc(new Date(from.substring(0, 10)), new Date(date)) >= 0 &&
+      compareDesc(new Date(to.substring(0, 10)), new Date(date)) <= 0
+    );
 };

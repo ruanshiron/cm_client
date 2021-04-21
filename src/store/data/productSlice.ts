@@ -3,10 +3,10 @@ import {
   createSelector,
   createSlice,
 } from "@reduxjs/toolkit";
-import { compareDesc } from "date-fns";
 import { forEach } from "lodash";
-import { ProcessEnum } from "../../models/process";
 import { getAllProducts, Product } from "../../models/product";
+import { processParser } from "../../utils/data";
+import { isBetween } from "../../utils/date";
 import { RootState } from "../rootReducer";
 
 let initialState: Product[] = [];
@@ -77,11 +77,8 @@ export const statisticsForProduct = createSelector(
 
     const statistics: { label: string; value: number }[] = Object.keys(tmp).map(
       (key) => {
-        const [processId, processType] = key.split("/");
         return {
-          label:
-            ProcessEnum[processType] +
-            processes.find((i) => i.id === processId)?.name,
+          label: processParser(key, processes),
           value: tmp[key],
         };
       }
@@ -113,17 +110,13 @@ export const stagesByProductAndProcess = createSelector(
         (item) =>
           item.product === productId &&
           item.process.startsWith(processId) &&
-          compareDesc(new Date(from), new Date(item.date)) >= 0 &&
-          compareDesc(new Date(to), new Date(item.date)) <= 0
+          isBetween(item.date, from, to)
       )
       .sort((a, b) => a.date.localeCompare(b.date))
       .map((item) => {
-        const [processId, processType] = item.process.split("/");
         return {
           ...item,
-          process:
-            ProcessEnum[processType] +
-            processes.find((i) => i.id === processId)?.name,
+          process: processParser(item.process, processes),
           workshop: workshops.find((i) => i.id === item.workshop)?.name,
           note: item.note || "_",
         };

@@ -20,6 +20,9 @@ export const useProcessForm = (process = initialProcess) => {
   const submit = async () => {
     if (isInvalidProcess(fields)) return;
 
+    console.log(fields);
+    
+
     try {
       await saveProcess(fields);
       setFields(process);
