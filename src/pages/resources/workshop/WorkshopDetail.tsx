@@ -39,6 +39,7 @@ import { saveWorkshop } from "../../../models/workshop";
 import { useDispatch } from "react-redux";
 import { fetchAllWorkshops } from "../../../store/data/workshopSlice";
 import { toast } from "../../../utils/toast";
+import QRCode from "qrcode.react";
 
 interface WorkshopDetailProps {}
 
@@ -138,11 +139,23 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                           </IonButton>
                         </IonButtons>
                       </IonItem>
+                      {workshop?.code && (
+                        <IonItem>
+                          <QRCode
+                            style={{ margin: "auto" }}
+                            id="qrcode"
+                            value={workshop?.code}
+                            size={290}
+                            level={"H"}
+                            includeMargin={true}
+                          />
+                        </IonItem>
+                      )}
                     </IonList>
                   </IonCardContent>
                 </IonCard>
 
-                <IonCard  className="list-card">
+                <IonCard className="list-card">
                   <IonCardContent>
                     <IonList lines="full">
                       {events.map((e, i) => (
