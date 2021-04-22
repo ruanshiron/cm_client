@@ -40,6 +40,7 @@ export const useEventForm = (event = initialStage) => {
     try {
       await saveStage(fields);
       setShowEventForm(false);
+      setSubmitted(false);
       toast("Lưu thành công.");
       // TODO: Do not fetch again
       dispatch(fetchAllStages());

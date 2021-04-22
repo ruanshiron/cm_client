@@ -101,8 +101,16 @@
   }
 
   ion-item {
-    ion-label {
-      border-left: 2px solid var(--ion-color-medium);
+    ion-label.success {
+      border-left: 2px solid var(--ion-color-success);
+      padding-left: 10px;
+    }
+    ion-label.warning {
+      border-left: 2px solid var(--ion-color-warning);
+      padding-left: 10px;
+    }
+    ion-label.danger {
+      border-left: 2px solid var(--ion-color-danger);
       padding-left: 10px;
     }
   }

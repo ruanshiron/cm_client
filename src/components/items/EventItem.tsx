@@ -23,6 +23,13 @@ const EventItem: React.FC<EventItemProps> = ({ data }) => {
     state.workshops.find((v) => v.id === data.workshop)
   );
 
+  const noteColor = (process?: string) => {
+    if (!process) return "primary";
+    if (process.endsWith("fulfilled")) return "success";
+    if (process.endsWith("pending")) return "warning";
+    if (process.endsWith("rejected")) return "danger";
+  };
+
   return (
     <>
       <IonItem
@@ -31,7 +38,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }) => {
         detail={false}
       >
         <>
-          <IonLabel>
+          <IonLabel className={noteColor(data.process)}>
             <h2>
               {workshop?.name}・
               <b>
@@ -43,7 +50,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }) => {
               {product?.name} / {data.size}
             </p>
           </IonLabel>
-          <IonNote slot="end" color="success">
+          <IonNote slot="end" color={noteColor(data.process)}>
             <h4>{data.quantity}</h4>
           </IonNote>
         </>

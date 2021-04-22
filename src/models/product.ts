@@ -1,6 +1,7 @@
 import { database } from "../config/firebase";
 import firebase from "firebase/app";
 import _ from "lodash";
+import { formatISO } from "date-fns";
 
 const collection = "products";
 
@@ -10,13 +11,17 @@ export const initialProduct: Product = {
   sizes: [],
   note: "",
   processes: [],
+  report_cache: {
+    from: formatISO(new Date(), { representation: "date" }),
+    to: null,
+  },
 };
 
 interface ReportCache {
-  from: any;
-  to: any;
-  for: any;
-  fields: { name: string; value: number }[];
+  from?: any;
+  to?: any;
+  for?: any;
+  fields?: { name: string; value: number }[];
 }
 export interface Product {
   id?: string;
@@ -25,7 +30,7 @@ export interface Product {
   sizes: string[];
   note: string;
   processes: string[];
-  report_cache?: ReportCache;
+  report_cache: ReportCache;
   updated?: any;
   createdAt?: any;
 }
@@ -39,6 +44,7 @@ export const getAllProducts = () => {
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate().toString(),
+        report_cache: {},
       }));
     });
 };
