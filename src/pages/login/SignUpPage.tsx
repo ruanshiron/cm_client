@@ -96,7 +96,7 @@ const SignUpPage = () => {
               style={{ margin: 10 }}
               fill="default"
               expand="block"
-              href="/login"
+              routerLink="/login"
             >
               Đăng nhập
             </IonButton>

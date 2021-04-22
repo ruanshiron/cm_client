@@ -60,6 +60,7 @@ import { fetchAllWorkshops } from "./store/data/workshopSlice";
 import { fetchAllOrders } from "./store/data/orderSlice";
 import { fetchAllCustomers } from "./store/data/customerSlice";
 import { fetchAllProcesses } from "./store/data/processSlice";
+import QrPage from "./pages/login/QrPage";
 
 interface AppRoute {
   url: string;
@@ -214,6 +215,7 @@ const App: React.FC = () => {
                 <Route path="/" render={() => <Redirect to="/login" />} exact />
                 <Route path="/login" component={LoginPage} exact />
                 <Route path="/signup" component={SignUpPage} exact />
+                <Route path="/qr" component={QrPage} exact />
                 <Redirect from="*" to="/" />
               </Switch>
             </IonRouterOutlet>

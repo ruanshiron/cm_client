@@ -71,11 +71,19 @@ const LoginPage = () => {
             </IonButton>
             <IonButton
               style={{ margin: 10 }}
-              fill="default"
+              fill="outline"
               expand="block"
-              href="/signup"
+              routerLink="/signup"
             >
               Đăng ký
+            </IonButton>
+            <IonButton
+              style={{ margin: 10 }}
+              fill="outline"
+              expand="block"
+              routerLink="/qr"
+            >
+              Quét mã
             </IonButton>
           </div>
         </IonGrid>

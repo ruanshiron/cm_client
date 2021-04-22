@@ -10,6 +10,7 @@ export interface Workshop {
   id?: string;
   name: string;
   phonenumber: string;
+  code?: string;
   createdAt?: any;
 }
 
