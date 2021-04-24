@@ -13,6 +13,7 @@ import {
 } from "@ionic/react";
 import { arrowBack, qrCodeOutline } from "ionicons/icons";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
+import { findWorkshopByCode } from "../../models/workshop";
 
 const QrPage = () => {
   const [qrValue, setQrValue] = useState<string>();
@@ -23,6 +24,13 @@ const QrPage = () => {
   };
 
   const isMobile = isPlatform("mobile");
+
+  const handleSubmit = async () => {
+    if (qrValue) {
+      const workshop = await findWorkshopByCode(qrValue);
+      console.log(workshop);
+    }
+  };
 
   return (
     <IonPage>
@@ -51,7 +59,12 @@ const QrPage = () => {
                 ></IonInput>
               </IonItem>
             </IonCard>
-            <IonButton style={{ margin: 10 }} fill="solid" expand="block">
+            <IonButton
+              style={{ margin: 10 }}
+              fill="solid"
+              expand="block"
+              onClick={handleSubmit}
+            >
               Đi đến
             </IonButton>
             {isMobile && (

@@ -8,7 +8,7 @@ import {
   setupConfig,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -211,13 +211,10 @@ const App: React.FC = () => {
             </IonSplitPane>
           ) : (
             <IonRouterOutlet>
-              <Switch>
-                <Route path="/" render={() => <Redirect to="/login" />} exact />
-                <Route path="/login" component={LoginPage} exact />
-                <Route path="/signup" component={SignUpPage} exact />
-                <Route path="/qr" component={QrPage} exact />
-                <Redirect from="*" to="/" />
-              </Switch>
+              <Route path="/" render={() => <Redirect to="/login" />} exact />
+              <Route path="/login" component={LoginPage} exact />
+              <Route path="/signup" component={SignUpPage} exact />
+              <Route path="/qr" component={QrPage} exact />
             </IonRouterOutlet>
           ))}
       </IonReactRouter>

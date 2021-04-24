@@ -43,3 +43,21 @@ export const destroyWorkshop = (id: string) => {
 
 export const isInvalidWorkshop = (fields: Workshop) =>
   !fields?.name?.trim() || !fields?.phonenumber?.trim();
+
+export const findWorkshopByCode = async (code: string) => {
+  try {
+    const snaps = await database
+      .collectionGroup(collection)
+      .where("code", "==", code)
+      .limit(1)
+      .get();
+
+    if (snaps.empty) {
+      return undefined;
+    } else {
+      return { ...snaps.docs[0].data(), id: snaps.docs[0].id };
+    }
+  } catch (error) {
+    return undefined;
+  }
+};
