@@ -1,7 +1,7 @@
 import React from "react";
 import { IonFab, IonFabButton, IonIcon } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { EventModal } from "../modals/EventModal";
+import { StageModal } from "../modals/StageModal";
 import { useEventForm } from "../../hooks/useEventForm";
 
 interface EventFabProps {}
@@ -17,7 +17,7 @@ const EventFab: React.FC<EventFabProps> = () => {
         </IonFabButton>
       </IonFab>
 
-      <EventModal form={form} />
+      <StageModal form={form} />
     </>
 );
 };

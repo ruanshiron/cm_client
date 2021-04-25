@@ -24,5 +24,5 @@ export const processParser = (process: string, processes: Process[]) => {
     else return ProcessEnum[processStatus] + tmp.name;
   }
 
-  return "unknown";
+  return undefined;
 };

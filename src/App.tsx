@@ -31,6 +31,7 @@ import "./theme/variables.css";
 
 /* SCSS */
 import "./theme/style.scss";
+import 'react-calendar/dist/Calendar.css';
 
 import MainTabs from "./pages/tabs/MainTabs";
 

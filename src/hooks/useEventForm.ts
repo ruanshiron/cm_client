@@ -9,6 +9,7 @@ import {
   saveStage,
 } from "../models/stage";
 import { fetchAllStages } from "../store/data/stageSlice";
+import { processParser } from "../utils/data";
 
 export const useEventForm = (event = initialStage) => {
   const dispatch = useDispatch();
@@ -49,6 +50,22 @@ export const useEventForm = (event = initialStage) => {
     }
   };
 
+  const detail = () => {
+    return (
+      fields.date +
+        " " +
+        (workshops.find((i) => i.id === fields.workshop)?.name || "") +
+        " " +
+        (processParser(fields.process, processes) || "") +
+        " " +
+        (products.find((i) => i.id === fields.product)?.name || "") +
+        " " +
+        (fields.size ? "/" + fields.size : "") +
+        " " +
+        (fields.quantity || "") || ""
+    );
+  };
+
   return {
     setFieldsValue,
     showEventForm,
@@ -58,5 +75,6 @@ export const useEventForm = (event = initialStage) => {
     submit,
     processes,
     workshops,
+    detail,
   };
 };

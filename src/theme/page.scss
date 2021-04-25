@@ -69,12 +69,6 @@ ion-router-outlet {
   }
 }
 
-ion-list {
-  ion-item:last-child {
-    --inner-border-width: 0;
-  }
-}
-
 .flat-list {
   padding: 0;
   border-radius: 12px !important;
@@ -158,4 +152,8 @@ ion-list {
     --inner-border-width: 0;
     --border-width: 0 0 0 0;
   }
+}
+
+ion-slides {
+  height: 100%;
 }
