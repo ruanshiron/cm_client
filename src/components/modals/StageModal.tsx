@@ -15,12 +15,10 @@ import {
   IonItem,
   IonLabel,
   IonInput,
-  IonText,
   IonListHeader,
 } from "@ionic/react";
 import {
   arrowBack,
-  arrowForward,
   checkmark,
   closeOutline,
 } from "ionicons/icons";
@@ -28,10 +26,8 @@ import { useEventForm } from "../../hooks/useEventForm";
 import Calendar from "react-calendar";
 import { formatISO } from "date-fns";
 import { isArray } from "lodash";
-import { initialStage, Stage } from "../../models/stage";
 import { Process } from "../../models/process";
 import { processParser } from "../../utils/data";
-import { State } from "ionicons/dist/types/stencil-public-runtime";
 
 const DateSelecter: React.FC<{ onChange: ReturnType<any>; value: Date }> = ({
   onChange,
