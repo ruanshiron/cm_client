@@ -11,8 +11,11 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonItemDivider,
+  IonItemGroup,
   IonLabel,
   IonList,
+  IonListHeader,
   IonNote,
   IonPage,
   IonRow,
@@ -29,7 +32,6 @@ import {
   qrCodeOutline,
   refresh,
 } from "ionicons/icons";
-import { chain, sum } from "lodash";
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import { WorkshopModal } from "../../../components/modals/WorkshopModal";
@@ -37,7 +39,11 @@ import { useSelector } from "../../../store";
 import { v4 as uuidv4 } from "uuid";
 import { saveWorkshop } from "../../../models/workshop";
 import { useDispatch } from "react-redux";
-import { fetchAllWorkshops } from "../../../store/data/workshopSlice";
+import {
+  fetchAllWorkshops,
+  statisticsForWorkshop,
+  statisticsForWorkshopAndGroupByProduct,
+} from "../../../store/data/workshopSlice";
 import { toast } from "../../../utils/toast";
 import QRCode from "qrcode.react";
 
@@ -49,16 +55,10 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   const workshop = useSelector((state) =>
     state.workshops.find((v) => v.id === id)
   );
-  const events = useSelector((state) => {
-    const e = state.stages.filter((v) => v.workshop === id);
-    return chain(e)
-      .groupBy("product")
-      .map((value, key) => ({
-        name: state.products.find((v) => v.id === key)?.name,
-        aggregate: sum(value.map((v) => v.quantity)),
-      }))
-      .value();
-  });
+
+  const statistics = useSelector((state) =>
+    statisticsForWorkshopAndGroupByProduct(statisticsForWorkshop(state, id))
+  );
 
   const dispatch = useDispatch();
 
@@ -109,7 +109,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
               <IonCol size="12" size-md="8" offsetMd="2">
                 <IonCard className="list-card">
                   <IonCardContent>
-                    <IonList lines="full">
+                    <IonList lines="full" style={{ border: "none" }}>
                       <IonItem>
                         <IonIcon icon={personOutline} slot="start"></IonIcon>
                         <IonLabel>{workshop?.name}</IonLabel>
@@ -157,14 +157,24 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
 
                 <IonCard className="list-card">
                   <IonCardContent>
-                    <IonList lines="full">
-                      {events.map((e, i) => (
-                        <IonItem key={i}>
-                          <IonLabel slot="start">{e.name}</IonLabel>
-                          <IonNote slot="end">
-                            <p>{e.aggregate}</p>
-                          </IonNote>
-                        </IonItem>
+                    <IonList lines="none" style={{ border: "none" }}>
+                      <IonListHeader>
+                        <IonLabel>Thống kê nhanh</IonLabel>
+                      </IonListHeader>
+                      {statistics.map((item, index) => (
+                        <IonItemGroup key={index}>
+                          <IonItemDivider style={{ border: "none" }}>
+                            <IonLabel>{item.product}</IonLabel>
+                          </IonItemDivider>
+                          {item.statistics.map((childItem, childIndex) => (
+                            <IonItem key={childIndex}>
+                              <IonLabel>{childItem.process}</IonLabel>
+                              <IonNote slot="end">
+                                <p>{childItem.value}</p>
+                              </IonNote>
+                            </IonItem>
+                          ))}
+                        </IonItemGroup>
                       ))}
                     </IonList>
                   </IonCardContent>

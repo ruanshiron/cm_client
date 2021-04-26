@@ -1,6 +1,7 @@
 import {
   IonAvatar,
   IonBackButton,
+  IonBadge,
   IonButton,
   IonButtons,
   IonCard,
@@ -130,16 +131,46 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                         <IonItem key={i}>{size}</IonItem>
                       ))}
                       <IonItemDivider>Quy trình sản xuất</IonItemDivider>
-                      {product?.processes?.map((process, i) => (
-                        <IonItem key={i}>
-                          {processes.find((p) => process === p.id)?.name}
-                        </IonItem>
-                      ))}
+                      {product?.processes?.map((process, i) => {
+                        const item = processes.find((p) => process === p.id);
+                        return (
+                          <IonItem key={i}>
+                            {item?.name}
+                            <IonNote slot="end">
+                              {item?.pending && (
+                                <IonBadge
+                                  color="warning"
+                                  style={{ marginRight: 4 }}
+                                >
+                                  {item.pending}
+                                </IonBadge>
+                              )}
+                              {item?.fulfilled && (
+                                <IonBadge
+                                  color="success"
+                                  style={{ marginRight: 4 }}
+                                >
+                                  {item.fulfilled}
+                                </IonBadge>
+                              )}
+                              {item?.rejected && (
+                                <IonBadge
+                                  color="danger"
+                                  style={{ marginRight: 4 }}
+                                >
+                                  {item.rejected}
+                                </IonBadge>
+                              )}
+                            </IonNote>
+                          </IonItem>
+                        );
+                      })}
                     </IonList>
                   </IonCardContent>
                 </IonCard>
               </IonCol>
             </IonRow>
+            <div style={{ padding: 100 }}></div>
           </IonGrid>
         </IonContent>
       </IonPage>

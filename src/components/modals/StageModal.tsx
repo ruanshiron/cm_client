@@ -16,12 +16,9 @@ import {
   IonLabel,
   IonInput,
   IonListHeader,
+  IonBadge,
 } from "@ionic/react";
-import {
-  arrowBack,
-  checkmark,
-  closeOutline,
-} from "ionicons/icons";
+import { arrowBack, checkmark, closeOutline } from "ionicons/icons";
 import { useEventForm } from "../../hooks/useEventForm";
 import Calendar from "react-calendar";
 import { formatISO } from "date-fns";
@@ -188,7 +185,7 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
   const handleChangeQuantity = (quantity: number) => {
     form.setFieldsValue({ quantity });
     if (quantity) setState("finished");
-    else setState("started")
+    else setState("started");
   };
   const handleSlideBack = async () => {
     slider.current?.slidePrev();
@@ -216,7 +213,14 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent color="light">
-        <IonListHeader>{form.detail()}</IonListHeader>
+        <IonListHeader>
+          {form
+            .detail()
+            .filter((i) => i)
+            .map((item, index) => (
+              <IonBadge style={{marginRight: 4}} key={index}>{item}</IonBadge>
+            ))}
+        </IonListHeader>
         <IonSlides ref={slider} options={{ allowTouchMove: false }}>
           <IonSlide>
             <DateSelecter
@@ -274,7 +278,14 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
           )}
           {state === "finished" && (
             <IonButtons slot="end">
-              <IonButton color="primary" style={{marginRight: 12}} onClick={form.submit}> <IonIcon icon={checkmark} slot="start"></IonIcon> Hoàn thành</IonButton>
+              <IonButton
+                color="primary"
+                style={{ marginRight: 12 }}
+                onClick={form.submit}
+              >
+                {" "}
+                <IonIcon icon={checkmark} slot="start"></IonIcon> Hoàn thành
+              </IonButton>
             </IonButtons>
           )}
         </IonToolbar>

@@ -3,7 +3,7 @@ import {
   createSelector,
   createSlice,
 } from "@reduxjs/toolkit";
-import { filter, forEach } from "lodash";
+import { chain, filter, forEach } from "lodash";
 import { getAllWorkshops, Workshop } from "../../models/workshop";
 import { processParser } from "../../utils/data";
 import { RootState } from "../rootReducer";
@@ -66,6 +66,15 @@ export const statisticsForWorkshop = createSelector(
 
     return r;
   }
+);
+
+export const statisticsForWorkshopAndGroupByProduct = createSelector(
+  (state: any[]) => state,
+  (state) =>
+    chain(state)
+      .groupBy("product")
+      .map((value, key) => ({ product: key, statistics: value }))
+      .value()
 );
 
 export const stagesByWorkshop = createSelector(

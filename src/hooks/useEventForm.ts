@@ -51,19 +51,14 @@ export const useEventForm = (event = initialStage) => {
   };
 
   const detail = () => {
-    return (
-      fields.date +
-        " " +
-        (workshops.find((i) => i.id === fields.workshop)?.name || "") +
-        " " +
-        (processParser(fields.process, processes) || "") +
-        " " +
-        (products.find((i) => i.id === fields.product)?.name || "") +
-        " " +
-        (fields.size ? "/" + fields.size : "") +
-        " " +
-        (fields.quantity || "") || ""
-    );
+    return [
+      fields.date,
+      workshops.find((i) => i.id === fields.workshop)?.name || "",
+      processParser(fields.process, processes) || "",
+      products.find((i) => i.id === fields.product)?.name || "",
+      fields.size || "",
+      fields.quantity || "",
+    ];
   };
 
   return {
