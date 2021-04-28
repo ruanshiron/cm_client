@@ -24,16 +24,20 @@ const SignUpPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const submit = async () => {
-    if (email.trim() === "" || password.trim() === "" || confirmPassword.trim() === "") {
+    if (
+      email.trim() === "" ||
+      password.trim() === "" ||
+      confirmPassword.trim() === ""
+    ) {
       return toast("Hãy nhập email và mật khẩu");
     }
 
     if (!validateEmail(email)) {
-      return toast("Hãy nhập đúng email")
+      return toast("Hãy nhập đúng email");
     }
 
     if (password !== confirmPassword) {
-      return toast("Nhập lại mật khẩu")
+      return toast("Nhập lại mật khẩu");
     }
 
     const res = await createUserWithEmail(email, password);
@@ -64,6 +68,8 @@ const SignUpPage = () => {
                   value={email}
                   onIonChange={(e) => setEmail(e.detail.value!)}
                   type="email"
+                  name="email"
+                  placeholder="Email đang sử dụng"
                 ></IonInput>
               </IonItem>
               <IonItem>
@@ -72,6 +78,8 @@ const SignUpPage = () => {
                   value={password}
                   onIonChange={(e) => setPassword(e.detail.value!)}
                   type="password"
+                  name="password"
+                  placeholder="Mật khẩu"
                 ></IonInput>
               </IonItem>
               <IonItem>
@@ -80,6 +88,8 @@ const SignUpPage = () => {
                   value={confirmPassword}
                   onIonChange={(e) => setConfirmPassword(e.detail.value!)}
                   type="password"
+                  name="password"
+                  placeholder="Nhập lại mật khẩu"
                 ></IonInput>
               </IonItem>
             </IonCard>

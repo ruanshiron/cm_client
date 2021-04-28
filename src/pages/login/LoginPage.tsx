@@ -50,6 +50,8 @@ const LoginPage = () => {
                   value={email}
                   onIonChange={(e) => setEmail(e.detail.value!)}
                   type="email"
+                  name="email"
+                  placeholder="Email đã đăng ký"
                 ></IonInput>
               </IonItem>
               <IonItem>
@@ -58,6 +60,8 @@ const LoginPage = () => {
                   value={password}
                   onIonChange={(e) => setPassword(e.detail.value!)}
                   type="password"
+                  name="password"
+                  placeholder="Mật khẩu"
                 ></IonInput>
               </IonItem>
             </IonCard>
