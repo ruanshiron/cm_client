@@ -32,21 +32,22 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchUser.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(fetchUser.fulfilled, (state, action: any) => {
-      state.loading = false;
-      state.isLoggedIn = action.payload ? true : false;
-      state.displayName = action.payload?.displayName || "";
-      state.email = action.payload?.email || "";
-      // console.log(action.payload);
-    });
-    builder.addCase(fetchUser.rejected, (state, action) => {
-      state.loading = false;
-      state.isLoggedIn = false;
-      // console.log(action.payload);
-    });
+    builder
+      .addCase(fetchUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchUser.fulfilled, (state, action: any) => {
+        state.loading = false;
+        state.isLoggedIn = action.payload ? true : false;
+        state.displayName = action.payload?.displayName || "";
+        state.email = action.payload?.email || "";
+        // console.log(action.payload);
+      })
+      .addCase(fetchUser.rejected, (state, action) => {
+        state.loading = false;
+        state.isLoggedIn = false;
+        // console.log(action.payload);
+      });
   },
 });
 
