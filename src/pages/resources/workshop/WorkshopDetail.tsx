@@ -21,12 +21,12 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
+  useIonRouter,
 } from "@ionic/react";
 import {
   analyticsOutline,
-  callOutline,
-  callSharp,
   copyOutline,
+  pencilOutline,
   personOutline,
   phonePortraitOutline,
   qrCodeOutline,
@@ -51,6 +51,7 @@ interface WorkshopDetailProps {}
 
 export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   const [showReportModal, setShowReportModal] = useState(false);
+  const router = useIonRouter();
   const { id } = useParams<{ id: string }>();
   const workshop = useSelector((state) =>
     state.workshops.find((v) => v.id === id)
@@ -91,12 +92,8 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
               </IonButtons>
               <IonTitle>Xưởng</IonTitle>
               <IonButtons slot="end">
-                <IonButton>
-                  <IonIcon
-                    slot="icon-only"
-                    ios={callOutline}
-                    md={callSharp}
-                  ></IonIcon>
+                <IonButton routerLink={router.routeInfo.pathname + "/update"}>
+                  <IonIcon slot="icon-only" icon={pencilOutline}></IonIcon>
                 </IonButton>
                 <IonButton onClick={() => setShowReportModal(true)}>
                   <IonIcon slot="icon-only" icon={analyticsOutline}></IonIcon>

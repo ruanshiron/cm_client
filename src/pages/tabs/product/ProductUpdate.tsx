@@ -41,7 +41,7 @@ export const ProductUpdate: React.FC<ProductUpdateProps> = () => {
 
   return (
     <>
-      <IonPage class="list-page">
+      <IonPage className="list-page">
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">

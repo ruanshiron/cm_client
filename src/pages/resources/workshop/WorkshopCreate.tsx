@@ -2,16 +2,17 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
-  IonInput,
-  IonItem,
-  IonLabel,
   IonPage,
+  IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import React from "react";
+import WorkshopForm from "../../../components/forms/WorkshopForm";
 import { useWorkshopForm } from "../../../hooks/useWorkshopForm";
 
 interface WorkshopCreateProps {}
@@ -19,7 +20,7 @@ interface WorkshopCreateProps {}
 const WorkshopCreate: React.FC<WorkshopCreateProps> = () => {
   const form = useWorkshopForm();
   return (
-    <IonPage>
+    <IonPage className="list-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -33,22 +34,14 @@ const WorkshopCreate: React.FC<WorkshopCreateProps> = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent color="light">
-        <div className="ion-padding-top ion-padding-start"></div>
-        <IonItem>
-          <IonLabel position="floating">Tên xưởng</IonLabel>
-          <IonInput
-            onIonChange={(e) => form.setFieldsValue({ name: e.detail.value! })}
-          ></IonInput>
-        </IonItem>
-        <IonItem>
-          <IonLabel position="floating">Số điện thoại</IonLabel>
-          <IonInput
-            onIonChange={(e) =>
-              form.setFieldsValue({ phonenumber: e.detail.value! })
-            }
-          ></IonInput>
-        </IonItem>
+      <IonContent>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12" size-md="8" offsetMd="2">
+              <WorkshopForm form={form} />
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );

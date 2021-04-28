@@ -4,12 +4,25 @@ import _ from "lodash";
 
 const collection = "workshops";
 
-export const initialWorkshop: Workshop = { name: "", phonenumber: "" };
+export const initialWorkshop: Workshop = {
+  name: "",
+  phonenumber: "",
+  amounts: [],
+};
+
+export interface Amount {
+  productId: string;
+  productName: string;
+  amount: number;
+  fromDate?: string;
+  toDate?: string;
+}
 
 export interface Workshop {
   id?: string;
   name: string;
   phonenumber: string;
+  amounts: Amount[];
   code?: string;
   createdAt?: any;
 }
@@ -61,3 +74,24 @@ export const findWorkshopByCode = async (code: string) => {
     return undefined;
   }
 };
+
+export const addAmountToWorkshop = (workshopId: string, amount: Amount) => {
+  const permitted = _.pickBy(amount, _.identity);
+  return database
+    .collection(collection)
+    .doc(workshopId)
+    .update({
+      amounts: firebase.firestore.FieldValue.arrayUnion(permitted),
+    });
+};
+
+export const removeAmountFromWorkshop = (workshopId: string, amount: Amount) => {
+  const permitted = _.pickBy(amount, _.identity);
+  return database
+    .collection(collection)
+    .doc(workshopId)
+    .update({
+      amounts: firebase.firestore.FieldValue.arrayRemove(permitted),
+    });
+};
+

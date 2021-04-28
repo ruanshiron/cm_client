@@ -33,12 +33,14 @@ const DateSelecter: React.FC<{ onChange: ReturnType<any>; value: Date }> = ({
   value,
 }) => {
   return (
-    <Calendar
-      onChange={(e) => {
-        onChange(isArray(e) ? e[0] : e);
-      }}
-      value={value}
-    />
+    <div className="calendar-swapper">
+      <Calendar
+        onChange={(e) => {
+          onChange(isArray(e) ? e[0] : e);
+        }}
+        value={value}
+      />
+    </div>
   );
 };
 

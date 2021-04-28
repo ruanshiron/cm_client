@@ -30,31 +30,14 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
 /* SCSS */
+import "react-calendar/dist/Calendar.css";
 import "./theme/style.scss";
-import 'react-calendar/dist/Calendar.css';
-
-import MainTabs from "./pages/tabs/MainTabs";
 
 import { useDispatch } from "react-redux";
-import WorkshopPage from "./pages/resources/workshop/WorkshopPage";
-import CustomerPage from "./pages/resources/customer/CustomerPage";
-import EmployeePage from "./pages/resources/employee/EmployeePage";
-import { WorkshopDetail } from "./pages/resources/workshop/WorkshopDetail";
-import WorkshopCreate from "./pages/resources/workshop/WorkshopCreate";
-import CustomerCreate from "./pages/resources/customer/CustomerCreate";
-import { CustomerDetail } from "./pages/resources/customer/CustomerDetail";
-import SupplierPage from "./pages/resources/supplier/SupplierPage";
-import SupplierCreate from "./pages/resources/supplier/SupplierCreate";
-import EmployeeCreate from "./pages/resources/employee/EmployeeCreate";
-import HomeOrTutorial from "./components/HomeOrTutorial";
 import { useSelector } from "./store";
-import SettingsPage from "./pages/settings/SettingsPage";
-import ProcessesPage from "./pages/settings/ProcessesPage";
 import { useAuth } from "./hooks/useAuth";
 import LoginPage from "./pages/login/LoginPage";
 import SignUpPage from "./pages/login/SignUpPage";
-import { SupplierDetail } from "./pages/resources/supplier/SupplierDetail";
-import { EmployeeDetail } from "./pages/resources/employee/EmployeeDetail";
 import { fetchAllProducts } from "./store/data/productSlice";
 import { fetchAllStages } from "./store/data/stageSlice";
 import { fetchAllWorkshops } from "./store/data/workshopSlice";
@@ -62,79 +45,7 @@ import { fetchAllOrders } from "./store/data/orderSlice";
 import { fetchAllCustomers } from "./store/data/customerSlice";
 import { fetchAllProcesses } from "./store/data/processSlice";
 import QrPage from "./pages/login/QrPage";
-
-interface AppRoute {
-  url: string;
-  component: any;
-}
-
-const listPages: AppRoute[] = [
-  {
-    url: "/workshops",
-    component: <WorkshopPage />,
-  },
-  {
-    url: "/customers",
-    component: <CustomerPage />,
-  },
-  {
-    url: "/employees",
-    component: <EmployeePage />,
-  },
-  {
-    url: "/suppliers",
-    component: <SupplierPage />,
-  },
-  {
-    url: "/settings",
-    component: <SettingsPage />,
-  },
-];
-
-const detailPages: AppRoute[] = [
-  {
-    url: "/workshops/:id",
-    component: WorkshopDetail,
-  },
-  {
-    url: "/customers/:id",
-    component: CustomerDetail,
-  },
-  {
-    url: "/suppliers/:id",
-    component: SupplierDetail,
-  },
-  {
-    url: "/employees/:id",
-    component: EmployeeDetail,
-  },
-];
-
-const createPages: AppRoute[] = [
-  {
-    url: "/workshops/create",
-    component: WorkshopCreate,
-  },
-  {
-    url: "/customers/create",
-    component: CustomerCreate,
-  },
-  {
-    url: "/employees/create",
-    component: EmployeeCreate,
-  },
-  {
-    url: "/suppliers/create",
-    component: SupplierCreate,
-  },
-];
-
-const settingPages: AppRoute[] = [
-  {
-    url: "/settings/processes",
-    component: ProcessesPage,
-  },
-];
+import MainRoutes from "./components/MainRoutes";
 
 setupConfig({
   rippleEffect: true,
@@ -172,43 +83,7 @@ const App: React.FC = () => {
           (isLoggedIn ? (
             <IonSplitPane contentId="main">
               <Menu />
-              <IonRouterOutlet id="main">
-                <Redirect from="*" to="/tabs" />
-                <Route path="/tabs" render={() => <MainTabs />} />
-                {listPages.map((page, index) => (
-                  <Route
-                    key={index}
-                    path={page.url}
-                    render={() => page.component}
-                    exact
-                  />
-                ))}
-                {detailPages.map((page, index) => (
-                  <Route
-                    key={index}
-                    path={page.url}
-                    component={page.component}
-                  />
-                ))}
-                {createPages.map((page, index) => (
-                  <Route
-                    key={index}
-                    path={page.url}
-                    component={page.component}
-                    exact
-                  />
-                ))}
-                {settingPages.map((page, index) => (
-                  <Route
-                    key={index}
-                    path={page.url}
-                    component={page.component}
-                    exact
-                  />
-                ))}
-
-                <Route path="/" component={HomeOrTutorial} exact />
-              </IonRouterOutlet>
+              <MainRoutes />
             </IonSplitPane>
           ) : (
             <IonRouterOutlet>
