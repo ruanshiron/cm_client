@@ -25,6 +25,8 @@ import { formatISO } from "date-fns";
 import { isArray } from "lodash";
 import { Process } from "../../models/process";
 import { processParser } from "../../utils/data";
+import { Workshop } from "../../models/workshop";
+import { Product } from "../../models/product";
 
 const DateSelecter: React.FC<{ onChange: ReturnType<any>; value: Date }> = ({
   onChange,
@@ -42,14 +44,14 @@ const DateSelecter: React.FC<{ onChange: ReturnType<any>; value: Date }> = ({
 
 const CustomSelecter: React.FC<{
   onChange: ReturnType<any>;
-  items: { id?: string; name: string }[];
+  items: { [key: string]: any }[];
   value: string;
 }> = ({ onChange, value, items }) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <IonList>
         {items.map((item, index) => (
-          <IonItem key={index} button onClick={() => onChange(item.id)}>
+          <IonItem key={index} button onClick={() => onChange(item)}>
             {item.name}
             {value === item.id && (
               <IonIcon icon={checkmark} slot="end" color="success"></IonIcon>
@@ -85,44 +87,74 @@ const SizeSelecter: React.FC<{
 const ProcessSelecter: React.FC<{
   onChange: ReturnType<any>;
   items: Process[];
-  value: string;
+  value: { processId: string; processStatus: string };
 }> = ({ onChange, value, items }) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <IonList>
         {items.map((item, index) => (
-          <>
+          <React.Fragment key={index}>
             <IonItem
-              key={index}
               button
-              onClick={() => onChange(item.id + "/pending")}
+              onClick={() =>
+                onChange({
+                  processId: item.id,
+                  processStatus: "pending",
+                  processLabel: item.pending,
+                })
+              }
             >
               {processParser(item.id + "/pending", items)}
-              {value === item.id + "/pending" && (
-                <IonIcon icon={checkmark} slot="end" color="success"></IonIcon>
-              )}
+              {value.processId === item.id &&
+                value.processStatus === "pending" && (
+                  <IonIcon
+                    icon={checkmark}
+                    slot="end"
+                    color="success"
+                  ></IonIcon>
+                )}
             </IonItem>
             <IonItem
-              key={index}
               button
-              onClick={() => onChange(item.id + "/fulfilled")}
+              onClick={() =>
+                onChange({
+                  processId: item.id,
+                  processStatus: "fulfilled",
+                  processLabel: item.fulfilled,
+                })
+              }
             >
               {processParser(item.id + "/fulfilled", items)}
-              {value === item.id + "/fulfilled" && (
-                <IonIcon icon={checkmark} slot="end" color="success"></IonIcon>
-              )}
+              {value.processId === item.id &&
+                value.processStatus === "fulfilled" && (
+                  <IonIcon
+                    icon={checkmark}
+                    slot="end"
+                    color="success"
+                  ></IonIcon>
+                )}
             </IonItem>
             <IonItem
-              key={index}
               button
-              onClick={() => onChange(item.id + "/rejected")}
+              onClick={() =>
+                onChange({
+                  processId: item.id,
+                  processStatus: "rejected",
+                  processLabel: item.rejected,
+                })
+              }
             >
               {processParser(item.id + "/rejected", items)}
-              {value === item.id + "/rejected" && (
-                <IonIcon icon={checkmark} slot="end" color="success"></IonIcon>
-              )}
+              {value.processId === item.id &&
+                value.processStatus === "rejected" && (
+                  <IonIcon
+                    icon={checkmark}
+                    slot="end"
+                    color="success"
+                  ></IonIcon>
+                )}
             </IonItem>
-          </>
+          </React.Fragment>
         ))}
       </IonList>
     </div>
@@ -139,9 +171,9 @@ const QuantityInput: React.FC<{ onChange: ReturnType<any>; value: number }> = ({
         <IonItem>
           <IonLabel position="stacked">Số lượng</IonLabel>
           <IonInput
-            type="number"
             style={{ fontSize: 36 }}
-            value={value}
+            value={value || undefined}
+            pattern="[0-9]"
             onIonChange={(e) => onChange(parseInt(e.detail.value!, 0))}
           ></IonInput>
         </IonItem>
@@ -166,31 +198,43 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
     form.setFieldsValue({ date: formatISO(date, { representation: "date" }) });
     setState("started");
   };
-  const handleChangeWorkshop = (workshop: string) => {
+  const handleChangeWorkshop = (workshop: Workshop) => {
     slider.current?.slideNext();
-    form.setFieldsValue({ workshop });
+    form.setFieldsValue({
+      workshopId: workshop.id,
+      workshopName: workshop.name,
+    });
   };
-  const handleChangeProcess = (process: string) => {
+  const handleChangeProcess = (params: {
+    processId: string;
+    processStatus: string;
+    processLabel: string;
+  }) => {
     slider.current?.slideNext();
-    form.setFieldsValue({ process });
+    form.setFieldsValue({
+      processId: params.processId,
+      processStatus: params.processStatus,
+      processLabel: params.processLabel,
+    });
   };
-  const handleChangeProduct = (product: string) => {
+  const handleChangeProduct = (product: Product) => {
     slider.current?.slideNext();
-    form.setFieldsValue({ product });
+    form.setFieldsValue({ productId: product.id, productName: product.name });
   };
   const handleChangeSize = (size: string) => {
     slider.current?.slideNext();
-    form.setFieldsValue({ size });
+    form.setFieldsValue({ productSize: size });
   };
-  const handleChangeQuantity = (quantity: number) => {
+  const handleChangeQuantity = (quantity: any) => {
     form.setFieldsValue({ quantity });
-    if (quantity) setState("finished");
-    else setState("started");
+
+    if (quantity) {
+      setState("finished");
+    } else setState("started");
   };
   const handleSlideBack = async () => {
     slider.current?.slidePrev();
     if (await slider.current?.isBeginning()) setState("initiated");
-    else setState("started");
   };
 
   return (
@@ -218,7 +262,9 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
             .detail()
             .filter((i) => i)
             .map((item, index) => (
-              <IonBadge style={{marginRight: 4}} key={index}>{item}</IonBadge>
+              <IonBadge style={{ marginRight: 4 }} key={index}>
+                {item}
+              </IonBadge>
             ))}
         </IonListHeader>
         <IonSlides ref={slider} options={{ allowTouchMove: false }}>
@@ -231,31 +277,34 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
           <IonSlide>
             <CustomSelecter
               items={form.workshops}
-              value={form.fields.workshop}
+              value={form.fields.workshopId}
               onChange={handleChangeWorkshop}
             />
           </IonSlide>
           <IonSlide>
             <ProcessSelecter
               items={form.processes}
-              value={form.fields.process}
+              value={{
+                processId: form.fields.processId,
+                processStatus: form.fields.processStatus,
+              }}
               onChange={handleChangeProcess}
             />
           </IonSlide>
           <IonSlide>
             <CustomSelecter
               items={form.products}
-              value={form.fields.product}
+              value={form.fields.productId}
               onChange={handleChangeProduct}
             />
           </IonSlide>
           <IonSlide>
             <SizeSelecter
               items={
-                form.products?.find((v) => v.id === form.fields?.product)
+                form.products?.find((v) => v.id === form.fields?.productId)
                   ?.sizes || []
               }
-              value={form.fields.size}
+              value={form.fields.productSize}
               onChange={handleChangeSize}
             />
           </IonSlide>
@@ -283,7 +332,6 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
                 style={{ marginRight: 12 }}
                 onClick={form.submit}
               >
-                {" "}
                 <IonIcon icon={checkmark} slot="start"></IonIcon> Hoàn thành
               </IonButton>
             </IonButtons>

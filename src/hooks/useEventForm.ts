@@ -7,9 +7,9 @@ import {
   isInvalidStage,
   Stage,
   saveStage,
+  destroyStage,
 } from "../models/stage";
 import { fetchAllStages } from "../store/data/stageSlice";
-import { processParser } from "../utils/data";
 
 export const useEventForm = (event = initialStage) => {
   const dispatch = useDispatch();
@@ -50,14 +50,23 @@ export const useEventForm = (event = initialStage) => {
     }
   };
 
+  const remove = async () => {
+    if (fields.id) await destroyStage(fields.id);
+
+    setShowEventForm(false);
+    toast("Xóa thành công.");
+    // TODO: Do not fetch again
+    dispatch(fetchAllStages());
+  };
+
   const detail = () => {
     return [
       fields.date,
-      workshops.find((i) => i.id === fields.workshop)?.name || "",
-      processParser(fields.process, processes) || "",
-      products.find((i) => i.id === fields.product)?.name || "",
-      fields.size || "",
-      fields.quantity || "",
+      fields.workshopName,
+      fields.processLabel,
+      fields.productName,
+      fields.productSize,
+      fields.quantity,
     ];
   };
 
@@ -71,5 +80,6 @@ export const useEventForm = (event = initialStage) => {
     processes,
     workshops,
     detail,
+    remove
   };
 };

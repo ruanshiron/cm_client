@@ -156,7 +156,7 @@ export const ProductModal: React.FC<Props> = ({
                     <td data-label="Xưởng">{e.workshop}</td>
                     <td data-label="Công đoạn">{e.process}</td>
                     <td data-label="Số lượng">{e.quantity}</td>
-                    <td data-label="Kích cỡ">{e.size}</td>
+                    <td data-label="Kích cỡ">{e.productSize}</td>
                     <td data-label="Ghi chú">{e.note}</td>
                   </tr>
                 ))}

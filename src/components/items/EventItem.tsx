@@ -1,10 +1,8 @@
 import React from "react";
 import { IonNote, IonItem, IonLabel } from "@ionic/react";
 import * as Event from "../../models/stage";
-import * as Process from "../../models/process";
 import { useEventForm } from "../../hooks/useEventForm";
 import { EventModal } from "../modals/EventModal";
-import { useSelector } from "../../store";
 
 interface EventItemProps {
   data: Event.Stage;
@@ -13,21 +11,11 @@ interface EventItemProps {
 const EventItem: React.FC<EventItemProps> = ({ data }) => {
   const form = useEventForm(data);
 
-  const product = useSelector((state) =>
-    state.products.find((v) => v.id === data.product)
-  );
-  const process = useSelector((state) =>
-    state.processes.find((v) => v.id === data.process?.split("/")[0])
-  );
-  const workshop = useSelector((state) =>
-    state.workshops.find((v) => v.id === data.workshop)
-  );
-
-  const noteColor = (process?: string) => {
-    if (!process) return "primary";
-    if (process.endsWith("fulfilled")) return "success";
-    if (process.endsWith("pending")) return "warning";
-    if (process.endsWith("rejected")) return "danger";
+  const noteColor = (status?: string) => {
+    if (!status) return "primary";
+    if (status.endsWith("fulfilled")) return "success";
+    if (status.endsWith("pending")) return "warning";
+    if (status.endsWith("rejected")) return "danger";
   };
 
   return (
@@ -38,19 +26,15 @@ const EventItem: React.FC<EventItemProps> = ({ data }) => {
         detail={false}
       >
         <>
-          <IonLabel className={noteColor(data.process)}>
+          <IonLabel className={noteColor(data.processStatus)}>
             <h2>
-              {workshop?.name}・
-              <b>
-                {Process.ProcessEnum[data.process?.split("/")[1]!] +
-                  process?.name}
-              </b>
+              {data.workshopName}・<b>{data.processLabel}</b>
             </h2>
             <p>
-              {product?.name} / {data.size}
+              {data.productName} / {data.productSize}
             </p>
           </IonLabel>
-          <IonNote slot="end" color={noteColor(data.process)}>
+          <IonNote slot="end" color={noteColor(data.processStatus)}>
             <h4>{data.quantity}</h4>
           </IonNote>
         </>

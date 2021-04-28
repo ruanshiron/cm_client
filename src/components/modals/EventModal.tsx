@@ -14,6 +14,7 @@ import {
   IonSelectOption,
   IonTitle,
   IonToolbar,
+  useIonAlert,
 } from "@ionic/react";
 import {
   bodyOutline,
@@ -32,6 +33,7 @@ interface EventModalProps {
 }
 
 export const EventModal: React.FC<EventModalProps> = ({ form }) => {
+  const [present] = useIonAlert();
   return (
     <IonModal
       isOpen={form.showEventForm}
@@ -76,9 +78,13 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
             cancelText="Hủy"
             interface="action-sheet"
             placeholder="Sản phẩm"
-            value={form.fields?.product}
+            value={form.fields?.productId}
             onIonChange={(e) =>
-              form.setFieldsValue({ product: e.detail.value! })
+              form.setFieldsValue({
+                productId: e.detail.value!,
+                productName: form.products.find((i) => i.id === e.detail.value!)
+                  ?.name,
+              })
             }
           >
             {form.products.map((item) => (
@@ -96,11 +102,13 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
             cancelText="Hủy"
             interface="action-sheet"
             placeholder="Kích cỡ"
-            value={form.fields?.size}
-            onIonChange={(e) => form.setFieldsValue({ size: e.detail.value! })}
+            value={form.fields?.productSize}
+            onIonChange={(e) =>
+              form.setFieldsValue({ productSize: e.detail.value! })
+            }
           >
             {form.products
-              ?.find((v) => v.id === form.fields?.product)
+              ?.find((v) => v.id === form.fields?.productId)
               ?.sizes.map((item, index) => (
                 <IonSelectOption key={index} value={item}>
                   {item}
@@ -118,24 +126,67 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
             cancelText="Hủy"
             interface="action-sheet"
             placeholder="Nhóm"
-            value={form.fields?.process}
-            onIonChange={(e) =>
-              form.setFieldsValue({ process: e.detail.value! })
-            }
+            value={JSON.stringify({
+              id: form.fields.processId,
+              status: form.fields.processStatus,
+            })}
+            onIonChange={(e) => {
+              const obj = JSON.parse(e.detail.value!);
+              const process = form.processes.find((i) => i.id === obj.id);
+
+              if (process) {
+                if (obj.status === "pending") {
+                  form.setFieldsValue({
+                    processId: obj.id,
+                    processStatus: obj.status,
+                    processLabel: process.pending,
+                  });
+                }
+                if (obj.status === "fulfilled") {
+                  form.setFieldsValue({
+                    processId: obj.id,
+                    processStatus: obj.status,
+                    processLabel: process.fulfilled,
+                  });
+                }
+                if (obj.status === "rejected") {
+                  form.setFieldsValue({
+                    processId: obj.id,
+                    processStatus: obj.status,
+                    processLabel: process.rejected,
+                  });
+                }
+              }
+            }}
           >
             {form.products
-              ?.find((v) => v.id === form.fields?.product)
+              ?.find((v) => v.id === form.fields?.productId)
               ?.processes?.map((process, i) => {
                 const p = form.processes.find((v) => v.id === process);
                 return (
                   <React.Fragment key={i}>
-                    <IonSelectOption value={`${p?.id}/pending`}>
+                    <IonSelectOption
+                      value={JSON.stringify({
+                        id: p?.id,
+                        status: "pending",
+                      })}
+                    >
                       {p?.pending ? p?.pending : "đang " + p?.name}
                     </IonSelectOption>
-                    <IonSelectOption value={`${p?.id}/fulfilled`}>
+                    <IonSelectOption
+                      value={JSON.stringify({
+                        id: p?.id,
+                        status: "fulfilled",
+                      })}
+                    >
                       {p?.fulfilled ? p?.fulfilled : "đã " + p?.name}
                     </IonSelectOption>
-                    <IonSelectOption value={`${p?.id}/rejected`}>
+                    <IonSelectOption
+                      value={JSON.stringify({
+                        id: p?.id,
+                        status: "rejected",
+                      })}
+                    >
                       {p?.rejected ? p?.rejected : p?.name + " lỗi"}
                     </IonSelectOption>
                   </React.Fragment>
@@ -151,9 +202,14 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
             cancelText="Hủy"
             interface="action-sheet"
             placeholder="Xưởng"
-            value={form.fields?.workshop}
+            value={form.fields?.workshopId}
             onIonChange={(e) =>
-              form.setFieldsValue({ workshop: e.detail.value! })
+              form.setFieldsValue({
+                workshopId: e.detail.value!,
+                workshopName: form.workshops.find(
+                  (i) => i.id === e.detail.value!
+                )?.name,
+              })
             }
           >
             {form.workshops.map((workshop, i) => (
@@ -192,10 +248,19 @@ export const EventModal: React.FC<EventModalProps> = ({ form }) => {
         <IonItem
           lines="full"
           button
-          onClick={() => form.setShowEventForm(false)}
+          onClick={() =>
+            present({
+              header: "Xóa",
+              message: "Xác nhận sẽ xóa sự kiện này",
+              buttons: [
+                "Hủy",
+                { text: "Ok", handler: (d) => form.remove() },
+              ],
+            })
+          }
         >
           <IonLabel color="danger" style={{ textAlign: "center" }}>
-            Hủy
+            Xóa
           </IonLabel>
         </IonItem>
       </IonContent>

@@ -36,16 +36,16 @@ export const statisticsForWorkshop = createSelector(
   (state, workshopId) => {
     const stagesByWorkshop = filter(
       state.stages,
-      (item) => item.workshop === workshopId
+      (item) => item.workshopId === workshopId
     );
 
     let result: any = {};
 
     forEach(stagesByWorkshop, (value) => {
-      if (`${value.product}/${value.process}` in result) {
-        result[`${value.product}/${value.process}`] += value.quantity;
+      if (`${value.productId}/${value.processId}` in result) {
+        result[`${value.productId}/${value.processId}`] += value.quantity;
       } else {
-        result[`${value.product}/${value.process}`] = value.quantity;
+        result[`${value.productId}/${value.processId}`] = value.quantity;
       }
     });
 
@@ -84,16 +84,16 @@ export const stagesByWorkshop = createSelector(
   (_state: RootState, workshopId: string) => workshopId,
   (stages, products, processes, workshopId) => {
     const filteredStages = stages
-      .filter((item) => item.workshop === workshopId)
+      .filter((item) => item.workshopId === workshopId)
       .sort((a, b) => a.date.localeCompare(b.date));
 
     return filteredStages.map((item) => {
       return {
         ...item,
         date: item.date,
-        product: products.find((i) => i.id === item.product)?.name,
-        process: processParser(item.process, processes),
-        size: item.size,
+        product: products.find((i) => i.id === item.productId)?.name,
+        process: processParser(item.processId, processes),
+        size: item.productSize,
         note: item.note || "_",
       };
     });

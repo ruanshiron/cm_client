@@ -3,18 +3,37 @@ import firebase from "firebase/app";
 import _ from "lodash";
 import { formatISO } from "date-fns";
 
-const collection = "stages";
+const collection = "stages2";
 
 export const initialStage: Stage = {
   quantity: NaN,
-  product: "",
-  size: "",
-  process: "",
-  workshop: "",
+  productId: "",
+  productName: "",
+  productSize: "",
+  workshopId: "",
+  workshopName: "",
+  processId: "",
+  processStatus: "",
+  processLabel: "",
   date: formatISO(new Date(), { representation: "date" }),
 };
 
 export interface Stage {
+  id?: string;
+  quantity: number;
+  productId: string;
+  productName: string;
+  productSize: string;
+  workshopId: string;
+  workshopName: string;
+  processId: string;
+  processStatus: string;
+  processLabel: string;
+  date: string;
+  note?: string;
+  timestamp?: string;
+}
+export interface Stage2 {
   id?: string;
   quantity: number;
   product: string;
@@ -40,7 +59,7 @@ export const getAllStages = () => {
       return snap.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate().toString(),
+        timestamp: doc.data().timestamp?.toDate().toString(),
       }));
     });
 };
@@ -48,7 +67,7 @@ export const getAllStages = () => {
 export const saveStage = (param: Partial<Stage>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
   };
   return param.id
     ? database.collection(collection).doc(param.id!).set(permittedParam)
@@ -62,8 +81,8 @@ export const destroyStage = (id: string) => {
 export const isInvalidStage = (fields: Stage) =>
   !fields.quantity ||
   !(fields.quantity > 0) ||
-  !fields.product.trim() ||
-  !fields.size.trim() ||
-  !fields.process.trim() ||
+  !fields.productId.trim() ||
+  !fields.productSize.trim() ||
+  !fields.processId.trim() ||
   !fields.date ||
-  !fields.workshop.trim();
+  !fields.workshopId.trim();

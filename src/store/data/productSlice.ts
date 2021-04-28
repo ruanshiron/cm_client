@@ -62,16 +62,16 @@ export const statisticsForProduct = createSelector(
   }),
   (stages, processes, { productId, processId }) => {
     const filteredStages = stages.filter(
-      (item) => item.product === productId && item.process.startsWith(processId)
+      (item) => item.productId === productId && item.processId.startsWith(processId)
     );
 
     const tmp: any = {};
 
     forEach(filteredStages, (value) => {
-      if (value.process in tmp) {
-        tmp[value.process] += value.quantity;
+      if (value.processId in tmp) {
+        tmp[value.processId] += value.quantity;
       } else {
-        tmp[value.process] = value.quantity;
+        tmp[value.processId] = value.quantity;
       }
     });
 
@@ -108,16 +108,16 @@ export const stagesByProductAndProcess = createSelector(
     const filteredStages = stages
       .filter(
         (item) =>
-          item.product === productId &&
-          item.process.startsWith(processId) &&
+          item.productId === productId &&
+          item.processId.startsWith(processId) &&
           isBetween(item.date, from, to)
       )
       .sort((a, b) => a.date.localeCompare(b.date))
       .map((item) => {
         return {
           ...item,
-          process: processParser(item.process, processes),
-          workshop: workshops.find((i) => i.id === item.workshop)?.name,
+          process: processParser(item.processId, processes),
+          workshop: workshops.find((i) => i.id === item.workshopId)?.name,
           note: item.note || "_",
         };
       });

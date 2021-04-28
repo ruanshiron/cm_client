@@ -44,7 +44,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
     const _product = state.products.find((x) => x.id === id);
     const _processes = state.processes;
 
-    const events = state.stages.filter((v) => v.product === id);
+    const events = state.stages.filter((v) => v.productId === id);
     const result = _.groupBy(events, "process");
 
     return {
