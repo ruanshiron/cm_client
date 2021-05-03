@@ -15,6 +15,7 @@ import { toast } from "../utils/toast";
 export const useOrderForm = () => {
   const router = useIonRouter();
   const [fields, setFields] = useState<Order>(initialOrder);
+  const uid = useSelector((state) => state.user.uid);
 
   const dispatch = useDispatch();
 
@@ -25,7 +26,7 @@ export const useOrderForm = () => {
     if (isInvalidOrder(fields)) return;
 
     try {
-      await saveOrder(fields);
+      await saveOrder(uid, fields);
       setFields(initialOrder);
       router.goBack();
       toast("Lưu thành công.");

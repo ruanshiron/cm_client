@@ -1,12 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getAllOrders, Order } from "../../models/order";
+import { RootState } from "../rootReducer";
 
 let initialState: Order[] = [];
 
 export const fetchAllOrders = createAsyncThunk(
   "orders/fetchAll",
-  async () => {
-    return await getAllOrders();
+  async (_param, thunkAPI) => {
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
+    return await getAllOrders(uid);
   }
 );
 

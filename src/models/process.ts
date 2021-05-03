@@ -4,6 +4,9 @@ import _ from "lodash";
 
 const collection = "processes";
 
+const ref = (user: string) =>
+  database.collection("users").doc(user).collection(collection);
+
 export const ProcessEnum: { [key: string]: string } = {
   pending: "đang ",
   fulfilled: "đã ",
@@ -21,9 +24,8 @@ export interface Process {
   pending?: string;
 }
 
-export const getAllProcesses = () => {
-  return database
-    .collection(collection)
+export const getAllProcesses = (user: string) => {
+  return ref(user)
     .get()
     .then((snap) => {
       return snap.docs.map((doc) => ({
@@ -34,18 +36,18 @@ export const getAllProcesses = () => {
     });
 };
 
-export const saveProcess = (param: Partial<Process>) => {
+export const saveProcess = (user: string, param: Partial<Process>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
   return param.id
-    ? database.collection(collection).doc(param.id!).set(permittedParam)
-    : database.collection(collection).add(permittedParam);
+    ? ref(user).doc(param.id!).set(permittedParam)
+    : ref(user).add(permittedParam);
 };
 
-export const destroyProcess = (id: string) => {
-  return database.collection(collection).doc(id).delete();
+export const destroyProcess = (user: string, id: string) => {
+  return ref(user).doc(id).delete();
 };
 
 export const isInvalidProcess = (fields: Process) => !fields.name.trim();

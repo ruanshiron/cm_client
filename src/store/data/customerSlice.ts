@@ -7,8 +7,9 @@ let initialState: Customer[] = [];
 export const fetchAllCustomers = createAsyncThunk(
   "customers/fetchAll",
   async (_param, thunkAPI) => {
-    const state = thunkAPI.getState() as RootState;
-    const uid = state.user.uid;
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
     return await getAllCustomers(uid);
   }
 );

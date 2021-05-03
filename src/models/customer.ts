@@ -6,6 +6,9 @@ const collection = "customers";
 
 export const initialCustomer: Customer = { name: "", phonenumber: "" };
 
+const ref = (user: string) =>
+  database.collection("users").doc(user).collection(collection);
+
 export interface Customer {
   id?: string;
   name: string;
@@ -14,10 +17,7 @@ export interface Customer {
 }
 
 export const getAllCustomers = (user: string) => {
-  return database
-    .collection("users")
-    .doc(user)
-    .collection(collection)
+  return ref(user)
     .get()
     .then((snap) => {
       return snap.docs.map((doc) => ({
@@ -28,18 +28,18 @@ export const getAllCustomers = (user: string) => {
     });
 };
 
-export const saveCustomer = (param: Partial<Customer>) => {
+export const saveCustomer = (user: string, param: Partial<Customer>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
   return param.id
-    ? database.collection(collection).doc(param.id!).set(permittedParam)
-    : database.collection(collection).add(permittedParam);
+    ? ref(user).doc(param.id!).set(permittedParam)
+    : ref(user).add(permittedParam);
 };
 
-export const destroyCustomer = (id: string) => {
-  return database.collection(collection).doc(id).delete();
+export const destroyCustomer = (user: string, id: string) => {
+  return ref(user).doc(id).delete();
 };
 
 export const isInvalidCustomer = (fields: Customer) =>

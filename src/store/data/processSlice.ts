@@ -1,12 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getAllProcesses, Process } from "../../models/process";
+import { RootState } from "../rootReducer";
 
 let initialState: Process[] = [];
 
 export const fetchAllProcesses = createAsyncThunk(
   "processes/fetchAll",
-  async () => {
-    return await getAllProcesses();
+  async (_param, thunkAPI) => {
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
+    return await getAllProcesses(uid);
   }
 );
 

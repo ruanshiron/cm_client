@@ -10,9 +10,15 @@ import { RootState } from "../rootReducer";
 
 const initialState: Stage[] = [];
 
-export const fetchAllStages = createAsyncThunk("stages/fetchAll", async () => {
-  return await getAllStages();
-});
+export const fetchAllStages = createAsyncThunk(
+  "stages/fetchAll",
+  async (_param, thunkAPI) => {
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
+    return await getAllStages(uid);
+  }
+);
 
 const stageSlice = createSlice({
   name: "stages",

@@ -7,11 +7,13 @@ import {
   saveSupplier,
   Supplier,
 } from "../models/supplier";
+import { useSelector } from "../store";
 import { fetchAllSuppliers } from "../store/data/supplierSlice";
 import { toast } from "../utils/toast";
 
 export const useSupplierForm = () => {
   const router = useIonRouter();
+  const uid = useSelector((state) => state.user.uid);
   const [fields, setFields] = useState<Supplier>(initialSupplier);
 
   const dispatch = useDispatch();
@@ -20,7 +22,7 @@ export const useSupplierForm = () => {
     if (isInvalidSupplier(fields)) return;
 
     try {
-      await saveSupplier(fields);
+      await saveSupplier(uid, fields);
       setFields(initialSupplier);
       router.goBack();
       toast("Lưu thành công.");

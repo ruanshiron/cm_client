@@ -4,8 +4,10 @@ import _ from "lodash";
 
 const collection = "employees";
 
-export const initialEmployee: Employee = { name: "", phonenumber: "" };
+const ref = (user: string) =>
+  database.collection("users").doc(user).collection(collection);
 
+export const initialEmployee: Employee = { name: "", phonenumber: "" };
 export interface Employee {
   id?: string;
   name: string;
@@ -13,9 +15,8 @@ export interface Employee {
   createdAt?: any;
 }
 
-export const getAllEmployees = () => {
-  return database
-    .collection(collection)
+export const getAllEmployees = (user: string) => {
+  return ref(user)
     .get()
     .then((snap) => {
       return snap.docs.map((doc) => ({
@@ -26,18 +27,18 @@ export const getAllEmployees = () => {
     });
 };
 
-export const saveEmployee = (param: Partial<Employee>) => {
+export const saveEmployee = (user: string, param: Partial<Employee>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
   return param.id
-    ? database.collection(collection).doc(param.id!).set(permittedParam)
-    : database.collection(collection).add(permittedParam);
+    ? ref(user).doc(param.id!).set(permittedParam)
+    : ref(user).add(permittedParam);
 };
 
-export const destroyEmployee = (id: string) => {
-  return database.collection(collection).doc(id).delete();
+export const destroyEmployee = (user: string, id: string) => {
+  return ref(user).doc(id).delete();
 };
 
 export const isInvalidEmployee = (fields: Employee) =>

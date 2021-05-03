@@ -7,12 +7,14 @@ import {
   isInvalidCustomer,
   saveCustomer,
 } from "../models/customer";
+import { useSelector } from "../store";
 import { fetchAllCustomers } from "../store/data/customerSlice";
 import { toast } from "../utils/toast";
 
 export const useCustomerForm = () => {
   const router = useIonRouter();
   const [fields, setFields] = useState<Customer>(initialCustomer);
+  const uid = useSelector((state) => state.user.uid);
 
   const dispatch = useDispatch();
 
@@ -20,7 +22,7 @@ export const useCustomerForm = () => {
     if (isInvalidCustomer(fields)) return;
 
     try {
-      await saveCustomer(fields);
+      await saveCustomer(uid, fields);
       setFields(initialCustomer);
       router.goBack();
       toast("Lưu thành công.");

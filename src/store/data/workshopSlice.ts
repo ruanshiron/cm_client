@@ -12,8 +12,11 @@ let initialState: Workshop[] = [];
 
 export const fetchAllWorkshops = createAsyncThunk(
   "workshops/fetchAll",
-  async () => {
-    return await getAllWorkshops();
+  async (_param, thunkAPI) => {
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
+    return await getAllWorkshops(uid);
   }
 );
 

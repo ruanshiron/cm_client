@@ -4,6 +4,9 @@ import _ from "lodash";
 
 const collection = "suppliers";
 
+const ref = (user: string) =>
+  database.collection("users").doc(user).collection(collection);
+
 export const initialSupplier: Supplier = {
   name: "",
   phonenumber: "",
@@ -18,9 +21,8 @@ export interface Supplier {
   createdAt?: any;
 }
 
-export const getAllSuppliers = () => {
-  return database
-    .collection(collection)
+export const getAllSuppliers = (user: string) => {
+  return ref(user)
     .get()
     .then((snap) => {
       return snap.docs.map((doc) => ({
@@ -31,18 +33,18 @@ export const getAllSuppliers = () => {
     });
 };
 
-export const saveSupplier = (param: Partial<Supplier>) => {
+export const saveSupplier = (user: string, param: Partial<Supplier>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
   return param.id
-    ? database.collection(collection).doc(param.id!).set(permittedParam)
-    : database.collection(collection).add(permittedParam);
+    ? ref(user).doc(param.id!).set(permittedParam)
+    : ref(user).add(permittedParam);
 };
 
-export const destroySupplier = (id: string) => {
-  return database.collection(collection).doc(id).delete();
+export const destroySupplier = (user: string, id: string) => {
+  return ref(user).doc(id).delete();
 };
 
 export const isInvalidSupplier = (fields: Supplier) =>

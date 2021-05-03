@@ -12,7 +12,6 @@ import {
   shirtSharp,
   checkmarkDoneCircleSharp,
   calendarSharp,
-  gridSharp,
 } from "ionicons/icons";
 import DiaryPage from "./diary/DiaryPage";
 import ProductPage from "./product/ProductPage";
@@ -21,7 +20,6 @@ import { OrderDetail } from "./order/OrderDetail";
 import { ProductDetail } from "./product/ProductDetail";
 import ProductCreate from "./product/ProductCreate";
 import OrderCreate from "./order/OrderCreate";
-import DashboardPage from "./dashboard/DashboardPage";
 import { ProductUpdate } from "./product/ProductUpdate";
 
 interface MainTabsProps {}
@@ -32,7 +30,7 @@ const MainTabs: React.FC<MainTabsProps> = () => {
       <IonRouterOutlet>
         <Redirect exact path="/tabs" to="/tabs/diary" />
 
-        <Route path="/tabs/dashboard" render={() => <DashboardPage />} exact />
+        {/* <Route path="/tabs/dashboard" render={() => <DashboardPage />} exact /> */}
         <Route path="/tabs/diary" render={() => <DiaryPage />} />
         <Route path="/tabs/product" render={() => <ProductPage />} />
         <Route path="/tabs/order" render={() => <OrderPage />} />
@@ -46,10 +44,10 @@ const MainTabs: React.FC<MainTabsProps> = () => {
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom" className="tab-bar">
-        <IonTabButton tab="dashboard" href="/tabs/dashboard" layout="label-hide" >
+        {/* <IonTabButton tab="dashboard" href="/tabs/dashboard" layout="label-hide" >
           <IonIcon size="large" icon={gridSharp} />
           <IonLabel>Tổng hợp</IonLabel>
-        </IonTabButton>
+        </IonTabButton> */}
         <IonTabButton tab="diary" href="/tabs/diary" layout="label-hide">
           <IonIcon size="large" icon={calendarSharp} />
           <IonLabel>Nhật ký</IonLabel>

@@ -13,8 +13,11 @@ let initialState: Product[] = [];
 
 export const fetchAllProducts = createAsyncThunk(
   "products/fetchAll",
-  async () => {
-    return await getAllProducts();
+  async (_param, thunkAPI) => {
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
+    return await getAllProducts(uid);
   }
 );
 

@@ -52,6 +52,7 @@ interface WorkshopDetailProps {}
 export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   const [showReportModal, setShowReportModal] = useState(false);
   const router = useIonRouter();
+  const uid = useSelector((state) => state.user.uid);
   const { id } = useParams<{ id: string }>();
   const workshop = useSelector((state) =>
     state.workshops.find((v) => v.id === id)
@@ -66,7 +67,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   const handleUpdateCode = async () => {
     const code = uuidv4();
     try {
-      await saveWorkshop({
+      await saveWorkshop(uid, {
         ...workshop,
         code,
       });

@@ -5,6 +5,9 @@ import { formatISO } from "date-fns";
 
 const collection = "stages2";
 
+const ref = (user: string) =>
+  database.collection("users").doc(user).collection(collection);
+
 export const initialStage: Stage = {
   quantity: NaN,
   productId: "",
@@ -51,9 +54,8 @@ export interface Group {
   events: Stage[];
 }
 
-export const getAllStages = () => {
-  return database
-    .collection(collection)
+export const getAllStages = (user: string) => {
+  return ref(user)
     .get()
     .then((snap) => {
       return snap.docs.map((doc) => ({
@@ -64,18 +66,18 @@ export const getAllStages = () => {
     });
 };
 
-export const saveStage = (param: Partial<Stage>) => {
+export const saveStage = (user: string, param: Partial<Stage>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
   };
   return param.id
-    ? database.collection(collection).doc(param.id!).set(permittedParam)
-    : database.collection(collection).add(permittedParam);
+    ? ref(user).doc(param.id!).set(permittedParam)
+    : ref(user).add(permittedParam);
 };
 
-export const destroyStage = (id: string) => {
-  return database.collection(collection).doc(id).delete();
+export const destroyStage = (user: string, id: string) => {
+  return ref(user).doc(id).delete();
 };
 
 export const isInvalidStage = (fields: Stage) =>

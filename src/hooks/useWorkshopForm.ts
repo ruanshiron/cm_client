@@ -8,6 +8,7 @@ import {
   isInvalidWorkshop,
   destroyWorkshop,
 } from "../models/workshop";
+import { useSelector } from "../store";
 import { fetchAllWorkshops } from "../store/data/workshopSlice";
 import { toast } from "../utils/toast";
 
@@ -15,10 +16,11 @@ export const useWorkshopForm = (workshop = initialWorkshop) => {
   const router = useIonRouter();
   const [fields, setFields] = useState<Workshop>(workshop);
   const dispatch = useDispatch();
+  const uid = useSelector((state) => state.user.uid);
   const submit = async () => {
     if (isInvalidWorkshop(fields)) return;
     try {
-      await saveWorkshop(fields);
+      await saveWorkshop(uid, fields);
       setFields(workshop);
       router.goBack();
       toast("Lưu thành công.");
@@ -33,9 +35,9 @@ export const useWorkshopForm = (workshop = initialWorkshop) => {
       toast("Không tìm thấy xưởng này");
       return;
     }
-    await destroyWorkshop(fields.id);
+    await destroyWorkshop(uid, fields.id);
     toast("Xóa thành công.");
-    router.push("/workshops/")
+    router.push("/workshops/");
     // TODO: Do not fetch again
     dispatch(fetchAllWorkshops());
   };

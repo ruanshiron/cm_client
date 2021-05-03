@@ -4,6 +4,9 @@ import _ from "lodash";
 
 const collection = "workshops";
 
+const ref = (user: string) =>
+  database.collection("users").doc(user).collection(collection);
+
 export const initialWorkshop: Workshop = {
   name: "",
   phonenumber: "",
@@ -27,9 +30,8 @@ export interface Workshop {
   createdAt?: any;
 }
 
-export const getAllWorkshops = () => {
-  return database
-    .collection(collection)
+export const getAllWorkshops = (user: string) => {
+  return ref(user)
     .get()
     .then((snap) => {
       return snap.docs.map((doc) => ({
@@ -40,18 +42,18 @@ export const getAllWorkshops = () => {
     });
 };
 
-export const saveWorkshop = (param: Partial<Workshop>) => {
+export const saveWorkshop = (user: string, param: Partial<Workshop>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
   return param.id
-    ? database.collection(collection).doc(param.id!).set(permittedParam)
-    : database.collection(collection).add(permittedParam);
+    ? ref(user).doc(param.id!).set(permittedParam)
+    : ref(user).add(permittedParam);
 };
 
-export const destroyWorkshop = (id: string) => {
-  return database.collection(collection).doc(id).delete();
+export const destroyWorkshop = (user:string, id: string) => {
+  return ref(user).doc(id).delete();
 };
 
 export const isInvalidWorkshop = (fields: Workshop) =>
@@ -85,7 +87,10 @@ export const addAmountToWorkshop = (workshopId: string, amount: Amount) => {
     });
 };
 
-export const removeAmountFromWorkshop = (workshopId: string, amount: Amount) => {
+export const removeAmountFromWorkshop = (
+  workshopId: string,
+  amount: Amount
+) => {
   const permitted = _.pickBy(amount, _.identity);
   return database
     .collection(collection)
@@ -94,4 +99,3 @@ export const removeAmountFromWorkshop = (workshopId: string, amount: Amount) => 
       amounts: firebase.firestore.FieldValue.arrayRemove(permitted),
     });
 };
-

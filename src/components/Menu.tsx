@@ -9,7 +9,6 @@ import {
   settingsOutline,
   cutOutline,
   todayOutline,
-  gridOutline,
 } from "ionicons/icons";
 import {
   IonContent,
@@ -32,12 +31,12 @@ interface AppPage {
 }
 
 const appPages: AppPage[] = [
-  {
-    title: "Tổng hợp",
-    url: "/tabs/dashboard",
-    iosIcon: gridOutline,
-    mdIcon: gridOutline,
-  },
+  // {
+  //   title: "Tổng hợp",
+  //   url: "/tabs/dashboard",
+  //   iosIcon: gridOutline,
+  //   mdIcon: gridOutline,
+  // },
   {
     title: "Nhật ký",
     url: "/tabs/diary",

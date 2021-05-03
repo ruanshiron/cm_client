@@ -7,12 +7,14 @@ import {
   isInvalidEmployee,
   saveEmployee,
 } from "../models/employee";
+import { useSelector } from "../store";
 import { fetchAllEmployees } from "../store/data/employeeSlice";
 import { toast } from "../utils/toast";
 
 export const useEmployeeCreate = () => {
   const router = useIonRouter();
   const [fields, setFields] = useState<Employee>(initialEmployee);
+  const uid = useSelector((state) => state.user.uid);
 
   const dispatch = useDispatch();
 
@@ -20,7 +22,7 @@ export const useEmployeeCreate = () => {
     if (isInvalidEmployee(fields)) return;
 
     try {
-      await saveEmployee(fields);
+      await saveEmployee(uid, fields);
       setFields(initialEmployee);
       router.goBack();
       toast("Lưu thành công.");

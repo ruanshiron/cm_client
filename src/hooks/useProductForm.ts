@@ -14,6 +14,7 @@ import { toast } from "../utils/toast";
 export const useProductForm = (product = initialProduct) => {
   const router = useIonRouter();
   const [fields, setFields] = useState<Product>(product);
+  const uid = useSelector((state) => state.user.uid);
 
   const dispatch = useDispatch();
 
@@ -23,7 +24,7 @@ export const useProductForm = (product = initialProduct) => {
     if (isInvalidProduct(fields)) return;
 
     try {
-      await saveProduct(fields);
+      await saveProduct(uid, fields);
       setFields(product);
       router.goBack();
       toast("Lưu thành công.");

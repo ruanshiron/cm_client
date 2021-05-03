@@ -4,6 +4,9 @@ import _ from "lodash";
 
 const collection = "orders";
 
+const ref = (user: string) =>
+  database.collection("users").doc(user).collection(collection);
+
 export const initialOrder: Order = {
   customer: "",
   lines: [{ product: "", size: "", quantity: NaN }],
@@ -25,9 +28,8 @@ export interface Order {
   createdAt?: any;
 }
 
-export const getAllOrders = () => {
-  return database
-    .collection(collection)
+export const getAllOrders = (user: string) => {
+  return ref(user)
     .get()
     .then((snap) => {
       return snap.docs.map((doc) => ({
@@ -38,18 +40,18 @@ export const getAllOrders = () => {
     });
 };
 
-export const saveOrder = (param: Partial<Order>) => {
+export const saveOrder = (user: string, param: Partial<Order>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
   return param.id
-    ? database.collection(collection).doc(param.id!).set(permittedParam)
-    : database.collection(collection).add(permittedParam);
+    ? ref(user).doc(param.id!).set(permittedParam)
+    : ref(user).add(permittedParam);
 };
 
-export const destroyOrder = (id: string) => {
-  return database.collection(collection).doc(id).delete();
+export const destroyOrder = (user: string, id: string) => {
+  return ref(user).doc(id).delete();
 };
 
 export const isInvalidOrder = (fields: Order) => {

@@ -14,6 +14,7 @@ import { fetchAllStages } from "../store/data/stageSlice";
 export const useEventForm = (event = initialStage) => {
   const dispatch = useDispatch();
 
+  const uid = useSelector((state) => state.user.uid);
   const [showEventForm, setShowEventForm] = useState<boolean>(false);
 
   const [fields, setFields] = useState<Stage>(event);
@@ -39,7 +40,7 @@ export const useEventForm = (event = initialStage) => {
 
     setSubmitted(true);
     try {
-      await saveStage(fields);
+      await saveStage(uid, fields);
       setShowEventForm(false);
       setSubmitted(false);
       toast("Lưu thành công.");
@@ -51,7 +52,7 @@ export const useEventForm = (event = initialStage) => {
   };
 
   const remove = async () => {
-    if (fields.id) await destroyStage(fields.id);
+    if (fields.id) await destroyStage(uid, fields.id);
 
     setShowEventForm(false);
     toast("Xóa thành công.");

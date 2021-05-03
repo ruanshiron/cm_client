@@ -5,6 +5,9 @@ import { formatISO } from "date-fns";
 
 const collection = "products";
 
+const ref = (user: string) =>
+  database.collection("users").doc(user).collection(collection);
+
 export const initialProduct: Product = {
   name: "",
   code: "",
@@ -35,9 +38,8 @@ export interface Product {
   createdAt?: any;
 }
 
-export const getAllProducts = () => {
-  return database
-    .collection(collection)
+export const getAllProducts = (user: string) => {
+  return ref(user)
     .get()
     .then((snap) => {
       return snap.docs.map((doc) => ({
@@ -49,25 +51,25 @@ export const getAllProducts = () => {
     });
 };
 
-export const saveProduct = (param: Partial<Product>) => {
+export const saveProduct = (user: string, param: Partial<Product>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
   return param.id
-    ? database.collection(collection).doc(param.id!).set(permittedParam)
-    : database.collection(collection).add(permittedParam);
+    ? ref(user).doc(param.id!).set(permittedParam)
+    : ref(user).add(permittedParam);
 };
 
-export const destroyProduct = (id: string) => {
-  return database.collection(collection).doc(id).delete();
+export const destroyProduct = (user: string, id: string) => {
+  return ref(user).doc(id).delete();
 };
 
 export const isInvalidProduct = (fields: Product) =>
   !fields.name.trim() || !fields.code.trim() || !fields.sizes.length;
 
-export const cache = (productId: string, reportCache: ReportCache) => {
-  return database.collection(collection).doc(productId).update({
+export const cache = (user: string, productId: string, reportCache: ReportCache) => {
+  return ref(user).doc(productId).update({
     report_cache: reportCache,
     updated: firebase.firestore.FieldValue.serverTimestamp(),
   });
