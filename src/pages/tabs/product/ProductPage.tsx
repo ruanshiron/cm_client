@@ -14,10 +14,12 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Item } from "../../../components/items/Item";
 import { ProductPagePopover } from "../../../components/popovers/ProductPagePopover";
 import { useSelector } from "../../../store";
+import { fetchAllProducts } from "../../../store/data/productSlice";
 
 interface ProductPageProps {}
 
@@ -31,6 +33,11 @@ const ProductPage: React.FC<ProductPageProps> = () => {
   };
 
   const products = useSelector((state) => state.products);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchAllProducts())
+  }, [dispatch])
 
   return (
     <IonPage className="list-page">

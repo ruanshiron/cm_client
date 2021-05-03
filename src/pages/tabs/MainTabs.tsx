@@ -31,15 +31,16 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         <Redirect exact path="/tabs" to="/tabs/diary" />
 
         {/* <Route path="/tabs/dashboard" render={() => <DashboardPage />} exact /> */}
-        <Route path="/tabs/diary" render={() => <DiaryPage />} />
-        <Route path="/tabs/product" render={() => <ProductPage />} />
-        <Route path="/tabs/order" render={() => <OrderPage />} />
+        <Route path="/tabs/diary" component={DiaryPage} exact />
+        <Route path="/tabs/product" component={ProductPage} exact />
+        <Route path="/tabs/order" component={OrderPage} exact />
 
         <Route path="/tabs/product/:id" component={ProductDetail} exact />
-        <Route path="/tabs/product/:id/update" component={ProductUpdate} exact />
-        <Route path="/tabs/product/create" component={ProductCreate} exact />
-
         <Route path="/tabs/order/:id" component={OrderDetail} exact />
+
+        <Route path="/tabs/product/:id/update" render={ProductUpdate} exact />
+
+        <Route path="/tabs/product/create" component={ProductCreate} exact />
         <Route path="/tabs/order/create" component={OrderCreate} exact />
       </IonRouterOutlet>
 
