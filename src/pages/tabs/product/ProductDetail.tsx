@@ -97,12 +97,6 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
   return (
     <>
       <IonPage className="list-page">
-        <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton routerLink={router.routeInfo.pathname + "/update"}>
-            <IonIcon icon={pencil}></IonIcon>
-          </IonFabButton>
-        </IonFab>
-
         <ProductModal
           showModal={showReportModal}
           onDismiss={() => setShowReportModal(false)}
@@ -141,8 +135,20 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                           });
                         },
                       },
-                      { text: "Xem thống kê chi tiết", icon: barChartOutline },
-                      { text: "Sửa", icon: pencilOutline },
+                      {
+                        text: "Xem thống kê chi tiết",
+                        icon: barChartOutline,
+                        handler: () => {
+                          setShowReportModal(true);
+                        },
+                      },
+                      {
+                        text: "Sửa",
+                        icon: pencilOutline,
+                        handler: () => {
+                          router.push(router.routeInfo.pathname + "/update");
+                        },
+                      },
                       { text: "Thoát", icon: close },
                     ],
                   })
