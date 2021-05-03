@@ -1,5 +1,4 @@
 import {
-  IonAlert,
   IonButton,
   IonButtons,
   IonCol,
@@ -11,9 +10,10 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
+  useIonAlert,
   useIonRouter,
 } from "@ionic/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../../store";
 import ProductForm from "../../../components/forms/ProductForm";
@@ -22,14 +22,14 @@ import { closeOutline } from "ionicons/icons";
 
 interface ProductUpdateProps {}
 
-export const ProductUpdate: React.FC<ProductUpdateProps> = () => {
+const ProductUpdate: React.FC<ProductUpdateProps> = () => {
   const { id } = useParams<{ id: string }>();
-  const [showCancelAlert, setShowCancelAlert] = useState(false);
+  const [presentCancelAlert] = useIonAlert();
 
   const product = useSelector((state) =>
     state.products.find((x) => x.id === id)
   );
-  
+
   const form = useProductForm();
 
   const router = useIonRouter();
@@ -40,59 +40,57 @@ export const ProductUpdate: React.FC<ProductUpdateProps> = () => {
   }, [product]);
 
   return (
-    <>
-      <IonPage className="list-page">
-        <IonHeader>
-          <IonToolbar>
-            <IonButtons slot="start">
-              <IonButton onClick={() => setShowCancelAlert(true)}>
-                <IonIcon slot="icon-only" icon={closeOutline} />
-              </IonButton>
-            </IonButtons>
-            <IonTitle>SỬA</IonTitle>
+    <IonPage className="list-page">
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonButton
+              onClick={() => {
+                presentCancelAlert({
+                  header: "Thoát mà không lưu",
+                  message: "Xác nhận thoát mà không lưu thay đổi này?",
+                  buttons: [
+                    {
+                      text: "ở lại",
+                      role: "cancel",
+                      handler: (blah) => {
+                        console.log("Stay");
+                      },
+                    },
+                    {
+                      text: "thoát",
+                      handler: () => {
+                        if (product) form.setFieldsValue(product);
+                        router.goBack();
+                      },
+                    },
+                  ],
+                });
+              }}
+            >
+              <IonIcon slot="icon-only" icon={closeOutline} />
+            </IonButton>
+          </IonButtons>
+          <IonTitle>SỬA</IonTitle>
 
-            <IonButtons slot="end">
-              <IonButton type="submit" onClick={form.submit}>
-                Lưu
-              </IonButton>
-            </IonButtons>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent>
-          <IonGrid>
-            <IonRow>
-              <IonCol size="12" size-md="8" offsetMd="2">
-                <ProductForm form={form} />
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        </IonContent>
-
-        <IonAlert
-          isOpen={showCancelAlert}
-          onDidDismiss={() => setShowCancelAlert(false)}
-          header="Hủy?"
-          message={
-            "Bạn có thực sự muốn thoát và không lưu thông tin này lại không?"
-          }
-          buttons={[
-            {
-              text: "ở lại",
-              role: "cancel",
-              handler: (blah) => {
-                console.log("Stay");
-              },
-            },
-            {
-              text: "thoát",
-              handler: () => {
-                if (product) form.setFieldsValue(product);
-                router.goBack();
-              },
-            },
-          ]}
-        />
-      </IonPage>
-    </>
+          <IonButtons slot="end">
+            <IonButton type="submit" onClick={form.submit}>
+              Lưu
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12" size-md="8" offsetMd="2">
+              <ProductForm form={form} />
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonContent>
+    </IonPage>
   );
 };
+
+export default ProductUpdate;

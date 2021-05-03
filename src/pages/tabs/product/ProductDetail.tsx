@@ -23,6 +23,8 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
+  useIonActionSheet,
+  useIonAlert,
   useIonRouter,
 } from "@ionic/react";
 import React, { useState } from "react";
@@ -30,15 +32,32 @@ import { useParams } from "react-router";
 import _ from "lodash";
 import * as Process from "../../../models/process";
 import { useSelector } from "../../../store";
-import { analyticsOutline, pencil } from "ionicons/icons";
+import {
+  barChartOutline,
+  close,
+  ellipsisVertical,
+  pencil,
+  pencilOutline,
+  trashOutline,
+} from "ionicons/icons";
 import { ProductModal } from "../../../components/modals/ProductModal";
+import { destroyProduct } from "../../../models/product";
+import { toast } from "../../../utils/toast";
+import { useDispatch } from "react-redux";
+import { removeProduct } from "../../../store/data/productSlice";
 
 interface ProductDetailProps {}
 
 export const ProductDetail: React.FC<ProductDetailProps> = () => {
+  const router = useIonRouter();
+  const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
+  const uid = useSelector((state) => state.user.uid);
 
   const [showReportModal, setShowReportModal] = useState(false);
+
+  const [presentActionSheet] = useIonActionSheet();
+  const [presentDeleteAlert] = useIonAlert();
 
   const { product, processes, fields } = useSelector((state) => {
     const _product = state.products.find((x) => x.id === id);
@@ -62,7 +81,18 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
     };
   });
 
-  const router = useIonRouter();
+  const handleDeleteProduct = async () => {
+    try {
+      if (id) await destroyProduct(uid, id);
+
+      toast("Xóa thành công!");
+      dispatch(removeProduct(id));
+
+      router.goBack();
+    } catch (error) {
+      toast("Có lỗi xảy ra, vui lòng thử lại!");
+    }
+  };
 
   return (
     <>
@@ -87,7 +117,38 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
 
             <IonButtons slot="end">
               <IonButton onClick={() => setShowReportModal(true)}>
-                <IonIcon slot="icon-only" icon={analyticsOutline} />
+                <IonIcon slot="icon-only" icon={barChartOutline} />
+              </IonButton>
+              <IonButton
+                onClick={() =>
+                  presentActionSheet({
+                    buttons: [
+                      {
+                        text: "Xóa",
+                        icon: trashOutline,
+                        handler: () => {
+                          presentDeleteAlert({
+                            header: "Xóa sản phẩm",
+                            message: "Bạn có chắc muốn xóa?",
+                            buttons: [
+                              "Hủy",
+                              {
+                                text: "OK!",
+                                handler: handleDeleteProduct,
+                              },
+                            ],
+                            onDidDismiss: (e) => console.log("did dismiss"),
+                          });
+                        },
+                      },
+                      { text: "Xem thống kê chi tiết", icon: barChartOutline },
+                      { text: "Sửa", icon: pencilOutline },
+                      { text: "Thoát", icon: close },
+                    ],
+                  })
+                }
+              >
+                <IonIcon slot="icon-only" icon={ellipsisVertical} />
               </IonButton>
             </IonButtons>
           </IonToolbar>

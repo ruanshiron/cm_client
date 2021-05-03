@@ -8,7 +8,7 @@ import {
   saveProduct,
 } from "../models/product";
 import { useSelector } from "../store";
-import { fetchAllProducts } from "../store/data/productSlice";
+import { addProduct, updateProduct } from "../store/data/productSlice";
 import { toast } from "../utils/toast";
 
 export const useProductForm = (product = initialProduct) => {
@@ -18,18 +18,26 @@ export const useProductForm = (product = initialProduct) => {
 
   const dispatch = useDispatch();
 
+  const [submitted, setSubmitted] = useState(false);
+
   const processes = useSelector((state) => state.processes);
 
   const submit = async () => {
+    if (submitted) return;
     if (isInvalidProduct(fields)) return;
-
+    setSubmitted(true);
     try {
-      await saveProduct(uid, fields);
+      const newProduct = (await saveProduct(uid, fields)) as any;
       setFields(product);
       router.goBack();
       toast("Lưu thành công.");
+      setSubmitted(false);
       // TODO: Do not fetch again
-      dispatch(fetchAllProducts());
+      if (fields.id) {
+        dispatch(updateProduct(fields));
+      } else {
+        dispatch(addProduct({ ...fields, id: newProduct.id }));
+      }
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }

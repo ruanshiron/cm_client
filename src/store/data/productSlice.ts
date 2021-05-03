@@ -46,6 +46,17 @@ const productSlice = createSlice({
         product.report_cache.for = action.payload;
       }
     },
+    removeProduct(state, action) {
+      return state.filter((item) => item.id !== action.payload);
+    },
+    addProduct(state, action) {
+      return [action.payload, ...state];
+    },
+    updateProduct(state, action) {
+      return state.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAllProducts.fulfilled, (_state, action: any) => {
@@ -56,6 +67,8 @@ const productSlice = createSlice({
 
 export default productSlice;
 
+export const { removeProduct, addProduct, updateProduct } = productSlice.actions;
+
 export const statisticsForProduct = createSelector(
   (state: RootState) => state.stages,
   (state: RootState) => state.processes,
@@ -65,7 +78,8 @@ export const statisticsForProduct = createSelector(
   }),
   (stages, processes, { productId, processId }) => {
     const filteredStages = stages.filter(
-      (item) => item.productId === productId && item.processId.startsWith(processId)
+      (item) =>
+        item.productId === productId && item.processId.startsWith(processId)
     );
 
     const tmp: any = {};
