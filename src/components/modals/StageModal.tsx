@@ -258,7 +258,7 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
           <IonTitle>{form.fields.id ? "Cập nhật" : "Thêm mới"}</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent color="light">
+      <IonContent>
         <IonListHeader>
           {form
             .detail()
@@ -318,8 +318,8 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
           </IonSlide>
         </IonSlides>
       </IonContent>
-      <IonFooter className="ion-no-border" color="light">
-        <IonToolbar color="light">
+      <IonFooter className="ion-no-border">
+        <IonToolbar>
           {state !== "initiated" && (
             <IonButtons slot="start">
               <IonButton onClick={handleSlideBack}>
