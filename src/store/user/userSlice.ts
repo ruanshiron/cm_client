@@ -9,6 +9,7 @@ interface UserState {
   loading: boolean;
   displayName: string;
   email: string;
+  uid: string;
 }
 
 let initialState: UserState = {
@@ -16,6 +17,7 @@ let initialState: UserState = {
   loading: false,
   displayName: "",
   email: "",
+  uid: "",
 };
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
@@ -26,9 +28,9 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    signOut: (state) => {
+    signOut: () => {
       firebaseSignOut();
-      state = { ...initialState };
+      return initialState;
     },
   },
   extraReducers: (builder) => {
@@ -37,15 +39,17 @@ const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchUser.fulfilled, (state, action: any) => {
+        if (!action.payload?.uid) return initialState;
+
         state.loading = false;
         state.isLoggedIn = action.payload ? true : false;
         state.displayName = action.payload?.displayName || "";
         state.email = action.payload?.email || "";
+        state.uid = action.payload?.uid || "";
         // console.log(action.payload);
       })
-      .addCase(fetchUser.rejected, (state, action) => {
-        state.loading = false;
-        state.isLoggedIn = false;
+      .addCase(fetchUser.rejected, () => {
+        return initialState;
         // console.log(action.payload);
       });
   },
