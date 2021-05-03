@@ -34,7 +34,7 @@ const ProductCreate: React.FC<ProductCreateProps> = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent color="light">
+      <IonContent>
         <IonGrid>
           <IonRow>
             <IonCol size="12" size-md="8" offsetMd="2">

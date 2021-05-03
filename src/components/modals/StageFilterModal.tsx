@@ -45,7 +45,7 @@ const StageFilterModal: React.FC<Props> = ({ isOpen, onDidDismiss }) => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent color="light">
+      <IonContent>
         <IonList>
           <IonListHeader>Thời gian</IonListHeader>
           <IonItem>

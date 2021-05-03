@@ -37,10 +37,10 @@ const MainTabs: React.FC<MainTabsProps> = () => {
 
         <Route path="/tabs/product/:id" component={ProductDetail} exact />
         <Route path="/tabs/product/:id/update" component={ProductUpdate} exact />
-        <Route path="/tabs/product/:id/create" component={ProductCreate} exact />
+        <Route path="/tabs/product/create" component={ProductCreate} exact />
 
         <Route path="/tabs/order/:id" component={OrderDetail} exact />
-        <Route path="/tabs/order/:id/create" component={OrderCreate} exact />
+        <Route path="/tabs/order/create" component={OrderCreate} exact />
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom" className="tab-bar">
