@@ -58,12 +58,12 @@ const App: React.FC = () => {
   useAuth();
 
   useEffect(() => {
-    dispatch(fetchAllStages());
-    dispatch(fetchAllProducts());
-    dispatch(fetchAllWorkshops());
-    dispatch(fetchAllOrders());
-    dispatch(fetchAllCustomers());
-    dispatch(fetchAllProcesses());
+    // dispatch(fetchAllStages());
+    // dispatch(fetchAllProducts());
+    // dispatch(fetchAllWorkshops());
+    // dispatch(fetchAllOrders());
+    // dispatch(fetchAllCustomers());
+    // dispatch(fetchAllProcesses());
   }, [dispatch]);
 
   const loading = useSelector((state) => state.loading.isLoading);

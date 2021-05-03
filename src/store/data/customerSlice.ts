@@ -1,12 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getAllCustomers, Customer } from "../../models/customer";
+import { RootState } from "../rootReducer";
 
 let initialState: Customer[] = [];
 
 export const fetchAllCustomers = createAsyncThunk(
   "customers/fetchAll",
-  async () => {
-    return await getAllCustomers();
+  async (_param, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+    const uid = state.user.uid;
+    return await getAllCustomers(uid);
   }
 );
 

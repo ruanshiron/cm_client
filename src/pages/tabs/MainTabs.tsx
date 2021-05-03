@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import {
   IonTabs,
   IonRouterOutlet,
@@ -24,112 +24,44 @@ import OrderCreate from "./order/OrderCreate";
 import DashboardPage from "./dashboard/DashboardPage";
 import { ProductUpdate } from "./product/ProductUpdate";
 
-interface TabPage {
-  name: string;
-  title: string;
-  icon: string;
-  path: string;
-  index?: ReactElement;
-  create?: React.FC;
-  update?: React.FC;
-  detail?: React.FC;
-}
-
-const tabPages: TabPage[] = [
-  {
-    name: "dashboard",
-    title: "Tổng hợp",
-    icon: gridSharp,
-    path: "/tabs/dashboard",
-    index: <DashboardPage />,
-  },
-  {
-    name: "diary",
-    title: "Nhật ký",
-    icon: calendarSharp,
-    path: "/tabs/diary",
-    index: <DiaryPage />,
-  },
-  {
-    name: "product",
-    title: "Sản phẩm",
-    icon: shirtSharp,
-    path: "/tabs/product",
-    index: <ProductPage />,
-    create: ProductCreate,
-    detail: ProductDetail,
-    update: ProductUpdate,
-  },
-  {
-    name: "order",
-    title: "Đơn hàng",
-    icon: checkmarkDoneCircleSharp,
-    path: "/tabs/order",
-    index: <OrderPage />,
-    create: OrderCreate,
-    detail: OrderDetail,
-  },
-];
-
 interface MainTabsProps {}
 
 const MainTabs: React.FC<MainTabsProps> = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Redirect exact path="/tabs" to="/tabs/dashboard" />
+        <Redirect exact path="/tabs" to="/tabs/diary" />
 
-        {tabPages
-          .filter((tab) => !!tab.index)
-          .map((tab, i) => (
-            <Route
-              key={i}
-              path={tab.path}
-              render={() => tab.index}
-              exact={!!(tab.detail || tab.create || tab.update)}
-            />
-          ))}
+        <Route path="/tabs/dashboard" render={() => <DashboardPage />} exact />
+        <Route path="/tabs/diary" render={() => <DiaryPage />} />
+        <Route path="/tabs/product" render={() => <ProductPage />} />
+        <Route path="/tabs/order" render={() => <OrderPage />} />
 
-        {tabPages
-          .filter((tab) => !!tab.detail)
-          .map((tab, i) => (
-            <Route
-              key={i}
-              path={tab.path + "/:id"}
-              component={tab.detail}
-              exact
-            />
-          ))}
+        <Route path="/tabs/product/:id" component={ProductDetail} exact />
+        <Route path="/tabs/product/:id/update" component={ProductUpdate} exact />
+        <Route path="/tabs/product/:id/create" component={ProductCreate} exact />
 
-        {tabPages
-          .filter((tab) => !!tab.detail)
-          .map((tab, i) => (
-            <Route
-              key={i}
-              path={tab.path + "/:id/update"}
-              component={tab.update}
-            />
-          ))}
-
-        {tabPages
-          .filter((tab) => !!tab.create)
-          .map((tab, i) => (
-            <Route key={i} path={tab.path + "/create"} component={tab.create} />
-          ))}
+        <Route path="/tabs/order/:id" component={OrderDetail} exact />
+        <Route path="/tabs/order/:id/create" component={OrderCreate} exact />
       </IonRouterOutlet>
 
       <IonTabBar slot="bottom" className="tab-bar">
-        {tabPages.map((tab, i) => (
-          <IonTabButton
-            key={i}
-            tab={tab.name}
-            href={tab.path}
-            layout="label-hide"
-          >
-            <IonIcon size="large" icon={tab.icon} />
-            <IonLabel>{tab.title}</IonLabel>
-          </IonTabButton>
-        ))}
+        <IonTabButton tab="dashboard" href="/tabs/dashboard" layout="label-hide" >
+          <IonIcon size="large" icon={gridSharp} />
+          <IonLabel>Tổng hợp</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="diary" href="/tabs/diary" layout="label-hide">
+          <IonIcon size="large" icon={calendarSharp} />
+          <IonLabel>Nhật ký</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="product" href="/tabs/product" layout="label-hide">
+          <IonIcon size="large" icon={shirtSharp} />
+          <IonLabel>Sản phẩm</IonLabel>
+        </IonTabButton>
+        <IonTabButton tab="order" href="/tabs/order" layout="label-hide">
+          <IonIcon size="large" icon={checkmarkDoneCircleSharp} />
+          <IonLabel>Đơn hàng</IonLabel>
+        </IonTabButton>
       </IonTabBar>
     </IonTabs>
   );

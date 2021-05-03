@@ -13,8 +13,10 @@ export interface Customer {
   createdAt?: any;
 }
 
-export const getAllCustomers = () => {
+export const getAllCustomers = (user: string) => {
   return database
+    .collection("users")
+    .doc(user)
     .collection(collection)
     .get()
     .then((snap) => {
