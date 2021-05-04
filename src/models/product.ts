@@ -68,7 +68,11 @@ export const destroyProduct = (user: string, id: string) => {
 export const isInvalidProduct = (fields: Product) =>
   !fields.name.trim() || !fields.code.trim() || !fields.sizes.length;
 
-export const cache = (user: string, productId: string, reportCache: ReportCache) => {
+export const cache = (
+  user: string,
+  productId: string,
+  reportCache: ReportCache
+) => {
   return ref(user).doc(productId).update({
     report_cache: reportCache,
     updated: firebase.firestore.FieldValue.serverTimestamp(),

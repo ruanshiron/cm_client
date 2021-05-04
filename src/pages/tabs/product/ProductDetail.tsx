@@ -9,8 +9,6 @@ import {
   IonCardHeader,
   IonCol,
   IonContent,
-  IonFab,
-  IonFabButton,
   IonGrid,
   IonHeader,
   IonIcon,
@@ -36,7 +34,6 @@ import {
   barChartOutline,
   close,
   ellipsisVertical,
-  pencil,
   pencilOutline,
   trashOutline,
 } from "ionicons/icons";
