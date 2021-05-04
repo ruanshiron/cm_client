@@ -4,6 +4,7 @@ import { Redirect, Route } from "react-router";
 import CustomerCreate from "../pages/resources/customer/CustomerCreate";
 import { CustomerDetail } from "../pages/resources/customer/CustomerDetail";
 import CustomerPage from "../pages/resources/customer/CustomerPage";
+import CustomerUpdate from "../pages/resources/customer/CustomerUpdate";
 import EmployeeCreate from "../pages/resources/employee/EmployeeCreate";
 import { EmployeeDetail } from "../pages/resources/employee/EmployeeDetail";
 import EmployeePage from "../pages/resources/employee/EmployeePage";
@@ -38,6 +39,7 @@ const MainRoutes = () => {
       <Route path="/suppliers/:id" component={SupplierDetail} exact />
 
       <Route path={"/workshops/:id/update"} component={WorkshopUpdate} />
+      <Route path={"/customers/:id/update"} component={CustomerUpdate} />
 
       <Route path="/workshops/create" component={WorkshopCreate} exact />
       <Route path="/customers/create" component={CustomerCreate} exact />

@@ -4,8 +4,6 @@ import {
   IonButtons,
   IonCard,
   IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
   IonCol,
   IonContent,
   IonGrid,
@@ -14,117 +12,138 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonNote,
   IonPage,
   IonRow,
   IonTitle,
   IonToolbar,
+  useIonActionSheet,
+  useIonAlert,
+  useIonRouter,
 } from "@ionic/react";
 import {
   callOutline,
   callSharp,
+  close,
+  ellipsisVertical,
+  pencilOutline,
   personOutline,
   phonePortraitOutline,
-  shareOutline,
-  shareSharp,
+  trashOutline,
 } from "ionicons/icons";
-import { chain, sum } from "lodash";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
+import { destroyCustomer } from "../../../models/customer";
 import { useSelector } from "../../../store";
+import { removeCustomer } from "../../../store/data/customerSlice";
+import { toast } from "../../../utils/toast";
 
 interface CustomerDetailProps {}
 
 export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
+  const [presentDeleteAlert] = useIonAlert();
+  const [presentActionSheet] = useIonActionSheet();
+  const uid = useSelector((state) => state.user.uid);
+  const dispatch = useDispatch();
+  const router = useIonRouter();
   const { id } = useParams<{ id: string }>();
   const customer = useSelector((state) =>
     state.customers.find((v) => v.id === id)
   );
 
-  const data = useSelector((state) => {
-    const orders = state.orders
-      .filter((v) => v.customer === id)
-      .flatMap((v) => v.lines);
-    return chain(orders)
-      .groupBy("product")
-      .map((value, key) => ({
-        name: state.products.find((v) => v.id === key)?.name,
-        aggregate: sum(value.map((v) => v.quantity)),
-      }))
-      .value();
-  });
+  const handleDeleteCustomer = async () => {
+    try {
+      if (id) await destroyCustomer(uid, id);
+
+      toast("Xóa thành công!");
+      dispatch(removeCustomer(id));
+
+      router.goBack();
+    } catch (error) {
+      toast("Có lỗi xảy ra, vui lòng thử lại!");
+    }
+  };
+
   return (
-    <>
-      <IonPage id="customer-detail">
-        <IonContent>
-          <IonHeader className="ion-no-border">
-            <IonToolbar>
-              <IonButtons slot="start">
-                <IonBackButton defaultHref="/customers" />
-              </IonButtons>
-              <IonTitle>Khách hàng</IonTitle>
-              <IonButtons slot="end">
-                <IonButton>
-                  <IonIcon
-                    slot="icon-only"
-                    ios={callOutline}
-                    md={callSharp}
-                  ></IonIcon>
-                </IonButton>
-                <IonButton>
-                  <IonIcon
-                    slot="icon-only"
-                    ios={shareOutline}
-                    md={shareSharp}
-                  ></IonIcon>
-                </IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-          <IonGrid>
-            <IonRow>
-              <IonCol size="12" size-md="8" offsetMd="2">
-                <IonCard>
-                  <IonCardContent>
-                    <IonList lines="full">
-                      <IonItem>
-                        <IonIcon icon={personOutline} slot="start"></IonIcon>
-                        <IonLabel slot="start">{customer?.name}</IonLabel>
-                      </IonItem>
-                      <IonItem>
-                        <IonIcon
-                          icon={phonePortraitOutline}
-                          slot="start"
-                        ></IonIcon>
-                        <IonLabel slot="start">
-                          {customer?.phonenumber}
-                        </IonLabel>
-                      </IonItem>
-                    </IonList>
-                  </IonCardContent>
-                </IonCard>
-                <IonCard>
-                  <IonCardHeader>
-                    <IonCardSubtitle>Sản phẩm đã đặt hàng</IonCardSubtitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <IonList lines="full">
-                      {data.map((e, index) => (
-                        <IonItem key={index}>
-                          <IonLabel slot="start">{e.name}</IonLabel>
-                          <IonNote slot="end">
-                            <p>{e.aggregate}</p>
-                          </IonNote>
-                        </IonItem>
-                      ))}
-                    </IonList>
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        </IonContent>
-      </IonPage>
-    </>
+    <IonPage className="list-page">
+      <IonContent>
+        <IonHeader className="ion-no-border">
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonBackButton defaultHref="/customers" />
+            </IonButtons>
+            <IonTitle>Khách hàng</IonTitle>
+            <IonButtons slot="end">
+              <IonButton>
+                <IonIcon
+                  slot="icon-only"
+                  ios={callOutline}
+                  md={callSharp}
+                ></IonIcon>
+              </IonButton>
+              <IonButton
+                onClick={() =>
+                  presentActionSheet({
+                    buttons: [
+                      {
+                        text: "Xóa",
+                        icon: trashOutline,
+                        handler: () => {
+                          presentDeleteAlert({
+                            header: "Xóa sản phẩm",
+                            message: "Bạn có chắc muốn xóa?",
+                            buttons: [
+                              "Hủy",
+                              {
+                                text: "OK!",
+                                handler: handleDeleteCustomer,
+                              },
+                            ],
+                            onDidDismiss: (e) => console.log("did dismiss"),
+                          });
+                        },
+                      },
+                      {
+                        text: "Sửa",
+                        icon: pencilOutline,
+                        handler: () => {
+                          router.push(router.routeInfo.pathname + "/update");
+                        },
+                      },
+                      { text: "Thoát", icon: close },
+                    ],
+                  })
+                }
+              >
+                <IonIcon slot="icon-only" icon={ellipsisVertical}></IonIcon>
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12" size-md="8" offsetMd="2">
+              <IonCard className="list-card">
+                <IonCardContent>
+                  <IonList lines="full" style={{ border: "none" }}>
+                    <IonItem>
+                      <IonIcon icon={personOutline} slot="start"></IonIcon>
+                      <IonLabel slot="start">{customer?.name}</IonLabel>
+                    </IonItem>
+                    <IonItem>
+                      <IonIcon
+                        icon={phonePortraitOutline}
+                        slot="start"
+                      ></IonIcon>
+                      <IonLabel slot="start">{customer?.phonenumber}</IonLabel>
+                    </IonItem>
+                  </IonList>
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonContent>
+    </IonPage>
   );
 };

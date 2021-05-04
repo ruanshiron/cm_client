@@ -8,7 +8,7 @@ import {
   saveCustomer,
 } from "../models/customer";
 import { useSelector } from "../store";
-import { fetchAllCustomers } from "../store/data/customerSlice";
+import { updateCustomer, addCustomer } from "../store/data/customerSlice";
 import { toast } from "../utils/toast";
 
 export const useCustomerForm = () => {
@@ -22,12 +22,15 @@ export const useCustomerForm = () => {
     if (isInvalidCustomer(fields)) return;
 
     try {
-      await saveCustomer(uid, fields);
+      const newCustomer = (await saveCustomer(uid, fields)) as any;
       setFields(initialCustomer);
       router.goBack();
       toast("Lưu thành công.");
-      // TODO: Do not fetch again
-      dispatch(fetchAllCustomers());
+      if (fields.id) {
+        dispatch(updateCustomer(fields));
+      } else {
+        dispatch(addCustomer({ ...fields, id: newCustomer.id }));
+      }
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
