@@ -1,4 +1,5 @@
 import Menu from "./components/Menu";
+import DateFnsUtils from "@date-io/date-fns";
 import React, { useEffect } from "react";
 import {
   IonApp,
@@ -31,6 +32,7 @@ import "./theme/variables.css";
 
 /* SCSS */
 import "react-calendar/dist/Calendar.css";
+import "react-datepicker/dist/react-datepicker.css";
 import "./theme/style.scss";
 
 import { useDispatch } from "react-redux";
@@ -47,6 +49,8 @@ import { fetchAllProcesses } from "./store/data/processSlice";
 import QrPage from "./pages/login/QrPage";
 import MainRoutes from "./components/MainRoutes";
 import { useFancyToast } from "./hooks/useFancyToast";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { vi } from "date-fns/locale";
 
 setupConfig({
   rippleEffect: true,
@@ -74,30 +78,32 @@ const App: React.FC = () => {
     (state) => state.user
   );
   return (
-    <IonApp>
-      {loading && (
-        <IonProgressBar
-          style={{ zIndex: 999 }}
-          type="indeterminate"
-        ></IonProgressBar>
-      )}
-      <IonReactRouter>
-        {!userLoading &&
-          (isLoggedIn ? (
-            <IonSplitPane contentId="main">
-              <Menu />
-              <MainRoutes />
-            </IonSplitPane>
-          ) : (
-            <IonRouterOutlet>
-              <Route path="/" render={() => <Redirect to="/login" />} exact />
-              <Route path="/login" component={LoginPage} exact />
-              <Route path="/signup" component={SignUpPage} exact />
-              <Route path="/qr" component={QrPage} exact />
-            </IonRouterOutlet>
-          ))}
-      </IonReactRouter>
-    </IonApp>
+    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={vi}>
+      <IonApp>
+        {loading && (
+          <IonProgressBar
+            style={{ zIndex: 999 }}
+            type="indeterminate"
+          ></IonProgressBar>
+        )}
+        <IonReactRouter>
+          {!userLoading &&
+            (isLoggedIn ? (
+              <IonSplitPane contentId="main">
+                <Menu />
+                <MainRoutes />
+              </IonSplitPane>
+            ) : (
+              <IonRouterOutlet>
+                <Route path="/" render={() => <Redirect to="/login" />} exact />
+                <Route path="/login" component={LoginPage} exact />
+                <Route path="/signup" component={SignUpPage} exact />
+                <Route path="/qr" component={QrPage} exact />
+              </IonRouterOutlet>
+            ))}
+        </IonReactRouter>
+      </IonApp>
+    </MuiPickersUtilsProvider>
   );
 };
 

@@ -155,7 +155,7 @@ ion-router-outlet {
 }
 
 ion-slides {
-  height: 100%;
+  height: calc(100% - 45px);
 }
 
 ion-col {

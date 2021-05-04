@@ -20,13 +20,12 @@ import {
 } from "@ionic/react";
 import { arrowBack, checkmark, closeOutline } from "ionicons/icons";
 import { useEventForm } from "../../hooks/useEventForm";
-import Calendar from "react-calendar";
 import { formatISO } from "date-fns";
-import { isArray } from "lodash";
 import { Process } from "../../models/process";
 import { processParser } from "../../utils/data";
 import { Workshop } from "../../models/workshop";
 import { Product } from "../../models/product";
+import { DatePicker } from "@material-ui/pickers";
 
 const DateSelecter: React.FC<{ onChange: ReturnType<any>; value: Date }> = ({
   onChange,
@@ -34,11 +33,14 @@ const DateSelecter: React.FC<{ onChange: ReturnType<any>; value: Date }> = ({
 }) => {
   return (
     <div className="calendar-swapper">
-      <Calendar
-        onChange={(e) => {
-          onChange(isArray(e) ? e[0] : e);
-        }}
+      <DatePicker
+      color="primary"
+        autoOk
+        orientation="landscape"
+        variant="static"
+        openTo="date"
         value={value}
+        onChange={(e) => onChange(e)}
       />
     </div>
   );
