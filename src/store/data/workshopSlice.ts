@@ -25,6 +25,9 @@ const workshopSlice = createSlice({
   name: "workshops",
   initialState,
   reducers: {
+    removeWorkshop: (state, action: PayloadAction<string>) => {
+      return state.filter((item) => item.id !== action.payload);
+    },
     addAmount: (
       state,
       action: PayloadAction<{ id: string; amount: Amount }>
@@ -57,7 +60,11 @@ const workshopSlice = createSlice({
   },
 });
 
-export const { addAmount, removeAmount } = workshopSlice.actions;
+export const {
+  addAmount,
+  removeAmount,
+  removeWorkshop,
+} = workshopSlice.actions;
 
 export default workshopSlice;
 

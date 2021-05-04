@@ -21,28 +21,34 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
+  useIonActionSheet,
+  useIonAlert,
   useIonRouter,
 } from "@ionic/react";
 import {
-  analyticsOutline,
+  barChartOutline,
+  close,
   copyOutline,
+  ellipsisVertical,
   pencilOutline,
   personOutline,
   phonePortraitOutline,
   qrCodeOutline,
   refresh,
+  trashOutline,
 } from "ionicons/icons";
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import { WorkshopModal } from "../../../components/modals/WorkshopModal";
 import { useSelector } from "../../../store";
 import { v4 as uuidv4 } from "uuid";
-import { saveWorkshop } from "../../../models/workshop";
+import { destroyWorkshop, saveWorkshop } from "../../../models/workshop";
 import { useDispatch } from "react-redux";
 import {
   fetchAllWorkshops,
   statisticsForWorkshop,
   statisticsForWorkshopAndGroupByProduct,
+  removeWorkshop,
 } from "../../../store/data/workshopSlice";
 import { toast } from "../../../utils/toast";
 import QRCode from "qrcode.react";
@@ -50,6 +56,8 @@ import QRCode from "qrcode.react";
 interface WorkshopDetailProps {}
 
 export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
+  const [presentDeleteAlert] = useIonAlert();
+  const [presentActionSheet] = useIonActionSheet();
   const [showReportModal, setShowReportModal] = useState(false);
   const router = useIonRouter();
   const uid = useSelector((state) => state.user.uid);
@@ -78,6 +86,20 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
   };
+
+  const handleDeleteWorkshop = async () => {
+    try {
+      if (id) await destroyWorkshop(uid, id);
+
+      toast("Xóa thành công!");
+      dispatch(removeWorkshop(id));
+
+      router.goBack();
+    } catch (error) {
+      toast("Có lỗi xảy ra, vui lòng thử lại!");
+    }
+  };
+
   return (
     <>
       <IonPage className="list-page">
@@ -97,7 +119,50 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                   <IonIcon slot="icon-only" icon={pencilOutline}></IonIcon>
                 </IonButton>
                 <IonButton onClick={() => setShowReportModal(true)}>
-                  <IonIcon slot="icon-only" icon={analyticsOutline}></IonIcon>
+                  <IonIcon slot="icon-only" icon={barChartOutline}></IonIcon>
+                </IonButton>
+                <IonButton
+                  onClick={() =>
+                    presentActionSheet({
+                      buttons: [
+                        {
+                          text: "Xóa",
+                          icon: trashOutline,
+                          handler: () => {
+                            presentDeleteAlert({
+                              header: "Xóa sản phẩm",
+                              message: "Bạn có chắc muốn xóa?",
+                              buttons: [
+                                "Hủy",
+                                {
+                                  text: "OK!",
+                                  handler: handleDeleteWorkshop,
+                                },
+                              ],
+                              onDidDismiss: (e) => console.log("did dismiss"),
+                            });
+                          },
+                        },
+                        {
+                          text: "Xem thống kê chi tiết",
+                          icon: barChartOutline,
+                          handler: () => {
+                            setShowReportModal(true);
+                          },
+                        },
+                        {
+                          text: "Sửa",
+                          icon: pencilOutline,
+                          handler: () => {
+                            router.push(router.routeInfo.pathname + "/update");
+                          },
+                        },
+                        { text: "Thoát", icon: close },
+                      ],
+                    })
+                  }
+                >
+                  <IonIcon slot="icon-only" icon={ellipsisVertical}></IonIcon>
                 </IonButton>
               </IonButtons>
             </IonToolbar>
