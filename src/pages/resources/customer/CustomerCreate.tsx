@@ -2,16 +2,17 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
-  IonInput,
-  IonItem,
-  IonLabel,
   IonPage,
+  IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import React from "react";
+import CustomerForm from "../../../components/forms/CustomerForm";
 import { useCustomerForm } from "../../../hooks/useCustomerForm";
 
 interface CustomerCreateProps {}
@@ -19,7 +20,7 @@ interface CustomerCreateProps {}
 const CustomerCreate: React.FC<CustomerCreateProps> = () => {
   const form = useCustomerForm();
   return (
-    <IonPage>
+    <IonPage className="list-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -33,22 +34,14 @@ const CustomerCreate: React.FC<CustomerCreateProps> = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent color="light">
-        <div className="ion-padding-top ion-padding-start"></div>
-        <IonItem>
-          <IonLabel position="floating">Tên</IonLabel>
-          <IonInput
-            onIonChange={(e) => form.setFieldsValue({ name: e.detail.value! })}
-          ></IonInput>
-        </IonItem>
-        <IonItem>
-          <IonLabel position="floating">Số điện thoại</IonLabel>
-          <IonInput
-            onIonChange={(e) =>
-              form.setFieldsValue({ phonenumber: e.detail.value! })
-            }
-          ></IonInput>
-        </IonItem>
+      <IonContent>
+        <IonGrid fixed>
+          <IonRow>
+            <IonCol size="12" size-md="8" offsetMd="2">
+              <CustomerForm form={form} />
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );

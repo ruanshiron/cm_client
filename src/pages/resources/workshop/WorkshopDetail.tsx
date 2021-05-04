@@ -45,10 +45,10 @@ import { v4 as uuidv4 } from "uuid";
 import { destroyWorkshop, saveWorkshop } from "../../../models/workshop";
 import { useDispatch } from "react-redux";
 import {
-  fetchAllWorkshops,
   statisticsForWorkshop,
   statisticsForWorkshopAndGroupByProduct,
   removeWorkshop,
+  updateWorkshopCode,
 } from "../../../store/data/workshopSlice";
 import { toast } from "../../../utils/toast";
 import QRCode from "qrcode.react";
@@ -80,8 +80,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
         code,
       });
       toast("Lưu thành công.");
-      // TODO: Do not fetch again
-      dispatch(fetchAllWorkshops());
+      dispatch(updateWorkshopCode({ id, code }));
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }

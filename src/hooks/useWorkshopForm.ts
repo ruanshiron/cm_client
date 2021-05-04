@@ -9,7 +9,11 @@ import {
   destroyWorkshop,
 } from "../models/workshop";
 import { useSelector } from "../store";
-import { fetchAllWorkshops } from "../store/data/workshopSlice";
+import {
+  updateWorkshop,
+  addWorkshop,
+  removeWorkshop,
+} from "../store/data/workshopSlice";
 import { toast } from "../utils/toast";
 
 export const useWorkshopForm = (workshop = initialWorkshop) => {
@@ -20,15 +24,18 @@ export const useWorkshopForm = (workshop = initialWorkshop) => {
   const submit = async () => {
     if (isInvalidWorkshop(fields)) return;
     try {
-      await saveWorkshop(uid, fields);
+      const newWorkshop = (await saveWorkshop(uid, fields)) as any;
       setFields(workshop);
       router.goBack();
       toast("Lưu thành công.");
-      // TODO: Do not fetch again
-      dispatch(fetchAllWorkshops());
+      if (fields.id) {
+        dispatch(updateWorkshop(fields));
+      } else {
+        dispatch(addWorkshop({ ...fields, id: newWorkshop.id }));
+      }
     } catch (e) {
       console.log(e);
-      
+
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
   };
@@ -40,8 +47,7 @@ export const useWorkshopForm = (workshop = initialWorkshop) => {
     await destroyWorkshop(uid, fields.id);
     toast("Xóa thành công.");
     router.push("/workshops/");
-    // TODO: Do not fetch again
-    dispatch(fetchAllWorkshops());
+    dispatch(removeWorkshop(fields.id));
   };
   const setFieldsValue = (e: Partial<Workshop>) => {
     setFields((fields) => ({ ...fields, ...e }));

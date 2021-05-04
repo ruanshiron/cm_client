@@ -11,6 +11,7 @@ export const initialWorkshop: Workshop = {
   name: "",
   phonenumber: "",
   amounts: [],
+  code: "",
 };
 
 export interface Amount {
@@ -26,7 +27,7 @@ export interface Workshop {
   name: string;
   phonenumber: string;
   amounts: Amount[];
-  code?: string;
+  code: string;
   createdAt?: any;
 }
 

@@ -28,6 +28,21 @@ const workshopSlice = createSlice({
     removeWorkshop: (state, action: PayloadAction<string>) => {
       return state.filter((item) => item.id !== action.payload);
     },
+    addWorkshop: (state, action: PayloadAction<Workshop>) => {
+      state.unshift(action.payload);
+    },
+    updateWorkshop: (state, action: PayloadAction<Workshop>) => {
+      return state.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+    },
+    updateWorkshopCode: (
+      state,
+      action: PayloadAction<{ id: string; code: string }>
+    ) => {
+      const item = state.find((item) => item.id === action.payload.id);
+      if (item) item.code = action.payload.code;
+    },
     addAmount: (
       state,
       action: PayloadAction<{ id: string; amount: Amount }>
@@ -61,9 +76,12 @@ const workshopSlice = createSlice({
 });
 
 export const {
+  addWorkshop,
+  updateWorkshop,
   addAmount,
   removeAmount,
   removeWorkshop,
+  updateWorkshopCode,
 } = workshopSlice.actions;
 
 export default workshopSlice;
