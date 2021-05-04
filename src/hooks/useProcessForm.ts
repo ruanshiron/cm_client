@@ -15,15 +15,15 @@ export const useProcessForm = (process = initialProcess) => {
   const uid = useSelector((state) => state.user.uid);
 
   const [fields, setFields] = useState<Process>(process);
-  const [defaultName, setDefaultName] = useState(false);
 
   const dispatch = useDispatch();
 
   const submit = async () => {
     if (isInvalidProcess(fields)) return;
 
-    console.log(fields);
-    
+    if (!fields.pending) fields.pending = "đang " + fields.name;
+    if (!fields.fulfilled) fields.fulfilled = "đã " + fields.name;
+    if (!fields.rejected) fields.rejected = fields.name + " lỗi";
 
     try {
       await saveProcess(uid, fields);
@@ -46,8 +46,6 @@ export const useProcessForm = (process = initialProcess) => {
     setFieldsValue,
     submit,
     setFields,
-    defaultName,
-    setDefaultName,
     showModal,
     setShowModal,
   };

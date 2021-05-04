@@ -17,6 +17,7 @@ import {
   IonInput,
   IonListHeader,
   IonBadge,
+  isPlatform,
 } from "@ionic/react";
 import { arrowBack, checkmark, closeOutline } from "ionicons/icons";
 import { useEventForm } from "../../hooks/useEventForm";
@@ -34,9 +35,8 @@ const DateSelecter: React.FC<{ onChange: ReturnType<any>; value: Date }> = ({
   return (
     <div className="calendar-swapper">
       <DatePicker
-      color="primary"
         autoOk
-        orientation="landscape"
+        orientation={isPlatform("mobile") ? "portrait" : "landscape"}
         variant="static"
         openTo="date"
         value={value}
@@ -53,7 +53,7 @@ const CustomSelecter: React.FC<{
 }> = ({ onChange, value, items }) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <IonList>
+      <IonList className="ion-no-padding" lines="full">
         {items.map((item, index) => (
           <IonItem key={index} button onClick={() => onChange(item)}>
             {item.name}
@@ -74,7 +74,7 @@ const SizeSelecter: React.FC<{
 }> = ({ onChange, value, items }) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <IonList>
+      <IonList className="ion-no-padding">
         {items.map((item, index) => (
           <IonItem key={index} button onClick={() => onChange(item)}>
             {item}
@@ -95,7 +95,7 @@ const ProcessSelecter: React.FC<{
 }> = ({ onChange, value, items }) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <IonList>
+      <IonList className="ion-no-padding" lines="full">
         {items.map((item, index) => (
           <React.Fragment key={index}>
             <IonItem
@@ -171,7 +171,7 @@ const QuantityInput: React.FC<{ onChange: ReturnType<any>; value: number }> = ({
 }) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <IonList>
+      <IonList className="ion-no-padding">
         <IonItem>
           <IonLabel position="stacked">Số lượng</IonLabel>
           <IonInput
