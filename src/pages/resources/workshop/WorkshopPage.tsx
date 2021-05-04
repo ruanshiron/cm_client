@@ -25,10 +25,8 @@ interface WorkshopPageProps {}
 
 const WorkshopPage: React.FC<WorkshopPageProps> = () => {
   const workshops = useSelector((state) => state.workshops);
-
   const [showPopover, setShowPopover] = useState(false);
   const [popoverEvent, setPopoverEvent] = useState<any>();
-
   const presentPopover = (e: React.MouseEvent) => {
     setPopoverEvent(e.nativeEvent);
     setShowPopover(true);

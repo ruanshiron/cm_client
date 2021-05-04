@@ -23,7 +23,7 @@ const CustomerCreate: React.FC<CustomerCreateProps> = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/tabs/workshop"></IonBackButton>
+            <IonBackButton defaultHref="/workshops"></IonBackButton>
           </IonButtons>
           <IonTitle>Thêm khách hàng</IonTitle>
           <IonButtons slot="end">

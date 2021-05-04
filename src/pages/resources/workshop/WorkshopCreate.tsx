@@ -24,7 +24,7 @@ const WorkshopCreate: React.FC<WorkshopCreateProps> = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/tabs/workshop"></IonBackButton>
+            <IonBackButton defaultHref="/workshops"></IonBackButton>
           </IonButtons>
           <IonTitle>Thêm xưởng may</IonTitle>
           <IonButtons slot="end">

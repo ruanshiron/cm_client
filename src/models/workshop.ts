@@ -45,14 +45,16 @@ export const getAllWorkshops = (user: string) => {
 export const saveWorkshop = (user: string, param: Partial<Workshop>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
+    amounts: param.amounts?.map((i) => _.pickBy(i, _.identity)) || [],
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
+
   return param.id
     ? ref(user).doc(param.id!).set(permittedParam)
     : ref(user).add(permittedParam);
 };
 
-export const destroyWorkshop = (user:string, id: string) => {
+export const destroyWorkshop = (user: string, id: string) => {
   return ref(user).doc(id).delete();
 };
 
@@ -77,10 +79,13 @@ export const findWorkshopByCode = async (code: string) => {
   }
 };
 
-export const addAmountToWorkshop = (workshopId: string, amount: Amount) => {
+export const addAmountToWorkshop = (
+  user: string,
+  workshopId: string,
+  amount: Amount
+) => {
   const permitted = _.pickBy(amount, _.identity);
-  return database
-    .collection(collection)
+  return ref(user)
     .doc(workshopId)
     .update({
       amounts: firebase.firestore.FieldValue.arrayUnion(permitted),
@@ -88,12 +93,12 @@ export const addAmountToWorkshop = (workshopId: string, amount: Amount) => {
 };
 
 export const removeAmountFromWorkshop = (
+  user: string,
   workshopId: string,
   amount: Amount
 ) => {
   const permitted = _.pickBy(amount, _.identity);
-  return database
-    .collection(collection)
+  return ref(user)
     .doc(workshopId)
     .update({
       amounts: firebase.firestore.FieldValue.arrayRemove(permitted),

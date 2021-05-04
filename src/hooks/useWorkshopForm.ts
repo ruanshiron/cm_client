@@ -26,7 +26,9 @@ export const useWorkshopForm = (workshop = initialWorkshop) => {
       toast("Lưu thành công.");
       // TODO: Do not fetch again
       dispatch(fetchAllWorkshops());
-    } catch {
+    } catch (e) {
+      console.log(e);
+      
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
   };

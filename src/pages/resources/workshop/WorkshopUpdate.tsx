@@ -23,6 +23,7 @@ import {
   useIonModal,
 } from "@ionic/react";
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
 import WorkshopForm from "../../../components/forms/WorkshopForm";
 import AmountModal from "../../../components/modals/AmountModal";
@@ -33,11 +34,15 @@ import {
   Amount,
 } from "../../../models/workshop";
 import { useSelector } from "../../../store";
+import { addAmount, removeAmount } from "../../../store/data/workshopSlice";
+import { toast } from "../../../utils/toast";
 
 interface WorkshopUpdateProps {}
 
 const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
   const { id } = useParams<{ id: string }>();
+  const uid = useSelector((state) => state.user.uid);
+  const dispatch = useDispatch();
   const workshop = useSelector((state) =>
     state.workshops.find((i) => i.id === id)
   );
@@ -45,15 +50,27 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
   const form = useWorkshopForm(workshop);
   const handleSubmitAmount = (amount: Amount) => {
     if (workshop?.id)
-      addAmountToWorkshop(workshop?.id, amount)
-        .then((doc) => console.log(doc))
-        .catch((e) => console.log(e));
+      addAmountToWorkshop(uid, workshop.id, amount)
+        .then((doc) => {
+          dispatch(addAmount({ id: workshop.id!, amount }));
+          dismiss();
+        })
+        .catch((e) => {
+          toast("Có lỗi xảy ra, vui lòng thử lại!");
+        });
   };
-  const handleDeleteAmount = (amount: Amount) => {
+  const handleDeleteAmount = (amount: Amount, index: number) => {
+    document.querySelector("ion-item-sliding")?.closeOpened();
+
     if (workshop?.id)
-      removeAmountFromWorkshop(workshop?.id, amount)
-        .then((doc) => console.log(doc))
-        .catch((e) => console.log(e));
+      removeAmountFromWorkshop(uid, workshop?.id, amount)
+        .then((doc) => {
+          dispatch(removeAmount({ id: workshop.id!, index }));
+          dismiss();
+        })
+        .catch((e) => {
+          toast("Có lỗi xảy ra, vui lòng thử lại!");
+        });
   };
   const [present, dismiss] = useIonModal(AmountModal, {
     onDismiss: () => dismiss(),
@@ -77,7 +94,7 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton defaultHref="/tabs/workshops"></IonBackButton>
+            <IonBackButton defaultHref="/workshops"></IonBackButton>
           </IonButtons>
           <IonTitle>Thêm xưởng may</IonTitle>
           <IonButtons slot="end">
@@ -125,7 +142,7 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
                           <IonItemOption
                             color="danger"
                             expandable
-                            onClick={() => handleDeleteAmount(item)}
+                            onClick={() => handleDeleteAmount(item, index)}
                           >
                             Xóa
                           </IonItemOption>

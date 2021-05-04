@@ -2,9 +2,10 @@ import {
   createAsyncThunk,
   createSelector,
   createSlice,
+  PayloadAction,
 } from "@reduxjs/toolkit";
 import { chain, filter, forEach } from "lodash";
-import { getAllWorkshops, Workshop } from "../../models/workshop";
+import { Amount, getAllWorkshops, Workshop } from "../../models/workshop";
 import { processParser } from "../../utils/data";
 import { RootState } from "../rootReducer";
 
@@ -23,13 +24,40 @@ export const fetchAllWorkshops = createAsyncThunk(
 const workshopSlice = createSlice({
   name: "workshops",
   initialState,
-  reducers: {},
+  reducers: {
+    addAmount: (
+      state,
+      action: PayloadAction<{ id: string; amount: Amount }>
+    ) => {
+      const item = state.find((item) => item.id === action.payload.id);
+      item?.amounts.push(action.payload.amount);
+    },
+    removeAmount: (
+      state,
+      action: PayloadAction<{ id: string; index: number }>
+    ) => {
+      // const item = state.find((item) => item.id === action.payload.id);
+      // item?.amounts.splice(action.payload.index, 1);
+      return state.map((item) =>
+        item.id !== action.payload.id
+          ? item
+          : {
+              ...item,
+              amounts: item.amounts.filter(
+                (_i, index) => index !== action.payload.index
+              ),
+            }
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchAllWorkshops.fulfilled, (_state, action: any) => {
       return action.payload;
     });
   },
 });
+
+export const { addAmount, removeAmount } = workshopSlice.actions;
 
 export default workshopSlice;
 
