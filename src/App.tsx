@@ -46,6 +46,7 @@ import { fetchAllCustomers } from "./store/data/customerSlice";
 import { fetchAllProcesses } from "./store/data/processSlice";
 import QrPage from "./pages/login/QrPage";
 import MainRoutes from "./components/MainRoutes";
+import { useFancyToast } from "./hooks/useFancyToast";
 
 setupConfig({
   rippleEffect: true,
@@ -56,6 +57,8 @@ const App: React.FC = () => {
   const dispatch = useDispatch();
 
   useAuth();
+
+  useFancyToast();
 
   useEffect(() => {
     // dispatch(fetchAllStages());

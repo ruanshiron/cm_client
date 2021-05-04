@@ -10,6 +10,7 @@ import customerSlice from "./data/customerSlice";
 import supplierSlice from "./data/supplierSlice";
 import employeeSlice from "./data/employeeSlice";
 import processSlice from "./data/processSlice";
+import toastSlice from "./toast/toastSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   employees: employeeSlice.reducer,
   processes: processSlice.reducer,
   loading: loadingSlice.reducer,
+  toasts: toastSlice.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
