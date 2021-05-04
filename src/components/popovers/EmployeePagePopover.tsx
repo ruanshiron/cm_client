@@ -5,7 +5,9 @@ interface EmployeePagePopoverProps {
   dismiss: () => void;
 }
 
-export const EmployeePagePopover: React.FC<EmployeePagePopoverProps> = ({ dismiss }) => {
+export const EmployeePagePopover: React.FC<EmployeePagePopoverProps> = ({
+  dismiss,
+}) => {
   const router = useIonRouter();
 
   // eslint-disable-next-line
@@ -22,7 +24,7 @@ export const EmployeePagePopover: React.FC<EmployeePagePopoverProps> = ({ dismis
   return (
     <IonList>
       <IonItem button onClick={(e) => open("/employees/create")}>
-        <IonLabel>Thêm sản phẩm</IonLabel>
+        <IonLabel>Thêm công nhân</IonLabel>
       </IonItem>
     </IonList>
   );

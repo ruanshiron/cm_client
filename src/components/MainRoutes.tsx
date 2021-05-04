@@ -8,6 +8,7 @@ import CustomerUpdate from "../pages/resources/customer/CustomerUpdate";
 import EmployeeCreate from "../pages/resources/employee/EmployeeCreate";
 import { EmployeeDetail } from "../pages/resources/employee/EmployeeDetail";
 import EmployeePage from "../pages/resources/employee/EmployeePage";
+import EmployeeUpdate from "../pages/resources/employee/EmployeeUpdate";
 import SupplierCreate from "../pages/resources/supplier/SupplierCreate";
 import { SupplierDetail } from "../pages/resources/supplier/SupplierDetail";
 import SupplierPage from "../pages/resources/supplier/SupplierPage";
@@ -40,6 +41,7 @@ const MainRoutes = () => {
 
       <Route path={"/workshops/:id/update"} component={WorkshopUpdate} />
       <Route path={"/customers/:id/update"} component={CustomerUpdate} />
+      <Route path={"/employees/:id/update"} component={EmployeeUpdate} />
 
       <Route path="/workshops/create" component={WorkshopCreate} exact />
       <Route path="/customers/create" component={CustomerCreate} exact />

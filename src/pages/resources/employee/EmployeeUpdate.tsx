@@ -11,14 +11,26 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React from "react";
+import React, { useEffect } from "react";
+import { useParams } from "react-router";
 import EmployeeForm from "../../../components/forms/EmployeeForm";
 import { useEmployeeForm } from "../../../hooks/useEmployeeForm";
+import { useSelector } from "../../../store";
 
-interface EmployeeCreateProps {}
+interface EmployeeUpdateProps {}
 
-const EmployeeCreate: React.FC<EmployeeCreateProps> = () => {
+const EmployeeUpdate: React.FC<EmployeeUpdateProps> = () => {
+  const { id } = useParams<{ id: string }>();
+  const employee = useSelector((state) =>
+    state.employees.find((i) => i.id === id)
+  );
   const form = useEmployeeForm();
+
+  useEffect(() => {
+    if (employee) form.setFieldsValue(employee);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [employee]);
+
   return (
     <IonPage className="list-page">
       <IonHeader>
@@ -26,7 +38,7 @@ const EmployeeCreate: React.FC<EmployeeCreateProps> = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/employees"></IonBackButton>
           </IonButtons>
-          <IonTitle>Thêm công nhân</IonTitle>
+          <IonTitle>Sửa công nhân</IonTitle>
           <IonButtons slot="end">
             <IonButton type="submit" onClick={form.submit}>
               Lưu
@@ -35,7 +47,7 @@ const EmployeeCreate: React.FC<EmployeeCreateProps> = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonGrid fixed>
+        <IonGrid>
           <IonRow className="ion-justify-content-center">
             <IonCol size="12" size-md="8">
               <EmployeeForm form={form} />
@@ -47,4 +59,4 @@ const EmployeeCreate: React.FC<EmployeeCreateProps> = () => {
   );
 };
 
-export default EmployeeCreate;
+export default EmployeeUpdate;

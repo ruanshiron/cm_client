@@ -8,10 +8,10 @@ import {
   saveEmployee,
 } from "../models/employee";
 import { useSelector } from "../store";
-import { fetchAllEmployees } from "../store/data/employeeSlice";
+import { addEmployee, updateEmployee } from "../store/data/employeeSlice";
 import { toast } from "../utils/toast";
 
-export const useEmployeeCreate = () => {
+export const useEmployeeForm = () => {
   const router = useIonRouter();
   const [fields, setFields] = useState<Employee>(initialEmployee);
   const uid = useSelector((state) => state.user.uid);
@@ -22,12 +22,15 @@ export const useEmployeeCreate = () => {
     if (isInvalidEmployee(fields)) return;
 
     try {
-      await saveEmployee(uid, fields);
+      const newEmployee = (await saveEmployee(uid, fields)) as any;
       setFields(initialEmployee);
       router.goBack();
       toast("Lưu thành công.");
-      // TODO: Do not fetch again
-      dispatch(fetchAllEmployees());
+      if (fields.id) {
+        dispatch(updateEmployee(fields));
+      } else {
+        dispatch(addEmployee({ ...fields, id: newEmployee.id }));
+      }
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
