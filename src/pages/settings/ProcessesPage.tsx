@@ -10,6 +10,7 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonItemDivider,
   IonLabel,
   IonList,
   IonListHeader,
@@ -19,6 +20,8 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
+  useIonAlert,
+  useIonRouter,
 } from "@ionic/react";
 import {
   add,
@@ -31,15 +34,33 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useProcessForm } from "../../hooks/useProcessForm";
-import { initialProcess } from "../../models/process";
+import { destroyProcess, initialProcess } from "../../models/process";
 import { useSelector } from "../../store";
-import { fetchAllProcesses } from "../../store/data/processSlice";
+import {
+  fetchAllProcesses,
+  removeProcess,
+} from "../../store/data/processSlice";
+import { toast } from "../../utils/toast";
 
 interface ProcessesPageProps {}
 
 const ProcessesPage: React.FC<ProcessesPageProps> = () => {
   const form = useProcessForm();
+  const uid = useSelector((state) => state.user.uid);
+  const [presentDeleteAlert] = useIonAlert();
   const processes = useSelector((state) => state.processes);
+  const handleDeleteProcess = async (id: string) => {
+    try {
+      if (id) await destroyProcess(uid, id);
+
+      toast("Xóa thành công!");
+
+      form.setShowModal(false);
+      dispatch(removeProcess(id));
+    } catch (error) {
+      toast("Có lỗi xảy ra, vui lòng thử lại!");
+    }
+  };
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchAllProcesses());
@@ -69,35 +90,37 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
         <IonGrid style={{ padding: 0 }}>
           <IonRow>
             <IonCol size="12" size-md="8" offsetMd="2" style={{ padding: 0 }}>
-              <IonList inset lines="full" className="flat-list">
-                {processes.map((process, i) => (
-                  <IonItem
-                    key={i}
-                    onClick={() => {
-                      form.setShowModal(true);
-                      form.setFieldsValue({ ...process });
-                    }}
-                    button
-                  >
-                    <IonLabel slot="start">
-                      <b>{process.name}</b>
-                    </IonLabel>
-                    <IonNote slot="end">
-                      <p>
-                        <IonBadge style={{ marginRight: 4 }} color="warning">
-                          {process.pending}
-                        </IonBadge>
-                        <IonBadge style={{ marginRight: 4 }} color="success">
-                          {process.fulfilled}
-                        </IonBadge>
-                        <IonBadge style={{ marginRight: 4 }} color="danger">
-                          {process.rejected}
-                        </IonBadge>
-                      </p>
-                    </IonNote>
-                  </IonItem>
-                ))}
-              </IonList>
+              {processes.length > 0 && (
+                <IonList inset lines="full" className="flat-list">
+                  {processes.map((process, i) => (
+                    <IonItem
+                      key={i}
+                      onClick={() => {
+                        form.setShowModal(true);
+                        form.setFieldsValue({ ...process });
+                      }}
+                      button
+                    >
+                      <IonLabel slot="start">
+                        <b>{process.name}</b>
+                      </IonLabel>
+                      <IonNote slot="end">
+                        <p>
+                          <IonBadge style={{ marginRight: 4 }} color="warning">
+                            {process.pending}
+                          </IonBadge>
+                          <IonBadge style={{ marginRight: 4 }} color="success">
+                            {process.fulfilled}
+                          </IonBadge>
+                          <IonBadge style={{ marginRight: 4 }} color="danger">
+                            {process.rejected}
+                          </IonBadge>
+                        </p>
+                      </IonNote>
+                    </IonItem>
+                  ))}
+                </IonList>
+              )}
             </IonCol>
           </IonRow>
         </IonGrid>
@@ -195,6 +218,33 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
                 }
               ></IonInput>
             </IonItem>
+            {form.fields.id && (
+              <>
+                <IonItemDivider />
+                <IonItem
+                  button
+                  lines="full"
+                  onClick={() =>
+                    presentDeleteAlert({
+                      header: "Xóa quy trình",
+                      message: "Bạn có chắc muốn xóa?",
+                      buttons: [
+                        "Hủy",
+                        {
+                          text: "OK!",
+                          handler: () => handleDeleteProcess(form.fields.id!),
+                        },
+                      ],
+                      onDidDismiss: (e) => console.log("did dismiss"),
+                    })
+                  }
+                >
+                  <IonLabel color="danger" className="ion-text-center">
+                    Xóa
+                  </IonLabel>
+                </IonItem>
+              </>
+            )}
           </IonList>
         </IonContent>
       </IonModal>

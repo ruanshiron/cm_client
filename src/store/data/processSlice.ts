@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getAllProcesses, Process } from "../../models/process";
 import { RootState } from "../rootReducer";
 
@@ -17,12 +17,18 @@ export const fetchAllProcesses = createAsyncThunk(
 const processSlice = createSlice({
   name: "processes",
   initialState,
-  reducers: {},
+  reducers: {
+    removeProcess: (state, action: PayloadAction<string>) => {
+      return state.filter((item) => item.id !== action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchAllProcesses.fulfilled, (_state, action: any) => {
       return action.payload;
     });
   },
 });
+
+export const { removeProcess } = processSlice.actions;
 
 export default processSlice;
