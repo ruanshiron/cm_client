@@ -66,6 +66,24 @@ export const getAllStages = (user: string) => {
     });
 };
 
+export const findStage = (user: string, id: string) => {
+  return ref(user)
+    .doc(id)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        const data = doc.data() as any;
+        return {
+          id: doc.id,
+          ...data,
+          timestamp: data.timestamp?.toDate().toString(),
+        };
+      } else {
+        return null;
+      }
+    });
+};
+
 export const saveStage = (user: string, param: Partial<Stage>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),

@@ -3,8 +3,9 @@ import {
   createAsyncThunk,
   createSelector,
   createSlice,
+  PayloadAction,
 } from "@reduxjs/toolkit";
-import { getAllStages, Stage } from "../../models/stage";
+import { findStage, getAllStages, Stage } from "../../models/stage";
 import { filter } from "../../utils/data";
 import { RootState } from "../rootReducer";
 
@@ -20,16 +21,44 @@ export const fetchAllStages = createAsyncThunk(
   }
 );
 
+export const findStageById = createAsyncThunk(
+  "stages/find",
+  async (param: string, thunkAPI) => {
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
+    return await findStage(uid, param);
+  }
+);
+
 const stageSlice = createSlice({
   name: "stages",
   initialState,
-  reducers: {},
+  reducers: {
+    removeStage: (state, action) => {
+      return state.filter((item) => item.id !== action.payload);
+    },
+    addStage: (state, action: PayloadAction<Stage>) => {
+      state.unshift(action.payload);
+    },
+    updateStage: (state, action: PayloadAction<Stage>) => {
+      return state.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+    },
+  },
   extraReducers: (builder) => {
-    builder.addCase(fetchAllStages.fulfilled, (_state, action: AnyAction) => {
-      return action.payload;
-    });
+    builder
+      .addCase(fetchAllStages.fulfilled, (_state, action: AnyAction) => {
+        return action.payload;
+      })
+      .addCase(findStageById.fulfilled, (state, action: AnyAction) => {
+        if (action.payload) state.unshift(action.payload);
+      });
   },
 });
+
+export const { addStage, removeStage, updateStage } = stageSlice.actions;
 
 export default stageSlice;
 

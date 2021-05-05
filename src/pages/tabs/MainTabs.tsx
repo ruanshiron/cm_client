@@ -21,6 +21,8 @@ import { ProductDetail } from "./product/ProductDetail";
 import ProductCreate from "./product/ProductCreate";
 import OrderCreate from "./order/OrderCreate";
 import ProductUpdate from "./product/ProductUpdate";
+import StageDetail from "./diary/StageDetail"
+import StageUpdate from "./diary/StageUpdate";
 
 interface MainTabsProps {}
 
@@ -37,8 +39,10 @@ const MainTabs: React.FC<MainTabsProps> = () => {
 
         <Route path="/tabs/product/:id" component={ProductDetail} exact />
         <Route path="/tabs/order/:id" component={OrderDetail} exact />
+        <Route path="/tabs/diary/:id" component={StageDetail} exact />
 
         <Route path="/tabs/product/:id/update" component={ProductUpdate} exact />
+        <Route path="/tabs/diary/:id/update" component={StageUpdate} exact />
 
         <Route path="/tabs/product/create" component={ProductCreate} exact />
         <Route path="/tabs/order/create" component={OrderCreate} exact />

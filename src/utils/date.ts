@@ -20,7 +20,7 @@ export const selectedDateLabelParser = (text = "") => {
     date.getFullYear() === today.getFullYear()
   )
     return "Hôm qua";
-  return "";
+  return "Thời gian";
 };
 
 export const getDates = (

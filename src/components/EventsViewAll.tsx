@@ -3,9 +3,11 @@ import {
   IonContent,
   IonGrid,
   IonHeader,
+  IonItem,
   IonItemDivider,
   IonLabel,
   IonList,
+  IonNote,
   IonRow,
   IonSearchbar,
   IonTitle,
@@ -13,9 +15,39 @@ import {
 } from "@ionic/react";
 import React from "react";
 import { useSelector } from "../store";
-import EventItem from "./items/EventItem";
 import * as Event from "../models/stage";
 import { filteredStages } from "../store/data/stageSlice";
+
+const noteColor = (status?: string) => {
+  if (!status) return "primary";
+  if (status.endsWith("fulfilled")) return "success";
+  if (status.endsWith("pending")) return "warning";
+  if (status.endsWith("rejected")) return "danger";
+};
+
+const StageItem: React.FC<{ stage: Event.Stage }> = ({ stage }) => {
+  return (
+    <IonItem
+      onClick={() => {}}
+      routerLink={"/tabs/diary/" + stage.id}
+      detail={false}
+    >
+      <>
+        <IonLabel className={noteColor(stage.processStatus)}>
+          <h2>
+            {stage.workshopName}・<b>{stage.processLabel}</b>
+          </h2>
+          <p>
+            {stage.productName} / {stage.productSize}
+          </p>
+        </IonLabel>
+        <IonNote slot="end" color={noteColor(stage.processStatus)}>
+          <h4>{stage.quantity}</h4>
+        </IonNote>
+      </>
+    </IonItem>
+  );
+};
 
 interface Props {}
 
@@ -47,7 +79,7 @@ export const EventsViewAll: React.FC<Props> = () => {
                         <IonLabel>{group.name}</IonLabel>
                       </IonItemDivider>
                       {group.events.map((item, j) => (
-                        <EventItem data={item} key={j} />
+                        <StageItem stage={item} key={j} />
                       ))}
                     </div>
                   </React.Fragment>

@@ -20,7 +20,7 @@ import {
   isPlatform,
 } from "@ionic/react";
 import { arrowBack, checkmark, closeOutline } from "ionicons/icons";
-import { useEventForm } from "../../hooks/useEventForm";
+import { useStageFormModal } from "../../hooks/useStageFormModal";
 import { formatISO } from "date-fns";
 import { Process } from "../../models/process";
 import { processParser } from "../../utils/data";
@@ -50,10 +50,14 @@ const CustomSelecter: React.FC<{
   onChange: ReturnType<any>;
   items: { [key: string]: any }[];
   value: string;
-}> = ({ onChange, value, items }) => {
+  title?: string;
+}> = ({ onChange, value, items, title }) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <IonList className="ion-no-padding" lines="full">
+        <IonListHeader>
+          <b>{title}</b>
+        </IonListHeader>
         {items.map((item, index) => (
           <IonItem key={index} button onClick={() => onChange(item)}>
             {item.name}
@@ -75,6 +79,9 @@ const SizeSelecter: React.FC<{
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <IonList className="ion-no-padding">
+        <IonListHeader>
+          <b>Chọn kích cỡ sản phẩm</b>
+        </IonListHeader>
         {items.map((item, index) => (
           <IonItem key={index} button onClick={() => onChange(item)}>
             {item}
@@ -96,6 +103,9 @@ const ProcessSelecter: React.FC<{
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <IonList className="ion-no-padding" lines="full">
+        <IonListHeader>
+          <b>Chọn quy trình</b>
+        </IonListHeader>
         {items.map((item, index) => (
           <React.Fragment key={index}>
             <IonItem
@@ -187,7 +197,7 @@ const QuantityInput: React.FC<{ onChange: ReturnType<any>; value: number }> = ({
 };
 
 interface StageModalProps {
-  form: ReturnType<typeof useEventForm>;
+  form: ReturnType<typeof useStageFormModal>;
 }
 
 export const StageModal: React.FC<StageModalProps> = ({ form }) => {
@@ -243,9 +253,9 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
 
   return (
     <IonModal
-      isOpen={form.showEventForm}
+      isOpen={form.showForm}
       swipeToClose={true}
-      onDidDismiss={() => form.setShowEventForm(false)}
+      onDidDismiss={() => form.setShowForm(false)}
       onDidPresent={() => {
         slider.current?.update();
       }}
@@ -253,7 +263,7 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton onClick={() => form.setShowEventForm(false)}>
+            <IonButton onClick={() => form.setShowForm(false)}>
               <IonIcon slot="icon-only" icon={closeOutline} />
             </IonButton>
           </IonButtons>
@@ -262,14 +272,15 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
       </IonHeader>
       <IonContent>
         <IonListHeader>
-          {form
-            .detail()
-            .filter((i) => i)
-            .map((item, index) => (
-              <IonBadge style={{ marginRight: 4 }} key={index}>
-                {item}
-              </IonBadge>
-            ))}
+          <b>
+            {form
+              .detail()
+              .map((item, index) => (
+                <IonBadge style={{ marginRight: 4 }} key={index}>
+                  {item}
+                </IonBadge>
+              ))}
+          </b>
         </IonListHeader>
         <IonSlides ref={slider} options={{ allowTouchMove: false }}>
           <IonSlide>
@@ -280,6 +291,22 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
           </IonSlide>
           <IonSlide>
             <CustomSelecter
+              title="Chọn sản phẩm"
+              items={form.products}
+              value={form.fields.productId}
+              onChange={handleChangeProduct}
+            />
+          </IonSlide>
+          <IonSlide>
+            <SizeSelecter
+              items={form.selectedProcduct?.sizes || []}
+              value={form.fields.productSize}
+              onChange={handleChangeSize}
+            />
+          </IonSlide>
+          <IonSlide>
+            <CustomSelecter
+              title="Chọn xưởng"
               items={form.workshops}
               value={form.fields.workshopId}
               onChange={handleChangeWorkshop}
@@ -293,23 +320,6 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
                 processStatus: form.fields.processStatus,
               }}
               onChange={handleChangeProcess}
-            />
-          </IonSlide>
-          <IonSlide>
-            <CustomSelecter
-              items={form.products}
-              value={form.fields.productId}
-              onChange={handleChangeProduct}
-            />
-          </IonSlide>
-          <IonSlide>
-            <SizeSelecter
-              items={
-                form.products?.find((v) => v.id === form.fields?.productId)
-                  ?.sizes || []
-              }
-              value={form.fields.productSize}
-              onChange={handleChangeSize}
             />
           </IonSlide>
           <IonSlide>
