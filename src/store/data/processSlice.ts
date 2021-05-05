@@ -21,6 +21,14 @@ const processSlice = createSlice({
     removeProcess: (state, action: PayloadAction<string>) => {
       return state.filter((item) => item.id !== action.payload);
     },
+    addProcess(state, action) {
+      return [...state, action.payload];
+    },
+    updateProcess(state, action) {
+      return state.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAllProcesses.fulfilled, (_state, action: any) => {
@@ -29,6 +37,10 @@ const processSlice = createSlice({
   },
 });
 
-export const { removeProcess } = processSlice.actions;
+export const {
+  removeProcess,
+  addProcess,
+  updateProcess,
+} = processSlice.actions;
 
 export default processSlice;

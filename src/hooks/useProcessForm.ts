@@ -7,7 +7,7 @@ import {
   saveProcess,
 } from "../models/process";
 import { useSelector } from "../store";
-import { fetchAllProcesses } from "../store/data/processSlice";
+import { updateProcess, addProcess } from "../store/data/processSlice";
 import { toast } from "../utils/toast";
 
 export const useProcessForm = (process = initialProcess) => {
@@ -26,12 +26,16 @@ export const useProcessForm = (process = initialProcess) => {
     if (!fields.rejected) fields.rejected = fields.name + " lỗi";
 
     try {
-      await saveProcess(uid, fields);
+      const newProcess = (await saveProcess(uid, fields)) as any;
       setFields(process);
       setShowModal(false);
       toast("Lưu thành công.");
       // TODO: Do not fetch again
-      dispatch(fetchAllProcesses());
+      if (fields.id) {
+        dispatch(updateProcess(fields));
+      } else {
+        dispatch(addProcess({ ...fields, id: newProcess.id }));
+      }
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }

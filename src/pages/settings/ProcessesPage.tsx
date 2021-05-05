@@ -21,7 +21,6 @@ import {
   IonTitle,
   IonToolbar,
   useIonAlert,
-  useIonRouter,
 } from "@ionic/react";
 import {
   add,
