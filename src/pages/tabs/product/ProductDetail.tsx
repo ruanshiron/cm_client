@@ -16,6 +16,7 @@ import {
   IonItemDivider,
   IonLabel,
   IonList,
+  IonLoading,
   IonNote,
   IonPage,
   IonRow,
@@ -25,10 +26,8 @@ import {
   useIonAlert,
   useIonRouter,
 } from "@ionic/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import _ from "lodash";
-import * as Process from "../../../models/process";
 import { useSelector } from "../../../store";
 import {
   barChartOutline,
@@ -41,7 +40,11 @@ import { ProductModal } from "../../../components/modals/ProductModal";
 import { destroyProduct } from "../../../models/product";
 import { toast } from "../../../utils/toast";
 import { useDispatch } from "react-redux";
-import { removeProduct } from "../../../store/data/productSlice";
+import {
+  findProductById,
+  removeProduct,
+} from "../../../store/data/productSlice";
+import { fetchAllProcesses } from "../../../store/data/processSlice";
 
 interface ProductDetailProps {}
 
@@ -50,34 +53,16 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
   const uid = useSelector((state) => state.user.uid);
-
+  const loading = useSelector((state) => state.loading.isLoading);
   const [showReportModal, setShowReportModal] = useState(false);
-
   const [presentActionSheet] = useIonActionSheet();
   const [presentDeleteAlert] = useIonAlert();
-
-  const { product, processes, fields } = useSelector((state) => {
-    const _product = state.products.find((x) => x.id === id);
-    const _processes = state.processes;
-
-    const events = state.stages.filter((v) => v.productId === id);
-    const result = _.groupBy(events, "process");
-
-    return {
-      product: _product,
-      processes: _processes,
-      fields: Object.keys(result).map((key) => {
-        const [id, type] = key.split("/");
-        return {
-          name:
-            Process.ProcessEnum[type] +
-            state.processes.find((i) => i.id === id)?.name,
-          value: result[key].reduce((a, b) => a + (b ? b?.quantity! : 0), 0),
-        };
-      }),
-    };
-  });
-
+  const product = useSelector((state) =>
+    state.products.find((item) => item.id === id)
+  );
+  const processes = useSelector((state) =>
+    state.processes.filter((item) => product?.processes.includes(item.id!))
+  );
   const handleDeleteProduct = async () => {
     try {
       if (id) await destroyProduct(uid, id);
@@ -90,7 +75,13 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
       toast("Có lỗi xảy ra, vui lòng thử lại!");
     }
   };
-
+  useEffect(() => {
+    if (!product) dispatch(findProductById(id));
+  }, [dispatch, id, product]);
+  useEffect(() => {
+    if (processes.length <= 0) dispatch(fetchAllProcesses());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
   return (
     <>
       <IonPage className="list-page">
@@ -159,6 +150,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
         <IonContent>
           <IonGrid>
             <IonRow>
+              <IonLoading isOpen={!!(loading && !product)} />
               <IonCol size="12" size-md="8" offsetMd="2">
                 <IonCard className="list-card">
                   <IonCardHeader>
@@ -177,52 +169,42 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                   </IonCardHeader>
                   <IonCardContent>
                     <IonList>
-                      <IonItemDivider>Thống kê tự động</IonItemDivider>
-                      {fields &&
-                        fields?.length > 0 &&
-                        fields?.map((field: any, i) => {
-                          return (
-                            <IonItem detail={false} key={i}>
-                              <IonLabel>{field.name}</IonLabel>
-                              <IonNote slot="end">
-                                <p>{field.value}</p>
-                              </IonNote>
-                            </IonItem>
-                          );
-                        })}
+                      <IonItemDivider>
+                        Thống kê tự động (đang xử lý)
+                      </IonItemDivider>
+
                       <IonItemDivider>Kích cỡ</IonItemDivider>
                       {product?.sizes?.map((size, i) => (
                         <IonItem key={i}>{size}</IonItem>
                       ))}
                       <IonItemDivider>Quy trình sản xuất</IonItemDivider>
-                      {product?.processes?.map((process, i) => {
-                        const item = processes.find((p) => process === p.id);
+                      {processes?.map((process, i) => {
                         return (
                           <IonItem key={i}>
-                            {item?.name}
+                            {process.name}
                             <IonNote slot="end">
-                              {item?.pending && (
+                              {process.pending && (
                                 <IonBadge
                                   color="warning"
                                   style={{ marginRight: 4 }}
                                 >
-                                  {item.pending}
+                                  {process.pending}
                                 </IonBadge>
                               )}
-                              {item?.fulfilled && (
+                              {process.fulfilled && (
                                 <IonBadge
                                   color="success"
                                   style={{ marginRight: 4 }}
                                 >
-                                  {item.fulfilled}
+                                  {process.fulfilled}
                                 </IonBadge>
                               )}
-                              {item?.rejected && (
+                              {process.rejected && (
                                 <IonBadge
                                   color="danger"
                                   style={{ marginRight: 4 }}
                                 >
-                                  {item.rejected}
+                                  {process.rejected}
                                 </IonBadge>
                               )}
                             </IonNote>

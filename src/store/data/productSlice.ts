@@ -4,7 +4,7 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 import { forEach } from "lodash";
-import { getAllProducts, Product } from "../../models/product";
+import { findProduct, getAllProducts, Product } from "../../models/product";
 import { processParser } from "../../utils/data";
 import { isBetween } from "../../utils/date";
 import { RootState } from "../rootReducer";
@@ -18,6 +18,16 @@ export const fetchAllProducts = createAsyncThunk(
       user: { uid },
     } = thunkAPI.getState() as RootState;
     return await getAllProducts(uid);
+  }
+);
+
+export const findProductById = createAsyncThunk(
+  "products/find",
+  async (param: string, thunkAPI) => {
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
+    return await findProduct(uid, param);
   }
 );
 
@@ -59,15 +69,23 @@ const productSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchAllProducts.fulfilled, (_state, action: any) => {
-      return action.payload;
-    });
+    builder
+      .addCase(fetchAllProducts.fulfilled, (_state, action: any) => {
+        return action.payload;
+      })
+      .addCase(findProductById.fulfilled, (state, action) => {
+        if (action.payload) state.unshift(action.payload);
+      });
   },
 });
 
 export default productSlice;
 
-export const { removeProduct, addProduct, updateProduct } = productSlice.actions;
+export const {
+  removeProduct,
+  addProduct,
+  updateProduct,
+} = productSlice.actions;
 
 export const statisticsForProduct = createSelector(
   (state: RootState) => state.stages,

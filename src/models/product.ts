@@ -51,6 +51,24 @@ export const getAllProducts = (user: string) => {
     });
 };
 
+export const findProduct = (user: string, id: string) => {
+  return ref(user)
+    .doc(id)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        const data = doc.data() as any;
+        return {
+          id: doc.id,
+          ...data,
+          createdAt: data.createdAt?.toDate().toString(),
+        };
+      } else {
+        return null;
+      }
+    });
+};
+
 export const saveProduct = (user: string, param: Partial<Product>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),
