@@ -9,6 +9,7 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
@@ -24,19 +25,28 @@ import {
   callOutline,
   callSharp,
   close,
+  copyOutline,
   ellipsisVertical,
   pencilOutline,
   personOutline,
   phonePortraitOutline,
+  qrCodeOutline,
+  refresh,
   trashOutline,
 } from "ionicons/icons";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
-import { destroyCustomer } from "../../../models/customer";
+import { destroyCustomer, saveCustomer } from "../../../models/customer";
 import { useSelector } from "../../../store";
-import { removeCustomer } from "../../../store/data/customerSlice";
+import {
+  removeCustomer,
+  updateCustomer,
+} from "../../../store/data/customerSlice";
 import { toast } from "../../../utils/toast";
+import QRCode from "qrcode.react";
+import copy from "copy-to-clipboard";
+import { v4 as uuidv4 } from "uuid";
 
 interface CustomerDetailProps {}
 
@@ -62,6 +72,24 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
     } catch (error) {
       toast("Có lỗi xảy ra, vui lòng thử lại!");
     }
+  };
+  const handleUpdateCode = async () => {
+    const code = uuidv4();
+    try {
+      await saveCustomer(uid, {
+        ...customer,
+        code,
+      });
+      toast("Lưu thành công.");
+      dispatch(updateCustomer({ ...customer!, code }));
+    } catch {
+      toast("Có lỗi xảy ra, vui lòng thử lại.");
+    }
+  };
+
+  const handleCopy = () => {
+    copy(customer?.code || "Hãy tạo mã trước!");
+    toast(customer?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!");
   };
 
   return (
@@ -138,6 +166,37 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
                       <IonLabel slot="start">{customer?.phonenumber}</IonLabel>
                     </IonItem>
                   </IonList>
+                </IonCardContent>
+              </IonCard>
+              <IonCard className="list-card">
+                <IonCardContent>
+                  <IonItem>
+                    <IonIcon icon={qrCodeOutline} slot="start"></IonIcon>
+                    <IonInput
+                      value={customer?.code || "Hãy tạo code mới"}
+                      onIonChange={() => {}}
+                    />
+                    <IonButtons slot="end">
+                      <IonButton onClick={handleUpdateCode}>
+                        <IonIcon slot="icon-only" icon={refresh}></IonIcon>
+                      </IonButton>
+                      <IonButton onClick={handleCopy}>
+                        <IonIcon slot="icon-only" icon={copyOutline}></IonIcon>
+                      </IonButton>
+                    </IonButtons>
+                  </IonItem>
+                  {customer?.code && (
+                    <IonItem>
+                      <QRCode
+                        style={{ margin: "auto" }}
+                        id="qrcode"
+                        value={customer?.code}
+                        size={290}
+                        level={"H"}
+                        includeMargin={true}
+                      />
+                    </IonItem>
+                  )}
                 </IonCardContent>
               </IonCard>
             </IonCol>

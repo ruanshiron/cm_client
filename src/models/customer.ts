@@ -14,6 +14,7 @@ export interface Customer {
   name: string;
   phonenumber: string;
   createdAt?: any;
+  code?: string;
 }
 
 export const getAllCustomers = (user: string) => {

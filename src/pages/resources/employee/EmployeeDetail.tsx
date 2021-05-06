@@ -9,6 +9,7 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
@@ -20,22 +21,31 @@ import {
   useIonAlert,
   useIonRouter,
 } from "@ionic/react";
+import copy from "copy-to-clipboard";
 import {
   callOutline,
   callSharp,
   close,
+  copyOutline,
   ellipsisVertical,
   pencilOutline,
   personOutline,
   phonePortraitOutline,
+  qrCodeOutline,
+  refresh,
   trashOutline,
 } from "ionicons/icons";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
-import { destroyEmployee } from "../../../models/employee";
+import { destroyEmployee, saveEmployee } from "../../../models/employee";
 import { useSelector } from "../../../store";
-import { removeEmployee } from "../../../store/data/employeeSlice";
+import {
+  removeEmployee,
+  updateEmployee,
+} from "../../../store/data/employeeSlice";
+import QRCode from "qrcode.react";
+import { v4 as uuidv4 } from "uuid";
 import { toast } from "../../../utils/toast";
 
 interface EmployeeDetailProps {}
@@ -62,6 +72,25 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
     } catch (error) {
       toast("Có lỗi xảy ra, vui lòng thử lại!");
     }
+  };
+
+  const handleUpdateCode = async () => {
+    const code = uuidv4();
+    try {
+      await saveEmployee(uid, {
+        ...employee,
+        code,
+      });
+      toast("Lưu thành công.");
+      dispatch(updateEmployee({ ...employee!, code }));
+    } catch {
+      toast("Có lỗi xảy ra, vui lòng thử lại.");
+    }
+  };
+
+  const handleCopy = () => {
+    copy(employee?.code || "Hãy tạo mã trước!");
+    toast(employee?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!");
   };
 
   return (
@@ -138,6 +167,37 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
                       <IonLabel slot="start">{employee?.phonenumber}</IonLabel>
                     </IonItem>
                   </IonList>
+                </IonCardContent>
+              </IonCard>
+              <IonCard className="list-card">
+                <IonCardContent>
+                  <IonItem>
+                    <IonIcon icon={qrCodeOutline} slot="start"></IonIcon>
+                    <IonInput
+                      value={employee?.code || "Hãy tạo code mới"}
+                      onIonChange={() => {}}
+                    />
+                    <IonButtons slot="end">
+                      <IonButton onClick={handleUpdateCode}>
+                        <IonIcon slot="icon-only" icon={refresh}></IonIcon>
+                      </IonButton>
+                      <IonButton onClick={handleCopy}>
+                        <IonIcon slot="icon-only" icon={copyOutline}></IonIcon>
+                      </IonButton>
+                    </IonButtons>
+                  </IonItem>
+                  {employee?.code && (
+                    <IonItem>
+                      <QRCode
+                        style={{ margin: "auto" }}
+                        id="qrcode"
+                        value={employee?.code}
+                        size={290}
+                        level={"H"}
+                        includeMargin={true}
+                      />
+                    </IonItem>
+                  )}
                 </IonCardContent>
               </IonCard>
             </IonCol>

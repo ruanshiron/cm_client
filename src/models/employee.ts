@@ -13,6 +13,7 @@ export interface Employee {
   name: string;
   phonenumber: string;
   createdAt?: any;
+  code?: string;
 }
 
 export const getAllEmployees = (user: string) => {
