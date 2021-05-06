@@ -49,11 +49,30 @@ import MainRoutes from "./components/MainRoutes";
 import { useFancyToast } from "./hooks/useFancyToast";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { vi } from "date-fns/locale";
+import AnonymousWorkshopPage from "./pages/anonymous/AnonymousWorkshopPage";
 
 setupConfig({
   rippleEffect: true,
   mode: "md",
 });
+
+const RoleBaseView: React.FC<{ role: string }> = ({ role }) => {
+  switch (role) {
+    case "owner":
+      return (
+        <IonSplitPane contentId="main">
+          <Menu />
+          <MainRoutes />
+        </IonSplitPane>
+      );
+
+    case "workshop":
+      return <AnonymousWorkshopPage />;
+
+    default:
+      return <h1> bạn không có phận sự</h1>;
+  }
+};
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -72,7 +91,7 @@ const App: React.FC = () => {
   }, [dispatch]);
 
   const loading = useSelector((state) => state.loading.isLoading);
-  const { isLoggedIn, loading: userLoading } = useSelector(
+  const { isLoggedIn, loading: userLoading, role } = useSelector(
     (state) => state.user
   );
   return (
@@ -87,10 +106,7 @@ const App: React.FC = () => {
         <IonReactRouter>
           {!userLoading &&
             (isLoggedIn ? (
-              <IonSplitPane contentId="main">
-                <Menu />
-                <MainRoutes />
-              </IonSplitPane>
+              <RoleBaseView role={role} />
             ) : (
               <IonRouterOutlet>
                 <Route path="/" render={() => <Redirect to="/login" />} exact />

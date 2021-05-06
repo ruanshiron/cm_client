@@ -5,7 +5,12 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import { chain, filter, forEach } from "lodash";
-import { Amount, getAllWorkshops, Workshop } from "../../models/workshop";
+import {
+  Amount,
+  findWorkshop,
+  getAllWorkshops,
+  Workshop,
+} from "../../models/workshop";
 import { processParser } from "../../utils/data";
 import { RootState } from "../rootReducer";
 
@@ -18,6 +23,16 @@ export const fetchAllWorkshops = createAsyncThunk(
       user: { uid },
     } = thunkAPI.getState() as RootState;
     return await getAllWorkshops(uid);
+  }
+);
+
+export const findWorkshopById = createAsyncThunk(
+  "products/find",
+  async (param: string, thunkAPI) => {
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
+    return await findWorkshop(uid, param);
   }
 );
 
@@ -69,9 +84,13 @@ const workshopSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchAllWorkshops.fulfilled, (_state, action: any) => {
-      return action.payload;
-    });
+    builder
+      .addCase(fetchAllWorkshops.fulfilled, (_state, action: any) => {
+        return action.payload;
+      })
+      .addCase(findWorkshopById.fulfilled, (state, action) => {
+        if (action.payload) state.unshift(action.payload);
+      });
   },
 });
 

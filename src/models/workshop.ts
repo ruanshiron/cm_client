@@ -55,6 +55,24 @@ export const saveWorkshop = (user: string, param: Partial<Workshop>) => {
     : ref(user).add(permittedParam);
 };
 
+export const findWorkshop = (user: string, id: string) => {
+  return ref(user)
+    .doc(id)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        const data = doc.data() as any;
+        return {
+          id: doc.id,
+          ...data,
+          createdAt: data.createdAt?.toDate().toString(),
+        };
+      } else {
+        return null;
+      }
+    });
+};
+
 export const destroyWorkshop = (user: string, id: string) => {
   return ref(user).doc(id).delete();
 };

@@ -64,3 +64,11 @@ export const isBetween = (date: string, from?: string, to?: string) => {
       compareDesc(new Date(to.substring(0, 10)), new Date(date)) <= 0
     );
 };
+
+export const stringFromToDate = (from?: string, to?: string) => {
+  return (
+    (from?.substring(0, 10) || "trước") +
+    " ~ " +
+    (to?.substring(0, 10) || "nay")
+  );
+};
