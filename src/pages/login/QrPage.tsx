@@ -13,7 +13,8 @@ import {
 } from "@ionic/react";
 import { arrowBack, qrCodeOutline } from "ionicons/icons";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
-import { findWorkshopByCode } from "../../models/workshop";
+import { functions } from "../../config/firebase";
+import { loginWithToken } from "../../helpers/firebaseHelper";
 
 const QrPage = () => {
   const [qrValue, setQrValue] = useState<string>();
@@ -27,8 +28,15 @@ const QrPage = () => {
 
   const handleSubmit = async () => {
     if (qrValue) {
-      const workshop = await findWorkshopByCode(qrValue);
-      console.log(workshop);
+      try {
+        const response = await functions.httpsCallable("createToken")(qrValue);
+        const { token } = response.data;
+        if (token) {
+          loginWithToken(token);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

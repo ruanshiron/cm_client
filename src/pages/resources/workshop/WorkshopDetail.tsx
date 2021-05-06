@@ -52,6 +52,7 @@ import {
 } from "../../../store/data/workshopSlice";
 import { toast } from "../../../utils/toast";
 import QRCode from "qrcode.react";
+import copy from 'copy-to-clipboard';
 
 interface WorkshopDetailProps {}
 
@@ -98,6 +99,11 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
       toast("Có lỗi xảy ra, vui lòng thử lại!");
     }
   };
+
+  const handleCopy = () => {
+    copy(workshop?.code || "Hãy tạo mã trước!")
+    toast(workshop?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!")
+  }
 
   return (
     <>
@@ -193,7 +199,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                           <IonButton onClick={handleUpdateCode}>
                             <IonIcon slot="icon-only" icon={refresh}></IonIcon>
                           </IonButton>
-                          <IonButton>
+                          <IonButton onClick={handleCopy}>
                             <IonIcon
                               slot="icon-only"
                               icon={copyOutline}

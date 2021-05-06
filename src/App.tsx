@@ -31,8 +31,6 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
 /* SCSS */
-import "react-calendar/dist/Calendar.css";
-import "react-datepicker/dist/react-datepicker.css";
 import "./theme/style.scss";
 
 import { useDispatch } from "react-redux";

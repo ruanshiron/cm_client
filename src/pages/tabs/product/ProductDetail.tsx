@@ -61,7 +61,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
     state.products.find((item) => item.id === id)
   );
   const processes = useSelector((state) =>
-    state.processes.filter((item) => product?.processes.includes(item.id!))
+    state.processes.filter((item) => product?.processes?.includes(item.id!))
   );
   const handleDeleteProduct = async () => {
     try {

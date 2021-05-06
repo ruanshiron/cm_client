@@ -9,12 +9,27 @@ export function onAuthStateChanged() {
   return new Promise((resolve) => {
     const unsubcribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        const userState = {
-          displayName: user.displayName,
-          uid: user.uid,
-          email: user.email,
-        };
-        resolve(userState);
+        user.getIdTokenResult().then((idTokenResult) => {
+          if (idTokenResult.claims.uid) {
+            const userState = {
+              displayName: user.displayName,
+              id: user.uid,
+              uid: idTokenResult.claims.uid,
+              email: user.email,
+              role: idTokenResult.claims.role,
+            };
+            resolve(userState);
+          } else {
+            const userState = {
+              displayName: user.displayName,
+              id: user.uid,
+              uid: user.uid,
+              email: user.email,
+              role: "owner",
+            };
+            resolve(userState);
+          }
+        });
       } else {
         resolve(null);
       }
@@ -44,6 +59,18 @@ export async function loginWithEmail(email: string, password: string) {
   try {
     await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
     await firebase.auth().signInWithEmailAndPassword(email, password);
+    window.location.replace("/");
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function loginWithToken(token: string) {
+  try {
+    await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    await firebase.auth().signInWithCustomToken(token);
     window.location.replace("/");
     return true;
   } catch (error) {

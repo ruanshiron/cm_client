@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   onAuthStateChanged,
   signOut as firebaseSignOut,
@@ -10,6 +10,8 @@ interface UserState {
   displayName: string;
   email: string;
   uid: string;
+  id: string;
+  role: "owner" | "workshop" | "customer" | "employee" | "anonymous";
 }
 
 let initialState: UserState = {
@@ -18,6 +20,8 @@ let initialState: UserState = {
   displayName: "",
   email: "",
   uid: "",
+  id: "",
+  role: "anonymous",
 };
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
@@ -38,14 +42,21 @@ const userSlice = createSlice({
       .addCase(fetchUser.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchUser.fulfilled, (state, action: any) => {
+      .addCase(fetchUser.fulfilled, (state, action: PayloadAction<any>) => {
         if (!action.payload?.uid) return initialState;
 
         state.loading = false;
         state.isLoggedIn = action.payload ? true : false;
-        state.displayName = action.payload?.displayName || "";
-        state.email = action.payload?.email || "";
-        state.uid = action.payload?.uid || "";
+        state.displayName = action.payload.displayName || "";
+        state.email = action.payload.email || "";
+        state.uid = action.payload.uid || "";
+        state.id = action.payload.id || action.payload?.uid || "";
+        if (
+          ["owner", "workshop", "customer", "employee", "anonymous"].includes(
+            action.payload.role
+          )
+        )
+          state.role = action.payload.role;
         // console.log(action.payload);
       })
       .addCase(fetchUser.rejected, () => {
