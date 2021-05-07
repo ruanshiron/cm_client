@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getAllCustomers, Customer } from "../../models/customer";
+import { getAllCustomers, Customer, findCustomer } from "../../models/customer";
 import { RootState } from "../rootReducer";
 
 let initialState: Customer[] = [];
@@ -11,6 +11,16 @@ export const fetchAllCustomers = createAsyncThunk(
       user: { uid },
     } = thunkAPI.getState() as RootState;
     return await getAllCustomers(uid);
+  }
+);
+
+export const findCustomerById = createAsyncThunk(
+  "customers/find",
+  async (param: string, thunkAPI) => {
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
+    return await findCustomer(uid, param);
   }
 );
 
@@ -31,9 +41,13 @@ const customerSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchAllCustomers.fulfilled, (_state, action: any) => {
-      return action.payload;
-    });
+    builder
+      .addCase(fetchAllCustomers.fulfilled, (_state, action: any) => {
+        return action.payload;
+      })
+      .addCase(findCustomerById.fulfilled, (state, action) => {
+        if (action.payload) state.unshift(action.payload);
+      });
   },
 });
 

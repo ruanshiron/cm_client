@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "../utils/toast";
 import { useSelector } from "../store";
@@ -16,11 +16,11 @@ import { fetchAllWorkshops } from "../store/data/workshopSlice";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 
-export const useStageFormModal = (event = initialStage) => {
+export const useStageFormModal = (stage = initialStage) => {
   const dispatch = useDispatch();
   const uid = useSelector((state) => state.user.uid);
   const [showForm, setShowForm] = useState<boolean>(false);
-  const [fields, setFields] = useState<Stage>(event);
+  const [fields, setFields] = useState<Stage>(stage);
   const [submitted, setSubmitted] = useState(false);
   const products = useSelector((state) => state.products);
   const selectedProcduct = useSelector((state) =>
@@ -33,12 +33,13 @@ export const useStageFormModal = (event = initialStage) => {
   });
   const workshops = useSelector((state) => state.workshops);
 
-  useEffect(() => {
+  const present = () => {
     if (products.length <= 0) dispatch(fetchAllProducts());
     if (processes.length <= 0) dispatch(fetchAllProcesses());
     if (workshops.length <= 0) dispatch(fetchAllWorkshops());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setShowForm(true);
+    setFieldsValue(stage);
+  };
 
   const setFieldsValue = (e: Partial<Stage>) => {
     setFields((fields) => ({ ...fields, ...e }));
@@ -84,10 +85,6 @@ export const useStageFormModal = (event = initialStage) => {
     ].filter((i) => i);
   };
 
-  const present = (stage = initialStage) => {
-    setFieldsValue(stage);
-  };
-
   return {
     setFieldsValue,
     fields,
@@ -97,9 +94,9 @@ export const useStageFormModal = (event = initialStage) => {
     workshops,
     detail,
     remove,
-    present,
     selectedProcduct,
     showForm,
     setShowForm,
+    present,
   };
 };

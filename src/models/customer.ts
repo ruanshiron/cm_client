@@ -29,6 +29,24 @@ export const getAllCustomers = (user: string) => {
     });
 };
 
+export const findCustomer = (user: string, id: string) => {
+  return ref(user)
+    .doc(id)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        const data = doc.data() as any;
+        return {
+          id: doc.id,
+          ...data,
+          createdAt: data.createdAt?.toDate().toString(),
+        };
+      } else {
+        return null;
+      }
+    });
+};
+
 export const saveCustomer = (user: string, param: Partial<Customer>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),

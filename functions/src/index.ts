@@ -5,11 +5,11 @@ admin.initializeApp();
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
-export const createToken = functions.https.onCall(async (data, context) => {
-  const code = data;
-  const workshop = await admin
+
+const findCodeInCollection = async (collection: string, code: string) => {
+  return await admin
     .firestore()
-    .collectionGroup("workshops")
+    .collectionGroup(collection)
     .where("code", "==", code)
     .limit(1)
     .get()
@@ -23,10 +23,31 @@ export const createToken = functions.https.onCall(async (data, context) => {
         return { ...data, uid, id };
       }
     });
+};
+
+export const createToken = functions.https.onCall(async (data, context) => {
+  const code = data;
+
+  const workshop = await findCodeInCollection("workshops", code);
+  const customer = await findCodeInCollection("customers", code);
+  const employee = await findCodeInCollection("employees", code);
+
   if (workshop) {
     const token = await admin
       .auth()
       .createCustomToken(workshop.id, { role: "workshop", ...workshop });
     return { token };
-  } else return { error: "Không tìm thấy mã!" };
+  } else if (customer) {
+    const token = await admin
+      .auth()
+      .createCustomToken(customer.id, { role: "customer", ...customer });
+    return { token };
+  } else if (employee) {
+    const token = await admin
+      .auth()
+      .createCustomToken(employee.id, { role: "employee", ...employee });
+    return { token };
+  } else {
+    return { error: "Không tìm thấy mã!" };
+  }
 });

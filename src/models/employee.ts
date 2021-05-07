@@ -28,6 +28,24 @@ export const getAllEmployees = (user: string) => {
     });
 };
 
+export const findEmployee = (user: string, id: string) => {
+  return ref(user)
+    .doc(id)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        const data = doc.data() as any;
+        return {
+          id: doc.id,
+          ...data,
+          createdAt: data.createdAt?.toDate().toString(),
+        };
+      } else {
+        return null;
+      }
+    });
+};
+
 export const saveEmployee = (user: string, param: Partial<Employee>) => {
   const permittedParam = {
     ..._.pickBy(param, _.identity),

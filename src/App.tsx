@@ -50,6 +50,8 @@ import { useFancyToast } from "./hooks/useFancyToast";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { vi } from "date-fns/locale";
 import AnonymousWorkshopPage from "./pages/anonymous/AnonymousWorkshopPage";
+import AnonymousCustomerPage from "./pages/anonymous/AnonymousCustomerPage";
+import AnonymousEmployeePage from "./pages/anonymous/AnonymousEmployeePage";
 
 setupConfig({
   rippleEffect: true,
@@ -68,6 +70,10 @@ const RoleBaseView: React.FC<{ role: string }> = ({ role }) => {
 
     case "workshop":
       return <AnonymousWorkshopPage />;
+    case "customer":
+      return <AnonymousCustomerPage />;
+    case "employee":
+      return <AnonymousEmployeePage />;
 
     default:
       return <h1> bạn không có phận sự</h1>;

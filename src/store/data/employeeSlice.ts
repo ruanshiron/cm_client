@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getAllEmployees, Employee } from "../../models/employee";
+import { getAllEmployees, Employee, findEmployee } from "../../models/employee";
 import { RootState } from "../rootReducer";
 
 let initialState: Employee[] = [];
@@ -11,6 +11,16 @@ export const fetchAllEmployees = createAsyncThunk(
       user: { uid },
     } = thunkAPI.getState() as RootState;
     return await getAllEmployees(uid);
+  }
+);
+
+export const findEmployeeById = createAsyncThunk(
+  "employees/find",
+  async (param: string, thunkAPI) => {
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
+    return await findEmployee(uid, param);
   }
 );
 
@@ -31,9 +41,13 @@ const employeeSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchAllEmployees.fulfilled, (_state, action: any) => {
-      return action.payload;
-    });
+    builder
+      .addCase(fetchAllEmployees.fulfilled, (_state, action: any) => {
+        return action.payload;
+      })
+      .addCase(findEmployeeById.fulfilled, (state, action) => {
+        if (action.payload) state.unshift(action.payload);
+      });
   },
 });
 

@@ -12,7 +12,11 @@ const EventFab: React.FC<EventFabProps> = () => {
   return (
     <>
       <IonFab vertical="bottom" horizontal="end" slot="fixed">
-        <IonFabButton onClick={() => form.setShowForm(true)}>
+        <IonFabButton
+          onClick={() => {
+            form.present()
+          }}
+        >
           <IonIcon icon={add}></IonIcon>
         </IonFabButton>
       </IonFab>

@@ -272,15 +272,11 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
       </IonHeader>
       <IonContent>
         <IonListHeader>
-          <b>
-            {form
-              .detail()
-              .map((item, index) => (
-                <IonBadge style={{ marginRight: 4 }} key={index}>
-                  {item}
-                </IonBadge>
-              ))}
-          </b>
+          {form.detail().map((item, index) => (
+            <IonBadge className="fadin" style={{ marginRight: 4 }} key={index} color="dark">
+              {item}
+            </IonBadge>
+          ))}
         </IonListHeader>
         <IonSlides ref={slider} options={{ allowTouchMove: false }}>
           <IonSlide>

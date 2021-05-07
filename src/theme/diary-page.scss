@@ -15,77 +15,11 @@
   }
 
   .border-full {
-    ion-item {
-      border-left: 1px solid
-        var(
-          --ion-item-border-color,
-          var(
-            --ion-border-color,
-            var(--ion-color-step-150, rgba(0, 0, 0, 0.13))
-          )
-        );
-
-      border-right: 1px solid
-        var(
-          --ion-item-border-color,
-          var(
-            --ion-border-color,
-            var(--ion-color-step-150, rgba(0, 0, 0, 0.13))
-          )
-        );
-    }
-
-    ion-item-divider {
-      border-top: 1px solid
-        var(
-          --ion-item-border-color,
-          var(
-            --ion-border-color,
-            var(--ion-color-step-150, rgba(0, 0, 0, 0.13))
-          )
-        );
-
-      border-left: 1px solid
-        var(
-          --ion-item-border-color,
-          var(
-            --ion-border-color,
-            var(--ion-color-step-150, rgba(0, 0, 0, 0.13))
-          )
-        );
-
-      border-right: 1px solid
-        var(
-          --ion-item-border-color,
-          var(
-            --ion-border-color,
-            var(--ion-color-step-150, rgba(0, 0, 0, 0.13))
-          )
-        );
-    }
-
-    ion-item:first-child {
-      border-top: 1px solid
-        var(
-          --ion-item-border-color,
-          var(
-            --ion-border-color,
-            var(--ion-color-step-150, rgba(0, 0, 0, 0.13))
-          )
-        );
-    }
-
-    ion-item:last-child {
-      border-bottom: 1px solid
-        var(
-          --ion-item-border-color,
-          var(
-            --ion-border-color,
-            var(--ion-color-step-150, rgba(0, 0, 0, 0.13))
-          )
-        );
-      --inner-border-width: 0;
-    }
+    border: 1px solid
+      var(
+        --ion-item-border-color,
+        var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+      );
   }
 
   ion-list.list-md {
