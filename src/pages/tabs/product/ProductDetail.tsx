@@ -1,21 +1,19 @@
 import {
-  IonAvatar,
   IonBackButton,
   IonBadge,
   IonButton,
   IonButtons,
   IonCard,
   IonCardContent,
-  IonCardHeader,
   IonCol,
   IonContent,
   IonGrid,
   IonHeader,
   IonIcon,
   IonItem,
-  IonItemDivider,
   IonLabel,
   IonList,
+  IonListHeader,
   IonLoading,
   IonNote,
   IonPage,
@@ -30,10 +28,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../../store";
 import {
+  accessibilityOutline,
   barChartOutline,
+  barcodeOutline,
   close,
   ellipsisVertical,
   pencilOutline,
+  textOutline,
   trashOutline,
 } from "ionicons/icons";
 import { ProductModal } from "../../../components/modals/ProductModal";
@@ -43,6 +44,7 @@ import { useDispatch } from "react-redux";
 import {
   findProductById,
   removeProduct,
+  statisticSelector,
 } from "../../../store/data/productSlice";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
 
@@ -60,6 +62,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
   const product = useSelector((state) =>
     state.products.find((item) => item.id === id)
   );
+  const statistic = useSelector((state) => statisticSelector(state, id));
   const processes = useSelector((state) =>
     state.processes.filter((item) => product?.processes?.includes(item.id!))
   );
@@ -153,64 +156,105 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
               <IonLoading isOpen={!!(loading && !product)} />
               <IonCol size="12" size-md="8" offsetMd="2">
                 <IonCard className="list-card">
-                  <IonCardHeader>
-                    <IonItem detail={false} lines="none" className="list-item">
-                      <IonAvatar slot="start">
-                        <img
-                          src="/assets/icon/icon.png"
-                          alt="Speaker profile pic"
-                        />
-                      </IonAvatar>
-                      <IonLabel>
-                        <h2>{product?.name}</h2>
-                        <p>{product?.code}</p>
-                      </IonLabel>
-                    </IonItem>
-                  </IonCardHeader>
                   <IonCardContent>
-                    <IonList>
-                      <IonItemDivider>
-                        Thống kê tự động (đang xử lý)
-                      </IonItemDivider>
-
-                      <IonItemDivider>Kích cỡ</IonItemDivider>
-                      {product?.sizes?.map((size, i) => (
-                        <IonItem key={i}>{size}</IonItem>
-                      ))}
-                      <IonItemDivider>Quy trình sản xuất</IonItemDivider>
-                      {processes?.map((process, i) => {
-                        return (
-                          <IonItem key={i}>
-                            {process.name}
-                            <IonNote slot="end">
-                              {process.pending && (
-                                <IonBadge
-                                  color="warning"
-                                  style={{ marginRight: 4 }}
-                                >
-                                  {process.pending}
-                                </IonBadge>
-                              )}
-                              {process.fulfilled && (
-                                <IonBadge
-                                  color="success"
-                                  style={{ marginRight: 4 }}
-                                >
-                                  {process.fulfilled}
-                                </IonBadge>
-                              )}
-                              {process.rejected && (
-                                <IonBadge
-                                  color="danger"
-                                  style={{ marginRight: 4 }}
-                                >
-                                  {process.rejected}
-                                </IonBadge>
-                              )}
-                            </IonNote>
+                    <IonList style={{ border: "none " }} lines="full">
+                      <IonItem>
+                        <IonIcon slot="start" icon={textOutline}></IonIcon>
+                        <IonLabel>
+                          <b>{product?.name}</b>
+                        </IonLabel>
+                        <IonNote slot="end">Tên sản phẩm</IonNote>
+                      </IonItem>
+                      <IonItem>
+                        <IonIcon slot="start" icon={barcodeOutline}></IonIcon>
+                        <IonLabel>
+                          <b>{product?.code}</b>
+                        </IonLabel>
+                        <IonNote slot="end">Mã sản phẩm</IonNote>
+                      </IonItem>
+                      <IonItem>
+                        <IonIcon
+                          slot="start"
+                          icon={accessibilityOutline}
+                        ></IonIcon>
+                        <IonLabel>
+                          {product?.sizes?.map((size, i) => (
+                            <IonBadge key={i} style={{ marginRight: 4 }}>
+                              {size}
+                            </IonBadge>
+                          ))}
+                        </IonLabel>
+                        <IonNote slot="end">Kích cỡ</IonNote>
+                      </IonItem>
+                    </IonList>
+                    <IonListHeader>Quy trình sản xuất</IonListHeader>
+                    {processes?.map((process, i) => {
+                      return (
+                        <IonItem key={i}>
+                          {process.name}
+                          <IonNote slot="end">
+                            {process.pending && (
+                              <IonBadge
+                                color="warning"
+                                style={{ marginLeft: 4 }}
+                              >
+                                {process.pending}
+                              </IonBadge>
+                            )}
+                            {process.fulfilled && (
+                              <IonBadge
+                                color="success"
+                                style={{ marginLeft: 4 }}
+                              >
+                                {process.fulfilled}
+                              </IonBadge>
+                            )}
+                            {process.rejected && (
+                              <IonBadge
+                                color="danger"
+                                style={{ marginLeft: 4 }}
+                              >
+                                {process.rejected}
+                              </IonBadge>
+                            )}
+                          </IonNote>
+                        </IonItem>
+                      );
+                    })}
+                  </IonCardContent>
+                </IonCard>
+                <IonCard className="list-card">
+                  <IonCardContent>
+                    <IonItem lines="none">
+                      <IonLabel>
+                        <u>
+                          <b>Thống kê tự động</b>
+                        </u>
+                      </IonLabel>
+                      <IonNote slot="end">
+                        từ {product?.statistic.from || "~"} đến{" "}
+                        {product?.statistic.to || "~"}
+                      </IonNote>
+                    </IonItem>
+                    <IonList lines="full" style={{ border: "none " }}>
+                      {statistic.map((item, index) => (
+                        <React.Fragment key={index}>
+                          <IonItem>
+                            <IonLabel className="ion-text-center">
+                              <b>{item.pending.value}</b>
+                              <p>{item.pending.label}</p>
+                            </IonLabel>
+                            <IonLabel className="ion-text-center">
+                              <b>{item.fulfilled.value}</b>
+                              <p>{item.fulfilled.label}</p>
+                            </IonLabel>
+                            <IonLabel className="ion-text-center">
+                              <b>{item.rejected.value}</b>
+                              <p>{item.rejected.label}</p>
+                            </IonLabel>
                           </IonItem>
-                        );
-                      })}
+                        </React.Fragment>
+                      ))}
                     </IonList>
                   </IonCardContent>
                 </IonCard>

@@ -87,6 +87,40 @@ export const {
   updateProduct,
 } = productSlice.actions;
 
+export const statisticSelector = createSelector(
+  (state: RootState) => state.products,
+  (state: RootState) => state.processes,
+  (_state: RootState, productId: string) => productId,
+  (products, processes, productId) => {
+    const product = products.find((item) => item.id === productId);
+    if (product) {
+      return Object.keys(product.statistic.processes).map((key) => {
+        const data = product.statistic.processes[key];
+        return {
+          pending: {
+            label:
+              processes.find((item) => item.id === key)?.pending ||
+              "đang tải...",
+            value: data.pending,
+          },
+          fulfilled: {
+            label:
+              processes.find((item) => item.id === key)?.fulfilled ||
+              "đang tải...",
+            value: data.fulfilled,
+          },
+          rejected: {
+            label:
+              processes.find((item) => item.id === key)?.rejected ||
+              "đang tải...",
+            value: data.rejected,
+          },
+        };
+      });
+    } else return [];
+  }
+);
+
 export const statisticsForProduct = createSelector(
   (state: RootState) => state.stages,
   (state: RootState) => state.processes,
