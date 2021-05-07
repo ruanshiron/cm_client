@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import _ from "lodash";
 import { formatISO } from "date-fns";
 
-const collection = "stages2";
+const collection = "stages";
 
 const ref = (user: string) =>
   database.collection("users").doc(user).collection(collection);
@@ -35,18 +35,6 @@ export interface Stage {
   date: string;
   note?: string;
   timestamp?: string;
-}
-export interface Stage2 {
-  id?: string;
-  quantity: number;
-  product: string;
-  size: string;
-  process: string;
-  workshop: string;
-  date: string;
-  note?: string;
-  created?: string;
-  updated?: string;
 }
 
 export interface Group {

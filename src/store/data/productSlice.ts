@@ -38,22 +38,22 @@ const productSlice = createSlice({
     updateFromDateProductReport(state, action) {
       const product = state.find((v) => v.id === action.payload.id);
 
-      if (product && product.report_cache) {
-        product.report_cache.to = action.payload;
+      if (product && product.statistic) {
+        product.statistic.to = action.payload;
       }
     },
     updateToDateProductReport(state, action) {
       const product = state.find((v) => v.id === action.payload.id);
 
-      if (product && product.report_cache) {
-        product.report_cache.from = action.payload;
+      if (product && product.statistic) {
+        product.statistic.from = action.payload;
       }
     },
     updateForProductReport(state, action) {
       const product = state.find((v) => v.id === action.payload.id);
 
-      if (product && product.report_cache) {
-        product.report_cache.for = action.payload;
+      if (product && product.statistic) {
+        product.statistic.for = action.payload;
       }
     },
     removeProduct(state, action) {

@@ -14,17 +14,18 @@ export const initialProduct: Product = {
   sizes: [],
   note: "",
   processes: [],
-  report_cache: {
+  statistic: {
     from: formatISO(new Date(), { representation: "date" }),
     to: null,
   },
 };
 
-interface ReportCache {
+interface Statistic {
   from?: any;
   to?: any;
   for?: any;
   fields?: { name: string; value: number }[];
+  processes?: any;
 }
 export interface Product {
   id?: string;
@@ -33,7 +34,7 @@ export interface Product {
   sizes: string[];
   note: string;
   processes: string[];
-  report_cache: ReportCache;
+  statistic: Statistic;
   updated?: any;
   createdAt?: any;
 }
@@ -89,10 +90,10 @@ export const isInvalidProduct = (fields: Product) =>
 export const cache = (
   user: string,
   productId: string,
-  reportCache: ReportCache
+  statistic: Statistic
 ) => {
   return ref(user).doc(productId).update({
-    report_cache: reportCache,
+    statistic: statistic,
     updated: firebase.firestore.FieldValue.serverTimestamp(),
   });
 };
