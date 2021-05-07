@@ -24,7 +24,7 @@ import {
   useIonAlert,
   useIonRouter,
 } from "@ionic/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../../store";
 import {
@@ -37,7 +37,6 @@ import {
   textOutline,
   trashOutline,
 } from "ionicons/icons";
-import { ProductModal } from "../../../components/modals/ProductModal";
 import { destroyProduct } from "../../../models/product";
 import { toast } from "../../../utils/toast";
 import { useDispatch } from "react-redux";
@@ -56,7 +55,6 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
   const { id } = useParams<{ id: string }>();
   const uid = useSelector((state) => state.user.uid);
   const loading = useSelector((state) => state.loading.isLoading);
-  const [showReportModal, setShowReportModal] = useState(false);
   const [presentActionSheet] = useIonActionSheet();
   const [presentDeleteAlert] = useIonAlert();
   const product = useSelector((state) =>
@@ -88,11 +86,6 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
   return (
     <>
       <IonPage className="list-page">
-        <ProductModal
-          showModal={showReportModal}
-          onDismiss={() => setShowReportModal(false)}
-        />
-
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
@@ -101,7 +94,14 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
             <IonTitle>{product?.name}</IonTitle>
 
             <IonButtons slot="end">
-              <IonButton onClick={() => setShowReportModal(true)}>
+              <IonButton
+                routerLink={
+                  router.routeInfo.pathname +
+                  (router.routeInfo.pathname.endsWith("/")
+                    ? "statistic"
+                    : "/statistic")
+                }
+              >
                 <IonIcon slot="icon-only" icon={barChartOutline} />
               </IonButton>
               <IonButton
@@ -130,7 +130,12 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                         text: "Xem thống kê chi tiết",
                         icon: barChartOutline,
                         handler: () => {
-                          setShowReportModal(true);
+                          router.push(
+                            router.routeInfo.pathname +
+                              (router.routeInfo.pathname.endsWith("/")
+                                ? "statistic"
+                                : "/statistic")
+                          );
                         },
                       },
                       {

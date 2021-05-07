@@ -35,26 +35,32 @@ const productSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    updateFromDateProductReport(state, action) {
-      const product = state.find((v) => v.id === action.payload.id);
-
-      if (product && product.statistic) {
-        product.statistic.to = action.payload;
-      }
+    updateFromDate(state, action) {
+      return state.map((v) =>
+        v.id !== action.payload.id
+          ? v
+          : { ...v, statistic: { ...v.statistic, from: action.payload.from } }
+      );
     },
-    updateToDateProductReport(state, action) {
-      const product = state.find((v) => v.id === action.payload.id);
-
-      if (product && product.statistic) {
-        product.statistic.from = action.payload;
-      }
+    updateToDate(state, action) {
+      return state.map((v) =>
+        v.id !== action.payload.id
+          ? v
+          : { ...v, statistic: { ...v.statistic, to: action.payload.to } }
+      );
     },
-    updateForProductReport(state, action) {
-      const product = state.find((v) => v.id === action.payload.id);
-
-      if (product && product.statistic) {
-        product.statistic.for = action.payload;
-      }
+    updateDefaultProcess(state, action) {
+      return state.map((v) =>
+        v.id !== action.payload.id
+          ? v
+          : {
+              ...v,
+              statistic: {
+                ...v.statistic,
+                defaultProcess: action.payload.processId,
+              },
+            }
+      );
     },
     removeProduct(state, action) {
       return state.filter((item) => item.id !== action.payload);
@@ -85,6 +91,9 @@ export const {
   removeProduct,
   addProduct,
   updateProduct,
+  updateDefaultProcess,
+  updateFromDate,
+  updateToDate,
 } = productSlice.actions;
 
 export const statisticSelector = createSelector(
@@ -101,23 +110,84 @@ export const statisticSelector = createSelector(
             label:
               processes.find((item) => item.id === key)?.pending ||
               "đang tải...",
-            value: data.pending,
+            value: data.pending || 0,
           },
           fulfilled: {
             label:
               processes.find((item) => item.id === key)?.fulfilled ||
               "đang tải...",
-            value: data.fulfilled,
+            value: data.fulfilled || 0,
           },
           rejected: {
             label:
               processes.find((item) => item.id === key)?.rejected ||
               "đang tải...",
-            value: data.rejected,
+            value: data.rejected || 0,
           },
         };
       });
     } else return [];
+  }
+);
+
+export const statisticHarderSelector = createSelector(
+  (state: RootState) => state.stages,
+  (state: RootState) => state.processes,
+  (_state: RootState, productId: string, from?: string, to?: string) => ({
+    productId,
+    from,
+    to,
+  }),
+  (stages, processes, { productId, from, to }) => {
+    const filteredStages = stages
+      .filter(
+        (item) => item.productId === productId && isBetween(item.date, from, to)
+      )
+      .sort((a, b) => a.date.localeCompare(b.date));
+    const tmp: { [key: string]: { [key: string]: any } } = {};
+    forEach(filteredStages, (value) => {
+      if (value.processId in tmp) {
+        if (value.processStatus in tmp[value.processId]) {
+          tmp[value.processId][value.processStatus] += value.quantity;
+        } else {
+          tmp[value.processId][value.processStatus] = value.quantity;
+        }
+      } else {
+        tmp[value.processId] = {
+          [value.processStatus]: value.quantity,
+        };
+      }
+    });
+
+    console.log(tmp);
+
+    return {
+      stages: filteredStages,
+      statistic: Object.keys(tmp).map((key) => {
+        const data = tmp[key];
+        return {
+          pending: {
+            label:
+              processes.find((item) => item.id === key)?.pending ||
+              "đang tải...",
+            value: data.pending || 0,
+          },
+          fulfilled: {
+            label:
+              processes.find((item) => item.id === key)?.fulfilled ||
+              "đang tải...",
+            value: data.fulfilled || 0,
+          },
+          rejected: {
+            label:
+              processes.find((item) => item.id === key)?.rejected ||
+              "đang tải...",
+            value: data.rejected || 0,
+          },
+        };
+      }),
+      processesParam: tmp,
+    };
   }
 );
 
@@ -154,43 +224,5 @@ export const statisticsForProduct = createSelector(
     );
 
     return statistics;
-  }
-);
-
-export const stagesByProductAndProcess = createSelector(
-  (state: RootState) => state.stages,
-  (state: RootState) => state.processes,
-  (state: RootState) => state.workshops,
-  (
-    _state: RootState,
-    productId: string,
-    processId: string,
-    from: string,
-    to: string
-  ) => ({
-    productId,
-    processId,
-    from,
-    to,
-  }),
-  (stages, processes, workshops, { productId, processId, from, to }) => {
-    const filteredStages = stages
-      .filter(
-        (item) =>
-          item.productId === productId &&
-          item.processId.startsWith(processId) &&
-          isBetween(item.date, from, to)
-      )
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .map((item) => {
-        return {
-          ...item,
-          process: processParser(item.processId, processes),
-          workshop: workshops.find((i) => i.id === item.workshopId)?.name,
-          note: item.note || "_",
-        };
-      });
-
-    return filteredStages;
   }
 );

@@ -68,3 +68,10 @@ export const filteredStages = createSelector(
     return filter(stages);
   }
 );
+
+export const stageOrderByTimestampSelector = createSelector(
+  (state: RootState) => state.stages,
+  (stages) => {
+    return stages.slice().sort((a, b) => b.date.localeCompare(a.date));
+  }
+);

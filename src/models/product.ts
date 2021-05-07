@@ -24,7 +24,7 @@ interface Statistic {
   from?: any;
   to?: any;
   for?: any;
-  fields?: { name: string; value: number }[];
+  defaultProcess?: string;
   processes?: any;
 }
 export interface Product {

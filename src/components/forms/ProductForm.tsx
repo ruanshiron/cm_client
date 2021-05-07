@@ -1,6 +1,7 @@
 import {
   IonCard,
   IonCardContent,
+  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
@@ -8,6 +9,11 @@ import {
   IonSelectOption,
   IonTextarea,
 } from "@ionic/react";
+import {
+  accessibilityOutline,
+  barcodeOutline,
+  textOutline,
+} from "ionicons/icons";
 import React from "react";
 import { useProductForm } from "../../hooks/useProductForm";
 
@@ -18,28 +24,33 @@ interface ProductFormProps {
 const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
   return (
     <>
-      <IonCard>
+      <IonCard className="list-card">
         <IonCardContent>
           <IonItem>
-            <IonLabel position="floating">Tên</IonLabel>
+            <IonIcon icon={textOutline} slot="start" />
             <IonInput
               value={form.fields.name}
+              placeholder="Tên sản phẩm"
               onIonChange={(e) =>
                 form.setFieldsValue({ name: e.detail.value! })
               }
             ></IonInput>
           </IonItem>
           <IonItem>
-            <IonLabel position="floating">Mã</IonLabel>
+            <IonIcon icon={barcodeOutline} slot="start" />
             <IonInput
               value={form.fields.code}
+              placeholder="Mã sản phẩm"
               onIonChange={(e) =>
                 form.setFieldsValue({ code: e.detail.value! })
               }
             ></IonInput>
           </IonItem>
           <IonItem lines="none">
-            <IonLabel position="floating">Kích cỡ</IonLabel>
+            <IonIcon icon={accessibilityOutline} slot="start" />
+            <IonLabel>
+              <b>Kích cỡ</b>
+            </IonLabel>
             <IonSelect
               value={form.fields.sizes}
               onIonChange={(e) =>
@@ -61,10 +72,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
         </IonCardContent>
       </IonCard>
 
-      <IonCard>
+      <IonCard className="list-card">
         <IonCardContent>
           <IonItem lines="none">
-            <IonLabel position="floating">Quy trình sản xuất</IonLabel>
+            <IonLabel>
+              <b>Quy trình sản xuất</b>
+            </IonLabel>
             <IonSelect
               value={form.fields.processes}
               onIonChange={(e) =>
@@ -92,7 +105,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
           />
         </IonThumbnail>
       </IonItem> */}
-      <IonCard>
+      <IonCard className="list-card">
         <IonCardContent>
           <IonItem lines="none">
             <IonLabel position="floating">Ghi chú</IonLabel>

@@ -22,21 +22,21 @@ export const useProductForm = (product = initialProduct) => {
 
   const processes = useSelector((state) => state.processes);
 
-  const submit = async () => {
+  const submit = async (params = fields) => {
     if (submitted) return;
-    if (isInvalidProduct(fields)) return;
+    if (isInvalidProduct(params)) return;
     setSubmitted(true);
     try {
-      const newProduct = (await saveProduct(uid, fields)) as any;
+      const newProduct = (await saveProduct(uid, params)) as any;
       setFields(product);
       router.goBack();
       toast("Lưu thành công.");
       setSubmitted(false);
       // TODO: Do not fetch again
-      if (fields.id) {
-        dispatch(updateProduct(fields));
+      if (params.id) {
+        dispatch(updateProduct(params));
       } else {
-        dispatch(addProduct({ ...fields, id: newProduct.id }));
+        dispatch(addProduct({ ...params, id: newProduct.id }));
       }
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");

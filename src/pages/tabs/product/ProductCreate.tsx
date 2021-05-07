@@ -28,7 +28,7 @@ const ProductCreate: React.FC<ProductCreateProps> = () => {
           </IonButtons>
           <IonTitle>Thêm sản phẩm</IonTitle>
           <IonButtons slot="end">
-            <IonButton type="submit" onClick={form.submit}>
+            <IonButton type="submit" onClick={() => form.submit()}>
               Lưu
             </IonButton>
           </IonButtons>
