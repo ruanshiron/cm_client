@@ -27,7 +27,7 @@ export const fetchAllWorkshops = createAsyncThunk(
 );
 
 export const findWorkshopById = createAsyncThunk(
-  "products/find",
+  "workshops/find",
   async (param: string, thunkAPI) => {
     const {
       user: { uid },

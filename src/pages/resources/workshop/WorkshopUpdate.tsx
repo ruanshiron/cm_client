@@ -8,6 +8,8 @@ import {
   IonContent,
   IonGrid,
   IonHeader,
+  IonIcon,
+  IonInput,
   IonItem,
   IonItemOption,
   IonItemOptions,
@@ -22,9 +24,18 @@ import {
   IonToolbar,
   useIonModal,
 } from "@ionic/react";
+import copy from "copy-to-clipboard";
+import {
+  cashOutline,
+  copyOutline,
+  qrCodeOutline,
+  refresh,
+} from "ionicons/icons";
+import QRCode from "qrcode.react";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
+import { v4 } from "uuid";
 import WorkshopForm from "../../../components/forms/WorkshopForm";
 import AmountModal from "../../../components/modals/AmountModal";
 import { useWorkshopForm } from "../../../hooks/useWorkshopForm";
@@ -32,9 +43,15 @@ import {
   addAmountToWorkshop,
   removeAmountFromWorkshop,
   Amount,
+  saveWorkshop,
 } from "../../../models/workshop";
 import { useSelector } from "../../../store";
-import { addAmount, removeAmount } from "../../../store/data/workshopSlice";
+import { fetchAllProducts } from "../../../store/data/productSlice";
+import {
+  addAmount,
+  removeAmount,
+  updateWorkshopCode,
+} from "../../../store/data/workshopSlice";
 import { toast } from "../../../utils/toast";
 
 interface WorkshopUpdateProps {}
@@ -85,10 +102,33 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
       (to?.substring(0, 10) || "nay")
     );
   };
+  const handleUpdateCode = async () => {
+    const code = v4();
+    try {
+      await saveWorkshop(uid, {
+        ...workshop,
+        code,
+      });
+      toast("Lưu thành công.");
+      dispatch(updateWorkshopCode({ id, code }));
+    } catch {
+      toast("Có lỗi xảy ra, vui lòng thử lại.");
+    }
+  };
+  const handleCopy = () => {
+    copy(workshop?.code || "Hãy tạo mã trước!");
+    toast(workshop?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!");
+  };
+
   useEffect(() => {
     if (workshop) form.setFieldsValue(workshop);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workshop]);
+
+  useEffect(() => {
+    if (products.length <= 0) dispatch(fetchAllProducts());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <IonPage className="list-page">
       <IonHeader>
@@ -96,7 +136,7 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/workshops"></IonBackButton>
           </IonButtons>
-          <IonTitle>Thêm xưởng may</IonTitle>
+          <IonTitle>Sửa thông tin</IonTitle>
           <IonButtons slot="end">
             <IonButton type="submit" onClick={form.submit}>
               Lưu
@@ -109,6 +149,35 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
           <IonRow className="ion-justify-content-center">
             <IonCol size="12" size-md="8">
               <WorkshopForm form={form} />
+              <IonCard className="list-card">
+                <IonItem>
+                  <IonIcon icon={qrCodeOutline} slot="start"></IonIcon>
+                  <IonInput
+                    value={workshop?.code || "Hãy tạo code mới"}
+                    readonly
+                  />
+                  <IonButtons slot="end">
+                    <IonButton onClick={handleUpdateCode}>
+                      <IonIcon slot="icon-only" icon={refresh}></IonIcon>
+                    </IonButton>
+                    <IonButton onClick={handleCopy}>
+                      <IonIcon slot="icon-only" icon={copyOutline}></IonIcon>
+                    </IonButton>
+                  </IonButtons>
+                </IonItem>
+                {workshop?.code && (
+                  <IonItem>
+                    <QRCode
+                      style={{ margin: "auto" }}
+                      id="qrcode"
+                      value={workshop?.code}
+                      size={290}
+                      level={"H"}
+                      includeMargin={true}
+                    />
+                  </IonItem>
+                )}
+              </IonCard>
               <IonCard className="list-card">
                 <IonCardContent>
                   <IonList style={{ borderTop: "none" }}>
@@ -126,17 +195,14 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
                     {workshop?.amounts.map((item, index) => (
                       <IonItemSliding key={index}>
                         <IonItem>
+                          <IonIcon slot="start" icon={cashOutline} />
                           <IonLabel>
-                            <p>
-                              <b>{item.productName}</b>
-                            </p>
+                            <b>{item.productName}</b>
                             <p>
                               {stringFromToDate(item.fromDate, item.toDate)}
                             </p>
                           </IonLabel>
-                          <IonText color="tertiary">
-                            {item.amount + " VND"}
-                          </IonText>
+                          <IonText color="dark">{item.amount}&nbsp;₫</IonText>
                         </IonItem>
                         <IonItemOptions side="end">
                           <IonItemOption

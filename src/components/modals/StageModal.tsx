@@ -53,7 +53,7 @@ const CustomSelecter: React.FC<{
   title?: string;
 }> = ({ onChange, value, items, title }) => {
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <IonContent>
       <IonList className="ion-no-padding" lines="full">
         <IonListHeader>
           <b>{title}</b>
@@ -66,8 +66,8 @@ const CustomSelecter: React.FC<{
             )}
           </IonItem>
         ))}
-      </IonList>
-    </div>
+      </IonList>{" "}
+    </IonContent>
   );
 };
 
@@ -77,7 +77,7 @@ const SizeSelecter: React.FC<{
   value: string;
 }> = ({ onChange, value, items }) => {
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <IonContent>
       <IonList className="ion-no-padding">
         <IonListHeader>
           <b>Chọn kích cỡ sản phẩm</b>
@@ -91,7 +91,7 @@ const SizeSelecter: React.FC<{
           </IonItem>
         ))}
       </IonList>
-    </div>
+    </IonContent>
   );
 };
 
@@ -101,7 +101,7 @@ const ProcessSelecter: React.FC<{
   value: { processId: string; processStatus: string };
 }> = ({ onChange, value, items }) => {
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <IonContent>
       <IonList className="ion-no-padding" lines="full">
         <IonListHeader>
           <b>Chọn quy trình</b>
@@ -171,7 +171,7 @@ const ProcessSelecter: React.FC<{
           </React.Fragment>
         ))}
       </IonList>
-    </div>
+    </IonContent>
   );
 };
 
@@ -273,7 +273,12 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
       <IonContent>
         <IonListHeader>
           {form.detail().map((item, index) => (
-            <IonBadge className="fadin" style={{ marginRight: 4 }} key={index} color="dark">
+            <IonBadge
+              className="fadin"
+              style={{ marginRight: 4 }}
+              key={index}
+              color="dark"
+            >
               {item}
             </IonBadge>
           ))}

@@ -28,7 +28,7 @@ export const useStageFormModal = (stage = initialStage) => {
   );
   const processes = useSelector((state) => {
     return state.processes.filter((item) =>
-      selectedProcduct?.processes.includes(item.id!)
+      selectedProcduct?.processes?.includes(item.id!)
     );
   });
   const workshops = useSelector((state) => state.workshops);

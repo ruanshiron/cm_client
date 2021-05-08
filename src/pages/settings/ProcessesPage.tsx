@@ -100,21 +100,19 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
                       }}
                       button
                     >
-                      <IonLabel slot="start">
+                      <IonLabel>
                         <b>{process.name}</b>
                       </IonLabel>
                       <IonNote slot="end">
-                        <p>
-                          <IonBadge style={{ marginRight: 4 }} color="warning">
-                            {process.pending}
-                          </IonBadge>
-                          <IonBadge style={{ marginRight: 4 }} color="success">
-                            {process.fulfilled}
-                          </IonBadge>
-                          <IonBadge style={{ marginRight: 4 }} color="danger">
-                            {process.rejected}
-                          </IonBadge>
-                        </p>
+                        <IonBadge style={{ marginLeft: 4 }} color="warning">
+                          {process.pending}
+                        </IonBadge>
+                        <IonBadge style={{ marginLeft: 4 }} color="success">
+                          {process.fulfilled}
+                        </IonBadge>
+                        <IonBadge style={{ marginLeft: 4 }} color="danger">
+                          {process.rejected}
+                        </IonBadge>
                       </IonNote>
                     </IonItem>
                   ))}

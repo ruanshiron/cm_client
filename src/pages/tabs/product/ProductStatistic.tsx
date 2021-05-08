@@ -17,8 +17,6 @@ import {
   IonNote,
   IonPage,
   IonRow,
-  IonSelect,
-  IonSelectOption,
   IonTitle,
   IonToolbar,
   useIonAlert,
@@ -29,14 +27,12 @@ import { useSelector } from "../../../store";
 import {
   calendarClearOutline,
   calendarNumberOutline,
-  helpOutline,
   saveOutline,
 } from "ionicons/icons";
 import { useDispatch } from "react-redux";
 import {
   findProductById,
   statisticHarderSelector,
-  updateDefaultProcess,
   updateFromDate,
   updateToDate,
 } from "../../../store/data/productSlice";
@@ -191,34 +187,6 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
                           );
                         }}
                       ></IonDatetime>
-                    </IonItem>
-                    <IonItem>
-                      <IonIcon slot="start" icon={helpOutline} />
-                      <IonLabel>
-                        <b>Quy trình</b>
-                      </IonLabel>
-                      <IonSelect
-                        interface="action-sheet"
-                        value={product?.statistic.defaultProcess}
-                        okText="OK!"
-                        cancelText="Hủy"
-                        onIonChange={(e) => {
-                          dispatch(
-                            updateDefaultProcess({
-                              id,
-                              processId: e.detail.value!,
-                            })
-                          );
-                        }}
-                      >
-                        {processes.map((item, index) => (
-                          <React.Fragment key={index}>
-                            <IonSelectOption value={item.id}>
-                              {item.name}
-                            </IonSelectOption>
-                          </React.Fragment>
-                        ))}
-                      </IonSelect>
                     </IonItem>
                   </IonList>
                 </IonCardContent>

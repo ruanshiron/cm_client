@@ -76,7 +76,7 @@ export const createStage = functions.firestore
       .firestore()
       .doc("users/" + context.params.userId + "/products/" + data.productId);
 
-    admin.firestore().runTransaction((transaction) => {
+    return admin.firestore().runTransaction((transaction) => {
       return transaction.get(productRef).then((productDoc) => {
         if (!productDoc.exists) {
           throw Error("Product Document does not exist!");
@@ -182,36 +182,37 @@ export const updateStage = functions.firestore
               productData.statistic.to
             )
           ) {
-            transaction.set(
-              afterProductRef,
-              {
-                statistic: {
-                  processes: {
-                    [after.processId]: {
-                      [after.processStatus]: admin.firestore.FieldValue.increment(
-                        after.quantity
-                      ),
+            transaction
+              .set(
+                beforeProductRef,
+                {
+                  statistic: {
+                    processes: {
+                      [before.processId]: {
+                        [before.processStatus]: admin.firestore.FieldValue.increment(
+                          -before.quantity
+                        ),
+                      },
                     },
                   },
                 },
-              },
-              { merge: true }
-            );
-            transaction.set(
-              beforeProductRef,
-              {
-                statistic: {
-                  processes: {
-                    [before.processId]: {
-                      [before.processStatus]: admin.firestore.FieldValue.increment(
-                        -before.quantity
-                      ),
+                { merge: true }
+              )
+              .set(
+                afterProductRef,
+                {
+                  statistic: {
+                    processes: {
+                      [after.processId]: {
+                        [after.processStatus]: admin.firestore.FieldValue.increment(
+                          after.quantity
+                        ),
+                      },
                     },
                   },
                 },
-              },
-              { merge: true }
-            );
+                { merge: true }
+              );
           }
       });
     });

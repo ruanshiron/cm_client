@@ -79,7 +79,7 @@ const AmountModal: React.FC<Props> = ({
       </IonHeader>
       <IonContent>
         <IonList>
-          <IonListHeader>Xưởng: {workshopName}</IonListHeader>
+          <IonListHeader>Xưởng:&nbsp;<b>{workshopName}</b></IonListHeader>
           <IonItem>
             <IonIcon icon={shirtOutline} slot="start" />
             <IonLabel>Sản phẩm</IonLabel>

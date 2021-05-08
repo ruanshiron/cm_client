@@ -49,19 +49,6 @@ const productSlice = createSlice({
           : { ...v, statistic: { ...v.statistic, to: action.payload.to } }
       );
     },
-    updateDefaultProcess(state, action) {
-      return state.map((v) =>
-        v.id !== action.payload.id
-          ? v
-          : {
-              ...v,
-              statistic: {
-                ...v.statistic,
-                defaultProcess: action.payload.processId,
-              },
-            }
-      );
-    },
     removeProduct(state, action) {
       return state.filter((item) => item.id !== action.payload);
     },
@@ -91,7 +78,6 @@ export const {
   removeProduct,
   addProduct,
   updateProduct,
-  updateDefaultProcess,
   updateFromDate,
   updateToDate,
 } = productSlice.actions;
@@ -102,7 +88,7 @@ export const statisticSelector = createSelector(
   (_state: RootState, productId: string) => productId,
   (products, processes, productId) => {
     const product = products.find((item) => item.id === productId);
-    if (product) {
+    if (product && product.statistic.processes) {
       return Object.keys(product.statistic.processes).map((key) => {
         const data = product.statistic.processes[key];
         return {
