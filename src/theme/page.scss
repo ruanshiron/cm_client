@@ -53,6 +53,12 @@
 
     padding: 0;
   }
+
+  ion-content {
+    ion-grid {
+      padding-bottom: 50vh;
+    }
+  }
 }
 
 ion-router-outlet,
@@ -167,6 +173,15 @@ ion-col {
 
 .loading-wrapper {
   border-radius: 9999px !important;
+}
+
+.border-full {
+  border-radius: 4px !important;
+  border: 1px solid
+    var(
+      --ion-item-border-color,
+      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+    );
 }
 
 .fadin {

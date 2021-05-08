@@ -15,6 +15,7 @@ import SupplierPage from "../pages/resources/supplier/SupplierPage";
 import WorkshopCreate from "../pages/resources/workshop/WorkshopCreate";
 import { WorkshopDetail } from "../pages/resources/workshop/WorkshopDetail";
 import WorkshopPage from "../pages/resources/workshop/WorkshopPage";
+import WorkshopStatistic from "../pages/resources/workshop/WorkshopStatistic";
 import WorkshopUpdate from "../pages/resources/workshop/WorkshopUpdate";
 import ProcessesPage from "../pages/settings/ProcessesPage";
 import SettingsPage from "../pages/settings/SettingsPage";
@@ -42,6 +43,8 @@ const MainRoutes = () => {
       <Route path={"/workshops/:id/update"} component={WorkshopUpdate} />
       <Route path={"/customers/:id/update"} component={CustomerUpdate} />
       <Route path={"/employees/:id/update"} component={EmployeeUpdate} />
+
+      <Route path="/workshops/:id/statistic" component={WorkshopStatistic} exact />
 
       <Route path="/workshops/create" component={WorkshopCreate} exact />
       <Route path="/customers/create" component={CustomerCreate} exact />

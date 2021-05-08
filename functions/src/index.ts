@@ -68,37 +68,54 @@ export const createToken = functions.https.onCall(async (data, context) => {
   }
 });
 
-export const createStage = functions.firestore
+export const statisticProductOnChangeStage = functions.firestore
   .document("users/{userId}/stages/{stageId}")
-  .onCreate((snap, context) => {
-    const data = snap.data();
-    const productRef = admin
-      .firestore()
-      .doc("users/" + context.params.userId + "/products/" + data.productId);
+  .onWrite((change, context) => {
+    const before = change.before.data();
+    const after = change.after.data();
+
+    const beforeProductRef = before
+      ? admin
+          .firestore()
+          .doc(
+            "users/" + context.params.userId + "/products/" + before.productId
+          )
+      : undefined;
+
+    const afterProductRef = after
+      ? admin
+          .firestore()
+          .doc(
+            "users/" + context.params.userId + "/products/" + after.productId
+          )
+      : undefined;
 
     return admin.firestore().runTransaction((transaction) => {
-      return transaction.get(productRef).then((productDoc) => {
-        if (!productDoc.exists) {
-          throw Error("Product Document does not exist!");
-        }
+      return transaction
+        .get((afterProductRef || beforeProductRef)!)
+        .then((productDoc) => {
+          if (!productDoc.exists) {
+            throw Error("Product Document does not exist!");
+          }
+          const productData = productDoc.data()!;
 
-        const productData = productDoc.data();
-        if (productData)
           if (
+            before &&
+            beforeProductRef &&
             isAbleToStatistic(
-              data.date,
-              productData.statistic.from,
-              productData.statistic.to
+              before.date,
+              productData.statistic?.from,
+              productData.statistic?.to
             )
           ) {
             transaction.set(
-              productRef,
+              beforeProductRef,
               {
                 statistic: {
                   processes: {
-                    [data.processId]: {
-                      [data.processStatus]: admin.firestore.FieldValue.increment(
-                        data.quantity
+                    [before.processId]: {
+                      [before.processStatus]: admin.firestore.FieldValue.increment(
+                        -before.quantity
                       ),
                     },
                   },
@@ -107,113 +124,126 @@ export const createStage = functions.firestore
               { merge: true }
             );
           }
-      });
-    });
-  });
-
-export const deleteStage = functions.firestore
-  .document("users/{userId}/stages/{stageId}")
-  .onDelete((snap, context) => {
-    const data = snap.data();
-    const productRef = admin
-      .firestore()
-      .doc("users/" + context.params.userId + "/products/" + data.productId);
-
-    admin.firestore().runTransaction((transaction) => {
-      return transaction.get(productRef).then((productDoc) => {
-        if (!productDoc.exists) {
-          throw Error("Product Document does not exist!");
-        }
-
-        const productData = productDoc.data();
-        if (productData)
           if (
-            isAbleToStatistic(
-              data.date,
-              productData.statistic.from,
-              productData.statistic.to
-            )
-          ) {
-            transaction.set(
-              productRef,
-              {
-                statistic: {
-                  processes: {
-                    [data.processId]: {
-                      [data.processStatus]: admin.firestore.FieldValue.increment(
-                        -data.quantity
-                      ),
-                    },
-                  },
-                },
-              },
-              { merge: true }
-            );
-          }
-      });
-    });
-  });
-
-export const updateStage = functions.firestore
-  .document("users/{userId}/stages/{stageId}")
-  .onUpdate((snap, context) => {
-    const before = snap.before.data();
-    const after = snap.after.data();
-
-    const beforeProductRef = admin
-      .firestore()
-      .doc("users/" + context.params.userId + "/products/" + before.productId);
-    const afterProductRef = admin
-      .firestore()
-      .doc("users/" + context.params.userId + "/products/" + after.productId);
-
-    admin.firestore().runTransaction((transaction) => {
-      return transaction.get(afterProductRef).then((productDoc) => {
-        if (!productDoc.exists) {
-          throw Error("Product Document does not exist!");
-        }
-
-        const productData = productDoc.data();
-        if (productData)
-          if (
+            after &&
+            afterProductRef &&
             isAbleToStatistic(
               after.date,
-              productData.statistic.from,
-              productData.statistic.to
+              productData.statistic?.from,
+              productData.statistic?.to
             )
           ) {
-            transaction
-              .set(
-                beforeProductRef,
-                {
-                  statistic: {
-                    processes: {
-                      [before.processId]: {
-                        [before.processStatus]: admin.firestore.FieldValue.increment(
-                          -before.quantity
-                        ),
-                      },
+            transaction.set(
+              afterProductRef,
+              {
+                statistic: {
+                  processes: {
+                    [after.processId]: {
+                      [after.processStatus]: admin.firestore.FieldValue.increment(
+                        after.quantity
+                      ),
                     },
                   },
                 },
-                { merge: true }
-              )
-              .set(
-                afterProductRef,
-                {
-                  statistic: {
-                    processes: {
-                      [after.processId]: {
-                        [after.processStatus]: admin.firestore.FieldValue.increment(
-                          after.quantity
-                        ),
-                      },
-                    },
-                  },
-                },
-                { merge: true }
-              );
+              },
+              { merge: true }
+            );
           }
-      });
+        });
+    });
+  });
+
+export const statisticWorkshopOnChangeStage = functions.firestore
+  .document("users/{userId}/stages/{stageId}")
+  .onWrite((change, context) => {
+    const before = change.before.data();
+    const after = change.after.data();
+
+    const beforeWorkshopRef = before
+      ? admin
+          .firestore()
+          .doc(
+            "users/" + context.params.userId + "/workshops/" + before.workshopId
+          )
+      : undefined;
+
+    const afterWorkshopRef = after
+      ? admin
+          .firestore()
+          .doc(
+            "users/" + context.params.userId + "/workshops/" + after.workshopId
+          )
+      : undefined;
+
+    return admin.firestore().runTransaction((transaction) => {
+      return transaction
+        .get((beforeWorkshopRef || afterWorkshopRef)!)
+        .then((doc) => {
+          if (!doc.exists) {
+            throw Error("Product Document does not exist!");
+          }
+          const productData = doc.data()!;
+
+          if (
+            before &&
+            beforeWorkshopRef &&
+            isAbleToStatistic(
+              before.date,
+              productData.statistic?.from,
+              productData.statistic?.to
+            )
+          ) {
+            transaction.set(
+              beforeWorkshopRef,
+              {
+                statistic: {
+                  products: {
+                    [before.productId]: {
+                      name: before.productName,
+                      processes: {
+                        [before.processId]: {
+                          [before.processStatus]: admin.firestore.FieldValue.increment(
+                            -before.quantity
+                          ),
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              { merge: true }
+            );
+          }
+          if (
+            after &&
+            afterWorkshopRef &&
+            isAbleToStatistic(
+              after.date,
+              productData.statistic?.from,
+              productData.statistic?.to
+            )
+          ) {
+            transaction.set(
+              afterWorkshopRef,
+              {
+                statistic: {
+                  products: {
+                    [after.productId]: {
+                      name: after.productName,
+                      processes: {
+                        [after.processId]: {
+                          [after.processStatus]: admin.firestore.FieldValue.increment(
+                            after.quantity
+                          ),
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              { merge: true }
+            );
+          }
+        });
     });
   });

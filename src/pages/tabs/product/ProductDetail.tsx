@@ -265,7 +265,6 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                 </IonCard>
               </IonCol>
             </IonRow>
-            <div style={{ padding: 100 }}></div>
           </IonGrid>
         </IonContent>
       </IonPage>

@@ -24,7 +24,6 @@ interface Statistic {
   from?: any;
   to?: any;
   for?: any;
-  defaultProcess?: string;
   processes?: any;
 }
 export interface Product {

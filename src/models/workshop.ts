@@ -12,6 +12,7 @@ export const initialWorkshop: Workshop = {
   phonenumber: "",
   amounts: [],
   code: "",
+  statistic: {},
 };
 
 export interface Amount {
@@ -22,12 +23,31 @@ export interface Amount {
   toDate?: string;
 }
 
+export interface Statistic {
+  from?: string;
+  to?: string;
+  products?: {
+    [key: string]: {
+      name: string;
+      code?: string;
+      processes: {
+        [key: string]: {
+          pending: any;
+          fulfilled: any;
+          rejected: any;
+        };
+      };
+    };
+  };
+}
+
 export interface Workshop {
   id?: string;
   name: string;
   phonenumber: string;
   amounts: Amount[];
   code: string;
+  statistic: Statistic;
   createdAt?: any;
 }
 
