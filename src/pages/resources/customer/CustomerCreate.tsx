@@ -28,7 +28,7 @@ const CustomerCreate: React.FC<CustomerCreateProps> = () => {
           </IonButtons>
           <IonTitle>Thêm khách hàng</IonTitle>
           <IonButtons slot="end">
-            <IonButton type="submit" onClick={form.submit}>
+            <IonButton type="submit" onClick={() => form.submit()}>
               Lưu
             </IonButton>
           </IonButtons>

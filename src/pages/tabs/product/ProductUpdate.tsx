@@ -19,6 +19,8 @@ import { useSelector } from "../../../store";
 import ProductForm from "../../../components/forms/ProductForm";
 import { useProductForm } from "../../../hooks/useProductForm";
 import { closeOutline } from "ionicons/icons";
+import { useDispatch } from "react-redux";
+import { findProductById } from "../../../store/data/productSlice";
 
 interface ProductUpdateProps {}
 
@@ -31,13 +33,18 @@ const ProductUpdate: React.FC<ProductUpdateProps> = () => {
   );
 
   const form = useProductForm();
-
+  const dispatch = useDispatch();
   const router = useIonRouter();
 
   useEffect(() => {
     if (product) form.setFieldsValue(product);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
+
+  useEffect(() => {
+    if (!product) dispatch(findProductById(id));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <IonPage className="list-page">

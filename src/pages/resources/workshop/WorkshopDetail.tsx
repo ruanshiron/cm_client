@@ -16,6 +16,7 @@ import {
   IonList,
   IonListHeader,
   IonLoading,
+  IonNote,
   IonPage,
   IonRow,
   IonText,
@@ -238,11 +239,17 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
               <IonCard className="list-card">
                 <IonCardContent>
                   <IonList lines="none" style={{ border: "none" }} color="dark">
-                    <IonListHeader>
+                    <IonItem lines="none">
                       <IonLabel>
-                        <b>Thống kê tự động</b>
+                        <u>
+                          <b>Thống kê tự động</b>
+                        </u>
                       </IonLabel>
-                    </IonListHeader>
+                      <IonNote slot="end">
+                        từ {workshop?.statistic.from || "~"} đến{" "}
+                        {workshop?.statistic.to || "~"}
+                      </IonNote>
+                    </IonItem>
                     {workshop?.statistic.products &&
                       Object.values(workshop?.statistic.products).map(
                         (item, index) => (

@@ -28,7 +28,7 @@ const EmployeeCreate: React.FC<EmployeeCreateProps> = () => {
           </IonButtons>
           <IonTitle>Thêm công nhân</IonTitle>
           <IonButtons slot="end">
-            <IonButton type="submit" onClick={form.submit}>
+            <IonButton type="submit" onClick={() => form.submit()}>
               Lưu
             </IonButton>
           </IonButtons>

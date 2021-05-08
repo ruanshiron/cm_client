@@ -345,7 +345,7 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
               <IonButton
                 color="primary"
                 style={{ marginRight: 12 }}
-                onClick={form.submit}
+                onClick={() => form.submit()}
               >
                 <IonIcon icon={checkmark} slot="start"></IonIcon> Hoàn thành
               </IonButton>

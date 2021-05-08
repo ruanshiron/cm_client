@@ -21,17 +21,17 @@ export const useWorkshopForm = (workshop = initialWorkshop) => {
   const [fields, setFields] = useState<Workshop>(workshop);
   const dispatch = useDispatch();
   const uid = useSelector((state) => state.user.uid);
-  const submit = async () => {
-    if (isInvalidWorkshop(fields)) return;
+  const submit = async (params = fields) => {
+    if (isInvalidWorkshop(params)) return;
     try {
-      const newWorkshop = (await saveWorkshop(uid, fields)) as any;
+      const newWorkshop = (await saveWorkshop(uid, params)) as any;
       setFields(workshop);
       router.goBack();
       toast("Lưu thành công.");
-      if (fields.id) {
-        dispatch(updateWorkshop(fields));
+      if (params.id) {
+        dispatch(updateWorkshop(params));
       } else {
-        dispatch(addWorkshop({ ...fields, id: newWorkshop.id }));
+        dispatch(addWorkshop({ ...params, id: newWorkshop.id }));
       }
     } catch (e) {
       console.log(e);

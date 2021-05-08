@@ -11,6 +11,7 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
+  IonItemGroup,
   IonLabel,
   IonList,
   IonLoading,
@@ -28,14 +29,9 @@ import {
   calendarClearOutline,
   calendarNumberOutline,
   saveOutline,
+  shirtOutline,
 } from "ionicons/icons";
 import { useDispatch } from "react-redux";
-import {
-  findProductById,
-  statisticHarderSelector,
-  updateFromDate,
-  updateToDate,
-} from "../../../store/data/productSlice";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
 import {
   Paper,
@@ -48,8 +44,14 @@ import {
 } from "@material-ui/core";
 import { useStyles } from "../../../hooks/useStyles";
 import { fetchAllStages } from "../../../store/data/stageSlice";
-import { useProductForm } from "../../../hooks/useProductForm";
-import { Product } from "../../../models/product";
+import {
+  findWorkshopById,
+  statisticHarderSelector,
+  updateFromDate,
+  updateToDate,
+} from "../../../store/data/workshopSlice";
+import { useWorkshopForm } from "../../../hooks/useWorkshopForm";
+import { Workshop } from "../../../models/workshop";
 import { toast } from "../../../utils/toast";
 
 interface Props {}
@@ -59,32 +61,25 @@ const WorkshopStatistic: React.FC<Props> = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
-  const form = useProductForm();
+  const form = useWorkshopForm();
   const loading = useSelector((state) => state.loading.isLoading);
-  const product = useSelector((state) =>
-    state.products.find((item) => item.id === id)
+  const workshop = useSelector((state) =>
+    state.workshops.find((item) => item.id === id)
   );
-  const processes = useSelector((state) =>
-    state.processes.filter((item) => product?.processes?.includes(item.id!))
-  );
-  const { statistic, stages, processesParam } = useSelector((state) =>
-    statisticHarderSelector(
-      state,
-      id,
-      product?.statistic.from,
-      product?.statistic.to
-    )
+  const processes = useSelector((state) => state.processes);
+  const { statistic, stages } = useSelector((state) =>
+    statisticHarderSelector(state, id)
   );
   useEffect(() => {
-    if (!product) dispatch(findProductById(id));
-  }, [dispatch, id, product]);
+    if (!workshop) dispatch(findWorkshopById(id));
+  }, [dispatch, id, workshop]);
   useEffect(() => {
     if (processes.length <= 0) dispatch(fetchAllProcesses());
     if (stages.length <= 0) dispatch(fetchAllStages());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   const handleSaveStatistic = () => {
-    if (product) {
+    if (workshop) {
       presentAlert({
         header: "Lưu thống kê hiện tại",
         message:
@@ -94,9 +89,9 @@ const WorkshopStatistic: React.FC<Props> = () => {
           {
             text: "OK!",
             handler: () => {
-              const fields: Product = {
-                ...product,
-                statistic: { ...product?.statistic, processes: processesParam },
+              const fields: Workshop = {
+                ...workshop,
+                statistic: { ...workshop?.statistic, products: statistic },
               };
               form.submit(fields);
             },
@@ -115,7 +110,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
             <IonBackButton defaultHref="/tabs/product" />
           </IonButtons>
           <IonTitle>
-            {product?.name}・{product?.code}
+            {workshop?.name}・{workshop?.phonenumber}
           </IonTitle>
           <IonButtons slot="end">
             <IonButton title="Lưu" onClick={() => handleSaveStatistic()}>
@@ -127,8 +122,8 @@ const WorkshopStatistic: React.FC<Props> = () => {
       <IonContent>
         <IonGrid>
           <IonRow className="ion-justify-content-center">
-            <IonLoading isOpen={!!(loading && !product)} />
-            <IonCol size="12" size-md="8">
+            <IonLoading isOpen={!!(loading && !workshop)} />
+            <IonCol size="12" size-lg="8">
               <IonCard className="list-card">
                 <IonCardContent>
                   <IonList style={{ border: "none " }} lines="full">
@@ -141,12 +136,12 @@ const WorkshopStatistic: React.FC<Props> = () => {
                         displayFormat="YYYY-MM-DD"
                         doneText="OK!"
                         cancelText="Hủy"
-                        value={product?.statistic.from}
+                        value={workshop?.statistic.from}
                         onIonChange={(e) => {
                           dispatch(
                             updateFromDate({
                               id,
-                              from: e.detail.value!.substring(0, 10),
+                              from: e.detail.value?.substring(0, 10),
                             })
                           );
                         }}
@@ -169,12 +164,12 @@ const WorkshopStatistic: React.FC<Props> = () => {
                         displayFormat="YYYY-MM-DD"
                         doneText="OK!"
                         cancelText="Hủy"
-                        value={product?.statistic.to || ""}
+                        value={workshop?.statistic.to || ""}
                         onIonChange={(e) => {
                           dispatch(
                             updateToDate({
                               id,
-                              to: e.detail.value!.substring(0, 10),
+                              to: e.detail.value?.substring(0, 10),
                             })
                           );
                         }}
@@ -200,30 +195,109 @@ const WorkshopStatistic: React.FC<Props> = () => {
                       </u>
                     </IonLabel>
                     <IonNote slot="end">
-                      từ {product?.statistic.from || "~"} đến{" "}
-                      {product?.statistic.to || "~"}
+                      từ {workshop?.statistic.from || "~"} đến{" "}
+                      {workshop?.statistic.to || "~"}
                     </IonNote>
                   </IonItem>
-                  {statistic.map((item, index) => (
-                    <React.Fragment key={index}>
-                      <IonItem>
-                        <IonLabel className="ion-text-center">
-                          <b>{item?.pending?.value}</b>
-                          <p>{item?.pending?.label}</p>
-                        </IonLabel>
-                        <IonLabel className="ion-text-center">
-                          <b>{item?.fulfilled?.value}</b>
-                          <p>{item?.fulfilled?.label}</p>
-                        </IonLabel>
-                        <IonLabel className="ion-text-center">
-                          <b>{item?.rejected?.value}</b>
-                          <p>{item?.rejected?.label}</p>
-                        </IonLabel>
-                      </IonItem>
-                    </React.Fragment>
-                  ))}
+                  <IonList lines="none" style={{ border: "none" }} color="dark">
+                    {statistic &&
+                      Object.values(statistic).map((item, index) => (
+                        <div className="border-full ion-margin" key={index}>
+                          <IonItemGroup>
+                            <IonItem lines="full">
+                              <IonIcon slot="start" icon={shirtOutline} />
+                              <IonLabel>
+                                <b>{item.name}</b>
+                                <p>{item?.code}</p>
+                              </IonLabel>
+                            </IonItem>
+                            {Object.keys(item.processes).map((i, j) => (
+                              <IonItem lines="full" key={j}>
+                                <IonLabel
+                                  className="ion-text-center ion-text-wrap"
+                                  style={{ maxWidth: "40%" }}
+                                >
+                                  <b>
+                                    {(item.processes[i].pending || 0) +
+                                      (item.processes[i].rejected || 0) -
+                                      (item.processes[i].fulfilled || 0)}
+                                  </b>
+                                  &nbsp;
+                                  <p>
+                                    {processes.find((v) => v.id === i)?.pending}
+                                    &nbsp;(hiện tại)
+                                  </p>
+                                </IonLabel>
+                                <IonLabel>
+                                  <table className="small-table">
+                                    <tbody>
+                                      <tr>
+                                        <td>
+                                          <b>
+                                            {item.processes[i].pending || 0}
+                                          </b>
+                                        </td>
+                                        <td>
+                                          <p>
+                                            <i>
+                                              {
+                                                processes.find(
+                                                  (v) => v.id === i
+                                                )?.pending
+                                              }
+                                              &nbsp;(toàn bộ)
+                                            </i>
+                                          </p>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <b>
+                                            {item.processes[i].fulfilled || 0}
+                                          </b>
+                                        </td>
+                                        <td>
+                                          <p>
+                                            <i>
+                                              {
+                                                processes.find(
+                                                  (v) => v.id === i
+                                                )?.fulfilled
+                                              }
+                                            </i>
+                                          </p>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <b>
+                                            {item.processes[i].rejected || 0}
+                                          </b>
+                                        </td>
+                                        <td>
+                                          <p>
+                                            <i>
+                                              {
+                                                processes.find(
+                                                  (v) => v.id === i
+                                                )?.rejected
+                                              }
+                                            </i>
+                                          </p>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </IonLabel>
+                              </IonItem>
+                            ))}
+                          </IonItemGroup>
+                        </div>
+                      ))}
+                  </IonList>
                 </IonCardContent>
               </IonCard>
+
               <IonCard className="list-card">
                 <IonCardContent>
                   <IonItem lines="none">
@@ -238,7 +312,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                       <TableHead>
                         <TableRow>
                           <TableCell>Ngày</TableCell>
-                          <TableCell>Xưởng</TableCell>
+                          <TableCell>Sản phẩm</TableCell>
                           <TableCell>Quy trình</TableCell>
                           <TableCell>Số lượng&nbsp;(sản phẩm)</TableCell>
                           <TableCell>Kích cỡ</TableCell>
@@ -251,7 +325,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                             <TableCell component="th" scope="row">
                               {item.date}
                             </TableCell>
-                            <TableCell>{item.workshopName}</TableCell>
+                            <TableCell>{item.productName}</TableCell>
                             <TableCell>{item.processLabel}</TableCell>
                             <TableCell>{item.quantity}</TableCell>
                             <TableCell>{item.productSize}</TableCell>

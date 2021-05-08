@@ -12,6 +12,7 @@ import {
   Workshop,
 } from "../../models/workshop";
 import { processParser } from "../../utils/data";
+import { isBetween } from "../../utils/date";
 import { RootState } from "../rootReducer";
 
 let initialState: Workshop[] = [];
@@ -49,6 +50,20 @@ const workshopSlice = createSlice({
     updateWorkshop: (state, action: PayloadAction<Workshop>) => {
       return state.map((item) =>
         item.id === action.payload.id ? action.payload : item
+      );
+    },
+    updateFromDate(state, action) {
+      return state.map((v) =>
+        v.id !== action.payload.id
+          ? v
+          : { ...v, statistic: { ...v.statistic, from: action.payload.from } }
+      );
+    },
+    updateToDate(state, action) {
+      return state.map((v) =>
+        v.id !== action.payload.id
+          ? v
+          : { ...v, statistic: { ...v.statistic, to: action.payload.to } }
       );
     },
     updateWorkshopCode: (
@@ -101,9 +116,77 @@ export const {
   removeAmount,
   removeWorkshop,
   updateWorkshopCode,
+  updateFromDate,
+  updateToDate,
 } = workshopSlice.actions;
 
 export default workshopSlice;
+
+export const statisticHarderSelector = createSelector(
+  (state: RootState) => state.stages,
+  (state: RootState) => state.workshops,
+  (_state: RootState, workshopId: string, from?: string, to?: string) => ({
+    workshopId,
+    from,
+    to,
+  }),
+  (stages, workshops, { workshopId }) => {
+    const workshop = workshops.find((item) => item.id === workshopId);
+    const filteredStages = stages
+      .filter(
+        (item) =>
+          item.workshopId === workshopId &&
+          isBetween(
+            item.date,
+            workshop?.statistic?.from,
+            workshop?.statistic?.to
+          )
+      )
+      .sort((a, b) => a.date.localeCompare(b.date));
+    const tmp: { [key: string]: any } = {};
+    forEach(filteredStages, (value) => {
+      if (value.productId in tmp) {
+        if ("processes" in tmp[value.productId]) {
+          if (value.processId in tmp[value.productId].processes) {
+            if (value.processStatus in tmp[value.productId].processes) {
+              tmp[value.productId]["processes"][value.processId][
+                value.processStatus
+              ] += value.quantity;
+            } else {
+              tmp[value.productId]["processes"][value.processId][
+                value.processStatus
+              ] = value.quantity;
+            }
+          } else {
+            tmp[value.productId]["processes"][value.processId] = {
+              [value.processStatus]: value.quantity,
+            };
+          }
+        } else {
+          tmp[value.productId]["processes"] = {
+            [value.processStatus]: value.quantity,
+          };
+        }
+      } else {
+        tmp[value.productId] = {
+          name: value.productName,
+          processes: {
+            [value.processId]: {
+              [value.processStatus]: value.quantity,
+            },
+          },
+        };
+      }
+    });
+
+    console.log(tmp);
+
+    return {
+      stages: filteredStages,
+      statistic: tmp,
+    };
+  }
+);
 
 export const statisticsForWorkshop = createSelector(
   (state: RootState) => state,

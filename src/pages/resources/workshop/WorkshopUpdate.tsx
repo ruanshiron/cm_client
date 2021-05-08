@@ -49,6 +49,7 @@ import { useSelector } from "../../../store";
 import { fetchAllProducts } from "../../../store/data/productSlice";
 import {
   addAmount,
+  findWorkshopById,
   removeAmount,
   updateWorkshopCode,
 } from "../../../store/data/workshopSlice";
@@ -127,8 +128,10 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
 
   useEffect(() => {
     if (products.length <= 0) dispatch(fetchAllProducts());
+    if (!workshop) dispatch(findWorkshopById(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <IonPage className="list-page">
       <IonHeader>
@@ -138,7 +141,7 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
           </IonButtons>
           <IonTitle>Sửa thông tin</IonTitle>
           <IonButtons slot="end">
-            <IonButton type="submit" onClick={form.submit}>
+            <IonButton type="submit" onClick={() => form.submit()}>
               Lưu
             </IonButton>
           </IonButtons>

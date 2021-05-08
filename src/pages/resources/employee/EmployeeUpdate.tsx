@@ -40,7 +40,7 @@ const EmployeeUpdate: React.FC<EmployeeUpdateProps> = () => {
           </IonButtons>
           <IonTitle>Sửa công nhân</IonTitle>
           <IonButtons slot="end">
-            <IonButton type="submit" onClick={form.submit}>
+            <IonButton type="submit" onClick={() => form.submit()}>
               Lưu
             </IonButton>
           </IonButtons>

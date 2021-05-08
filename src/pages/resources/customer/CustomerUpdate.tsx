@@ -40,7 +40,7 @@ const CustomerUpdate: React.FC<CustomerUpdateProps> = () => {
           </IonButtons>
           <IonTitle>Sửa khách hàng</IonTitle>
           <IonButtons slot="end">
-            <IonButton type="submit" onClick={form.submit}>
+            <IonButton type="submit" onClick={() => form.submit()}>
               Lưu
             </IonButton>
           </IonButtons>
