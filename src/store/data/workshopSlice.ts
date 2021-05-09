@@ -148,7 +148,15 @@ export const statisticHarderSelector = createSelector(
       if (value.productId in tmp) {
         if ("processes" in tmp[value.productId]) {
           if (value.processId in tmp[value.productId].processes) {
-            if (value.processStatus in tmp[value.productId].processes) {
+            const subt = subtotal(value, workshop);
+            tmp[value.productId]["processes"][value.processId][
+              "subtotal"
+            ] += subt;
+            tmp[value.productId]["processes"][value.processId]["isNotFinished"] =
+              tmp[value.productId]["processes"][value.processId][
+                "isNotFinished"
+              ] || !subt;
+            if (value.processStatus in tmp[value.productId]["processes"][value.processId]) {
               tmp[value.productId]["processes"][value.processId][
                 value.processStatus
               ] += value.quantity;
@@ -157,14 +165,7 @@ export const statisticHarderSelector = createSelector(
                 value.processStatus
               ] = value.quantity;
             }
-            const subt = subtotal(value, workshop);
-            tmp[value.productId]["processes"][value.processId][
-              "subtotal"
-            ] += subt;
-            tmp[value.productId]["processes"][value.processId]["isFinished"] =
-              tmp[value.productId]["processes"][value.processId][
-                "isFinished"
-              ] || !subt;
+            
           } else {
             const subt = subtotal(value, workshop);
             tmp[value.productId]["processes"][value.processId] = {
@@ -195,8 +196,6 @@ export const statisticHarderSelector = createSelector(
         };
       }
     });
-
-    console.log(tmp);
 
     return {
       stages: filteredStages,
