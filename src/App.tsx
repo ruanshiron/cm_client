@@ -3,7 +3,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import React, { useEffect } from "react";
 import {
   IonApp,
-  IonProgressBar,
+  IonLoading,
   IonRouterOutlet,
   IonSplitPane,
   setupConfig,
@@ -33,7 +33,6 @@ import "./theme/variables.css";
 /* SCSS */
 import "./theme/style.scss";
 
-import { useDispatch } from "react-redux";
 import { useSelector } from "./store";
 import { useAuth } from "./hooks/useAuth";
 import LoginPage from "./pages/login/LoginPage";
@@ -75,34 +74,15 @@ const RoleBaseView: React.FC<{ role: string }> = ({ role }) => {
 };
 
 const App: React.FC = () => {
-  const dispatch = useDispatch();
-
   useAuth();
-
   useFancyToast();
-
-  useEffect(() => {
-    // dispatch(fetchAllStages());
-    // dispatch(fetchAllProducts());
-    // dispatch(fetchAllWorkshops());
-    // dispatch(fetchAllOrders());
-    // dispatch(fetchAllCustomers());
-    // dispatch(fetchAllProcesses());
-  }, [dispatch]);
-
-  const loading = useSelector((state) => state.loading.isLoading);
   const { isLoggedIn, loading: userLoading, role } = useSelector(
     (state) => state.user
   );
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={vi}>
       <IonApp>
-        {loading && (
-          <IonProgressBar
-            style={{ zIndex: 999 }}
-            type="indeterminate"
-          ></IonProgressBar>
-        )}
+        <IonLoading isOpen={userLoading} />
         <IonReactRouter>
           {!userLoading &&
             (isLoggedIn ? (

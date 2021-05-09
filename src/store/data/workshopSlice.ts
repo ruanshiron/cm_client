@@ -11,7 +11,7 @@ import {
   getAllWorkshops,
   Workshop,
 } from "../../models/workshop";
-import { processParser } from "../../utils/data";
+import { processParser, subtotal } from "../../utils/data";
 import { isBetween } from "../../utils/date";
 import { RootState } from "../rootReducer";
 
@@ -157,22 +157,39 @@ export const statisticHarderSelector = createSelector(
                 value.processStatus
               ] = value.quantity;
             }
+            const subt = subtotal(value, workshop);
+            tmp[value.productId]["processes"][value.processId][
+              "subtotal"
+            ] += subt;
+            tmp[value.productId]["processes"][value.processId]["isFinished"] =
+              tmp[value.productId]["processes"][value.processId][
+                "isFinished"
+              ] || !subt;
           } else {
+            const subt = subtotal(value, workshop);
             tmp[value.productId]["processes"][value.processId] = {
               [value.processStatus]: value.quantity,
+              subtotal: subt,
+              isNotFinished: !subt,
             };
           }
         } else {
+          const subt = subtotal(value, workshop);
           tmp[value.productId]["processes"] = {
             [value.processStatus]: value.quantity,
+            subtotal: subt,
+            isNotFinished: !subt,
           };
         }
       } else {
+        const subt = subtotal(value, workshop);
         tmp[value.productId] = {
           name: value.productName,
           processes: {
             [value.processId]: {
               [value.processStatus]: value.quantity,
+              subtotal: subt,
+              isNotFinished: !subt,
             },
           },
         };

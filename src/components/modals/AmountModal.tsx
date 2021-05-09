@@ -19,10 +19,12 @@ import {
   calendarClearOutline,
   calendarNumberOutline,
   closeOutline,
+  helpOutline,
   pricetagOutline,
   shirtOutline,
 } from "ionicons/icons";
 import React, { useState } from "react";
+import { Process } from "../../models/process";
 import { Product } from "../../models/product";
 import { Amount } from "../../models/workshop";
 import { toast } from "../../utils/toast";
@@ -33,6 +35,7 @@ interface Props {
   workshopName: string;
   products: Product[];
   amount: number;
+  processes: Process[];
   fromDate?: string;
   toDate?: string;
 }
@@ -42,17 +45,21 @@ const AmountModal: React.FC<Props> = ({
   onSubmit,
   workshopName,
   products,
+  processes,
   fromDate: propFromDate,
   toDate: propToDate,
 }) => {
   const [productId, setProductId] = useState<string>();
+  const [processId, setProcessId] = useState<string>();
   const [amount, setAmount] = useState<string>();
   const [fromDate, setFromDate] = useState<string | undefined>(propFromDate);
   const [toDate, setToDate] = useState<string | undefined>(propToDate);
   const handleSubmit = () => {
-    if (productId && amount) {
+    if (processId && productId && amount) {
       onSubmit({
         productId,
+        processId,
+        processName: processes.find((i) => i.id === processId)?.name || "",
         productName: products.find((i) => i.id === productId)?.name || "",
         amount: parseInt(amount, 0),
         fromDate,
@@ -79,7 +86,9 @@ const AmountModal: React.FC<Props> = ({
       </IonHeader>
       <IonContent>
         <IonList>
-          <IonListHeader>Xưởng:&nbsp;<b>{workshopName}</b></IonListHeader>
+          <IonListHeader>
+            Xưởng:&nbsp;<b>{workshopName}</b>
+          </IonListHeader>
           <IonItem>
             <IonIcon icon={shirtOutline} slot="start" />
             <IonLabel>Sản phẩm</IonLabel>
@@ -91,6 +100,23 @@ const AmountModal: React.FC<Props> = ({
               cancelText="Hủy"
             >
               {products.map((item, index) => (
+                <IonSelectOption key={index} value={item.id}>
+                  {item.name}
+                </IonSelectOption>
+              ))}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonIcon icon={helpOutline} slot="start" />
+            <IonLabel>Quy trình</IonLabel>
+            <IonSelect
+              value={processId}
+              onIonChange={(e) => setProcessId(e.detail.value!)}
+              okText="Chọn"
+              interface="action-sheet"
+              cancelText="Hủy"
+            >
+              {processes.map((item, index) => (
                 <IonSelectOption key={index} value={item.id}>
                   {item.name}
                 </IonSelectOption>

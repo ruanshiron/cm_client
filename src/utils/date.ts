@@ -1,4 +1,5 @@
-import { compareDesc, formatISO } from "date-fns";
+import { compareDesc, format, formatISO } from "date-fns";
+import { vi } from "date-fns/locale";
 
 export function formatDate(raw: Date | string | number) {
   const date = new Date(raw);
@@ -71,4 +72,14 @@ export const stringFromToDate = (from?: string, to?: string) => {
     " ~ " +
     (to?.substring(0, 10) || "nay")
   );
+};
+
+export const formatStringDate = (date?: string) => {
+  if (!date) {
+    return "~";
+  } else {
+    return format(new Date(date), "EEEE, dd MMMM, yyyy", {
+      locale: vi,
+    });
+  }
 };

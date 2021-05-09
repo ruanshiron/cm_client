@@ -71,8 +71,8 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
     statisticHarderSelector(
       state,
       id,
-      product?.statistic.from,
-      product?.statistic.to
+      product?.statistic?.from,
+      product?.statistic?.to
     )
   );
   useEffect(() => {
@@ -141,7 +141,7 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
                         displayFormat="YYYY-MM-DD"
                         doneText="OK!"
                         cancelText="Hủy"
-                        value={product?.statistic.from}
+                        value={product?.statistic?.from}
                         onIonChange={(e) => {
                           dispatch(
                             updateFromDate({
@@ -169,7 +169,7 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
                         displayFormat="YYYY-MM-DD"
                         doneText="OK!"
                         cancelText="Hủy"
-                        value={product?.statistic.to || ""}
+                        value={product?.statistic?.to || ""}
                         onIonChange={(e) => {
                           dispatch(
                             updateToDate({
@@ -200,11 +200,11 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
                       </u>
                     </IonLabel>
                     <IonNote slot="end">
-                      từ {product?.statistic.from || "~"} đến{" "}
-                      {product?.statistic.to || "~"}
+                      từ {product?.statistic?.from || "~"} đến{" "}
+                      {product?.statistic?.to || "~"}
                     </IonNote>
                   </IonItem>
-                  {statistic.map((item, index) => (
+                  {statistic?.map((item, index) => (
                     <React.Fragment key={index}>
                       <IonItem>
                         <IonLabel className="ion-text-center">

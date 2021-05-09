@@ -136,7 +136,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                         displayFormat="YYYY-MM-DD"
                         doneText="OK!"
                         cancelText="Hủy"
-                        value={workshop?.statistic.from}
+                        value={workshop?.statistic?.from}
                         onIonChange={(e) => {
                           dispatch(
                             updateFromDate({
@@ -164,7 +164,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                         displayFormat="YYYY-MM-DD"
                         doneText="OK!"
                         cancelText="Hủy"
-                        value={workshop?.statistic.to || ""}
+                        value={workshop?.statistic?.to || ""}
                         onIonChange={(e) => {
                           dispatch(
                             updateToDate({
@@ -195,8 +195,8 @@ const WorkshopStatistic: React.FC<Props> = () => {
                       </u>
                     </IonLabel>
                     <IonNote slot="end">
-                      từ {workshop?.statistic.from || "~"} đến{" "}
-                      {workshop?.statistic.to || "~"}
+                      từ {workshop?.statistic?.from || "~"} đến{" "}
+                      {workshop?.statistic?.to || "~"}
                     </IonNote>
                   </IonItem>
                   <IonList lines="none" style={{ border: "none" }} color="dark">

@@ -88,9 +88,9 @@ export const statisticSelector = createSelector(
   (_state: RootState, productId: string) => productId,
   (products, processes, productId) => {
     const product = products.find((item) => item.id === productId);
-    if (product && product.statistic.processes) {
-      return Object.keys(product.statistic.processes).map((key) => {
-        const data = product.statistic.processes[key];
+    if (product && product.statistic?.processes) {
+      return Object.keys(product.statistic?.processes).map((key) => {
+        const data = product.statistic?.processes[key];
         return {
           pending: {
             label:

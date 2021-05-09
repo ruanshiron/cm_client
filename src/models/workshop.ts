@@ -18,6 +18,8 @@ export const initialWorkshop: Workshop = {
 export interface Amount {
   productId: string;
   productName: string;
+  processId: string;
+  processName: string;
   amount: number;
   fromDate?: string;
   toDate?: string;

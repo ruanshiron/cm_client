@@ -46,6 +46,7 @@ import {
   saveWorkshop,
 } from "../../../models/workshop";
 import { useSelector } from "../../../store";
+import { fetchAllProcesses } from "../../../store/data/processSlice";
 import { fetchAllProducts } from "../../../store/data/productSlice";
 import {
   addAmount,
@@ -65,6 +66,7 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
     state.workshops.find((i) => i.id === id)
   );
   const products = useSelector((state) => state.products);
+  const processes = useSelector((state) => state.processes);
   const form = useWorkshopForm(workshop);
   const handleSubmitAmount = (amount: Amount) => {
     if (workshop?.id)
@@ -95,6 +97,7 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
     onSubmit: (amount: Amount) => handleSubmitAmount(amount),
     workshopName: workshop?.name,
     products: products,
+    processes: processes,
   });
   const stringFromToDate = (from?: string, to?: string) => {
     return (
@@ -128,6 +131,7 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
 
   useEffect(() => {
     if (products.length <= 0) dispatch(fetchAllProducts());
+    if (processes.length <= 0) dispatch(fetchAllProcesses());
     if (!workshop) dispatch(findWorkshopById(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
