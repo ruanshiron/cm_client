@@ -150,10 +150,12 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                               {stringFromToDate(item.fromDate, item.toDate)}
                             </p>
                           </IonLabel>
-                          <IonText color="dark">{new Intl.NumberFormat("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                  }).format(item.amount)}</IonText>
+                          <IonText color="dark">
+                            {new Intl.NumberFormat("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            }).format(item.amount)}
+                          </IonText>
                         </IonItem>
                       ))}
                     </IonList>
