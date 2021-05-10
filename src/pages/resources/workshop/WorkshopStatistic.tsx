@@ -92,7 +92,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                 ...workshop,
                 statistic: { ...workshop?.statistic, products: statistic },
               };
-              form.submit(fields);
+              form.submit(fields, false);
             },
           },
         ],

@@ -34,6 +34,7 @@ import {
   close,
   ellipsisVertical,
   pencilOutline,
+  refresh,
   textOutline,
   trashOutline,
 } from "ionicons/icons";
@@ -95,6 +96,9 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
             <IonTitle>{product?.name}</IonTitle>
             {product && (
               <IonButtons slot="end">
+                <IonButton onClick={() => dispatch(findProductById(id))}>
+                  <IonIcon slot="icon-only" icon={refresh} />
+                </IonButton>
                 <IonButton
                   routerLink={
                     router.routeInfo.pathname +

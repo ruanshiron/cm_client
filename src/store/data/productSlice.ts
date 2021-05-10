@@ -67,7 +67,9 @@ const productSlice = createSlice({
         return action.payload;
       })
       .addCase(findProductById.fulfilled, (state, action) => {
-        if (action.payload) state.unshift(action.payload);
+        let product = state.find((item) => item.id === action.payload.id);
+        if (action.payload && !product) state.unshift(action.payload);
+        if (action.payload && product) product = action.payload;
       });
   },
 });

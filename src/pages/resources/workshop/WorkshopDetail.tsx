@@ -36,6 +36,7 @@ import {
   personOutline,
   phonePortraitOutline,
   qrCodeOutline,
+  refresh,
   shirtOutline,
   trashOutline,
 } from "ionicons/icons";
@@ -103,6 +104,9 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
             <IonTitle>Xưởng</IonTitle>
             {workshop && (
               <IonButtons slot="end">
+                <IonButton onClick={() => dispatch(findWorkshopById(id))}>
+                  <IonIcon slot="icon-only" icon={refresh}></IonIcon>
+                </IonButton>
                 <IonButton routerLink={router.routeInfo.pathname + "/update"}>
                   <IonIcon slot="icon-only" icon={pencilOutline}></IonIcon>
                 </IonButton>
@@ -168,7 +172,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
             )}
           </IonToolbar>
         </IonHeader>
-        <IonLoading isOpen={!!(loading && !workshop)} />
+        <IonLoading isOpen={!!(loading)} />
         <IonGrid>
           <IonRow>
             <IonCol size="12" size-md="8" offsetMd="2">
