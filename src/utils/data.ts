@@ -119,7 +119,8 @@ export const subtotal = (stage: Event.Stage, workshop?: Workshop) => {
   if (!workshop) return 0;
   const amount = workshop.amounts.find(
     (item) =>
-      stage.processStatus === "fulfilled" &&
+      (stage.processStatus === "fulfilled" ||
+        stage.processStatus === "rejected") &&
       item.processId === stage.processId &&
       item.productId === stage.productId &&
       isBetween(stage.date, item.fromDate, item.toDate)
@@ -127,6 +128,10 @@ export const subtotal = (stage: Event.Stage, workshop?: Workshop) => {
   if (!amount) {
     return 0;
   } else {
-    return stage.quantity * amount.amount;
+    return (
+      stage.quantity *
+      amount.amount *
+      (stage.processStatus === "fulfilled" ? 1 : -1)
+    );
   }
 };

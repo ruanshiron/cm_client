@@ -209,7 +209,12 @@ const WorkshopUpdate: React.FC<WorkshopUpdateProps> = () => {
                               {stringFromToDate(item.fromDate, item.toDate)}
                             </p>
                           </IonLabel>
-                          <IonText color="dark">{item.amount}&nbsp;₫</IonText>
+                          <IonText color="dark">
+                            {new Intl.NumberFormat("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            }).format(item.amount)}
+                          </IonText>
                         </IonItem>
                         <IonItemOptions side="end">
                           <IonItemOption
