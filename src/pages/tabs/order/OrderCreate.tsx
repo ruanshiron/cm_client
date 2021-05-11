@@ -20,7 +20,7 @@ interface OrderCreateProps {}
 const OrderCreate: React.FC<OrderCreateProps> = () => {
   const form = useOrderForm();
   return (
-    <IonPage>
+    <IonPage className="list-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">

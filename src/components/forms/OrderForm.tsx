@@ -3,6 +3,7 @@ import {
   IonCard,
   IonCardContent,
   IonCol,
+  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
@@ -11,6 +12,12 @@ import {
   IonSelectOption,
   IonTextarea,
 } from "@ionic/react";
+import {
+  accessibilityOutline,
+  documentOutline,
+  personOutline,
+  shirtOutline,
+} from "ionicons/icons";
 import React from "react";
 import { useOrderForm } from "../../hooks/useOrderForm";
 
@@ -21,15 +28,18 @@ interface OrderFormProps {
 const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
   return (
     <>
-      <IonCard>
+      <IonCard className="list-card">
         <IonCardContent>
           <IonItem lines="none">
-            <IonLabel>Khách hàng</IonLabel>
+            <IonIcon slot="start" icon={personOutline} />
+            <IonLabel>
+              <b>Khách hàng</b>
+            </IonLabel>
             <IonSelect
               okText="Chọn"
               cancelText="Hủy"
               interface="action-sheet"
-              placeholder="Khách hàng"
+              placeholder="Chọn khách hàng"
               value={form.fields?.customer}
               onIonChange={(e) =>
                 form.setFieldsValue({ customer: e.detail.value! })
@@ -45,9 +55,9 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
         </IonCardContent>
       </IonCard>
 
-      <IonCard>
+      <IonCard className="list-card">
         <IonCardContent>
-          <IonItem lines="none">
+          <IonItem>
             <IonLabel position="floating">Ghi chú</IonLabel>
             <IonTextarea
               onIonChange={(e) =>
@@ -66,10 +76,13 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
             sizeMd={form.fields.lines.length <= 1 ? "12" : "6"}
             style={{ padding: 0 }}
           >
-            <IonCard>
+            <IonCard className="list-card">
               <IonCardContent>
                 <IonItem>
-                  <IonLabel>Sản phẩm</IonLabel>
+                  <IonIcon slot="start" icon={shirtOutline} />
+                  <IonLabel>
+                    <b>Sản phẩm</b>
+                  </IonLabel>
                   <IonSelect
                     okText="Chọn"
                     cancelText="Hủy"
@@ -95,7 +108,10 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
                 </IonItem>
 
                 <IonItem>
-                  <IonLabel>Kích cỡ</IonLabel>
+                  <IonIcon slot="start" icon={accessibilityOutline} />
+                  <IonLabel>
+                    <b>Kích cỡ</b>
+                  </IonLabel>
                   <IonSelect
                     okText="Chọn"
                     interface="action-sheet"
@@ -123,9 +139,13 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
                 </IonItem>
 
                 <IonItem>
-                  <IonLabel>Số lượng</IonLabel>
+                  <IonIcon slot="start" icon={documentOutline} />
+                  <IonLabel>
+                    <b>Số lượng</b>
+                  </IonLabel>
                   <IonInput
                     type="number"
+                    placeholder="Nhập số lượng"
                     value={form.fields.lines[index].quantity || undefined}
                     style={{ textAlign: "right" }}
                     onIonChange={(e) =>

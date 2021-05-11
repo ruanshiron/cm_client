@@ -67,10 +67,6 @@ export const OrderDetail: React.FC<OrderDetailProps> = () => {
         <IonContent>
           <IonRow>
             <IonCol size="12" size-md="8" offsetMd="2">
-              <IonButton expand="block" fill="clear" color="danger" style={{ margin: 10}}>
-                <IonIcon slot="start" icon={checkmarkDoneSharp}></IonIcon>
-                <IonLabel> Bạn đã hoàn thành đơn hàng này</IonLabel>
-              </IonButton>
               <IonCard className="list-card">
                 <IonCardHeader>
                   <IonItem detail={false} lines="none" className="list-item">

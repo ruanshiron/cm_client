@@ -79,9 +79,9 @@ export const useStageFormModal = (stage = initialStage) => {
       format(new Date(fields.date), "EEEE, dd MMMM, yyyy", { locale: vi }),
       fields.workshopName,
       fields.processLabel,
+      fields.quantity,
       fields.productName,
       fields.productSize,
-      fields.quantity,
     ].filter((i) => i);
   };
 

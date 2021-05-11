@@ -14,10 +14,12 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { OrderItem } from "../../../components/items/OrderItem";
 import { OrderPagePopover } from "../../../components/popovers/OrderPagePopover";
 import { useSelector } from "../../../store";
+import { fetchAllOrders } from "../../../store/data/orderSlice";
 
 interface OrderPageProps {}
 
@@ -31,6 +33,12 @@ const OrderPage: React.FC<OrderPageProps> = () => {
   };
 
   const orders = useSelector((state) => state.orders);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (orders.length <= 0) dispatch(fetchAllOrders());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   return (
     <IonPage className="list-page">
