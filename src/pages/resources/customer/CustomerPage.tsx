@@ -16,7 +16,7 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Item } from "../../../components/items/Item";
+import { CustomerItem } from "../../../components/items/CustomerItem";
 import { CustomerPagePopover } from "../../../components/popovers/CustomerPagePopover";
 import { useSelector } from "../../../store";
 import { fetchAllCustomers } from "../../../store/data/customerSlice";
@@ -65,15 +65,10 @@ const CustomerPage: React.FC<CustomerPageProps> = () => {
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>
-          <IonRow>
+          <IonRow className="ion-justify-content-center">
             {customers.map((customer) => (
-              <IonCol size="12" size-md="6" key={customer.id}>
-                <Item
-                  title={customer.name!}
-                  subtitle={customer.phonenumber!}
-                  id={customer.id}
-                  baseUrl="/customers"
-                />
+              <IonCol size="12" size-lg="8" key={customer.id}>
+                <CustomerItem data={customer} />
               </IonCol>
             ))}
           </IonRow>

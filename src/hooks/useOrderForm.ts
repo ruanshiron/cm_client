@@ -1,5 +1,5 @@
 import { useIonRouter } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   initialOrder,
@@ -9,29 +9,38 @@ import {
   initialLine,
 } from "../models/order";
 import { useSelector } from "../store";
-import { fetchAllOrders } from "../store/data/orderSlice";
+import { fetchAllProducts } from "../store/data/productSlice";
 import { toast } from "../utils/toast";
 
-export const useOrderForm = () => {
+export const useOrderForm = (customerId: string) => {
   const router = useIonRouter();
   const [fields, setFields] = useState<Order>(initialOrder);
   const uid = useSelector((state) => state.user.uid);
-
   const dispatch = useDispatch();
-
   const products = useSelector((state) => state.products);
   const customers = useSelector((state) => state.customers);
+
+  useEffect(() => {
+    if (products.length <= 0) dispatch(fetchAllProducts());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const submit = async () => {
     if (isInvalidOrder(fields)) return;
 
+    const params = fields;
+    params.lines = fields.lines.map((line) => ({
+      ...line,
+      productName:
+        products.find((item) => item.id === line.productId)?.name || "",
+    }));
+
     try {
-      await saveOrder(uid, fields);
+      await saveOrder(uid, customerId, params);
       setFields(initialOrder);
       router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
-      dispatch(fetchAllOrders());
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }

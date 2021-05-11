@@ -22,31 +22,26 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import {
-  callOutline,
-  callSharp,
+  add,
   close,
   copyOutline,
+  documentsOutline,
   ellipsisVertical,
   pencilOutline,
   personOutline,
   phonePortraitOutline,
   qrCodeOutline,
-  refresh,
   trashOutline,
 } from "ionicons/icons";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
-import { destroyCustomer, saveCustomer } from "../../../models/customer";
+import { destroyCustomer } from "../../../models/customer";
 import { useSelector } from "../../../store";
-import {
-  removeCustomer,
-  updateCustomer,
-} from "../../../store/data/customerSlice";
+import { removeCustomer } from "../../../store/data/customerSlice";
 import { toast } from "../../../utils/toast";
 import QRCode from "qrcode.react";
 import copy from "copy-to-clipboard";
-import { v4 as uuidv4 } from "uuid";
 
 interface CustomerDetailProps {}
 
@@ -73,19 +68,6 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
       toast("Có lỗi xảy ra, vui lòng thử lại!");
     }
   };
-  const handleUpdateCode = async () => {
-    const code = uuidv4();
-    try {
-      await saveCustomer(uid, {
-        ...customer,
-        code,
-      });
-      toast("Lưu thành công.");
-      dispatch(updateCustomer({ ...customer!, code }));
-    } catch {
-      toast("Có lỗi xảy ra, vui lòng thử lại.");
-    }
-  };
 
   const handleCopy = () => {
     copy(customer?.code || "Hãy tạo mã trước!");
@@ -102,12 +84,12 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
             </IonButtons>
             <IonTitle>Khách hàng</IonTitle>
             <IonButtons slot="end">
-              <IonButton>
-                <IonIcon
-                  slot="icon-only"
-                  ios={callOutline}
-                  md={callSharp}
-                ></IonIcon>
+              <IonButton
+                fill="outline"
+                routerLink={router.routeInfo.pathname + "/orders/create"}
+              >
+                <IonIcon slot="start" icon={add} />
+                Đơn hàng
               </IonButton>
               <IonButton
                 onClick={() =>
@@ -136,6 +118,13 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
                         icon: pencilOutline,
                         handler: () => {
                           router.push(router.routeInfo.pathname + "/update");
+                        },
+                      },
+                      {
+                        text: "Danh sách đơn hàng",
+                        icon: documentsOutline,
+                        handler: () => {
+                          router.push(router.routeInfo.pathname + "/orders");
                         },
                       },
                       { text: "Thoát", icon: close },
@@ -177,9 +166,6 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
                       onIonChange={() => {}}
                     />
                     <IonButtons slot="end">
-                      <IonButton onClick={handleUpdateCode}>
-                        <IonIcon slot="icon-only" icon={refresh}></IonIcon>
-                      </IonButton>
                       <IonButton onClick={handleCopy}>
                         <IonIcon slot="icon-only" icon={copyOutline}></IonIcon>
                       </IonButton>

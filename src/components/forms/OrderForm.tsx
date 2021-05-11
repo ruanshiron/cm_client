@@ -3,6 +3,7 @@ import {
   IonCard,
   IonCardContent,
   IonCol,
+  IonDatetime,
   IonIcon,
   IonInput,
   IonItem,
@@ -15,7 +16,6 @@ import {
 import {
   accessibilityOutline,
   documentOutline,
-  personOutline,
   shirtOutline,
 } from "ionicons/icons";
 import React from "react";
@@ -30,31 +30,20 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
     <>
       <IonCard className="list-card">
         <IonCardContent>
-          <IonItem lines="none">
-            <IonIcon slot="start" icon={personOutline} />
-            <IonLabel>
-              <b>Khách hàng</b>
-            </IonLabel>
-            <IonSelect
-              okText="Chọn"
+          <IonItem>
+            <IonLabel position="floating">Ngày tháng</IonLabel>
+            <IonDatetime
+              displayFormat="YYYY-MM-DD"
+              doneText="OK!"
               cancelText="Hủy"
-              interface="action-sheet"
-              placeholder="Chọn khách hàng"
-              value={form.fields?.customer}
-              onIonChange={(e) =>
-                form.setFieldsValue({ customer: e.detail.value! })
-              }
-            >
-              {form.customers.map((item) => (
-                <IonSelectOption key={item.id} value={item.id}>
-                  {item.name}
-                </IonSelectOption>
-              ))}
-            </IonSelect>
+              value={form.fields.date}
+              onIonChange={(e) => {
+                form.setFieldsValue({ date: e.detail.value?.substring(0, 10) });
+              }}
+            />
           </IonItem>
         </IonCardContent>
       </IonCard>
-
       <IonCard className="list-card">
         <IonCardContent>
           <IonItem>
@@ -88,12 +77,12 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
                     cancelText="Hủy"
                     interface="action-sheet"
                     placeholder="Sản phẩm"
-                    value={form.fields.lines[index].product}
+                    value={form.fields.lines[index].productId}
                     onIonChange={(e) =>
                       form.setFieldsValue({
                         lines: form.fields.lines.map((line, i) =>
                           i === index
-                            ? { ...line, product: e.detail.value! }
+                            ? { ...line, productId: e.detail.value! }
                             : line
                         ),
                       })
@@ -129,7 +118,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ form }) => {
                     }
                   >
                     {form.products
-                      .find((v) => v.id === line.product)
+                      .find((v) => v.id === line.productId)
                       ?.sizes?.map((item, index) => (
                         <IonSelectOption key={index} value={item}>
                           {item}

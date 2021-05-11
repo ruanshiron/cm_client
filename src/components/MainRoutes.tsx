@@ -5,6 +5,7 @@ import CustomerCreate from "../pages/resources/customer/CustomerCreate";
 import { CustomerDetail } from "../pages/resources/customer/CustomerDetail";
 import CustomerPage from "../pages/resources/customer/CustomerPage";
 import CustomerUpdate from "../pages/resources/customer/CustomerUpdate";
+import OrderPage from "../pages/resources/customer/orders/OrderPage";
 import EmployeeCreate from "../pages/resources/employee/EmployeeCreate";
 import { EmployeeDetail } from "../pages/resources/employee/EmployeeDetail";
 import EmployeePage from "../pages/resources/employee/EmployeePage";
@@ -20,6 +21,7 @@ import WorkshopUpdate from "../pages/resources/workshop/WorkshopUpdate";
 import ProcessesPage from "../pages/settings/ProcessesPage";
 import SettingsPage from "../pages/settings/SettingsPage";
 import MainTabs from "../pages/tabs/MainTabs";
+import OrderCreate from "../pages/resources/customer/orders/OrderCreate";
 import HomeOrTutorial from "./HomeOrTutorial";
 
 const MainRoutes = () => {
@@ -40,11 +42,15 @@ const MainRoutes = () => {
       <Route path="/employees/:id" component={EmployeeDetail} exact />
       <Route path="/suppliers/:id" component={SupplierDetail} exact />
 
-      <Route path={"/workshops/:id/update"} component={WorkshopUpdate} />
-      <Route path={"/customers/:id/update"} component={CustomerUpdate} />
-      <Route path={"/employees/:id/update"} component={EmployeeUpdate} />
+      <Route path={"/workshops/:id/update"} component={WorkshopUpdate} exact />
+      <Route path={"/customers/:id/update"} component={CustomerUpdate} exact />
+      <Route path={"/employees/:id/update"} component={EmployeeUpdate}  exact/>
 
       <Route path="/workshops/:id/statistic" component={WorkshopStatistic} exact />
+
+      <Route path={"/customers/:id/orders"} component={OrderPage} exact />
+      <Route path={"/customers/:customerId/orders/create"} component={OrderCreate} exact />
+      <Route path={"/customers/:customerId/orders/:orderId/update"} component={OrderCreate} exact />
 
       <Route path="/workshops/create" component={WorkshopCreate} exact />
       <Route path="/customers/create" component={CustomerCreate} exact />

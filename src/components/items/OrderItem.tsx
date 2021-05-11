@@ -1,65 +1,98 @@
 import {
-  IonAvatar,
   IonCard,
   IonCardContent,
-  IonCardHeader,
+  IonIcon,
   IonItem,
   IonLabel,
   IonList,
-  IonText,
+  IonNote,
+  useIonActionSheet,
+  useIonAlert,
+  useIonRouter,
 } from "@ionic/react";
+import { close, create, shirtOutline, trashOutline } from "ionicons/icons";
 import React from "react";
-import { Order } from "../../models/order";
+import { useDispatch } from "react-redux";
+import { destroyOrder, Order } from "../../models/order";
 import { useSelector } from "../../store";
-import { formatDate } from "../../utils/date";
+import { removeOrder } from "../../store/data/orderSlice";
+import { toast } from "../../utils/toast";
 
-export const OrderItem: React.FC<{ data: Order }> = ({ data }) => {
-  const customer = useSelector((state) =>
-    state.customers.find((i) => i.id === data.customer)
-  );
-
-  const products = useSelector((state) => state.products);
-
+export const OrderItem: React.FC<{ order: Order }> = ({ order }) => {
+  const router = useIonRouter();
+  const dispatch = useDispatch();
+  const uid = useSelector((state) => state.user.uid);
+  const [presentAlert] = useIonAlert();
+  const [presentActions] = useIonActionSheet();
+  const handleActions = () => {
+    presentActions({
+      buttons: [
+        {
+          icon: create,
+          text: "Sửa",
+          handler: () => {
+            router.push(router.routeInfo.pathname + "/" + order.id + "/update");
+          },
+        },
+        {
+          icon: trashOutline,
+          text: "Xóa",
+          handler: handleDeleteOrder,
+        },
+        {
+          icon: close,
+          text: "thoát",
+        },
+      ],
+    });
+  };
+  const handleDeleteOrder = () => {
+    presentAlert({
+      header: "Xác nhận xóa",
+      message: "Bạn sẽ xóa đơn hàng này?",
+      buttons: [
+        "Hủy",
+        {
+          text: "OK!",
+          handler: async () => {
+            try {
+              if (order.id && order.customerId) {
+                await destroyOrder(uid, order.customerId, order.id);
+                toast("Xóa thành công!");
+                dispatch(removeOrder(order.id));
+              } else {
+                toast("Có lỗi xảy ra, vui lòng thử lại!");
+              }
+            } catch (error) {
+              toast("Có lỗi xảy ra, vui lòng thử lại!");
+            }
+          },
+        },
+      ],
+    });
+  };
   return (
-    <>
-      <IonCard
-        button
-        className="list-card"
-        routerLink={`/tabs/order/${data.id}`}
-      >
-        <IonCardHeader>
-          <IonItem
-            detail={false}
-            lines="none"
-            className="list-item transparent"
-            style={{ background: "none" }}
-          >
-            <IonAvatar slot="start">
-              <img src="/assets/icon/icon.png" alt="Speaker profile pic" />
-            </IonAvatar>
+    <IonCard button className="list-card" onClick={handleActions}>
+      <IonCardContent>
+        <IonList style={{ border: "none" }} lines="inset">
+          <IonItem>
             <IonLabel>
-              <h2>{customer?.name}</h2>
-              <p>{formatDate(data.createdAt)}</p>
+              <b>{order.date}</b>
             </IonLabel>
           </IonItem>
-        </IonCardHeader>
-
-        <IonCardContent>
-          <IonList lines="inset">
-            {data.lines.map((line, index) => (
-              <IonItem detail={false} key={index}>
-                <IonLabel>
-                  {products.find((i) => i.id === line.product)?.code}
-                </IonLabel>
-                <IonLabel slot="end">{line.size}</IonLabel>
-                <IonText slot="end">
-                  <p>{line.quantity}</p>
-                </IonText>
-              </IonItem>
-            ))}
-          </IonList>
-        </IonCardContent>
-      </IonCard>
-    </>
+          {order.lines.map((line, index) => (
+            <IonItem detail={false} key={index}>
+              <IonIcon icon={shirtOutline} slot="start" />
+              <IonLabel slot="start">
+                {line.productName}・{line.size}
+              </IonLabel>
+              <IonNote slot="end">
+                <p>{line.quantity}&nbsp;sp</p>
+              </IonNote>
+            </IonItem>
+          ))}
+        </IonList>
+      </IonCardContent>
+    </IonCard>
   );
 };

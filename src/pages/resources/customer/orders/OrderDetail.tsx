@@ -30,8 +30,8 @@ import {
 } from "ionicons/icons";
 import React, { useState } from "react";
 import { useParams } from "react-router";
-import { useSelector } from "../../../store";
-import { formatDate } from "../../../utils/date";
+import { useSelector } from "../../../../store";
+import { formatDate } from "../../../../utils/date";
 
 interface OrderDetailProps {}
 
@@ -43,9 +43,7 @@ export const OrderDetail: React.FC<OrderDetailProps> = () => {
     state.orders.find((i) => i.id === id)
   );
 
-  const customer = useSelector((state) =>
-    state.customers.find((i) => i.id === order?.customer)
-  );
+  const customer: any = {}
 
   const products = useSelector((state) => state.products);
 
@@ -90,7 +88,7 @@ export const OrderDetail: React.FC<OrderDetailProps> = () => {
                     {order?.lines.map((line, index) => (
                       <IonItem key={index}>
                         <IonLabel>
-                          {products.find((i) => i.id === line.product)?.code}
+                          {products.find((i) => i.id === line.productId)?.code}
                         </IonLabel>
                         <IonLabel slot="end">
                           <p>{line.size}</p>
