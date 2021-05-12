@@ -39,6 +39,20 @@ const customerSlice = createSlice({
         item.id === action.payload.id ? action.payload : item
       );
     },
+    updateFromDate(state, action) {
+      return state.map((v) =>
+        v.id !== action.payload.id
+          ? v
+          : { ...v, statistic: { ...v.statistic, from: action.payload.from } }
+      );
+    },
+    updateToDate(state, action) {
+      return state.map((v) =>
+        v.id !== action.payload.id
+          ? v
+          : { ...v, statistic: { ...v.statistic, to: action.payload.to } }
+      );
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -55,6 +69,8 @@ export const {
   removeCustomer,
   addCustomer,
   updateCustomer,
+  updateFromDate,
+  updateToDate,
 } = customerSlice.actions;
 
 export default customerSlice;

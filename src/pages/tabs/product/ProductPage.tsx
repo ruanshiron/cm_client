@@ -16,9 +16,10 @@ import {
 import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Item } from "../../../components/items/Item";
+import { ProductItem } from "../../../components/items/ProductItem";
 import { ProductPagePopover } from "../../../components/popovers/ProductPagePopover";
 import { useSelector } from "../../../store";
+import { fetchAllProcesses } from "../../../store/data/processSlice";
 import { fetchAllProducts } from "../../../store/data/productSlice";
 
 interface ProductPageProps {}
@@ -36,8 +37,12 @@ const ProductPage: React.FC<ProductPageProps> = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchAllProducts())
-  }, [dispatch])
+    if (products.length <= 0) {
+      dispatch(fetchAllProducts());
+      dispatch(fetchAllProcesses());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   return (
     <IonPage className="list-page">
@@ -65,15 +70,10 @@ const ProductPage: React.FC<ProductPageProps> = () => {
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>
-          <IonRow>
+          <IonRow className="ion-justify-content-center">
             {products.map((product) => (
-              <IonCol size="12" size-md="6" key={product.id}>
-                <Item
-                  title={product.name}
-                  subtitle={product.code}
-                  baseUrl="/tabs/product"
-                  id={product.id}
-                />
+              <IonCol size="12" size-md="8" key={product.id}>
+                <ProductItem product={product} />
               </IonCol>
             ))}
           </IonRow>

@@ -2,7 +2,6 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import {
   shirtOutline,
-  checkmarkDoneCircleOutline,
   personOutline,
   peopleOutline,
   storefrontOutline,
@@ -48,12 +47,6 @@ const appPages: AppPage[] = [
     url: "/tabs/product",
     iosIcon: shirtOutline,
     mdIcon: shirtOutline,
-  },
-  {
-    title: "Đơn hàng",
-    url: "/tabs/order",
-    iosIcon: checkmarkDoneCircleOutline,
-    mdIcon: checkmarkDoneCircleOutline,
   },
 ];
 

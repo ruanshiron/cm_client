@@ -41,14 +41,14 @@ export const EventsViewAll: React.FC<Props> = () => {
                 <React.Fragment key={i}>
                   <div className="bulkhead"></div>
 
-                  <div className="border-full" key={i}>
+                  <IonList className="border-full-2" key={i}>
                     <IonItemDivider className="top-divider" color="white">
                       <IonLabel>{group.name}</IonLabel>
                     </IonItemDivider>
                     {group.events.map((item, j) => (
                       <StageItem stage={item} key={j} />
                     ))}
-                  </div>
+                  </IonList>
                 </React.Fragment>
               ))}
               <div className="last-item"></div>

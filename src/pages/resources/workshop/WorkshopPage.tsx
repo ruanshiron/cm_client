@@ -8,16 +8,15 @@ import {
   IonIcon,
   IonMenuButton,
   IonPage,
-  IonPopover,
   IonRow,
   IonTitle,
   IonToolbar,
+  useIonRouter,
 } from "@ionic/react";
-import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
+import { add } from "ionicons/icons";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Item } from "../../../components/items/Item";
-import { WorkshopPagePopover } from "../../../components/popovers/WorkshopPagePopover";
 import { useSelector } from "../../../store";
 import { fetchAllWorkshops } from "../../../store/data/workshopSlice";
 
@@ -25,13 +24,7 @@ interface WorkshopPageProps {}
 
 const WorkshopPage: React.FC<WorkshopPageProps> = () => {
   const workshops = useSelector((state) => state.workshops);
-  const [showPopover, setShowPopover] = useState(false);
-  const [popoverEvent, setPopoverEvent] = useState<any>();
-  const presentPopover = (e: React.MouseEvent) => {
-    setPopoverEvent(e.nativeEvent);
-    setShowPopover(true);
-  };
-
+  const router = useIonRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,12 +40,8 @@ const WorkshopPage: React.FC<WorkshopPageProps> = () => {
           </IonButtons>
           <IonTitle>Xưởng</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={presentPopover}>
-              <IonIcon
-                slot="icon-only"
-                ios={ellipsisHorizontal}
-                md={ellipsisVertical}
-              ></IonIcon>
+            <IonButton routerLink={router.routeInfo.pathname + "/create"}>
+              <IonIcon slot="icon-only" icon={add}></IonIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -64,9 +53,9 @@ const WorkshopPage: React.FC<WorkshopPageProps> = () => {
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>
-          <IonRow>
+          <IonRow className="ion-justify-content-center">
             {workshops.map((workshop) => (
-              <IonCol size="12" size-md="6" key={workshop.id}>
+              <IonCol size="12" size-md="8" key={workshop.id}>
                 <Item
                   title={workshop.name!}
                   subtitle={workshop.phonenumber!}
@@ -78,14 +67,6 @@ const WorkshopPage: React.FC<WorkshopPageProps> = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
-
-      <IonPopover
-        isOpen={showPopover}
-        event={popoverEvent}
-        onDidDismiss={() => setShowPopover(false)}
-      >
-        <WorkshopPagePopover dismiss={() => setShowPopover(false)} />
-      </IonPopover>
     </IonPage>
   );
 };

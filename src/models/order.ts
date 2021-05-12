@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import _ from "lodash";
 import { formatISO } from "date-fns";
 
-const collection = "orders";
+const collection = "customers";
 
 const ref = (user: string) =>
   database.collection("users").doc(user).collection(collection);

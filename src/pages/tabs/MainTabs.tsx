@@ -49,15 +49,15 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           <IonIcon size="large" icon={gridSharp} />
           <IonLabel>Tổng hợp</IonLabel>
         </IonTabButton> */}
-        <IonTabButton tab="diary" href="/tabs/diary" layout="label-hide">
+        <IonTabButton tab="diary" href="/tabs/diary" layout="icon-top">
           <IonIcon size="large" icon={calendarSharp} />
           <IonLabel>Nhật ký</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="product" href="/tabs/product" layout="label-hide">
+        <IonTabButton tab="product" href="/tabs/product" layout="icon-top">
           <IonIcon size="large" icon={shirtSharp} />
           <IonLabel>Sản phẩm</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="order" href="/tabs/order" layout="label-hide">
+        <IonTabButton tab="order" href="/tabs/order" layout="icon-top">
           <IonIcon size="large" icon={checkmarkDoneCircleSharp} />
           <IonLabel>Đơn hàng</IonLabel>
         </IonTabButton>

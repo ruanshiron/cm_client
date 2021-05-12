@@ -85,11 +85,12 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
             <IonTitle>Khách hàng</IonTitle>
             <IonButtons slot="end">
               <IonButton
-                fill="outline"
                 routerLink={router.routeInfo.pathname + "/orders/create"}
               >
-                <IonIcon slot="start" icon={add} />
-                Đơn hàng
+                <IonIcon slot="icon-only" icon={add} />
+              </IonButton>
+              <IonButton routerLink={router.routeInfo.pathname + "/orders"}>
+                <IonIcon slot="icon-only" icon={documentsOutline} />
               </IonButton>
               <IonButton
                 onClick={() =>

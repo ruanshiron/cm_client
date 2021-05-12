@@ -247,3 +247,25 @@ export const statisticWorkshopOnChangeStage = functions.firestore
         });
     });
   });
+
+export const updateMostRecentOrder = functions.firestore
+  .document("users/{userId}/customers/{customerId}/orders/{orderId}")
+  .onWrite((_change, context) => {
+    const { customerId, userId } = context.params;
+    const customerRef = admin
+      .firestore()
+      .collection("users")
+      .doc(userId)
+      .collection("customers")
+      .doc(customerId);
+    return customerRef
+      .collection("orders")
+      .orderBy("date", "desc")
+      .limit(1)
+      .get()
+      .then((snaps) => {
+        if (snaps.empty) return;
+        const mostRecentOrder = snaps.docs[0].data();
+        customerRef.set({ mostRecentOrder }, { merge: true });
+      });
+  });
