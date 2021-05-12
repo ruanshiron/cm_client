@@ -42,39 +42,48 @@ const appPages: AppPage[] = [
     iosIcon: todayOutline,
     mdIcon: todayOutline,
   },
+];
+
+const listPages: AppPage[] = [
   {
     title: "Sản phẩm",
     url: "/tabs/product",
     iosIcon: shirtOutline,
     mdIcon: shirtOutline,
   },
-];
-
-const listPages: AppPage[] = [
   {
     title: "Xưởng may",
-    url: "/workshops",
+    url: "/tabs/workshops",
     iosIcon: storefrontOutline,
     mdIcon: storefrontOutline,
   },
   {
     title: "Khách hàng",
-    url: "/customers",
+    url: "/tabs/customers",
     iosIcon: personOutline,
     mdIcon: personOutline,
   },
-  {
-    title: "Nguồn nguyên liệu",
-    url: "/suppliers",
-    iosIcon: cutOutline,
-    mdIcon: cutOutline,
-  },
+];
+
+const extraPages: AppPage[] = [
   {
     title: "Công nhân",
     url: "/employees",
     iosIcon: peopleOutline,
     mdIcon: peopleOutline,
   },
+  {
+    title: "Quy trình sản xuất",
+    url: "/processes",
+    iosIcon: cutOutline,
+    mdIcon: cutOutline,
+  },
+  // {
+  //   title: "Nguồn nguyên liệu",
+  //   url: "/suppliers",
+  //   iosIcon: cutOutline,
+  //   mdIcon: cutOutline,
+  // },
 ];
 
 const configPages: AppPage[] = [
@@ -115,7 +124,7 @@ const Menu: React.FC = () => {
                   routerLink={appPage.url}
                   lines="none"
                   detail={false}
-                  routerDirection="none"
+                  // routerDirection="none"
                 >
                   <IonIcon
                     slot="start"
@@ -134,6 +143,33 @@ const Menu: React.FC = () => {
             <IonLabel>Danh sách</IonLabel>
           </IonListHeader>
           {listPages.map((appPage, index) => {
+            return (
+              <IonMenuToggle key={index} autoHide={false}>
+                <IonItem
+                  className={
+                    location.pathname.includes(appPage.url) ? "selected" : ""
+                  }
+                  routerLink={appPage.url}
+                  lines="none"
+                  detail={false}
+                >
+                  <IonIcon
+                    slot="start"
+                    ios={appPage.iosIcon}
+                    md={appPage.mdIcon}
+                  />
+                  <IonLabel>{appPage.title}</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+            );
+          })}
+        </IonList>
+
+        <IonList id="labels-list">
+          <IonListHeader>
+            <IonLabel>Mở rộng</IonLabel>
+          </IonListHeader>
+          {extraPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem

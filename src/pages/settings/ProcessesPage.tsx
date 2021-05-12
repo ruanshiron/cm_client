@@ -1,5 +1,4 @@
 import {
-  IonBackButton,
   IonBadge,
   IonButton,
   IonButtons,
@@ -18,6 +17,7 @@ import {
   IonNote,
   IonPage,
   IonRow,
+  IonText,
   IonTitle,
   IonToolbar,
   useIonAlert,
@@ -69,9 +69,6 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton defaultHref="/settings" />
-          </IonButtons>
           <IonTitle>Quy trình</IonTitle>
           <IonButtons slot="end">
             <IonButton
@@ -87,8 +84,13 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
       </IonHeader>
       <IonContent>
         <IonGrid style={{ padding: 0 }}>
-          <IonRow>
-            <IonCol size="12" size-md="8" offsetMd="2" style={{ padding: 0 }}>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="12" size-md="8">
+              <div className="ion-margin-top ion-text-center">
+                Vui lòng chỉ tạo nhiều nhất <b>10</b> công đoạn
+              </div>
+            </IonCol>
+            <IonCol size="12" size-md="8" style={{ padding: 0 }}>
               {processes.length > 0 && (
                 <IonList inset lines="full" className="flat-list">
                   {processes.map((process, i) => (

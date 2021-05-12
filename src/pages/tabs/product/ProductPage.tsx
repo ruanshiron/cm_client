@@ -8,16 +8,15 @@ import {
   IonIcon,
   IonMenuButton,
   IonPage,
-  IonPopover,
   IonRow,
   IonTitle,
   IonToolbar,
+  useIonRouter,
 } from "@ionic/react";
-import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
+import { add } from "ionicons/icons";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ProductItem } from "../../../components/items/ProductItem";
-import { ProductPagePopover } from "../../../components/popovers/ProductPagePopover";
 import { useSelector } from "../../../store";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
 import { fetchAllProducts } from "../../../store/data/productSlice";
@@ -25,16 +24,8 @@ import { fetchAllProducts } from "../../../store/data/productSlice";
 interface ProductPageProps {}
 
 const ProductPage: React.FC<ProductPageProps> = () => {
-  const [showPopover, setShowPopover] = useState(false);
-  const [popoverEvent, setPopoverEvent] = useState<any>();
-
-  const presentPopover = (e: React.MouseEvent) => {
-    setPopoverEvent(e.nativeEvent);
-    setShowPopover(true);
-  };
-
+  const router = useIonRouter();
   const products = useSelector((state) => state.products);
-
   const dispatch = useDispatch();
   useEffect(() => {
     if (products.length <= 0) {
@@ -53,12 +44,8 @@ const ProductPage: React.FC<ProductPageProps> = () => {
           </IonButtons>
           <IonTitle>Sản phẩm</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={presentPopover}>
-              <IonIcon
-                slot="icon-only"
-                ios={ellipsisHorizontal}
-                md={ellipsisVertical}
-              ></IonIcon>
+            <IonButton routerLink={router.routeInfo.pathname + "/create"}>
+              <IonIcon slot="icon-only" icon={add}></IonIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -79,13 +66,6 @@ const ProductPage: React.FC<ProductPageProps> = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
-      <IonPopover
-        isOpen={showPopover}
-        event={popoverEvent}
-        onDidDismiss={() => setShowPopover(false)}
-      >
-        <ProductPagePopover dismiss={() => setShowPopover(false)} />
-      </IonPopover>
     </IonPage>
   );
 };

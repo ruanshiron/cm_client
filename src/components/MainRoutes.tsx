@@ -56,7 +56,7 @@ const MainRoutes = () => {
       <Route path="/customers/create" component={CustomerCreate} exact />
       <Route path="/employees/create" component={EmployeeCreate} exact />
       <Route path="/suppliers/create" component={SupplierCreate} exact />
-      <Route path="/settings/processes" component={ProcessesPage} exact />
+      <Route path="/processes" component={ProcessesPage} exact />
 
       <Route path="/" component={HomeOrTutorial} exact />
     </IonRouterOutlet>
