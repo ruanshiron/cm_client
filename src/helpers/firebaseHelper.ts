@@ -28,6 +28,8 @@ export function onAuthStateChanged() {
               uid: user.uid,
               email: user.email,
               role: "owner",
+              emailVerified: user.emailVerified,
+              creationTime: user.metadata.creationTime,
             };
             resolve(userState);
           }
