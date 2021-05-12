@@ -1,6 +1,6 @@
 import Menu from "./components/Menu";
 import DateFnsUtils from "@date-io/date-fns";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   IonApp,
   IonLoading,
