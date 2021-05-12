@@ -233,3 +233,10 @@ ion-col {
 .firebase-emulator-warning {
   display: none;
 }
+
+ion-list {
+  ion-item:last-child {
+    --inner-border-width: 0;
+    --border-width: 0 0 0 0;
+  }
+}
