@@ -1,7 +1,7 @@
 import {
   IonButtons,
   IonCard,
-  IonCardHeader,
+  IonCardContent,
   IonCol,
   IonContent,
   IonGrid,
@@ -9,15 +9,26 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
+  IonList,
   IonMenuButton,
   IonPage,
   IonRow,
+  IonText,
   IonTitle,
   IonToolbar,
+  useIonAlert,
 } from "@ionic/react";
-import { logOutOutline, optionsOutline } from "ionicons/icons";
+import {
+  checkboxOutline,
+  logInOutline,
+  logOutOutline,
+  mailOutline,
+  textOutline,
+} from "ionicons/icons";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { auth } from "../../config/firebase";
+import { useSelector } from "../../store";
 
 import { signOut } from "../../store/user/userSlice";
 
@@ -25,6 +36,11 @@ interface SettingsPageProps {}
 
 const SettingsPage: React.FC<SettingsPageProps> = () => {
   const dispatch = useDispatch();
+  const [present] = useIonAlert();
+  const user = useSelector((state) => state.user);
+  const handleVerify = () => {
+    auth.currentUser?.sendEmailVerification();
+  };
   return (
     <IonPage className="list-page">
       <IonHeader>
@@ -37,31 +53,74 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       </IonHeader>
       <IonContent>
         <IonGrid>
-          <IonRow>
-            <IonCol size="12" size-md="8" offsetMd="2">
-              <IonCard className="list-card">
-                <IonCardHeader>
-                  <IonItem
-                    button
-                    detail={false}
-                    lines="none"
-                    className="list-item small"
-                    routerLink="/settings/processes"
-                  >
-                    <IonIcon icon={optionsOutline} slot="start"></IonIcon>
-                    <IonLabel slot="start">
-                      <h2>Quy trình</h2>
-                    </IonLabel>
-                  </IonItem>
-                </IonCardHeader>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="12" sizeLg="8">
+              <IonCard className="list-card ion-margin-top">
+                <IonCardContent>
+                  <IonList style={{ border: "none" }}>
+                    <IonItem>
+                      <IonIcon icon={mailOutline} slot="start"></IonIcon>
+                      <IonLabel>Email</IonLabel>
+                      <IonText slot="end">{user.email}</IonText>
+                    </IonItem>
+                    <IonItem
+                      button
+                      onClick={() => {
+                        present({
+                          header: "Nhập tên hiển thị",
+                          inputs: [
+                            {
+                              name: "name",
+                              placeholder: "Tên hiển thị",
+                              type: "text",
+                              value: user.displayName,
+                            },
+                          ],
+                          buttons: [
+                            "huỷ",
+                            {
+                              text: "Ok",
+                              handler: (data) => {
+                                console.log(data.name);
+                              },
+                            },
+                          ],
+                        });
+                      }}
+                    >
+                      <IonIcon icon={textOutline} slot="start"></IonIcon>
+                      <IonLabel>Tên hiển thị</IonLabel>
+                      <IonText slot="end">{user.displayName}</IonText>
+                    </IonItem>
+                    <IonItem>
+                      <IonIcon icon={logInOutline} slot="start"></IonIcon>
+                      <IonLabel>Ngày đăng ký</IonLabel>
+                      <IonText slot="end">{user.creationTime}</IonText>
+                    </IonItem>
+                    <IonItem button onClick={handleVerify}>
+                      <IonIcon icon={checkboxOutline} slot="start"></IonIcon>
+                      <IonLabel>Xác thực email</IonLabel>
+                      {user.emailVerified ? (
+                        <IonText slot="end" color="success">
+                          đã xác thực
+                        </IonText>
+                      ) : (
+                        <IonText slot="end" color="danger">
+                          chưa xác thực
+                        </IonText>
+                      )}
+                    </IonItem>
+                  </IonList>
+                </IonCardContent>
               </IonCard>
-              <IonCard className="list-card">
-                <IonCardHeader>
+            </IonCol>
+            <IonCol size="12" sizeLg="8">
+              <IonCard className="list-card ion-margin-top">
+                <IonCardContent>
                   <IonItem
                     button
                     detail={false}
                     lines="none"
-                    className="list-item small"
                     onClick={() => dispatch(signOut())}
                   >
                     <IonIcon
@@ -70,10 +129,10 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
                       color="danger"
                     ></IonIcon>
                     <IonLabel slot="start" color="danger">
-                      <h2>Đăng xuất</h2>
+                      <b>Đăng xuất</b>
                     </IonLabel>
                   </IonItem>
-                </IonCardHeader>
+                </IonCardContent>
               </IonCard>
             </IonCol>
           </IonRow>

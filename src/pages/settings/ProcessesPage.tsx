@@ -17,7 +17,6 @@ import {
   IonNote,
   IonPage,
   IonRow,
-  IonText,
   IonTitle,
   IonToolbar,
   useIonAlert,

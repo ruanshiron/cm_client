@@ -6,10 +6,12 @@ import {
 
 interface UserState {
   isLoggedIn: boolean;
+  emailVerified: boolean;
   loading: boolean;
   displayName: string;
   email: string;
   uid: string;
+  creationTime: string;
   id: string;
   role: "owner" | "workshop" | "customer" | "employee" | "anonymous";
 }
@@ -17,8 +19,10 @@ interface UserState {
 let initialState: UserState = {
   isLoggedIn: false,
   loading: false,
+  emailVerified: false,
   displayName: "",
   email: "",
+  creationTime: "",
   uid: "",
   id: "",
   role: "anonymous",
@@ -49,6 +53,8 @@ const userSlice = createSlice({
         state.isLoggedIn = action.payload ? true : false;
         state.displayName = action.payload.displayName || "";
         state.email = action.payload.email || "";
+        state.creationTime = action.payload.creationTime || "";
+        state.emailVerified = !!action.payload.emailVerified;
         state.uid = action.payload.uid || "";
         state.id = action.payload.id || action.payload?.uid || "";
         if (

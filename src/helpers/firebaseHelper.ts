@@ -16,6 +16,8 @@ export function onAuthStateChanged() {
               id: user.uid,
               uid: idTokenResult.claims.uid,
               email: user.email,
+              emailVerified: user.emailVerified,
+              creationTime: user.metadata.creationTime,
               role: idTokenResult.claims.role,
             };
             resolve(userState);
