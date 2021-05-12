@@ -32,17 +32,17 @@ export const CustomerItem: React.FC<{ data: Customer }> = ({ data }) => {
           icon: createOutline,
           text: "Thêm đơn hàng",
           handler: () =>
-            router.push("/customers/" + data.id + "/orders/create"),
+            router.push("/tabs/customers/" + data.id + "/orders/create"),
         },
         {
           icon: documentsOutline,
           text: "Danh sách đơn hàng",
-          handler: () => router.push("/customers/" + data.id + "/orders"),
+          handler: () => router.push("/tabs/customers/" + data.id + "/orders"),
         },
         {
           icon: information,
           text: "Thông tin chi tiết",
-          handler: () => router.push("/customers/" + data.id),
+          handler: () => router.push("/tabs/customers/" + data.id),
         },
         {
           icon: close,

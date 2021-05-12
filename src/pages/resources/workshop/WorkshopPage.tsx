@@ -60,7 +60,7 @@ const WorkshopPage: React.FC<WorkshopPageProps> = () => {
                   title={workshop.name!}
                   subtitle={workshop.phonenumber!}
                   id={workshop.id}
-                  baseUrl="/workshops"
+                  baseUrl="/tabs/workshops"
                 />
               </IonCol>
             ))}

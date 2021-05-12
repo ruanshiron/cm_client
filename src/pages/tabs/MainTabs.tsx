@@ -10,7 +10,6 @@ import {
 import { Route, Redirect } from "react-router";
 import {
   shirtSharp,
-  checkmarkDoneCircleSharp,
   calendarSharp,
   storefrontOutline,
   peopleCircleOutline,
