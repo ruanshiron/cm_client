@@ -125,7 +125,7 @@ export const {
 export default workshopSlice;
 
 export const statisticHarderSelector = createSelector(
-  (state: RootState) => state.stages,
+  (state: RootState) => state.stages.all,
   (state: RootState) => state.workshops,
   (_state: RootState, workshopId: string, from?: string, to?: string) => ({
     workshopId,
@@ -215,7 +215,7 @@ export const statisticsForWorkshop = createSelector(
   (_state: RootState, workshopId: string) => workshopId,
   (state, workshopId) => {
     const stagesByWorkshop = filter(
-      state.stages,
+      state.stages.all,
       (item) => item.workshopId === workshopId
     );
 
@@ -258,7 +258,7 @@ export const statisticsForWorkshopAndGroupByProduct = createSelector(
 );
 
 export const stagesByWorkshop = createSelector(
-  (state: RootState) => state.stages,
+  (state: RootState) => state.stages.all,
   (state: RootState) => state.products,
   (state: RootState) => state.processes,
   (_state: RootState, workshopId: string) => workshopId,

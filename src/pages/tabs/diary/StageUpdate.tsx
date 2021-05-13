@@ -21,7 +21,7 @@ interface StageUpdateProps {}
 
 const StageUpdate: React.FC<StageUpdateProps> = () => {
   const { id } = useParams<{ id: string }>();
-  const stage = useSelector((state) => state.stages.find((i) => i.id === id));
+  const stage = useSelector((state) => state.stages.all.find((i) => i.id === id));
   const form = useStageForm();
 
   useEffect(() => {

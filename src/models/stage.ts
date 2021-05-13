@@ -50,10 +50,11 @@ export interface StageFilterOptions {
   productSize?: string;
   processId?: string;
   processStatus?: string;
+  lastVisible?: any;
 }
 
 export const getStages = (user: string, options?: StageFilterOptions) => {
-  let collection: firebase.firestore.Query<firebase.firestore.DocumentData> = ref(user);
+  let collection: firebase.firestore.Query<firebase.firestore.DocumentData> = ref(user).orderBy("date", "desc");
   if (options?.from) collection = collection.where("date", ">=", options.from);
   if (options?.to) collection = collection.where("date", "<=", options.to);
   if (options?.workshopId) collection = collection.where("workshopId", ">=", options.workshopId);
@@ -61,16 +62,11 @@ export const getStages = (user: string, options?: StageFilterOptions) => {
   if (options?.productSize) collection = collection.where("productSize", ">=", options.productSize);
   if (options?.processId) collection = collection.where("processId", ">=", options.processId);
   if (options?.processStatus) collection = collection.where("processStatus", ">=", options.processStatus);
+  if (options?.lastVisible) collection = collection.startAfter(options.lastVisible)
 
   return collection
+    .limit(5)
     .get()
-    .then((snap) => {
-      return snap.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        timestamp: doc.data().timestamp?.toDate().toString(),
-      }));
-    });
 };
 
 export const getAllStages = (user: string) => {

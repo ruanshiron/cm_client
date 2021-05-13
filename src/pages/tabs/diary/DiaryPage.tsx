@@ -9,23 +9,15 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { filterOutline, searchSharp } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import { EventsViewAll } from "../../../components/EventsViewAll";
 import EventFab from "../../../components/fabs/EventFab";
 import StageFilterModal from "../../../components/modals/StageFilterModal";
-import { fetchAllStages } from "../../../store/data/stageSlice";
 
 interface DiaryPageProps {}
 
 const DiaryPage: React.FC<DiaryPageProps> = () => {
-  const dispatch = useDispatch();
   const [showFilterModal, setShowFilterModal] = useState(false);
-
-  useEffect(() => {
-    dispatch(fetchAllStages());
-  }, [dispatch]);
-
   return (
     <IonPage id="diary-page">
       <EventFab />

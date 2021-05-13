@@ -57,7 +57,7 @@ const StageDetail: React.FC<StageDetailProps> = () => {
   const { id } = useParams<{ id: string }>();
   const uid = useSelector((state) => state.user.uid);
   const stage = useSelector((state) =>
-    state.stages.find((item) => item.id === id)
+    state.stages.all.find((item) => item.id === id)
   );
   const loading = useSelector((state) => state.loading.isLoading);
   const handleDeleteStage = async () => {

@@ -119,7 +119,7 @@ export const statisticSelector = createSelector(
 );
 
 export const statisticHarderSelector = createSelector(
-  (state: RootState) => state.stages,
+  (state: RootState) => state.stages.all,
   (state: RootState) => state.processes,
   (_state: RootState, productId: string, from?: string, to?: string) => ({
     productId,
@@ -180,7 +180,7 @@ export const statisticHarderSelector = createSelector(
 );
 
 export const statisticsForProduct = createSelector(
-  (state: RootState) => state.stages,
+  (state: RootState) => state.stages.all,
   (state: RootState) => state.processes,
   (_state: RootState, productId: string, processId: string) => ({
     productId,

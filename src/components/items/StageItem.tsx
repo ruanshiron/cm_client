@@ -13,6 +13,7 @@ const StageItem: React.FC<{ stage: Stage }> = ({ stage }) => {
   return (
     <IonItem
       onClick={() => {}}
+      className="fadin"
       routerLink={"/tabs/diary/" + stage.id}
       detail={false}
     >

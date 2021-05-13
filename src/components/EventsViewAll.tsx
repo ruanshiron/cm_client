@@ -11,34 +11,86 @@ import {
   IonRefresherContent,
   IonRow,
 } from "@ionic/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "../store";
-import * as Event from "../models/stage";
-import { filteredStages } from "../store/data/stageSlice";
+import {
+  addStage,
+  filteredStages,
+  resetAllStages,
+} from "../store/data/stageSlice";
 import StageItem from "./items/StageItem";
 import { RefresherEventDetail } from "@ionic/core";
+import { useDispatch } from "react-redux";
+import { getStages, Group } from "../models/stage";
 
 interface Props {}
 
 export const EventsViewAll: React.FC<Props> = () => {
-  const groups: Event.Group[] = useSelector(filteredStages);
-  function doRefresh(event: CustomEvent<RefresherEventDetail>) {
-    console.log("Begin async operation");
-
-    setTimeout(() => {
-      console.log("Async operation has ended");
-      event.detail.complete();
-    }, 2000);
-  }
+  const groups: Group[] = useSelector(filteredStages);
+  const uid = useSelector((state) => state.user.uid);
+  const [lastVisible, setLastVisible] = useState<any>();
+  const [isNoMoreStage, setIsNoMoreStage] = useState(false);
+  const dispatch = useDispatch();
+  const handleRefesh = (event: CustomEvent<RefresherEventDetail>) => {
+    dispatch(resetAllStages());
+    setIsNoMoreStage(false);
+    getStages(uid, {}).then((snap) => {
+      setLastVisible(snap.docs[snap.docs.length - 1]);
+      snap.docs.forEach((doc) => {
+        event.detail.complete();
+        const data = doc.data() as any;
+        dispatch(
+          addStage({
+            id: doc.id,
+            ...data,
+            timestamp: data.timestamp?.toDate().toString(),
+          })
+        );
+      });
+    });
+  };
+  const handleLoadMore = (event: CustomEvent<void>) => {
+    getStages(uid, { lastVisible }).then((snap) => {
+      setLastVisible(snap.docs[snap.docs.length - 1]);
+      if (snap.docs.length <= 0) setIsNoMoreStage(true);
+      (event.target as HTMLIonInfiniteScrollElement).complete();
+      snap.docs.forEach((doc) => {
+        const data = doc.data() as any;
+        dispatch(
+          addStage({
+            id: doc.id,
+            ...data,
+            timestamp: data.timestamp?.toDate().toString(),
+          })
+        );
+      });
+    });
+  };
+  useEffect(() => {
+    getStages(uid, {}).then((snap) => {
+      setLastVisible(snap.docs[snap.docs.length - 1]);
+      snap.docs.forEach((doc) => {
+        const data = doc.data() as any;
+        dispatch(
+          addStage({
+            id: doc.id,
+            ...data,
+            timestamp: data.timestamp?.toDate().toString(),
+          })
+        );
+      });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <IonContent>
-      <IonRefresher slot="fixed" onIonRefresh={doRefresh}>
+      <IonRefresher slot="fixed" onIonRefresh={handleRefesh}>
         <IonRefresherContent></IonRefresherContent>
       </IonRefresher>
 
-      <IonGrid style={{ padding: 0 }}>
-        <IonRow>
-          <IonCol size="12" size-md="8" offsetMd="2" style={{ padding: 0 }}>
+      <IonGrid>
+        <IonRow className="ion-justify-content-center">
+          <IonCol size="12" size-md="8">
             {groups.map((group, i) => (
               <IonList className="border-full-2 ion-margin-top" key={i}>
                 <IonItemDivider className="top-divider" color="white">
@@ -49,14 +101,17 @@ export const EventsViewAll: React.FC<Props> = () => {
                 ))}
               </IonList>
             ))}
+            <IonInfiniteScroll
+              disabled={isNoMoreStage}
+              threshold="100px"
+              onIonInfinite={handleLoadMore}
+            >
+              <IonInfiniteScrollContent></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
             <div className="last-item"></div>
           </IonCol>
         </IonRow>
       </IonGrid>
-
-      <IonInfiniteScroll threshold="100px" onIonInfinite={() => {}}>
-        <IonInfiniteScrollContent loadingText="Đang tải..."></IonInfiniteScrollContent>
-      </IonInfiniteScroll>
     </IonContent>
   );
 };
