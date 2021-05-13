@@ -146,7 +146,7 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
           <IonList lines="full" className="ion-no-padding">
             <IonItem>
               <IonIcon slot="start" icon={textOutline} />
-              <IonLabel position="fixed">
+              <IonLabel position="floating">
                 <b>Tên quy trình</b>
               </IonLabel>
               <IonInput
@@ -164,7 +164,7 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
             <IonListHeader>Bao gồm các trạng thái</IonListHeader>
             <IonItem>
               <IonIcon slot="start" icon={caretForward} />
-              <IonLabel position="fixed">
+              <IonLabel position="floating">
                 <b>{"đang " + form.fields.name}</b>
               </IonLabel>
               <IonInput
@@ -182,7 +182,7 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
             </IonItem>
             <IonItem>
               <IonIcon slot="start" icon={checkboxOutline} />
-              <IonLabel position="fixed">
+              <IonLabel position="floating">
                 <b>{"đã " + form.fields.name}</b>
               </IonLabel>
               <IonInput
@@ -200,7 +200,7 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
             </IonItem>
             <IonItem>
               <IonIcon slot="start" icon={alertOutline} />
-              <IonLabel position="fixed">
+              <IonLabel position="floating">
                 <b>{form.fields.name + " lỗi"}</b>
               </IonLabel>
               <IonInput

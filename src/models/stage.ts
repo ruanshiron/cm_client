@@ -42,6 +42,37 @@ export interface Group {
   events: Stage[];
 }
 
+export interface StageFilterOptions {
+  from?: string;
+  to?: string;
+  workshopId?: string;
+  productId?: string;
+  productSize?: string;
+  processId?: string;
+  processStatus?: string;
+}
+
+export const getStages = (user: string, options?: StageFilterOptions) => {
+  let collection: firebase.firestore.Query<firebase.firestore.DocumentData> = ref(user);
+  if (options?.from) collection = collection.where("date", ">=", options.from);
+  if (options?.to) collection = collection.where("date", "<=", options.to);
+  if (options?.workshopId) collection = collection.where("workshopId", ">=", options.workshopId);
+  if (options?.productId) collection = collection.where("productId", ">=", options.productId);
+  if (options?.productSize) collection = collection.where("productSize", ">=", options.productSize);
+  if (options?.processId) collection = collection.where("processId", ">=", options.processId);
+  if (options?.processStatus) collection = collection.where("processStatus", ">=", options.processStatus);
+
+  return collection
+    .get()
+    .then((snap) => {
+      return snap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        timestamp: doc.data().timestamp?.toDate().toString(),
+      }));
+    });
+};
+
 export const getAllStages = (user: string) => {
   return ref(user)
     .get()

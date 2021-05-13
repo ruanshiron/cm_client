@@ -2,36 +2,39 @@ import {
   IonCol,
   IonContent,
   IonGrid,
-  IonHeader,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonItemDivider,
   IonLabel,
   IonList,
+  IonRefresher,
+  IonRefresherContent,
   IonRow,
-  IonSearchbar,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
 import React from "react";
 import { useSelector } from "../store";
 import * as Event from "../models/stage";
 import { filteredStages } from "../store/data/stageSlice";
 import StageItem from "./items/StageItem";
+import { RefresherEventDetail } from "@ionic/core";
 
 interface Props {}
 
 export const EventsViewAll: React.FC<Props> = () => {
   const groups: Event.Group[] = useSelector(filteredStages);
+  function doRefresh(event: CustomEvent<RefresherEventDetail>) {
+    console.log("Begin async operation");
 
+    setTimeout(() => {
+      console.log("Async operation has ended");
+      event.detail.complete();
+    }, 2000);
+  }
   return (
-    <IonContent fullscreen={true}>
-      <IonHeader collapse="condense">
-        <IonToolbar>
-          <IonTitle size="large">Nhật ký</IonTitle>
-        </IonToolbar>
-        <IonToolbar>
-          <IonSearchbar placeholder="Search"></IonSearchbar>
-        </IonToolbar>
-      </IonHeader>
+    <IonContent>
+      <IonRefresher slot="fixed" onIonRefresh={doRefresh}>
+        <IonRefresherContent></IonRefresherContent>
+      </IonRefresher>
 
       <IonGrid style={{ padding: 0 }}>
         <IonRow>
@@ -50,6 +53,10 @@ export const EventsViewAll: React.FC<Props> = () => {
           </IonCol>
         </IonRow>
       </IonGrid>
+
+      <IonInfiniteScroll threshold="100px" onIonInfinite={() => {}}>
+        <IonInfiniteScrollContent loadingText="Đang tải..."></IonInfiniteScrollContent>
+      </IonInfiniteScroll>
     </IonContent>
   );
 };

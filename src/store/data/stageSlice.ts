@@ -5,11 +5,21 @@ import {
   createSlice,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import { findStage, getAllStages, Stage } from "../../models/stage";
+import { findStage, getAllStages, getStages, Stage, StageFilterOptions } from "../../models/stage";
 import { filter } from "../../utils/data";
 import { RootState } from "../rootReducer";
 
 const initialState: Stage[] = [];
+
+export const fetchStages = createAsyncThunk(
+  "stages/fetch",
+  async (param: StageFilterOptions, thunkAPI) => {
+    const {
+      user: { uid },
+    } = thunkAPI.getState() as RootState;
+    return await getStages(uid, param);
+  }
+);
 
 export const fetchAllStages = createAsyncThunk(
   "stages/fetchAll",

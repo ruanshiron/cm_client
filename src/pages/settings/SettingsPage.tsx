@@ -55,7 +55,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       .then(() => {
         toast("Đã sửa tên hiển thị!");
       })
-      .catch((error) => {
+      .catch(() => {
         toast("Có lỗi xảy ra, không thể hoàn thành thao tác!");
       });
   };
