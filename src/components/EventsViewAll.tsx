@@ -22,6 +22,7 @@ import StageItem from "./items/StageItem";
 import { RefresherEventDetail } from "@ionic/core";
 import { useDispatch } from "react-redux";
 import { getStages, Group } from "../models/stage";
+import { formatStringDate } from "../utils/date";
 
 interface Props {}
 
@@ -92,9 +93,9 @@ export const EventsViewAll: React.FC<Props> = () => {
         <IonRow className="ion-justify-content-center">
           <IonCol size="12" size-md="8">
             {groups.map((group, i) => (
-              <IonList className="border-full-2 ion-margin-top" key={i}>
+              <IonList className="fadin border-full-2 ion-margin-top" key={i}>
                 <IonItemDivider className="top-divider" color="white">
-                  <IonLabel>{group.name}</IonLabel>
+                  <IonLabel>{formatStringDate(group.name)}</IonLabel>
                 </IonItemDivider>
                 {group.events.map((item, j) => (
                   <StageItem stage={item} key={j} />

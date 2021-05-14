@@ -18,13 +18,14 @@ import { useSelector } from "../../store";
 import { removeOrder } from "../../store/data/orderSlice";
 import { toast } from "../../utils/toast";
 
-export const OrderItem: React.FC<{ order: Order }> = ({ order }) => {
+export const OrderItem: React.FC<{ order: Order, readonly?: boolean }> = ({ order, readonly = false }) => {
   const router = useIonRouter();
   const dispatch = useDispatch();
   const uid = useSelector((state) => state.user.uid);
   const [presentAlert] = useIonAlert();
   const [presentActions] = useIonActionSheet();
   const handleActions = () => {
+    if (readonly) return;
     presentActions({
       buttons: [
         {

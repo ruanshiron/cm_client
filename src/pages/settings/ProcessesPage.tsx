@@ -13,6 +13,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonMenuButton,
   IonModal,
   IonNote,
   IonPage,
@@ -68,6 +69,9 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
           <IonTitle>Quy trình</IonTitle>
           <IonButtons slot="end">
             <IonButton
