@@ -44,7 +44,7 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { vi } from "date-fns/locale";
 import AnonymousWorkshopPage from "./pages/anonymous/AnonymousWorkshopPage";
 import AnonymousCustomerPage from "./pages/anonymous/AnonymousCustomerPage";
-import AnonymousEmployeePage from "./pages/anonymous/AnonymousEmployeePage";
+import AnonymousPage from "./pages/anonymous/AnonymousPage";
 
 setupConfig({
   rippleEffect: true,
@@ -54,6 +54,7 @@ setupConfig({
 const RoleBaseView: React.FC<{ role: string }> = ({ role }) => {
   switch (role) {
     case "owner":
+    case "employees":
       return (
         <IonSplitPane contentId="main">
           <Menu />
@@ -61,15 +62,18 @@ const RoleBaseView: React.FC<{ role: string }> = ({ role }) => {
         </IonSplitPane>
       );
 
-    case "workshop":
+    case "workshops":
       return <AnonymousWorkshopPage />;
-    case "customer":
+    case "customers":
       return <AnonymousCustomerPage />;
-    case "employee":
-      return <AnonymousEmployeePage />;
 
     default:
-      return <h1> bạn không có phận sự</h1>;
+      return (
+        <div>
+          <h1> bạn không có phận sự</h1>
+          <h2> Đăng xuất </h2>
+        </div>
+      );
   }
 };
 
@@ -93,6 +97,7 @@ const App: React.FC = () => {
                 <Route path="/login" component={LoginPage} exact />
                 <Route path="/signup" component={SignUpPage} exact />
                 <Route path="/qr" component={QrPage} exact />
+                <AnonymousPage />
               </IonRouterOutlet>
             ))}
         </IonReactRouter>

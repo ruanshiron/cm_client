@@ -32,20 +32,15 @@ import {
   personOutline,
   phonePortraitOutline,
   qrCodeOutline,
-  refresh,
   trashOutline,
 } from "ionicons/icons";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
-import { destroyEmployee, saveEmployee } from "../../../models/employee";
+import { destroyEmployee } from "../../../models/employee";
 import { useSelector } from "../../../store";
-import {
-  removeEmployee,
-  updateEmployee,
-} from "../../../store/data/employeeSlice";
+import { removeEmployee } from "../../../store/data/employeeSlice";
 import QRCode from "qrcode.react";
-import { v4 as uuidv4 } from "uuid";
 import { toast } from "../../../utils/toast";
 
 interface EmployeeDetailProps {}
@@ -53,7 +48,7 @@ interface EmployeeDetailProps {}
 export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
   const [presentDeleteAlert] = useIonAlert();
   const [presentActionSheet] = useIonActionSheet();
-  const uid = useSelector((state) => state.user.uid);
+  const { uid, role } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const router = useIonRouter();
   const { id } = useParams<{ id: string }>();
@@ -71,20 +66,6 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
       router.goBack();
     } catch (error) {
       toast("Có lỗi xảy ra, vui lòng thử lại!");
-    }
-  };
-
-  const handleUpdateCode = async () => {
-    const code = uuidv4();
-    try {
-      await saveEmployee(uid, {
-        ...employee,
-        code,
-      });
-      toast("Lưu thành công.");
-      dispatch(updateEmployee({ ...employee!, code }));
-    } catch {
-      toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
   };
 
@@ -118,8 +99,17 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
                         text: "Xóa",
                         icon: trashOutline,
                         handler: () => {
+                          if (role !== "owner") {
+                            presentDeleteAlert({
+                              header: "Bạn không thể xóa",
+                              message:
+                                "Bạn không có quyền xóa khi không phải chủ sở hữu",
+                              buttons: ["OK!"],
+                            });
+                            return;
+                          }
                           presentDeleteAlert({
-                            header: "Xóa sản phẩm",
+                            header: "Xóa mục này",
                             message: "Bạn có chắc muốn xóa?",
                             buttons: [
                               "Hủy",
@@ -178,9 +168,6 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
                       onIonChange={() => {}}
                     />
                     <IonButtons slot="end">
-                      <IonButton onClick={handleUpdateCode}>
-                        <IonIcon slot="icon-only" icon={refresh}></IonIcon>
-                      </IonButton>
                       <IonButton onClick={handleCopy}>
                         <IonIcon slot="icon-only" icon={copyOutline}></IonIcon>
                       </IonButton>

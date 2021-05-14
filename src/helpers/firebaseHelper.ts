@@ -11,16 +11,44 @@ export function onAuthStateChanged() {
       if (user) {
         user.getIdTokenResult().then((idTokenResult) => {
           if (idTokenResult.claims.uid) {
-            const userState = {
-              displayName: user.displayName,
-              id: user.uid,
-              uid: idTokenResult.claims.uid,
-              email: user.email,
-              emailVerified: user.emailVerified,
-              creationTime: user.metadata.creationTime,
-              role: idTokenResult.claims.role,
-            };
-            resolve(userState);
+            if (idTokenResult.claims.role) {
+              firebase
+                .firestore()
+                .collection("users")
+                .doc(idTokenResult.claims.uid)
+                .collection(idTokenResult.claims.role)
+                .doc(user.uid)
+                .get()
+                .then((doc) => {
+                  if (doc.exists) {
+                    const data = doc.data();
+                    resolve({
+                      displayName: data?.name,
+                      id: user.uid,
+                      uid: idTokenResult.claims.uid,
+                      email: user.email,
+                      emailVerified: user.emailVerified,
+                      creationTime: user.metadata.creationTime,
+                      role: idTokenResult.claims.role,
+                      permissions: data?.permissions,
+                    });
+                  } else {
+                    resolve(undefined);
+                  }
+                });
+            } else {
+              const userState = {
+                displayName: user.displayName,
+                id: user.uid,
+                uid: idTokenResult.claims.uid,
+                email: user.email,
+                emailVerified: user.emailVerified,
+                creationTime: user.metadata.creationTime,
+                role: idTokenResult.claims.role,
+                permissions: idTokenResult.claims.permissions,
+              };
+              resolve(userState);
+            }
           } else {
             const userState = {
               displayName: user.displayName,

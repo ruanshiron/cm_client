@@ -3,6 +3,7 @@ import {
   onAuthStateChanged,
   signOut as firebaseSignOut,
 } from "../../helpers/firebaseHelper";
+import { Permission } from "../../models/employee";
 
 interface UserState {
   isLoggedIn: boolean;
@@ -13,7 +14,8 @@ interface UserState {
   uid: string;
   creationTime: string;
   id: string;
-  role: "owner" | "workshop" | "customer" | "employee" | "anonymous";
+  role: "owner" | "workshops" | "customers" | "employees" | "anonymous";
+  permissions: Permission[];
 }
 
 let initialState: UserState = {
@@ -26,6 +28,7 @@ let initialState: UserState = {
   uid: "",
   id: "",
   role: "anonymous",
+  permissions: [],
 };
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
@@ -39,6 +42,9 @@ const userSlice = createSlice({
     signOut: () => {
       firebaseSignOut();
       return initialState;
+    },
+    updatePermission: (state, action: PayloadAction<Permission[]>) => {
+      state.permissions = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -58,11 +64,23 @@ const userSlice = createSlice({
         state.uid = action.payload.uid || "";
         state.id = action.payload.id || action.payload?.uid || "";
         if (
-          ["owner", "workshop", "customer", "employee", "anonymous"].includes(
+          ["owner", "workshops", "customers", "employees", "anonymous"].includes(
             action.payload.role
           )
         )
           state.role = action.payload.role;
+
+        if (state.role === "owner") {
+          state.permissions = [
+            "manage_stage",
+            "manage_product",
+            "manage_customer",
+            "manage_workshop",
+            "manage_employee",
+            "manage_process",
+          ];
+        }
+
         // console.log(action.payload);
       })
       .addCase(fetchUser.rejected, () => {

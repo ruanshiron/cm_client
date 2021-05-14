@@ -45,7 +45,7 @@ interface ProcessesPageProps {}
 
 const ProcessesPage: React.FC<ProcessesPageProps> = () => {
   const form = useProcessForm();
-  const uid = useSelector((state) => state.user.uid);
+  const { uid, role } = useSelector((state) => state.user);
   const [presentDeleteAlert] = useIonAlert();
   const processes = useSelector((state) => state.processes);
   const handleDeleteProcess = async (id: string) => {
@@ -226,7 +226,16 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
                 <IonItem
                   button
                   lines="full"
-                  onClick={() =>
+                  onClick={() => {
+                    if (role !== "owner") {
+                      presentDeleteAlert({
+                        header: "Bạn không thể xóa",
+                        message:
+                          "Bạn không có quyền xóa khi không phải chủ sở hữu",
+                        buttons: ["OK!"],
+                      });
+                      return;
+                    }
                     presentDeleteAlert({
                       header: "Xóa quy trình",
                       message: "Bạn có chắc muốn xóa?",
@@ -238,8 +247,8 @@ const ProcessesPage: React.FC<ProcessesPageProps> = () => {
                         },
                       ],
                       onDidDismiss: (e) => console.log("did dismiss"),
-                    })
-                  }
+                    });
+                  }}
                 >
                   <IonLabel color="danger" className="ion-text-center">
                     Xóa

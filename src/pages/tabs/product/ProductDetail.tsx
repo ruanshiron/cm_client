@@ -55,7 +55,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
   const router = useIonRouter();
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
-  const uid = useSelector((state) => state.user.uid);
+  const { uid, role } = useSelector((state) => state.user);
   const loading = useSelector((state) => state.loading.isLoading);
   const [presentActionSheet] = useIonActionSheet();
   const [presentDeleteAlert] = useIonAlert();
@@ -117,6 +117,15 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                           text: "Xóa",
                           icon: trashOutline,
                           handler: () => {
+                            if (role !== "owner") {
+                              presentDeleteAlert({
+                                header: "Bạn không thể xóa",
+                                message:
+                                  "Bạn không có quyền xóa khi không phải chủ sở hữu",
+                                buttons: ["OK!"],
+                              });
+                              return;
+                            }
                             presentDeleteAlert({
                               header: "Xóa sản phẩm",
                               message: "Bạn có chắc muốn xóa?",

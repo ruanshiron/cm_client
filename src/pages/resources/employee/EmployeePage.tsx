@@ -65,9 +65,9 @@ const EmployeePage: React.FC<EmployeePageProps> = () => {
           </IonToolbar>
         </IonHeader>
         <IonGrid fixed>
-          <IonRow>
+          <IonRow className="ion-justify-content-center">
             {employees.map((employee) => (
-              <IonCol size="12" size-md="6" key={employee.id}>
+              <IonCol size="12" size-lg="8" key={employee.id}>
                 <Item
                   title={employee.name!}
                   subtitle={employee.phonenumber!}

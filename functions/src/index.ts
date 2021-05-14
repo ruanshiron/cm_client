@@ -51,17 +51,17 @@ export const createToken = functions.https.onCall(async (data, context) => {
   if (workshop) {
     const token = await admin
       .auth()
-      .createCustomToken(workshop.id, { role: "workshop", ...workshop });
+      .createCustomToken(workshop.id, { role: "workshops", ...workshop });
     return { token };
   } else if (customer) {
     const token = await admin
       .auth()
-      .createCustomToken(customer.id, { role: "customer", ...customer });
+      .createCustomToken(customer.id, { role: "customers", ...customer });
     return { token };
   } else if (employee) {
     const token = await admin
       .auth()
-      .createCustomToken(employee.id, { role: "employee", ...employee });
+      .createCustomToken(employee.id, { role: "employees", ...employee });
     return { token };
   } else {
     return { error: "Không tìm thấy mã!" };

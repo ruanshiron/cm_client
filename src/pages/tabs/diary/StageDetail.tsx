@@ -55,7 +55,7 @@ const StageDetail: React.FC<StageDetailProps> = () => {
   const dispatch = useDispatch();
   const router = useIonRouter();
   const { id } = useParams<{ id: string }>();
-  const uid = useSelector((state) => state.user.uid);
+  const { uid, role } = useSelector((state) => state.user);
   const stage = useSelector((state) =>
     state.stages.all.find((item) => item.id === id)
   );
@@ -95,6 +95,15 @@ const StageDetail: React.FC<StageDetailProps> = () => {
                       text: "Xóa",
                       icon: trashOutline,
                       handler: () => {
+                        if (role !== "owner") {
+                          presentDeleteAlert({
+                            header: "Bạn không thể xóa",
+                            message:
+                              "Bạn không có quyền xóa khi không phải chủ sở hữu",
+                            buttons: ["OK!"],
+                          });
+                          return;
+                        }
                         presentDeleteAlert({
                           header: "Xóa sản phẩm",
                           message: "Bạn có chắc muốn xóa?",

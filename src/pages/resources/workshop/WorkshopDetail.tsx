@@ -64,7 +64,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   const loading = useSelector((state) => state.loading.isLoading);
   const router = useIonRouter();
   const dispatch = useDispatch();
-  const uid = useSelector((state) => state.user.uid);
+  const { uid, role } = useSelector((state) => state.user);
   const { id } = useParams<{ id: string }>();
   const workshop = useSelector((state) =>
     state.workshops.find((v) => v.id === id)
@@ -128,6 +128,15 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                           text: "Xóa",
                           icon: trashOutline,
                           handler: () => {
+                            if (role !== "owner") {
+                              presentDeleteAlert({
+                                header: "Bạn không thể xóa",
+                                message:
+                                  "Bạn không có quyền xóa khi không phải chủ sở hữu",
+                                buttons: ["OK!"],
+                              });
+                              return;
+                            }
                             presentDeleteAlert({
                               header: "Xóa sản phẩm",
                               message: "Bạn có chắc muốn xóa?",
@@ -172,7 +181,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
             )}
           </IonToolbar>
         </IonHeader>
-        <IonLoading isOpen={!!(loading)} />
+        <IonLoading isOpen={!!loading} />
         <IonGrid>
           <IonRow>
             <IonCol size="12" size-md="8" offsetMd="2">

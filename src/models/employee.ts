@@ -7,11 +7,31 @@ const collection = "employees";
 const ref = (user: string) =>
   database.collection("users").doc(user).collection(collection);
 
-export const initialEmployee: Employee = { name: "", phonenumber: "" };
+export const initialEmployee: Employee = {
+  name: "",
+  phonenumber: "",
+  permissions: [
+    "manage_stage",
+    "manage_product",
+    "manage_workshop",
+    "manage_employee",
+    "manage_process",
+  ],
+};
+
+export type Permission =
+  | "manage_stage"
+  | "manage_product"
+  | "manage_customer"
+  | "manage_workshop"
+  | "manage_employee"
+  | "manage_process";
+
 export interface Employee {
   id?: string;
   name: string;
   phonenumber: string;
+  permissions?: Permission[];
   createdAt?: any;
   code?: string;
 }
