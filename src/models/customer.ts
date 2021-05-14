@@ -30,7 +30,7 @@ export const getAllCustomers = (user: string) => {
     .then((snap) => {
       return snap.docs.map((doc) => {
         const data = doc.data();
-        delete data.mostRecentOrder.createdAt;
+        delete data?.mostRecentOrder?.createdAt;
         return {
           id: doc.id,
           ...data,
