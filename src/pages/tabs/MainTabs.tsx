@@ -33,10 +33,12 @@ import OrderPage from "../resources/customer/orders/OrderPage";
 import OrderCreate from "../resources/customer/orders/OrderCreate";
 import WorkshopCreate from "../resources/workshop/WorkshopCreate";
 import CustomerCreate from "../resources/customer/CustomerCreate";
+import { useSelector } from "../../store";
 
 interface MainTabsProps {}
 
 const MainTabs: React.FC<MainTabsProps> = () => {
+  const role = useSelector((state) => state.user.role);
   return (
     <IonTabs>
       <IonRouterOutlet>
@@ -87,10 +89,11 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           <IonIcon size="large" icon={storefrontOutline} />
           <IonLabel>Xưởng</IonLabel>
         </IonTabButton>
+        {role === "owner" &&
         <IonTabButton tab="customers" href="/tabs/customers" layout="icon-top">
           <IonIcon size="large" icon={peopleCircleOutline} />
           <IonLabel>Khách hàng</IonLabel>
-        </IonTabButton>
+        </IonTabButton>}
       </IonTabBar>
     </IonTabs>
   );

@@ -99,7 +99,7 @@ const kaomoji = ["(o^▽^o)", "(⌒▽⌒)☆", "＼(＾▽＾)／"];
 
 const Menu: React.FC = () => {
   const location = useLocation();
-  const { isLoggedIn } = useSelector((state) => state.user);
+  const { isLoggedIn, role } = useSelector((state) => state.user);
 
   return (
     <IonMenu id="side-menu" contentId="main" type="overlay" swipeGesture>
@@ -142,27 +142,29 @@ const Menu: React.FC = () => {
           <IonListHeader>
             <IonLabel>Danh sách</IonLabel>
           </IonListHeader>
-          {listPages.map((appPage, index) => {
-            return (
-              <IonMenuToggle key={index} autoHide={false}>
-                <IonItem
-                  className={
-                    location.pathname.includes(appPage.url) ? "selected" : ""
-                  }
-                  routerLink={appPage.url}
-                  lines="none"
-                  detail={false}
-                >
-                  <IonIcon
-                    slot="start"
-                    ios={appPage.iosIcon}
-                    md={appPage.mdIcon}
-                  />
-                  <IonLabel>{appPage.title}</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
-            );
-          })}
+          {listPages
+            .filter((i) => (role === "owner" ? i : i.url !== "/tabs/customers"))
+            .map((appPage, index) => {
+              return (
+                <IonMenuToggle key={index} autoHide={false}>
+                  <IonItem
+                    className={
+                      location.pathname.includes(appPage.url) ? "selected" : ""
+                    }
+                    routerLink={appPage.url}
+                    lines="none"
+                    detail={false}
+                  >
+                    <IonIcon
+                      slot="start"
+                      ios={appPage.iosIcon}
+                      md={appPage.mdIcon}
+                    />
+                    <IonLabel>{appPage.title}</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
+              );
+            })}
         </IonList>
 
         <IonList id="labels-list">
