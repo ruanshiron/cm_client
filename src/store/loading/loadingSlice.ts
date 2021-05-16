@@ -1,4 +1,9 @@
-import { AnyAction, AsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  AnyAction,
+  AsyncThunk,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { includes } from "lodash";
 
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>;
@@ -29,7 +34,11 @@ const initialState: LoadingState = { isLoading: false };
 const loadingSlice = createSlice({
   name: "loading",
   initialState,
-  reducers: {},
+  reducers: {
+    setLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(isPendingAction, (state, action) => {
@@ -46,5 +55,7 @@ const loadingSlice = createSlice({
       });
   },
 });
+
+export const { setLoading } = loadingSlice.actions;
 
 export default loadingSlice;

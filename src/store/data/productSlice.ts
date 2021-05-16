@@ -6,7 +6,6 @@ import {
 import { forEach } from "lodash";
 import { findProduct, getAllProducts, Product } from "../../models/product";
 import { processParser } from "../../utils/data";
-import { isBetween } from "../../utils/date";
 import { RootState } from "../rootReducer";
 
 let initialState: Product[] = [];
@@ -119,7 +118,7 @@ export const statisticSelector = createSelector(
 );
 
 export const statisticHarderSelector = createSelector(
-  (state: RootState) => state.stages.all,
+  (state: RootState) => state.stages,
   (state: RootState) => state.processes,
   (_state: RootState, productId: string, from?: string, to?: string) => ({
     productId,
@@ -127,11 +126,7 @@ export const statisticHarderSelector = createSelector(
     to,
   }),
   (stages, processes, { productId, from, to }) => {
-    const filteredStages = stages
-      .filter(
-        (item) => item.productId === productId && isBetween(item.date, from, to)
-      )
-      .sort((a, b) => a.date.localeCompare(b.date));
+    const filteredStages = stages[productId] || []
     const tmp: { [key: string]: { [key: string]: any } } = {};
     forEach(filteredStages, (value) => {
       if (value.processId in tmp) {

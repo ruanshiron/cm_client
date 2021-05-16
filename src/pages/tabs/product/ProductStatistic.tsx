@@ -40,12 +40,14 @@ import {
   TableRow,
 } from "@material-ui/core";
 import { useStyles } from "../../../hooks/useStyles";
-import { fetchAllStages } from "../../../store/data/stageSlice";
+import { addStatisticStages } from "../../../store/data/stageSlice";
 import { useProductForm } from "../../../hooks/useProductForm";
 import { Product } from "../../../models/product";
 import { toast } from "../../../utils/toast";
 import Datetime from "../../../components/statistics/Datetime";
 import ProductSummary from "../../../components/statistics/ProductSummary";
+import { getStages, parseStage } from "../../../models/stage";
+import { setLoading } from "../../../store/loading/loadingSlice";
 
 interface ProductStatisticProps {}
 
@@ -55,6 +57,7 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
   const form = useProductForm();
+  const uid = useSelector((state) => state.user.uid);
   const loading = useSelector((state) => state.loading.isLoading);
   const product = useSelector((state) =>
     state.products.find((item) => item.id === id)
@@ -72,10 +75,21 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
   );
   useEffect(() => {
     if (!product) dispatch(findProductById(id));
-  }, [dispatch, id, product]);
+    if (product) {
+      dispatch(setLoading(true));
+      getStages(uid, {
+        from: product.statistic?.from,
+        to: product.statistic?.to,
+        productId: product.id,
+      }).then((snap) => {
+        const stages = snap.docs.map(parseStage);
+        dispatch(addStatisticStages({ id, stages }));
+        dispatch(setLoading(false));
+      });
+    }
+  }, [dispatch, id, product, uid]);
   useEffect(() => {
     if (processes.length <= 0) dispatch(fetchAllProcesses());
-    if (stages.length <= 0) dispatch(fetchAllStages());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   const handleSaveStatistic = () => {
@@ -93,7 +107,7 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
                 ...product,
                 statistic: { ...product?.statistic, processes: processesParam },
               };
-              form.submit(fields);
+              form.submit(fields, false);
             },
           },
         ],
@@ -122,7 +136,7 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
       <IonContent>
         <IonGrid>
           <IonRow className="ion-justify-content-center">
-            <IonLoading isOpen={!!(loading && !product)} />
+            <IonLoading isOpen={loading} />
             <IonCol size="12" size-md="8">
               <Datetime
                 fromValue={product?.statistic?.from}
@@ -153,7 +167,7 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
                 }}
                 onCancelTo={() => {
                   dispatch(
-                    updateFromDate({
+                    updateToDate({
                       id,
                       to: "",
                     })

@@ -23,12 +23,8 @@ import {
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../../store";
-import {
-  saveOutline,
-  shirtOutline,
-} from "ionicons/icons";
+import { saveOutline, shirtOutline } from "ionicons/icons";
 import { useDispatch } from "react-redux";
-import { fetchAllProcesses } from "../../../store/data/processSlice";
 import {
   Paper,
   Table,
@@ -39,7 +35,9 @@ import {
   TableRow,
 } from "@material-ui/core";
 import { useStyles } from "../../../hooks/useStyles";
-import { fetchAllStages } from "../../../store/data/stageSlice";
+import {
+  addStatisticStages,
+} from "../../../store/data/stageSlice";
 import {
   findWorkshopById,
   statisticHarderSelector,
@@ -50,6 +48,9 @@ import { useWorkshopForm } from "../../../hooks/useWorkshopForm";
 import { Workshop } from "../../../models/workshop";
 import { toast } from "../../../utils/toast";
 import Datetime from "../../../components/statistics/Datetime";
+import { setLoading } from "../../../store/loading/loadingSlice";
+import { getStages, parseStage } from "../../../models/stage";
+import { fetchAllProcesses } from "../../../store/data/processSlice";
 
 interface Props {}
 
@@ -59,6 +60,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
   const form = useWorkshopForm();
+  const uid = useSelector((state) => state.user.uid);
   const loading = useSelector((state) => state.loading.isLoading);
   const workshop = useSelector((state) =>
     state.workshops.find((item) => item.id === id)
@@ -69,10 +71,21 @@ const WorkshopStatistic: React.FC<Props> = () => {
   );
   useEffect(() => {
     if (!workshop) dispatch(findWorkshopById(id));
-  }, [dispatch, id, workshop]);
+    if (workshop) {
+      dispatch(setLoading(true));
+      getStages(uid, {
+        from: workshop.statistic?.from,
+        to: workshop.statistic?.to,
+        workshopId: workshop.id,
+      }).then((snap) => {
+        const stages = snap.docs.map(parseStage);
+        dispatch(addStatisticStages({ id, stages }));
+        dispatch(setLoading(false));
+      });
+    }
+  }, [dispatch, id, uid, workshop]);
   useEffect(() => {
-    if (processes.length <= 0) dispatch(fetchAllProcesses());
-    if (stages.length <= 0) dispatch(fetchAllStages());
+    if (stages.length <= 0) dispatch(fetchAllProcesses());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   const handleSaveStatistic = () => {

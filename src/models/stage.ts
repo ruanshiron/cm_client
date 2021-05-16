@@ -56,18 +56,18 @@ export interface StageFilterOptions {
 export const getStages = (user: string, options?: StageFilterOptions) => {
   let collection: firebase.firestore.Query<firebase.firestore.DocumentData> =
     ref(user).orderBy("date", "desc");
-  if (options?.from) collection = collection.where("date", ">=", options.from);
-  if (options?.to) collection = collection.where("date", "<=", options.to);
+  if (options?.from) collection = collection.where("date", ">=", options.from.substring(0, 10));
+  if (options?.to) collection = collection.where("date", "<=", options.to.substring(0, 10));
   if (options?.workshopId)
-    collection = collection.where("workshopId", ">=", options.workshopId);
+    collection = collection.where("workshopId", "==", options.workshopId);
   if (options?.productId)
-    collection = collection.where("productId", ">=", options.productId);
+    collection = collection.where("productId", "==", options.productId);
   if (options?.productSize)
-    collection = collection.where("productSize", ">=", options.productSize);
+    collection = collection.where("productSize", "==", options.productSize);
   if (options?.processId)
-    collection = collection.where("processId", ">=", options.processId);
+    collection = collection.where("processId", "==", options.processId);
   if (options?.processStatus)
-    collection = collection.where("processStatus", ">=", options.processStatus);
+    collection = collection.where("processStatus", "==", options.processStatus);
   if (options?.lastVisible)
     collection = collection.startAfter(options.lastVisible);
 
@@ -126,3 +126,14 @@ export const isInvalidStage = (fields: Stage) =>
   !fields.processId.trim() ||
   !fields.date ||
   !fields.workshopId.trim();
+
+export const parseStage = (
+  doc: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
+) => {
+  const data = doc.data() as any;
+  return {
+    id: doc.id,
+    ...data,
+    timestamp: data.timestamp?.toDate().toString(),
+  } as Stage;
+};

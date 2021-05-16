@@ -70,6 +70,12 @@ const stageSlice = createSlice({
     resetAllStages: (state) => {
       state.all = [];
     },
+    addStatisticStages: (
+      state,
+      action: PayloadAction<{ id: string; stages: Stage[] }>
+    ) => {
+      state[action.payload.id] = action.payload.stages;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -85,7 +91,7 @@ const stageSlice = createSlice({
   },
 });
 
-export const { addStage, removeStage, updateStage, resetAllStages } =
+export const { addStage, removeStage, updateStage, resetAllStages, addStatisticStages } =
   stageSlice.actions;
 
 export default stageSlice;

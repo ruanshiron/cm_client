@@ -22,14 +22,14 @@ export const useProductForm = (product = initialProduct) => {
 
   const processes = useSelector((state) => state.processes);
 
-  const submit = async (params = fields) => {
+  const submit = async (params = fields, leave = true) => {
     if (submitted) return;
     if (isInvalidProduct(params)) return;
     setSubmitted(true);
     try {
       const newProduct = (await saveProduct(uid, params)) as any;
       setFields(product);
-      router.goBack();
+      if (leave) router.goBack();
       toast("Lưu thành công.");
       setSubmitted(false);
       // TODO: Do not fetch again

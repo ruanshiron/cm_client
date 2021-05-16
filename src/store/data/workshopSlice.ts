@@ -12,7 +12,6 @@ import {
   Workshop,
 } from "../../models/workshop";
 import { processParser, subtotal } from "../../utils/data";
-import { isBetween } from "../../utils/date";
 import { RootState } from "../rootReducer";
 
 let initialState: Workshop[] = [];
@@ -125,7 +124,7 @@ export const {
 export default workshopSlice;
 
 export const statisticHarderSelector = createSelector(
-  (state: RootState) => state.stages.all,
+  (state: RootState) => state.stages,
   (state: RootState) => state.workshops,
   (_state: RootState, workshopId: string, from?: string, to?: string) => ({
     workshopId,
@@ -134,17 +133,7 @@ export const statisticHarderSelector = createSelector(
   }),
   (stages, workshops, { workshopId }) => {
     const workshop = workshops.find((item) => item.id === workshopId);
-    const filteredStages = stages
-      .filter(
-        (item) =>
-          item.workshopId === workshopId &&
-          isBetween(
-            item.date,
-            workshop?.statistic?.from,
-            workshop?.statistic?.to
-          )
-      )
-      .sort((a, b) => a.date.localeCompare(b.date));
+    const filteredStages = stages[workshopId] || [];
     const tmp: { [key: string]: any } = {};
     forEach(filteredStages, (value) => {
       if (value.productId in tmp) {
