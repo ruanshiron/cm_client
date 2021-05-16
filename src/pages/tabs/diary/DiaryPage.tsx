@@ -3,6 +3,7 @@ import {
   IonButtons,
   IonHeader,
   IonIcon,
+  IonLoading,
   IonMenuButton,
   IonPage,
   IonTitle,
@@ -13,11 +14,13 @@ import React, { useState } from "react";
 import { EventsViewAll } from "../../../components/EventsViewAll";
 import EventFab from "../../../components/fabs/EventFab";
 import StageFilterModal from "../../../components/modals/StageFilterModal";
+import { useSelector } from "../../../store";
 
 interface DiaryPageProps {}
 
 const DiaryPage: React.FC<DiaryPageProps> = () => {
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const isLoading = useSelector((state) => state.loading.isLoading);
   return (
     <IonPage id="diary-page">
       <EventFab />
@@ -37,7 +40,7 @@ const DiaryPage: React.FC<DiaryPageProps> = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-
+      <IonLoading isOpen={isLoading} />
       <EventsViewAll />
 
       <StageFilterModal

@@ -20,10 +20,11 @@ function isRejectedAction(action: AnyAction): action is RejectedAction {
 }
 
 interface LoadingState {
+  isLoading: boolean;
   [key: string]: string | boolean;
 }
 
-const initialState: LoadingState = {};
+const initialState: LoadingState = { isLoading: false };
 
 const loadingSlice = createSlice({
   name: "loading",

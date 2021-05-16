@@ -1,7 +1,15 @@
 import { IonButton, IonContent, IonGrid, IonPage, IonText } from "@ionic/react";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "../../store";
+import { signOut } from "../../store/user/userSlice";
 
 const AnonymousPage = () => {
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(signOut());
+  };
   return (
     <IonPage>
       <IonContent>
@@ -16,7 +24,11 @@ const AnonymousPage = () => {
             <IonText>
               <h1>Quay lại trang chủ</h1>
             </IonText>
-            <IonButton href="/">Trang chủ</IonButton>
+            {isLoggedIn ? (
+              <IonButton onClick={handleLogout}>Đăng xuất</IonButton>
+            ) : (
+              <IonButton href="/">Trang chủ</IonButton>
+            )}
           </div>
         </IonGrid>
       </IonContent>

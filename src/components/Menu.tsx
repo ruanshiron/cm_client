@@ -99,13 +99,13 @@ const kaomoji = ["(o^▽^o)", "(⌒▽⌒)☆", "＼(＾▽＾)／"];
 
 const Menu: React.FC = () => {
   const location = useLocation();
-  const { isLoggedIn, role } = useSelector((state) => state.user);
+  const { isLoggedIn, role, displayName } = useSelector((state) => state.user);
 
   return (
     <IonMenu id="side-menu" contentId="main" type="overlay" swipeGesture>
       <IonContent>
         <IonList id="tab-list">
-          <IonListHeader>Trang Quản Lý</IonListHeader>
+          <IonListHeader>{displayName ? displayName : "Tran quản lý"}</IonListHeader>
           {isLoggedIn ? (
             <IonNote>
               {kaomoji[Math.floor(Math.random() * kaomoji.length)]}

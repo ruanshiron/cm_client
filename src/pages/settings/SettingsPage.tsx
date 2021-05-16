@@ -25,7 +25,7 @@ import {
   mailOutline,
   textOutline,
 } from "ionicons/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { auth } from "../../config/firebase";
 import { useSelector } from "../../store";
@@ -40,6 +40,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
   const dispatch = useDispatch();
   const [present] = useIonAlert();
   const user = useSelector((state) => state.user);
+  const [name, setName] = useState(auth.currentUser?.displayName);
   const handleVerify = () => {
     if (!auth.currentUser?.emailVerified) {
       auth.currentUser?.sendEmailVerification();
@@ -54,11 +55,13 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       ?.updateProfile({ displayName })
       .then(() => {
         toast("Đã sửa tên hiển thị!");
+        setName(displayName);
       })
       .catch(() => {
         toast("Có lỗi xảy ra, không thể hoàn thành thao tác!");
       });
   };
+  useEffect(() => {});
   return (
     <IonPage className="list-page">
       <IonHeader>
@@ -91,7 +94,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
                               name: "name",
                               placeholder: "Tên hiển thị",
                               type: "text",
-                              value: user.displayName,
+                              value: name,
                             },
                           ],
                           buttons: [
@@ -108,9 +111,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
                     >
                       <IonIcon icon={textOutline} slot="start"></IonIcon>
                       <IonLabel>Tên hiển thị</IonLabel>
-                      <IonText slot="end">
-                        {auth.currentUser?.displayName}
-                      </IonText>
+                      <IonText slot="end">{name}</IonText>
                     </IonItem>
                     <IonItem>
                       <IonIcon icon={logInOutline} slot="start"></IonIcon>

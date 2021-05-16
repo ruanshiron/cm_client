@@ -55,10 +55,15 @@ const stageSlice = createSlice({
       state.all = state.all.filter((item) => item.id !== action.payload);
     },
     addStage: (state, action: PayloadAction<Stage>) => {
-      state.all.unshift(action.payload);
+      let stage = state.all.find((item) => item.id === action.payload.id);
+      if (stage) {
+        stage = action.payload;
+      } else {
+        state.all.unshift(action.payload);
+      }
     },
     updateStage: (state, action: PayloadAction<Stage>) => {
-      state.all.map((item) =>
+      state.all = state.all.map((item) =>
         item.id === action.payload.id ? action.payload : item
       );
     },
@@ -80,12 +85,8 @@ const stageSlice = createSlice({
   },
 });
 
-export const {
-  addStage,
-  removeStage,
-  updateStage,
-  resetAllStages,
-} = stageSlice.actions;
+export const { addStage, removeStage, updateStage, resetAllStages } =
+  stageSlice.actions;
 
 export default stageSlice;
 
