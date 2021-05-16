@@ -1,25 +1,25 @@
 import { IonRouterOutlet } from "@ionic/react";
 import React from "react";
 import { Redirect, Route } from "react-router";
-import CustomerCreate from "../pages/resources/customer/CustomerCreate";
-import { CustomerDetail } from "../pages/resources/customer/CustomerDetail";
-import CustomerPage from "../pages/resources/customer/CustomerPage";
-import CustomerUpdate from "../pages/resources/customer/CustomerUpdate";
-import OrderPage from "../pages/resources/customer/orders/OrderPage";
-import EmployeeCreate from "../pages/resources/employee/EmployeeCreate";
-import { EmployeeDetail } from "../pages/resources/employee/EmployeeDetail";
-import EmployeePage from "../pages/resources/employee/EmployeePage";
-import EmployeeUpdate from "../pages/resources/employee/EmployeeUpdate";
-import WorkshopCreate from "../pages/resources/workshop/WorkshopCreate";
-import { WorkshopDetail } from "../pages/resources/workshop/WorkshopDetail";
-import WorkshopPage from "../pages/resources/workshop/WorkshopPage";
-import WorkshopStatistic from "../pages/resources/workshop/WorkshopStatistic";
-import WorkshopUpdate from "../pages/resources/workshop/WorkshopUpdate";
-import ProcessesPage from "../pages/settings/ProcessesPage";
-import SettingsPage from "../pages/settings/SettingsPage";
-import MainTabs from "../pages/tabs/MainTabs";
-import OrderCreate from "../pages/resources/customer/orders/OrderCreate";
-import HomeOrTutorial from "./HomeOrTutorial";
+import CustomerCreate from "../../pages/resources/customer/CustomerCreate";
+import { CustomerDetail } from "../../pages/resources/customer/CustomerDetail";
+import CustomerPage from "../../pages/resources/customer/CustomerPage";
+import CustomerUpdate from "../../pages/resources/customer/CustomerUpdate";
+import OrderPage from "../../pages/resources/customer/orders/OrderPage";
+import EmployeeCreate from "../../pages/resources/employee/EmployeeCreate";
+import { EmployeeDetail } from "../../pages/resources/employee/EmployeeDetail";
+import EmployeePage from "../../pages/resources/employee/EmployeePage";
+import EmployeeUpdate from "../../pages/resources/employee/EmployeeUpdate";
+import WorkshopCreate from "../../pages/resources/workshop/WorkshopCreate";
+import { WorkshopDetail } from "../../pages/resources/workshop/WorkshopDetail";
+import WorkshopPage from "../../pages/resources/workshop/WorkshopPage";
+import WorkshopStatistic from "../../pages/resources/workshop/WorkshopStatistic";
+import WorkshopUpdate from "../../pages/resources/workshop/WorkshopUpdate";
+import ProcessesPage from "../../pages/settings/ProcessesPage";
+import SettingsPage from "../../pages/settings/SettingsPage";
+import MainTabs from "../../pages/tabs/MainTabs";
+import OrderCreate from "../../pages/resources/customer/orders/OrderCreate";
+import HomeOrTutorial from "../HomeOrTutorial";
 
 
 

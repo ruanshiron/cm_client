@@ -11,8 +11,8 @@ import { Route, Redirect } from "react-router";
 import {
   shirtSharp,
   calendarSharp,
-  storefrontOutline,
-  peopleCircleOutline,
+  storefrontSharp,
+  peopleCircleSharp,
 } from "ionicons/icons";
 import DiaryPage from "./diary/DiaryPage";
 import ProductPage from "./product/ProductPage";
@@ -86,12 +86,12 @@ const MainTabs: React.FC<MainTabsProps> = () => {
           <IonLabel>Sản phẩm</IonLabel>
         </IonTabButton>
         <IonTabButton tab="workshops" href="/tabs/workshops" layout="icon-top">
-          <IonIcon size="large" icon={storefrontOutline} />
+          <IonIcon size="large" icon={storefrontSharp} />
           <IonLabel>Xưởng</IonLabel>
         </IonTabButton>
         {role === "owner" &&
         <IonTabButton tab="customers" href="/tabs/customers" layout="icon-top">
-          <IonIcon size="large" icon={peopleCircleOutline} />
+          <IonIcon size="large" icon={peopleCircleSharp} />
           <IonLabel>Khách hàng</IonLabel>
         </IonTabButton>}
       </IonTabBar>

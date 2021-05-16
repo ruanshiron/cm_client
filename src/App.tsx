@@ -1,4 +1,4 @@
-import Menu from "./components/Menu";
+import Menu from "./components/menus/Menu";
 import DateFnsUtils from "@date-io/date-fns";
 import React from "react";
 import {
@@ -38,13 +38,20 @@ import { useAuth } from "./hooks/useAuth";
 import LoginPage from "./pages/login/LoginPage";
 import SignUpPage from "./pages/login/SignUpPage";
 import QrPage from "./pages/login/QrPage";
-import MainRoutes from "./components/MainRoutes";
+import MainRoutes from "./components/routes/MainRoutes";
 import { useFancyToast } from "./hooks/useFancyToast";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { vi } from "date-fns/locale";
 import AnonymousWorkshopPage from "./pages/anonymous/AnonymousWorkshopPage";
 import AnonymousCustomerPage from "./pages/anonymous/AnonymousCustomerPage";
 import AnonymousPage from "./pages/anonymous/AnonymousPage";
+import DiaryPage from "./pages/tabs/diary/DiaryPage";
+import StageDetail from "./pages/tabs/diary/StageDetail";
+import StageUpdate from "./pages/tabs/diary/StageUpdate";
+import AnonymousMenu from "./components/menus/AnonymousMenu";
+import SettingsPage from "./pages/settings/SettingsPage";
+import { ThemeProvider } from "@material-ui/styles";
+import { defaultMaterialTheme } from "./hooks/useStyles";
 
 setupConfig({
   rippleEffect: true,
@@ -54,14 +61,29 @@ setupConfig({
 const RoleBaseView: React.FC<{ role: string }> = ({ role }) => {
   switch (role) {
     case "owner":
-    case "employees":
       return (
         <IonSplitPane contentId="main">
           <Menu />
           <MainRoutes />
         </IonSplitPane>
       );
-
+    case "employees":
+      return (
+        <>
+          <AnonymousMenu />
+          <IonRouterOutlet id="main">
+            <Route path="/" render={() => <Redirect to="/diary" />} exact />
+            <Route path="/diary" component={DiaryPage} exact />
+            <Route path="/diary/:id" component={StageDetail} exact />
+            <Route
+              path="/tabs/diary/:id/update"
+              component={StageUpdate}
+              exact
+            />
+            <Route path="/settings" component={SettingsPage} exact />
+          </IonRouterOutlet>
+        </>
+      );
     case "workshops":
       return <AnonymousWorkshopPage />;
     case "customers":
@@ -80,29 +102,37 @@ const RoleBaseView: React.FC<{ role: string }> = ({ role }) => {
 const App: React.FC = () => {
   useAuth();
   useFancyToast();
-  const { isLoggedIn, loading: userLoading, role } = useSelector(
-    (state) => state.user
-  );
+  const {
+    isLoggedIn,
+    loading: userLoading,
+    role,
+  } = useSelector((state) => state.user);
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={vi}>
-      <IonApp>
-        <IonLoading isOpen={userLoading} />
-        <IonReactRouter>
-          {!userLoading &&
-            (isLoggedIn ? (
-              <RoleBaseView role={role} />
-            ) : (
-              <IonRouterOutlet>
-                <Route path="/" render={() => <Redirect to="/login" />} exact />
-                <Route path="/login" component={LoginPage} exact />
-                <Route path="/signup" component={SignUpPage} exact />
-                <Route path="/qr" component={QrPage} exact />
-                <AnonymousPage />
-              </IonRouterOutlet>
-            ))}
-        </IonReactRouter>
-      </IonApp>
-    </MuiPickersUtilsProvider>
+    <ThemeProvider theme={defaultMaterialTheme}>
+      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={vi}>
+        <IonApp>
+          <IonLoading isOpen={userLoading} />
+          <IonReactRouter>
+            {!userLoading &&
+              (isLoggedIn ? (
+                <RoleBaseView role={role} />
+              ) : (
+                <IonRouterOutlet>
+                  <Route
+                    path="/"
+                    render={() => <Redirect to="/login" />}
+                    exact
+                  />
+                  <Route path="/login" component={LoginPage} exact />
+                  <Route path="/signup" component={SignUpPage} exact />
+                  <Route path="/qr" component={QrPage} exact />
+                  <AnonymousPage />
+                </IonRouterOutlet>
+              ))}
+          </IonReactRouter>
+        </IonApp>
+      </MuiPickersUtilsProvider>
+    </ThemeProvider>
   );
 };
 

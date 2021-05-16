@@ -20,7 +20,7 @@ import {
   IonMenuToggle,
   IonNote,
 } from "@ionic/react";
-import { useSelector } from "../store";
+import { useSelector } from "../../store";
 
 interface AppPage {
   url: string;
@@ -30,12 +30,6 @@ interface AppPage {
 }
 
 const appPages: AppPage[] = [
-  // {
-  //   title: "Tổng hợp",
-  //   url: "/tabs/dashboard",
-  //   iosIcon: gridOutline,
-  //   mdIcon: gridOutline,
-  // },
   {
     title: "Nhật ký",
     url: "/tabs/diary",
@@ -78,12 +72,6 @@ const extraPages: AppPage[] = [
     iosIcon: cutOutline,
     mdIcon: cutOutline,
   },
-  // {
-  //   title: "Nguồn nguyên liệu",
-  //   url: "/suppliers",
-  //   iosIcon: cutOutline,
-  //   mdIcon: cutOutline,
-  // },
 ];
 
 const configPages: AppPage[] = [
@@ -95,24 +83,16 @@ const configPages: AppPage[] = [
   },
 ];
 
-const kaomoji = ["(o^▽^o)", "(⌒▽⌒)☆", "＼(＾▽＾)／"];
-
 const Menu: React.FC = () => {
   const location = useLocation();
-  const { isLoggedIn, role, displayName } = useSelector((state) => state.user);
+  const { displayName } = useSelector((state) => state.user);
 
   return (
     <IonMenu id="side-menu" contentId="main" type="overlay" swipeGesture>
       <IonContent>
         <IonList id="tab-list">
-          <IonListHeader>{displayName ? displayName : "Tran quản lý"}</IonListHeader>
-          {isLoggedIn ? (
-            <IonNote>
-              {kaomoji[Math.floor(Math.random() * kaomoji.length)]}
-            </IonNote>
-          ) : (
-            <IonNote>chào quản trị viên</IonNote>
-          )}
+          <IonListHeader>{"Xin chào " + displayName}</IonListHeader>
+          <IonNote>Quản lý</IonNote>
 
           {appPages.map((appPage, index) => {
             return (
@@ -142,29 +122,27 @@ const Menu: React.FC = () => {
           <IonListHeader>
             <IonLabel>Danh sách</IonLabel>
           </IonListHeader>
-          {listPages
-            .filter((i) => (role === "owner" ? i : i.url !== "/tabs/customers"))
-            .map((appPage, index) => {
-              return (
-                <IonMenuToggle key={index} autoHide={false}>
-                  <IonItem
-                    className={
-                      location.pathname.includes(appPage.url) ? "selected" : ""
-                    }
-                    routerLink={appPage.url}
-                    lines="none"
-                    detail={false}
-                  >
-                    <IonIcon
-                      slot="start"
-                      ios={appPage.iosIcon}
-                      md={appPage.mdIcon}
-                    />
-                    <IonLabel>{appPage.title}</IonLabel>
-                  </IonItem>
-                </IonMenuToggle>
-              );
-            })}
+          {listPages.map((appPage, index) => {
+            return (
+              <IonMenuToggle key={index} autoHide={false}>
+                <IonItem
+                  className={
+                    location.pathname.includes(appPage.url) ? "selected" : ""
+                  }
+                  routerLink={appPage.url}
+                  lines="none"
+                  detail={false}
+                >
+                  <IonIcon
+                    slot="start"
+                    ios={appPage.iosIcon}
+                    md={appPage.mdIcon}
+                  />
+                  <IonLabel>{appPage.title}</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+            );
+          })}
         </IonList>
 
         <IonList id="labels-list">
