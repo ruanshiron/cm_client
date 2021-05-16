@@ -51,6 +51,7 @@ import { fetchAllStages } from "../../../store/data/stageSlice";
 import { useProductForm } from "../../../hooks/useProductForm";
 import { Product } from "../../../models/product";
 import { toast } from "../../../utils/toast";
+import { formatStringDate } from "../../../utils/date";
 
 interface ProductStatisticProps {}
 
@@ -146,7 +147,7 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
                           dispatch(
                             updateFromDate({
                               id,
-                              from: e.detail.value!.substring(0, 10),
+                              from: e.detail.value,
                             })
                           );
                         }}
@@ -166,7 +167,8 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
                         <b>Đến ngày</b>
                       </IonLabel>
                       <IonDatetime
-                        displayFormat="YYYY-MM-DD"
+                        displayFormat="DD MMMM, YYYY"
+                        monthNames={[1,2,3,4,5,6,7,8,9,10,11,12].map((i) => 'Tháng ' + i)}
                         doneText="OK!"
                         cancelText="Hủy"
                         value={product?.statistic?.to || ""}
@@ -174,7 +176,7 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
                           dispatch(
                             updateToDate({
                               id,
-                              to: e.detail.value!.substring(0, 10),
+                              to: e.detail.value,
                             })
                           );
                         }}
@@ -199,9 +201,9 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
                         <b>Tổng hợp</b>
                       </u>
                     </IonLabel>
-                    <IonNote slot="end">
-                      từ {product?.statistic?.from || "~"} đến{" "}
-                      {product?.statistic?.to || "~"}
+                    <IonNote className="ion-text-wrap" slot="end">
+                      từ {formatStringDate(product?.statistic?.from)} đến{" "}
+                      {formatStringDate(product?.statistic?.to)}
                     </IonNote>
                   </IonItem>
                   {statistic?.map((item, index) => (

@@ -8,15 +8,20 @@ import {
   IonIcon,
   IonMenuButton,
   IonPage,
-  IonPopover,
   IonRow,
   IonTitle,
   IonToolbar,
+  useIonActionSheet,
+  useIonRouter,
 } from "@ionic/react";
-import { ellipsisHorizontal, ellipsisVertical } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
+import {
+  close,
+  create,
+  ellipsisHorizontal,
+  ellipsisVertical,
+} from "ionicons/icons";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { EmployeePagePopover } from "../../../components/popovers/EmployeePagePopover";
 import { useSelector } from "../../../store";
 import { Item } from "../../../components/items/Item";
 import { fetchAllEmployees } from "../../../store/data/employeeSlice";
@@ -24,16 +29,28 @@ import { fetchAllEmployees } from "../../../store/data/employeeSlice";
 interface EmployeePageProps {}
 
 const EmployeePage: React.FC<EmployeePageProps> = () => {
-  const [showPopover, setShowPopover] = useState(false);
-  const [popoverEvent, setPopoverEvent] = useState<any>();
-
-  const presentPopover = (e: React.MouseEvent) => {
-    setPopoverEvent(e.nativeEvent);
-    setShowPopover(true);
-  };
-
+  const [presentActionSheet] = useIonActionSheet();
   const employees = useSelector((state) => state.employees);
   const dispatch = useDispatch();
+  const router = useIonRouter();
+
+  function handleActionSheet() {
+    presentActionSheet({
+      buttons: [
+        {
+          icon: create,
+          text: "Thêm nhân viên",
+          handler: () => {
+            router.push(router.routeInfo.pathname + "/create");
+          },
+        },
+        {
+          icon: close,
+          text: "Thoát",
+        },
+      ],
+    });
+  }
 
   useEffect(() => {
     dispatch(fetchAllEmployees());
@@ -48,7 +65,7 @@ const EmployeePage: React.FC<EmployeePageProps> = () => {
           </IonButtons>
           <IonTitle>Công nhân</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={presentPopover}>
+            <IonButton onClick={handleActionSheet}>
               <IonIcon
                 slot="icon-only"
                 ios={ellipsisHorizontal}
@@ -79,13 +96,6 @@ const EmployeePage: React.FC<EmployeePageProps> = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
-      <IonPopover
-        isOpen={showPopover}
-        event={popoverEvent}
-        onDidDismiss={() => setShowPopover(false)}
-      >
-        <EmployeePagePopover dismiss={() => setShowPopover(false)} />
-      </IonPopover>
     </IonPage>
   );
 };

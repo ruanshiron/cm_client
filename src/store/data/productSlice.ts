@@ -147,8 +147,6 @@ export const statisticHarderSelector = createSelector(
       }
     });
 
-    console.log(tmp);
-
     return {
       stages: filteredStages,
       statistic: Object.keys(tmp).map((key) => {

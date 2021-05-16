@@ -48,6 +48,7 @@ import {
 } from "../../../store/data/productSlice";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
 import EmptyComponent from "../../../components/EmptyComponent";
+import { formatStringDate } from "../../../utils/date";
 
 interface ProductDetailProps {}
 
@@ -252,9 +253,9 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                             <b>Thống kê tự động</b>
                           </u>
                         </IonLabel>
-                        <IonNote slot="end">
-                          từ {product?.statistic?.from || "~"} đến{" "}
-                          {product?.statistic?.to || "~"}
+                        <IonNote className="ion-text-wrap" slot="end">
+                          từ {formatStringDate(product?.statistic?.from)} đến{" "}
+                          {formatStringDate(product?.statistic?.to)}
                         </IonNote>
                       </IonItem>
                       <IonList lines="full" style={{ border: "none " }}>
