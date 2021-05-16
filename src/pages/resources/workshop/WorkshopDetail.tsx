@@ -275,8 +275,10 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                           </u>
                         </IonLabel>
                         <IonNote slot="end">
-                          từ {workshop?.statistic?.from || "~"} đến{" "}
-                          {workshop?.statistic?.to || "~"}
+                          {stringFromToDate(
+                            workshop?.statistic?.from,
+                            workshop?.statistic?.to
+                          )}
                         </IonNote>
                       </IonItem>
                       {workshop?.statistic?.products &&

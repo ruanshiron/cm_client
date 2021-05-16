@@ -6,7 +6,6 @@ import {
   IonCardContent,
   IonCol,
   IonContent,
-  IonDatetime,
   IonGrid,
   IonHeader,
   IonIcon,
@@ -25,8 +24,6 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../../store";
 import {
-  calendarClearOutline,
-  calendarNumberOutline,
   saveOutline,
   shirtOutline,
 } from "ionicons/icons";
@@ -52,6 +49,7 @@ import {
 import { useWorkshopForm } from "../../../hooks/useWorkshopForm";
 import { Workshop } from "../../../models/workshop";
 import { toast } from "../../../utils/toast";
+import Datetime from "../../../components/statistics/Datetime";
 
 interface Props {}
 
@@ -123,68 +121,42 @@ const WorkshopStatistic: React.FC<Props> = () => {
           <IonRow className="ion-justify-content-center">
             <IonLoading isOpen={!!(loading && !workshop)} />
             <IonCol size="12" size-lg="8">
-              <IonCard className="list-card">
-                <IonCardContent>
-                  <IonList style={{ border: "none " }} lines="full">
-                    <IonItem>
-                      <IonIcon slot="start" icon={calendarClearOutline} />
-                      <IonLabel>
-                        <b>Từ ngày</b>
-                      </IonLabel>
-                      <IonDatetime
-                        displayFormat="YYYY-MM-DD"
-                        doneText="OK!"
-                        cancelText="Hủy"
-                        value={workshop?.statistic?.from}
-                        onIonChange={(e) => {
-                          dispatch(
-                            updateFromDate({
-                              id,
-                              from: e.detail.value?.substring(0, 10),
-                            })
-                          );
-                        }}
-                        onIonCancel={(e) => {
-                          dispatch(
-                            updateToDate({
-                              id,
-                              from: "",
-                            })
-                          );
-                        }}
-                      ></IonDatetime>
-                    </IonItem>
-                    <IonItem>
-                      <IonIcon slot="start" icon={calendarNumberOutline} />
-                      <IonLabel>
-                        <b>Đến ngày</b>
-                      </IonLabel>
-                      <IonDatetime
-                        displayFormat="YYYY-MM-DD"
-                        doneText="OK!"
-                        cancelText="Hủy"
-                        value={workshop?.statistic?.to || ""}
-                        onIonChange={(e) => {
-                          dispatch(
-                            updateToDate({
-                              id,
-                              to: e.detail.value?.substring(0, 10),
-                            })
-                          );
-                        }}
-                        onIonCancel={(e) => {
-                          dispatch(
-                            updateToDate({
-                              id,
-                              to: "",
-                            })
-                          );
-                        }}
-                      ></IonDatetime>
-                    </IonItem>
-                  </IonList>
-                </IonCardContent>
-              </IonCard>
+              <Datetime
+                fromValue={workshop?.statistic?.from}
+                toValue={workshop?.statistic?.to}
+                onChangeFrom={(e) => {
+                  dispatch(
+                    updateFromDate({
+                      id,
+                      from: e.detail.value || "",
+                    })
+                  );
+                }}
+                onChangeTo={(e) => {
+                  dispatch(
+                    updateToDate({
+                      id,
+                      to: e.detail.value || "",
+                    })
+                  );
+                }}
+                onCancelFrom={() => {
+                  dispatch(
+                    updateFromDate({
+                      id,
+                      from: "",
+                    })
+                  );
+                }}
+                onCancelTo={() => {
+                  dispatch(
+                    updateFromDate({
+                      id,
+                      to: "",
+                    })
+                  );
+                }}
+              />
               <IonCard className="list-card">
                 <IonCardContent>
                   <IonItem lines="none">

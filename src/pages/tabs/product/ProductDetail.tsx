@@ -48,7 +48,7 @@ import {
 } from "../../../store/data/productSlice";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
 import EmptyComponent from "../../../components/EmptyComponent";
-import { formatStringDate } from "../../../utils/date";
+import ProductSummary from "../../../components/statistics/ProductSummary";
 
 interface ProductDetailProps {}
 
@@ -245,41 +245,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                       })}
                     </IonCardContent>
                   </IonCard>
-                  <IonCard className="list-card">
-                    <IonCardContent>
-                      <IonItem lines="none">
-                        <IonLabel>
-                          <u>
-                            <b>Thống kê tự động</b>
-                          </u>
-                        </IonLabel>
-                        <IonNote className="ion-text-wrap" slot="end">
-                          từ {formatStringDate(product?.statistic?.from)} đến{" "}
-                          {formatStringDate(product?.statistic?.to)}
-                        </IonNote>
-                      </IonItem>
-                      <IonList lines="full" style={{ border: "none " }}>
-                        {statistic?.map((item, index) => (
-                          <React.Fragment key={index}>
-                            <IonItem>
-                              <IonLabel className="ion-text-center">
-                                <b>{item.pending.value}</b>
-                                <p>{item.pending.label}</p>
-                              </IonLabel>
-                              <IonLabel className="ion-text-center">
-                                <b>{item.fulfilled.value}</b>
-                                <p>{item.fulfilled.label}</p>
-                              </IonLabel>
-                              <IonLabel className="ion-text-center">
-                                <b>{item.rejected.value}</b>
-                                <p>{item.rejected.label}</p>
-                              </IonLabel>
-                            </IonItem>
-                          </React.Fragment>
-                        ))}
-                      </IonList>
-                    </IonCardContent>
-                  </IonCard>
+                  <ProductSummary product={product} statistic={statistic} />
                 </EmptyComponent>
               </IonCol>
             </IonRow>

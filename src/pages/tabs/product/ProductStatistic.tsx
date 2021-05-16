@@ -6,15 +6,12 @@ import {
   IonCardContent,
   IonCol,
   IonContent,
-  IonDatetime,
   IonGrid,
   IonHeader,
   IonIcon,
   IonItem,
   IonLabel,
-  IonList,
   IonLoading,
-  IonNote,
   IonPage,
   IonRow,
   IonTitle,
@@ -24,11 +21,7 @@ import {
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../../store";
-import {
-  calendarClearOutline,
-  calendarNumberOutline,
-  saveOutline,
-} from "ionicons/icons";
+import { saveOutline } from "ionicons/icons";
 import { useDispatch } from "react-redux";
 import {
   findProductById,
@@ -51,7 +44,8 @@ import { fetchAllStages } from "../../../store/data/stageSlice";
 import { useProductForm } from "../../../hooks/useProductForm";
 import { Product } from "../../../models/product";
 import { toast } from "../../../utils/toast";
-import { formatStringDate } from "../../../utils/date";
+import Datetime from "../../../components/statistics/Datetime";
+import ProductSummary from "../../../components/statistics/ProductSummary";
 
 interface ProductStatisticProps {}
 
@@ -130,102 +124,43 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
           <IonRow className="ion-justify-content-center">
             <IonLoading isOpen={!!(loading && !product)} />
             <IonCol size="12" size-md="8">
-              <IonCard className="list-card">
-                <IonCardContent>
-                  <IonList style={{ border: "none " }} lines="full">
-                    <IonItem>
-                      <IonIcon slot="start" icon={calendarClearOutline} />
-                      <IonLabel>
-                        <b>Từ ngày</b>
-                      </IonLabel>
-                      <IonDatetime
-                        displayFormat="YYYY-MM-DD"
-                        doneText="OK!"
-                        cancelText="Hủy"
-                        value={product?.statistic?.from}
-                        onIonChange={(e) => {
-                          dispatch(
-                            updateFromDate({
-                              id,
-                              from: e.detail.value,
-                            })
-                          );
-                        }}
-                        onIonCancel={(e) => {
-                          dispatch(
-                            updateToDate({
-                              id,
-                              from: "",
-                            })
-                          );
-                        }}
-                      ></IonDatetime>
-                    </IonItem>
-                    <IonItem>
-                      <IonIcon slot="start" icon={calendarNumberOutline} />
-                      <IonLabel>
-                        <b>Đến ngày</b>
-                      </IonLabel>
-                      <IonDatetime
-                        displayFormat="DD MMMM, YYYY"
-                        monthNames={[1,2,3,4,5,6,7,8,9,10,11,12].map((i) => 'Tháng ' + i)}
-                        doneText="OK!"
-                        cancelText="Hủy"
-                        value={product?.statistic?.to || ""}
-                        onIonChange={(e) => {
-                          dispatch(
-                            updateToDate({
-                              id,
-                              to: e.detail.value,
-                            })
-                          );
-                        }}
-                        onIonCancel={(e) => {
-                          dispatch(
-                            updateToDate({
-                              id,
-                              to: "",
-                            })
-                          );
-                        }}
-                      ></IonDatetime>
-                    </IonItem>
-                  </IonList>
-                </IonCardContent>
-              </IonCard>
-              <IonCard className="list-card">
-                <IonCardContent>
-                  <IonItem lines="none">
-                    <IonLabel>
-                      <u>
-                        <b>Tổng hợp</b>
-                      </u>
-                    </IonLabel>
-                    <IonNote className="ion-text-wrap" slot="end">
-                      từ {formatStringDate(product?.statistic?.from)} đến{" "}
-                      {formatStringDate(product?.statistic?.to)}
-                    </IonNote>
-                  </IonItem>
-                  {statistic?.map((item, index) => (
-                    <React.Fragment key={index}>
-                      <IonItem>
-                        <IonLabel className="ion-text-center">
-                          <b>{item?.pending?.value}</b>
-                          <p>{item?.pending?.label}</p>
-                        </IonLabel>
-                        <IonLabel className="ion-text-center">
-                          <b>{item?.fulfilled?.value}</b>
-                          <p>{item?.fulfilled?.label}</p>
-                        </IonLabel>
-                        <IonLabel className="ion-text-center">
-                          <b>{item?.rejected?.value}</b>
-                          <p>{item?.rejected?.label}</p>
-                        </IonLabel>
-                      </IonItem>
-                    </React.Fragment>
-                  ))}
-                </IonCardContent>
-              </IonCard>
+              <Datetime
+                fromValue={product?.statistic?.from}
+                toValue={product?.statistic?.to}
+                onChangeFrom={(e) => {
+                  dispatch(
+                    updateFromDate({
+                      id,
+                      from: e.detail.value || "",
+                    })
+                  );
+                }}
+                onChangeTo={(e) => {
+                  dispatch(
+                    updateToDate({
+                      id,
+                      to: e.detail.value || "",
+                    })
+                  );
+                }}
+                onCancelFrom={() => {
+                  dispatch(
+                    updateFromDate({
+                      id,
+                      from: "",
+                    })
+                  );
+                }}
+                onCancelTo={() => {
+                  dispatch(
+                    updateFromDate({
+                      id,
+                      to: "",
+                    })
+                  );
+                }}
+              />
+              <ProductSummary product={product} statistic={statistic} />
               <IonCard className="list-card">
                 <IonCardContent>
                   <IonItem lines="none">
