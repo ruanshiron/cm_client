@@ -18,8 +18,19 @@ import {
   IonListHeader,
   IonBadge,
   isPlatform,
+  IonRow,
+  IonImg,
+  IonThumbnail,
+  IonTextarea,
+  IonItemDivider,
+  IonItemGroup,
 } from "@ionic/react";
-import { arrowBack, checkmark, closeOutline } from "ionicons/icons";
+import {
+  arrowBack,
+  checkmark,
+  closeOutline,
+  imageOutline,
+} from "ionicons/icons";
 import { useStageFormModal } from "../../hooks/useStageFormModal";
 import { formatISO } from "date-fns";
 import { Process } from "../../models/process";
@@ -175,23 +186,90 @@ const ProcessSelecter: React.FC<{
   );
 };
 
-const QuantityInput: React.FC<{ onChange: ReturnType<any>; value: number }> = ({
-  onChange,
-  value,
+const QuantityInput: React.FC<{
+  onChangeQuantity: ReturnType<any>;
+  quantity: number;
+  note?: string;
+  onChangeNote: ReturnType<any>;
+  images: File[];
+  setImages: React.Dispatch<React.SetStateAction<File[]>>;
+}> = ({
+  onChangeQuantity,
+  quantity,
+  images,
+  setImages,
+  note,
+  onChangeNote,
 }) => {
+  const imagesInput = useRef<HTMLInputElement>(null);
+  const [more, setMore] = useState(false);
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <IonList className="ion-no-padding">
-        <IonItem>
-          <IonLabel position="stacked">Số lượng</IonLabel>
-          <IonInput
-            style={{ fontSize: 36 }}
-            value={value || undefined}
-            pattern="[0-9]"
-            onIonChange={(e) => onChange(parseInt(e.detail.value!, 0))}
-          ></IonInput>
-        </IonItem>
-      </IonList>
+      <IonContent>
+        <IonList className="ion-no-padding">
+          <IonItem>
+            <IonLabel position="stacked">Số lượng</IonLabel>
+            <IonInput
+              style={{ fontSize: 36 }}
+              value={quantity || undefined}
+              pattern="[0-9]"
+              onIonChange={(e) =>
+                onChangeQuantity(parseInt(e.detail.value!, 0))
+              }
+            ></IonInput>
+          </IonItem>
+        </IonList>
+        {more ? (
+          <IonItemGroup>
+            <IonItemDivider />
+            <IonItem>
+              <IonLabel position="stacked">Ghi chú</IonLabel>
+              <IonTextarea
+                value={note || undefined}
+                onIonChange={(e) => onChangeNote(e.detail.value!)}
+              ></IonTextarea>
+            </IonItem>
+            <IonItem
+              button
+              onClick={() => {
+                imagesInput.current?.click();
+              }}
+              lines="none"
+            >
+              <IonIcon slot="start" icon={imageOutline}></IonIcon>
+              <IonLabel>Camera</IonLabel>
+            </IonItem>
+            <IonRow className="ion-justify-content-between">
+              {images.map((image, index) => (
+                <IonThumbnail key={index} className="preview">
+                  <IonImg src={URL.createObjectURL(image)} />
+                </IonThumbnail>
+              ))}
+            </IonRow>
+          </IonItemGroup>
+        ) : (
+          <IonButton expand="full" fill="clear" onClick={() => setMore(true)}>
+            Chi tiết hơn
+          </IonButton>
+        )}
+        <input
+          className="ion-hide"
+          onChange={(e) => {
+            if (e.target.files !== null && e.target.files.length > 0) {
+              setImages([]);
+              for (let index = 0; index < e.target.files.length; index++) {
+                setImages((images) => [...images, e.target.files![index]]);
+              }
+            }
+            console.log(e.target.files?.length);
+          }}
+          ref={imagesInput}
+          type="file"
+          name="images"
+          accept="image/*"
+          multiple
+        ></input>
+      </IonContent>
     </div>
   );
 };
@@ -203,9 +281,8 @@ interface StageModalProps {
 export const StageModal: React.FC<StageModalProps> = ({ form }) => {
   const slider = useRef<HTMLIonSlidesElement>(null);
 
-  const [state, setState] = useState<"started" | "finished" | "initiated">(
-    "initiated"
-  );
+  const [state, setState] =
+    useState<"started" | "finished" | "initiated">("initiated");
 
   const handleChangeDate = (date: Date) => {
     slider.current?.slideNext();
@@ -245,6 +322,9 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
     if (quantity) {
       setState("finished");
     } else setState("started");
+  };
+  const handleChangeNote = (note: string) => {
+    form.setFieldsValue({ note });
   };
   const handleSlideBack = async () => {
     slider.current?.slidePrev();
@@ -325,8 +405,12 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
           </IonSlide>
           <IonSlide>
             <QuantityInput
-              value={form.fields.quantity}
-              onChange={handleChangeQuantity}
+              quantity={form.fields.quantity}
+              onChangeQuantity={handleChangeQuantity}
+              note={form.fields.note}
+              onChangeNote={handleChangeNote}
+              images={form.images}
+              setImages={form.setImages}
             />
           </IonSlide>
         </IonSlides>

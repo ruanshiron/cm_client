@@ -10,9 +10,11 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonImg,
   IonItem,
   IonLabel,
   IonList,
+  IonListHeader,
   IonLoading,
   IonNote,
   IonPage,
@@ -42,11 +44,15 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
+import { storage } from "../../../config/firebase";
 import { destroyStage } from "../../../models/stage";
 import { useSelector } from "../../../store";
-import { findStageById, removeStage } from "../../../store/data/stageSlice";
+import {
+  findStageById,
+  removeStage,
+  uploadImages,
+} from "../../../store/data/stageSlice";
 import { toast } from "../../../utils/toast";
-
 interface StageDetailProps {}
 
 const StageDetail: React.FC<StageDetailProps> = () => {
@@ -74,7 +80,19 @@ const StageDetail: React.FC<StageDetailProps> = () => {
   };
   useEffect(() => {
     if (!stage) dispatch(findStageById(id));
-  }, [dispatch, id, stage]);
+    if (!stage?.images) {
+      storage
+        .ref(`users/${uid}/stages/${id}`)
+        .listAll()
+        .then((snaps) => {
+          Promise.all(snaps.items.map((pre) => pre.getDownloadURL())).then(
+            (images) => {
+              if (images.length > 0) dispatch(uploadImages({ id, images }));
+            }
+          );
+        });
+    }
+  }, [dispatch, id, stage, uid]);
   return (
     <IonPage className="list-page">
       <IonHeader>
@@ -200,7 +218,7 @@ const StageDetail: React.FC<StageDetailProps> = () => {
                         </IonLabel>
                         <IonTextarea
                           readonly
-                          value="heek"
+                          value={stage.note}
                           unselectable="off"
                         ></IonTextarea>
                       </IonItem>
@@ -208,6 +226,23 @@ const StageDetail: React.FC<StageDetailProps> = () => {
                   )}
                 </IonCardContent>
               </IonCard>
+
+              {stage?.images && (
+                <IonCard className="list-card">
+                  <IonCardContent>
+                    <IonListHeader>
+                      <b>Ảnh</b>
+                    </IonListHeader>
+                    <IonRow class="ion-justify-content-center">
+                      {stage.images.map((image, index) => (
+                        <IonCol sizeLg="6" size="12" key={index}>
+                          <IonImg className="cover" src={image} />
+                        </IonCol>
+                      ))}
+                    </IonRow>
+                  </IonCardContent>
+                </IonCard>
+              )}
             </IonCol>
           </IonRow>
         </IonGrid>

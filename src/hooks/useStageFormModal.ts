@@ -9,18 +9,25 @@ import {
   saveStage,
   destroyStage,
 } from "../models/stage";
-import { addStage, removeStage, updateStage } from "../store/data/stageSlice";
+import {
+  addStage,
+  removeStage,
+  updateStage,
+  uploadImages,
+} from "../store/data/stageSlice";
 import { fetchAllProducts } from "../store/data/productSlice";
 import { fetchAllProcesses } from "../store/data/processSlice";
 import { fetchAllWorkshops } from "../store/data/workshopSlice";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
+import { onUpload } from "../helpers/firebaseHelper";
 
 export const useStageFormModal = (stage = initialStage) => {
   const dispatch = useDispatch();
   const uid = useSelector((state) => state.user.uid);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [fields, setFields] = useState<Stage>(stage);
+  const [images, setImages] = useState<File[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const {
     products,
@@ -62,10 +69,16 @@ export const useStageFormModal = (stage = initialStage) => {
         dispatch(updateStage(fields));
       } else {
         dispatch(addStage({ ...fields, id: newStage.id }));
+        const uploadedImages = await upload(newStage.id);
+        dispatch(uploadImages({ id: newStage.id, images: uploadedImages }));
       }
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
+  };
+
+  const upload = async (id: string) => {
+    return onUpload(images, `users/${uid}/stages/${id}`);
   };
 
   const remove = async () => {
@@ -100,5 +113,7 @@ export const useStageFormModal = (stage = initialStage) => {
     showForm,
     setShowForm,
     present,
+    images,
+    setImages,
   };
 };

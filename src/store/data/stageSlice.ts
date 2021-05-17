@@ -67,6 +67,23 @@ const stageSlice = createSlice({
         item.id === action.payload.id ? action.payload : item
       );
     },
+    uploadImages: (
+      state,
+      action: PayloadAction<{ id: string; images: string[] }>
+    ) => {
+      let stage = state.all.find((item) => item.id === action.payload.id);
+      if (stage) stage.images = action.payload.images;
+    },
+    removeImage: (
+      state,
+      action: PayloadAction<{ id: string; image: string }>
+    ) => {
+      let stage = state.all.find((item) => item.id === action.payload.id);
+      if (stage)
+        stage.images = stage.images?.filter(
+          (item) => item !== action.payload.image
+        );
+    },
     resetAllStages: (state) => {
       state.all = [];
     },
@@ -91,8 +108,15 @@ const stageSlice = createSlice({
   },
 });
 
-export const { addStage, removeStage, updateStage, resetAllStages, addStatisticStages } =
-  stageSlice.actions;
+export const {
+  addStage,
+  removeStage,
+  updateStage,
+  uploadImages,
+  removeImage,
+  resetAllStages,
+  addStatisticStages,
+} = stageSlice.actions;
 
 export default stageSlice;
 

@@ -2,6 +2,8 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 import "firebase/storage";
+import { v4 } from "uuid";
+import { storage } from "../config/firebase";
 // import { toast } from "../utils/toast";
 // import { database, storage } from "../config/firebase";
 
@@ -125,4 +127,16 @@ export async function createUserWithEmail(email: string, password: string) {
 export async function signOut() {
   await firebase.auth().signOut();
   window.location.replace("/");
+}
+
+export async function onUpload(files: File[], path: string = "tmp") {
+  const promises = files.map(async (file) => {
+    const snap = await firebase
+      .storage()
+      .ref()
+      .child(`${path}/${file.name}`)
+      .put(file);
+    return await snap.ref.getDownloadURL();
+  });
+  return Promise.all(promises);
 }

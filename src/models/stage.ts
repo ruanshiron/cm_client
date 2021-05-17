@@ -34,6 +34,7 @@ export interface Stage {
   processLabel: string;
   date: string;
   note?: string;
+  images?: string[];
   timestamp?: string;
 }
 
