@@ -256,12 +256,9 @@ const QuantityInput: React.FC<{
           className="ion-hide"
           onChange={(e) => {
             if (e.target.files !== null && e.target.files.length > 0) {
-              setImages([]);
-              for (let index = 0; index < e.target.files.length; index++) {
-                setImages((images) => [...images, e.target.files![index]]);
-              }
+              setImages(Array.from(e.target.files));
             }
-            console.log(e.target.files?.length);
+            // console.log(e.target.files?.length);
           }}
           ref={imagesInput}
           type="file"

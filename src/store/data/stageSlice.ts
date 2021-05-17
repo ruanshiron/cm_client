@@ -72,7 +72,11 @@ const stageSlice = createSlice({
       action: PayloadAction<{ id: string; images: string[] }>
     ) => {
       let stage = state.all.find((item) => item.id === action.payload.id);
-      if (stage) stage.images = action.payload.images;
+      if (stage) {
+        if (stage.images) {
+          stage.images = [...stage.images, ...action.payload.images];
+        } else stage.images = action.payload.images;
+      }
     },
     removeImage: (
       state,

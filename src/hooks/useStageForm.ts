@@ -22,6 +22,7 @@ export const useStageForm = (event = initialStage) => {
   const uid = useSelector((state) => state.user.uid);
   const router = useIonRouter();
   const [fields, setFields] = useState<Stage>(event);
+  const [images, setImages] = useState<File[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const products = useSelector((state) => state.products);
   const selectedProcduct = useSelector((state) =>
@@ -100,5 +101,7 @@ export const useStageForm = (event = initialStage) => {
     remove,
     present,
     selectedProcduct,
+    images,
+    setImages,
   };
 };

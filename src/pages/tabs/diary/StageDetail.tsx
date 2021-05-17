@@ -80,7 +80,7 @@ const StageDetail: React.FC<StageDetailProps> = () => {
   };
   useEffect(() => {
     if (!stage) dispatch(findStageById(id));
-    if (!stage?.images) {
+    if (stage && !stage?.images) {
       storage
         .ref(`users/${uid}/stages/${id}`)
         .listAll()
