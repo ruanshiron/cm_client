@@ -72,9 +72,13 @@ const RoleBaseView: React.FC<{ role: string }> = ({ role }) => {
         <>
           <AnonymousMenu />
           <IonRouterOutlet id="main">
-            <Route path="/" render={() => <Redirect to="/diary" />} exact />
-            <Route path="/diary" component={DiaryPage} exact />
-            <Route path="/diary/:id" component={StageDetail} exact />
+            <Route
+              path="/"
+              render={() => <Redirect to="/tabs/diary" />}
+              exact
+            />
+            <Route path="/tabs/diary" component={DiaryPage} exact />
+            <Route path="/tabs/diary/:id" component={StageDetail} exact />
             <Route
               path="/tabs/diary/:id/update"
               component={StageUpdate}
@@ -90,12 +94,7 @@ const RoleBaseView: React.FC<{ role: string }> = ({ role }) => {
       return <AnonymousCustomerPage />;
 
     default:
-      return (
-        <div>
-          <h1> bạn không có phận sự</h1>
-          <h2> Đăng xuất </h2>
-        </div>
-      );
+      return <AnonymousPage />;
   }
 };
 

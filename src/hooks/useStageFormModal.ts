@@ -22,7 +22,11 @@ export const useStageFormModal = (stage = initialStage) => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [fields, setFields] = useState<Stage>(stage);
   const [submitted, setSubmitted] = useState(false);
-  const products = useSelector((state) => state.products);
+  const {
+    products,
+    workshops,
+    processes: allProcesses,
+  } = useSelector((state) => state);
   const selectedProcduct = useSelector((state) =>
     state.products.find((item) => item.id === fields.productId)
   );
@@ -31,11 +35,9 @@ export const useStageFormModal = (stage = initialStage) => {
       selectedProcduct?.processes?.includes(item.id!)
     );
   });
-  const workshops = useSelector((state) => state.workshops);
-
   const present = () => {
     if (products.length <= 0) dispatch(fetchAllProducts());
-    if (processes.length <= 0) dispatch(fetchAllProcesses());
+    if (allProcesses.length <= 0) dispatch(fetchAllProcesses());
     if (workshops.length <= 0) dispatch(fetchAllWorkshops());
     setShowForm(true);
     setFieldsValue(stage);

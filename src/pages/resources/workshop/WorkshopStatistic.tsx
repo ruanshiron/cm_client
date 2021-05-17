@@ -35,9 +35,7 @@ import {
   TableRow,
 } from "@material-ui/core";
 import { useStyles } from "../../../hooks/useStyles";
-import {
-  addStatisticStages,
-} from "../../../store/data/stageSlice";
+import { addStatisticStages } from "../../../store/data/stageSlice";
 import {
   findWorkshopById,
   statisticHarderSelector,
@@ -51,6 +49,7 @@ import Datetime from "../../../components/statistics/Datetime";
 import { setLoading } from "../../../store/loading/loadingSlice";
 import { getStages, parseStage } from "../../../models/stage";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
+import { stringFromToDate } from "../../../utils/date";
 
 interface Props {}
 
@@ -179,8 +178,10 @@ const WorkshopStatistic: React.FC<Props> = () => {
                       </u>
                     </IonLabel>
                     <IonNote slot="end">
-                      từ {workshop?.statistic?.from || "~"} đến{" "}
-                      {workshop?.statistic?.to || "~"}
+                      {stringFromToDate(
+                        workshop?.statistic?.from,
+                        workshop?.statistic?.to
+                      )}
                     </IonNote>
                   </IonItem>
                   {statistic &&
