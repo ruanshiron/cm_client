@@ -2,8 +2,6 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 import "firebase/storage";
-import { v4 } from "uuid";
-import { storage } from "../config/firebase";
 // import { toast } from "../utils/toast";
 // import { database, storage } from "../config/firebase";
 

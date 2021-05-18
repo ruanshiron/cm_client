@@ -11,7 +11,7 @@ import { calendarClearOutline, calendarNumberOutline } from "ionicons/icons";
 import { DatetimeChangeEventDetail } from "@ionic/core";
 import React from "react";
 
-const monthNames = [
+export const monthNames = [
   "Tháng 1",
   "Tháng 2",
   "Tháng 3",

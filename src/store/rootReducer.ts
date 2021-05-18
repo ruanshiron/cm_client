@@ -9,9 +9,13 @@ import customerSlice from "./data/customerSlice";
 import employeeSlice from "./data/employeeSlice";
 import processSlice from "./data/processSlice";
 import toastSlice from "./toast/toastSlice";
+import diaryPageSlice from "./page/diaryPageSlice";
 
 const rootReducer = combineReducers({
+  // User
   user: userReducer,
+
+  // Data
   products: productSlice.reducer,
   stages: stageSlice.reducer,
   workshops: workshopSlice.reducer,
@@ -19,6 +23,11 @@ const rootReducer = combineReducers({
   customers: customerSlice.reducer,
   employees: employeeSlice.reducer,
   processes: processSlice.reducer,
+
+  // Page
+  diaryPage: diaryPageSlice.reducer,
+
+  // Loading and Toast
   loading: loadingSlice.reducer,
   toasts: toastSlice.reducer,
 });

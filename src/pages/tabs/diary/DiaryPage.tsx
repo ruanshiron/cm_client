@@ -6,6 +6,7 @@ import {
   IonLoading,
   IonMenuButton,
   IonPage,
+  IonProgressBar,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -40,7 +41,11 @@ const DiaryPage: React.FC<DiaryPageProps> = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonLoading isOpen={isLoading} />
+      <IonProgressBar
+        className={isLoading ? "" : "ion-hide"}
+        type="indeterminate"
+        slot="fixed"
+      />
       <EventsViewAll />
 
       <StageFilterModal
