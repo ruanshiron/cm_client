@@ -111,8 +111,11 @@ export const EventsViewAll: React.FC<Props> = () => {
         <IonRefresherContent></IonRefresherContent>
       </IonRefresher>
       <IonGrid>
-        <IonRow className="ion-justify-content-center">
-          <IonCol size="12" size-md="8">
+        <IonRow
+          style={{ paddingBottom: isNoMoreStage ? 184 : 100 }}
+          className="ion-justify-content-center"
+        >
+          <IonCol style={{ paddingBottom: 100 }} size="12" size-md="8">
             {groups.map((group, i) => (
               <IonList className="fadin border-full-2 ion-margin-top" key={i}>
                 <IonItemDivider className="top-divider" color="white">
@@ -123,14 +126,14 @@ export const EventsViewAll: React.FC<Props> = () => {
                 ))}
               </IonList>
             ))}
-            <IonInfiniteScroll
-              disabled={isNoMoreStage}
-              threshold="100px"
-              onIonInfinite={handleLoadMore}
-            >
-              <IonInfiniteScrollContent></IonInfiniteScrollContent>
-            </IonInfiniteScroll>
           </IonCol>
+          <IonInfiniteScroll
+            disabled={isNoMoreStage}
+            threshold="100px"
+            onIonInfinite={handleLoadMore}
+          >
+            <IonInfiniteScrollContent loadingText="Đang tải..." />
+          </IonInfiniteScroll>
         </IonRow>
       </IonGrid>
     </IonContent>
