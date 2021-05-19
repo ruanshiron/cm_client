@@ -1,16 +1,16 @@
 import {
+  IonBadge,
   IonButton,
   IonButtons,
   IonHeader,
   IonIcon,
-  IonLoading,
   IonMenuButton,
   IonPage,
   IonProgressBar,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { filterOutline, searchSharp } from "ionicons/icons";
+import { filterOutline } from "ionicons/icons";
 import React, { useState } from "react";
 import { EventsViewAll } from "../../../components/EventsViewAll";
 import EventFab from "../../../components/fabs/EventFab";
@@ -21,6 +21,12 @@ interface DiaryPageProps {}
 
 const DiaryPage: React.FC<DiaryPageProps> = () => {
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const hasFilter = useSelector((state) =>
+    Object.values(state.diaryPage.stageFilter).reduce(
+      (a, b) => !!a || !!b,
+      false
+    )
+  );
   const isLoading = useSelector((state) => state.loading.isLoading);
   return (
     <IonPage id="diary-page">
@@ -32,11 +38,16 @@ const DiaryPage: React.FC<DiaryPageProps> = () => {
           </IonButtons>
           <IonTitle>Nhật ký</IonTitle>
           <IonButtons slot="end">
-            <IonButton>
-              <IonIcon slot="icon-only" icon={searchSharp} />
-            </IonButton>
-            <IonButton onClick={() => setShowFilterModal(true)}>
+            <IonButton
+              className="notification-button"
+              onClick={() => setShowFilterModal(true)}
+            >
               <IonIcon slot="icon-only" icon={filterOutline} />
+              {hasFilter && (
+                <IonBadge className="notifications-badge" color="danger">
+                  {" "}
+                </IonBadge>
+              )}
             </IonButton>
           </IonButtons>
         </IonToolbar>

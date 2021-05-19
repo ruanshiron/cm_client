@@ -246,7 +246,6 @@ ion-list {
   margin: 4px;
 }
 
-
 .cover {
   object-fit: cover;
   height: 256px;
@@ -259,7 +258,7 @@ ion-list {
 }
 
 .image__middle {
-  transition: .5s ease;
+  transition: 0.5s ease;
   opacity: 0;
   position: absolute;
   top: 50%;
@@ -278,8 +277,25 @@ ion-list {
 }
 
 .text {
-  background-color: #04AA6D;
+  background-color: #04aa6d;
   color: white;
   font-size: 16px;
   padding: 16px 32px;
+}
+
+.notification-button {
+  position: relative;
+  width: 42px;
+  top: 1px;
+  right: 1px;
+  overflow: visible !important;
+}
+
+.notifications-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  font-size: 5px;
+  width: 5px;
+  height: 5px;
 }

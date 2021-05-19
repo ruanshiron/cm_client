@@ -11,6 +11,7 @@ import {
   IonListHeader,
   IonModal,
   IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -22,10 +23,13 @@ import {
   peopleCircleOutline,
   shirtOutline,
 } from "ionicons/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { StageFilterOptions } from "../../models/stage";
 import { useSelector } from "../../store";
+import { fetchAllProcesses } from "../../store/data/processSlice";
+import { fetchAllProducts } from "../../store/data/productSlice";
+import { fetchAllWorkshops } from "../../store/data/workshopSlice";
 import { setFilter } from "../../store/page/diaryPageSlice";
 import { monthNames } from "../statistics/Datetime";
 
@@ -49,6 +53,10 @@ const StageFilterModal: React.FC<Props> = ({ isOpen, onDidDismiss }) => {
   );
   const [process, setProcess] = useState<string>(
     (stageFilter.processId || "") + "/" + (stageFilter.processStatus || "")
+  );
+  const { products, workshops, processes } = useSelector((state) => state);
+  const selectedProduct = useSelector((state) =>
+    state.products.find((item) => item.id === productId)
   );
   const handleSubmit = () => {
     const [processId, processStatus] = process.split("/");
@@ -84,6 +92,12 @@ const StageFilterModal: React.FC<Props> = ({ isOpen, onDidDismiss }) => {
       );
     }
   };
+  useEffect(() => {
+    if (workshops.length <= 0) dispatch(fetchAllWorkshops());
+    if (processes.length <= 0) dispatch(fetchAllProcesses());
+    if (products.length <= 0) dispatch(fetchAllProducts());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <IonModal
       onWillPresent={handlePresent}
@@ -138,7 +152,13 @@ const StageFilterModal: React.FC<Props> = ({ isOpen, onDidDismiss }) => {
               cancelText="Hủy"
               value={workshopId}
               onIonChange={(e) => setWorkshopId(e.detail.value)}
-            ></IonSelect>
+            >
+              {workshops.map((item, index) => (
+                <IonSelectOption key={index} value={item.id}>
+                  {item.name}
+                </IonSelectOption>
+              ))}
+            </IonSelect>
           </IonItem>
           <IonItem>
             <IonIcon icon={shirtOutline} slot="start" />
@@ -149,7 +169,13 @@ const StageFilterModal: React.FC<Props> = ({ isOpen, onDidDismiss }) => {
               cancelText="Hủy"
               value={productId}
               onIonChange={(e) => setProductId(e.detail.value)}
-            ></IonSelect>
+            >
+              {products.map((item, index) => (
+                <IonSelectOption key={index} value={item.id}>
+                  {item.name}
+                </IonSelectOption>
+              ))}
+            </IonSelect>
           </IonItem>
           <IonItem>
             <IonIcon icon={bodyOutline} slot="start" />
@@ -160,7 +186,13 @@ const StageFilterModal: React.FC<Props> = ({ isOpen, onDidDismiss }) => {
               cancelText="Hủy"
               value={productSize}
               onIonChange={(e) => setProductSize(e.detail.value)}
-            ></IonSelect>
+            >
+              {selectedProduct?.sizes.map((item, index) => (
+                <IonSelectOption key={index} value={item}>
+                  {item}
+                </IonSelectOption>
+              ))}
+            </IonSelect>
           </IonItem>
           <IonItem>
             <IonIcon icon={helpCircleOutline} slot="start" />
@@ -171,7 +203,17 @@ const StageFilterModal: React.FC<Props> = ({ isOpen, onDidDismiss }) => {
               cancelText="Hủy"
               value={process}
               onIonChange={(e) => setProcess(e.detail.value)}
-            ></IonSelect>
+            >
+              {processes.map((item, index) => (
+                <React.Fragment key={index}>
+                  {["pending", "fulfilled", "rejected"].map((status) => (
+                    <IonSelectOption value={`${item}/${status}`}>
+                      {(item as any)[status]}
+                    </IonSelectOption>
+                  ))}
+                </React.Fragment>
+              ))}
+            </IonSelect>
           </IonItem>
           <IonItem onClick={handleReset} button lines="full">
             <IonLabel color="danger" className="ion-text-center">
