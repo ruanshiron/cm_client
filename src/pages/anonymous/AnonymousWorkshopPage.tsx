@@ -49,6 +49,7 @@ import { fetchAllProcesses } from "../../store/data/processSlice";
 import { addStatisticStages } from "../../store/data/stageSlice";
 import { setLoading } from "../../store/loading/loadingSlice";
 import { getStages, parseStage } from "../../models/stage";
+import WorkshopSummary from "../../components/statistics/WorkshopSummary";
 
 interface Props {}
 
@@ -154,114 +155,22 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                         </u>
                       </IonLabel>
                       <IonNote slot="end">
-                        từ {workshop?.statistic?.from || "~"} đến{" "}
-                        {workshop?.statistic?.to || "~"}
+                        {stringFromToDate(
+                          workshop.statistic?.from,
+                          workshop.statistic?.to
+                        )}
                       </IonNote>
                     </IonItem>
-                    {statistic &&
-                      Object.keys(statistic).map((key, index) => (
-                        <IonList
-                          style={{ margin: 10, marginTop: 0 }}
-                          className="border-full"
-                          key={index}
-                        >
-                          <IonItem lines="full">
-                            <IonIcon slot="start" icon={shirtOutline} />
-                            <IonLabel>
-                              <b>{statistic[key].name}</b>
-                              <p>{statistic[key]?.code}</p>
-                            </IonLabel>
-                            <IonNote slot="end">đơn vị sản phẩm</IonNote>
-                          </IonItem>
-                          {Object.keys(statistic[key].processes).map((i, j) => (
-                            <IonItem lines="full" key={j}>
-                              <IonLabel>
-                                <p>
-                                  <i>
-                                    {processes.find((v) => v.id === i)?.pending}
-                                  </i>
-                                </p>
-                                <b>
-                                  🤝
-                                  {statistic[key].processes[i].pending || 0}
-                                </b>
-                                <p>
-                                  <i>
-                                    {
-                                      processes.find((v) => v.id === i)
-                                        ?.fulfilled
-                                    }
-                                  </i>
-                                </p>
-                                <b>
-                                  ✅{statistic[key].processes[i].fulfilled || 0}
-                                </b>
-                                <p>
-                                  <i>
-                                    {
-                                      processes.find((v) => v.id === i)
-                                        ?.rejected
-                                    }
-                                  </i>
-                                </p>
-                                <b>
-                                  👨‍🔧{statistic[key].processes[i].rejected || 0}
-                                </b>
-                              </IonLabel>
-                              <IonLabel>
-                                <p>
-                                  Chưa&nbsp;
-                                  {processes.find((v) => v.id === i)?.fulfilled}
-                                </p>
-                                <b>
-                                  🖐
-                                  {(statistic[key].processes[i].pending || 0) +
-                                    (statistic[key].processes[i].rejected ||
-                                      0) -
-                                    (statistic[key].processes[i].fulfilled ||
-                                      0)}
-                                </b>
-                                <p>Đơn giá</p>
-                                {workshop?.amounts
-                                  .filter(
-                                    (amount) =>
-                                      amount.processId === i &&
-                                      amount.productId === key
-                                  )
-                                  .map((amount) => (
-                                    <b>
-                                      🏷
-                                      {new Intl.NumberFormat("vi-VN", {
-                                        style: "currency",
-                                        currency: "VND",
-                                      }).format(amount.amount)}
-                                      <small>
-                                        &nbsp;(
-                                        {stringFromToDate(
-                                          amount.fromDate,
-                                          amount.toDate
-                                        )}
-                                        )
-                                      </small>
-                                    </b>
-                                  ))}
-                                <p>Tổng tiền</p>
-                                <b>
-                                  💵
-                                  {new Intl.NumberFormat("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                  }).format(
-                                    statistic[key].processes[i].subtotal
-                                  )}
-                                </b>
-                              </IonLabel>
-                            </IonItem>
-                          ))}
-                        </IonList>
-                      ))}
                   </IonCardContent>
                 </IonCard>
+
+                {statistic && (
+                  <WorkshopSummary
+                    statistic={statistic}
+                    workshop={workshop}
+                    processes={processes}
+                  />
+                )}
 
                 <IonCard className="list-card">
                   <IonCardContent>
