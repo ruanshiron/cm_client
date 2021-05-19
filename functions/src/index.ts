@@ -114,9 +114,8 @@ export const statisticProductOnChangeStage = functions.firestore
                 statistic: {
                   processes: {
                     [before.processId]: {
-                      [before.processStatus]: admin.firestore.FieldValue.increment(
-                        -before.quantity
-                      ),
+                      [before.processStatus]:
+                        admin.firestore.FieldValue.increment(-before.quantity),
                     },
                   },
                 },
@@ -139,9 +138,8 @@ export const statisticProductOnChangeStage = functions.firestore
                 statistic: {
                   processes: {
                     [after.processId]: {
-                      [after.processStatus]: admin.firestore.FieldValue.increment(
-                        after.quantity
-                      ),
+                      [after.processStatus]:
+                        admin.firestore.FieldValue.increment(after.quantity),
                     },
                   },
                 },
@@ -202,9 +200,10 @@ export const statisticWorkshopOnChangeStage = functions.firestore
                       name: before.productName,
                       processes: {
                         [before.processId]: {
-                          [before.processStatus]: admin.firestore.FieldValue.increment(
-                            -before.quantity
-                          ),
+                          [before.processStatus]:
+                            admin.firestore.FieldValue.increment(
+                              -before.quantity
+                            ),
                         },
                       },
                     },
@@ -232,9 +231,10 @@ export const statisticWorkshopOnChangeStage = functions.firestore
                       name: after.productName,
                       processes: {
                         [after.processId]: {
-                          [after.processStatus]: admin.firestore.FieldValue.increment(
-                            after.quantity
-                          ),
+                          [after.processStatus]:
+                            admin.firestore.FieldValue.increment(
+                              after.quantity
+                            ),
                         },
                       },
                     },
@@ -268,4 +268,80 @@ export const updateMostRecentOrder = functions.firestore
         const mostRecentOrder = snaps.docs[0].data();
         customerRef.set({ mostRecentOrder }, { merge: true });
       });
+  });
+
+export const updateStagesOnChangeProduct = functions.firestore
+  .document("users/{userId}/products/{productId}")
+  .onUpdate((change, context) => {
+    const before = change.before.data();
+    const after = change.after.data();
+
+    if (after.name !== before.name) {
+      return admin
+        .firestore()
+        .collection("users")
+        .doc(context.params.userId)
+        .collection("stages")
+        .where("productId", "==", change.before.id)
+        .get()
+        .then((snap) => {
+          snap.docs.forEach((doc) => {
+            doc.ref.update({ productName: after.name });
+          });
+        });
+    } else {
+      return true;
+    }
+  });
+
+export const updateStagesOnChangeWorkshop = functions.firestore
+  .document("users/{userId}/workshops/{workshopId}")
+  .onUpdate((change, context) => {
+    const before = change.before.data();
+    const after = change.after.data();
+
+    if (after.name !== before.name) {
+      return admin
+        .firestore()
+        .collection("users")
+        .doc(context.params.userId)
+        .collection("stages")
+        .where("workshopId", "==", change.before.id)
+        .get()
+        .then((snap) => {
+          snap.docs.forEach((doc) => {
+            doc.ref.update({ workshopName: after.name });
+          });
+        });
+    } else {
+      return true;
+    }
+  });
+
+export const updateStagesOnChangeProcess = functions.firestore
+  .document("users/{userId}/processes/{processId}")
+  .onUpdate((change, context) => {
+    const before = change.before.data();
+    const after = change.after.data();
+
+    if (
+      after.pending !== before.pending ||
+      after.fulfilled !== before.fulfilled ||
+      after.rejected !== before.rejected
+    ) {
+      return admin
+        .firestore()
+        .collection("users")
+        .doc(context.params.userId)
+        .collection("stages")
+        .where("processId", "==", change.before.id)
+        .get()
+        .then((snap) => {
+          snap.docs.forEach((doc) => {
+            doc.ref.update({ processLabel: after[doc.data().processStatus] });
+          });
+        });
+    } else {
+      return true;
+    }
   });
