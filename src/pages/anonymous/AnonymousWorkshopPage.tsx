@@ -159,7 +159,7 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                       </IonNote>
                     </IonItem>
                     {statistic &&
-                      Object.values(statistic).map((key, index) => (
+                      Object.keys(statistic).map((key, index) => (
                         <IonList
                           style={{ margin: 10, marginTop: 0 }}
                           className="border-full"
