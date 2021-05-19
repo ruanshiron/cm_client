@@ -47,7 +47,7 @@ export const findCustomer = (user: string, id: string) => {
     .then((doc) => {
       if (doc.exists) {
         const data = doc.data() as any;
-        delete data!.mostRecentOrder.createdAt;
+        delete data?.mostRecentOrder?.createdAt;
         return {
           id: doc.id,
           ...data,

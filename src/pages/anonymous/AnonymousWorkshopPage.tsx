@@ -49,14 +49,16 @@ import {
 } from "@material-ui/core";
 import { useStyles } from "../../hooks/useStyles";
 import { fetchAllProcesses } from "../../store/data/processSlice";
-import { fetchAllStages } from "../../store/data/stageSlice";
+import { addStatisticStages } from "../../store/data/stageSlice";
+import { setLoading } from "../../store/loading/loadingSlice";
+import { getStages, parseStage } from "../../models/stage";
 
 interface Props {}
 
 const AnonymousWorkshopPage: React.FC<Props> = () => {
   const dispatch = useDispatch();
   const [presentActionSheet] = useIonActionSheet();
-  const id = useSelector((state) => state.user.id);
+  const { id, uid } = useSelector((state) => state.user);
   const workshop = useSelector((state) =>
     state.workshops.find((item) => item.id === state.user.id)
   );
@@ -70,9 +72,24 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
   }, [dispatch, id, workshop]);
   useEffect(() => {
     if (processes.length <= 0) dispatch(fetchAllProcesses());
-    if (stages.length <= 0) dispatch(fetchAllStages());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!workshop) dispatch(findWorkshopById(id));
+    if (workshop) {
+      dispatch(setLoading(true));
+      getStages(uid, {
+        from: workshop.statistic?.from,
+        to: workshop.statistic?.to,
+        workshopId: workshop.id,
+      }).then((snap) => {
+        const stages = snap.docs.map(parseStage);
+        dispatch(addStatisticStages({ id, stages }));
+        dispatch(setLoading(false));
+      });
+    }
+  }, [dispatch, id, uid, workshop]);
 
   useEffect(() => {
     dispatch(findWorkshopById(id));
@@ -193,27 +210,8 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                             <IonItem lines="full" key={j}>
                               <IonLabel>
                                 <p>
-                                  {processes.find((v) => v.id === i)?.pending}
-                                  &nbsp;(hiện tại)
-                                </p>
-                                <b>
-                                  {(item.processes[i].pending || 0) +
-                                    (item.processes[i].rejected || 0) -
-                                    (item.processes[i].fulfilled || 0)}
-                                </b>
-                                <p>Tổng tiền</p>
-                                <b>
-                                  {new Intl.NumberFormat("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                  }).format(item.processes[i].subtotal)}
-                                </b>
-                              </IonLabel>
-                              <IonLabel>
-                                <p>
                                   <i>
                                     {processes.find((v) => v.id === i)?.pending}
-                                    &nbsp;(toàn bộ)
                                   </i>
                                 </p>
                                 <b>{item.processes[i].pending || 0}</b>
@@ -235,6 +233,24 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                                   </i>
                                 </p>
                                 <b>{item.processes[i].rejected || 0}</b>
+                              </IonLabel>
+                              <IonLabel>
+                                <p>
+                                  Chưa&nbsp;
+                                  {processes.find((v) => v.id === i)?.fulfilled}
+                                </p>
+                                <b>
+                                  {(item.processes[i].pending || 0) +
+                                    (item.processes[i].rejected || 0) -
+                                    (item.processes[i].fulfilled || 0)}
+                                </b>
+                                <p>Tổng tiền</p>
+                                <b>
+                                  {new Intl.NumberFormat("vi-VN", {
+                                    style: "currency",
+                                    currency: "VND",
+                                  }).format(item.processes[i].subtotal)}
+                                </b>
                               </IonLabel>
                             </IonItem>
                           ))}

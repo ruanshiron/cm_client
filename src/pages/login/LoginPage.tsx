@@ -7,26 +7,34 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonLoading,
   IonPage,
 } from "@ionic/react";
 import { keyOutline, mailOutline } from "ionicons/icons";
 import { toast } from "../../utils/toast";
 import { loginWithEmail } from "../../helpers/firebaseHelper";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../store/loading/loadingSlice";
+import { useSelector } from "../../store";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.loading);
 
   const login = async () => {
     if (email.trim() === "" || password.trim() === "") {
       return toast("Hãy nhập email và mật khẩu");
     }
-
+    dispatch(setLoading(true));
     const res = await loginWithEmail(email, password);
 
     if (res) {
+      dispatch(setLoading(false));
       toast("Đăng nhập thành công");
     } else {
+      dispatch(setLoading(false));
       toast("Email hoặc mật khẩu không chính xác");
       setPassword("");
     }
@@ -34,6 +42,7 @@ const LoginPage = () => {
 
   return (
     <IonPage>
+      <IonLoading isOpen={isLoading} />
       <IonContent>
         <IonGrid>
           <div

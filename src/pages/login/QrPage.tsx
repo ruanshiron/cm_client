@@ -8,6 +8,7 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonLoading,
   IonPage,
   isPlatform,
 } from "@ionic/react";
@@ -17,10 +18,12 @@ import { functions } from "../../config/firebase";
 import { loginWithToken } from "../../helpers/firebaseHelper";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/loading/loadingSlice";
+import { useSelector } from "../../store";
 
 const QrPage = () => {
   const [qrValue, setQrValue] = useState<string>();
   const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.loading);
   const openScanner = async () => {
     const data = await BarcodeScanner.scan();
     console.log(`Barcode data: ${data.text}`);
@@ -47,6 +50,7 @@ const QrPage = () => {
 
   return (
     <IonPage>
+      <IonLoading isOpen={isLoading} />
       <IonContent>
         <IonGrid>
           <div

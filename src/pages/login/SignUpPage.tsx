@@ -7,14 +7,19 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonLoading,
   IonPage,
 } from "@ionic/react";
 import { keyOutline, mailOutline } from "ionicons/icons";
 import { toast } from "../../utils/toast";
 import { createUserWithEmail } from "../../helpers/firebaseHelper";
+import { useSelector } from "../../store";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../store/loading/loadingSlice";
 
 function validateEmail(email: string) {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
 
@@ -22,7 +27,8 @@ const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const { isLoading } = useSelector((state) => state.loading);
+  const dispatch = useDispatch();
   const submit = async () => {
     if (
       email.trim() === "" ||
@@ -40,11 +46,14 @@ const SignUpPage = () => {
       return toast("Nhập lại mật khẩu");
     }
 
+    dispatch(setLoading(true));
     const res = await createUserWithEmail(email, password);
 
     if (res) {
+      dispatch(setLoading(false));
       toast("Đăng ký thành công");
     } else {
+      dispatch(setLoading(false));
       toast("Email hoặc mật khẩu không chính xác");
       setPassword("");
     }
@@ -52,6 +61,7 @@ const SignUpPage = () => {
 
   return (
     <IonPage>
+      <IonLoading isOpen={isLoading} />
       <IonContent>
         <IonGrid>
           <div

@@ -1,4 +1,4 @@
-import { IonItem, IonLabel, IonNote } from "@ionic/react";
+import { IonItem, IonLabel, IonNote, IonText } from "@ionic/react";
 import React from "react";
 import { Stage } from "../../models/stage";
 
@@ -18,15 +18,21 @@ const StageItem: React.FC<{ stage: Stage }> = ({ stage }) => {
       detail={false}
     >
       <IonLabel className={color(stage.processStatus)}>
-        <h2>
-          {stage.workshopName}・<b>{stage.processLabel}</b>
-        </h2>
+        <h2>{stage.workshopName}</h2>
         <p>
           {stage.productName} / {stage.productSize}
         </p>
       </IonLabel>
-      <IonNote slot="end" color={color(stage.processStatus)}>
-        <h4>{stage.quantity}</h4>
+      <IonNote
+        className="ion-text-right"
+        slot="end"
+        color={color(stage.processStatus)}
+      >
+        <IonText>{stage.processLabel}</IonText>
+        <br />
+        <IonText style={{ fontSize: 18, fontWeight: 700 }}>
+          {stage.quantity}
+        </IonText>
       </IonNote>
     </IonItem>
   );
