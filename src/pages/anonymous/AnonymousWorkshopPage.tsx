@@ -11,11 +11,9 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonListHeader,
   IonNote,
   IonPage,
   IonRow,
-  IonText,
   IonTitle,
   IonToolbar,
   useIonActionSheet,
@@ -23,7 +21,6 @@ import {
 import {
   calendarClearOutline,
   calendarNumberOutline,
-  cashOutline,
   ellipsisVertical,
   logOutOutline,
   shirtOutline,
@@ -148,36 +145,6 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                     </IonList>
                   </IonCardContent>
                 </IonCard>
-
-                <IonCard className="list-card">
-                  <IonCardContent>
-                    <IonList lines="none" style={{ border: "none" }}>
-                      <IonListHeader>
-                        <IonLabel>
-                          <b>Giá công</b>
-                        </IonLabel>
-                      </IonListHeader>
-                      {workshop?.amounts.map((item, index) => (
-                        <IonItem key={index}>
-                          <IonIcon slot="start" icon={cashOutline} />
-                          <IonLabel>
-                            <b>{item.productName}</b>
-                            <p>
-                              giá&nbsp;[{item.processName}]&nbsp;từ&nbsp;
-                              {stringFromToDate(item.fromDate, item.toDate)}
-                            </p>
-                          </IonLabel>
-                          <IonText color="dark">
-                            {new Intl.NumberFormat("vi-VN", {
-                              style: "currency",
-                              currency: "VND",
-                            }).format(item.amount)}
-                          </IonText>
-                        </IonItem>
-                      ))}
-                    </IonList>
-                  </IonCardContent>
-                </IonCard>
                 <IonCard className="list-card">
                   <IonCardContent>
                     <IonItem lines="none">
@@ -192,7 +159,7 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                       </IonNote>
                     </IonItem>
                     {statistic &&
-                      Object.values(statistic).map((item, index) => (
+                      Object.values(statistic).map((key, index) => (
                         <IonList
                           style={{ margin: 10, marginTop: 0 }}
                           className="border-full"
@@ -201,12 +168,12 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                           <IonItem lines="full">
                             <IonIcon slot="start" icon={shirtOutline} />
                             <IonLabel>
-                              <b>{item.name}</b>
-                              <p>{item?.code}</p>
+                              <b>{statistic[key].name}</b>
+                              <p>{statistic[key]?.code}</p>
                             </IonLabel>
                             <IonNote slot="end">đơn vị sản phẩm</IonNote>
                           </IonItem>
-                          {Object.keys(item.processes).map((i, j) => (
+                          {Object.keys(statistic[key].processes).map((i, j) => (
                             <IonItem lines="full" key={j}>
                               <IonLabel>
                                 <p>
@@ -214,7 +181,10 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                                     {processes.find((v) => v.id === i)?.pending}
                                   </i>
                                 </p>
-                                <b>{item.processes[i].pending || 0}</b>
+                                <b>
+                                  🤝
+                                  {statistic[key].processes[i].pending || 0}
+                                </b>
                                 <p>
                                   <i>
                                     {
@@ -223,7 +193,9 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                                     }
                                   </i>
                                 </p>
-                                <b>{item.processes[i].fulfilled || 0}</b>
+                                <b>
+                                  ✅{statistic[key].processes[i].fulfilled || 0}
+                                </b>
                                 <p>
                                   <i>
                                     {
@@ -232,7 +204,9 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                                     }
                                   </i>
                                 </p>
-                                <b>{item.processes[i].rejected || 0}</b>
+                                <b>
+                                  👨‍🔧{statistic[key].processes[i].rejected || 0}
+                                </b>
                               </IonLabel>
                               <IonLabel>
                                 <p>
@@ -240,16 +214,46 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                                   {processes.find((v) => v.id === i)?.fulfilled}
                                 </p>
                                 <b>
-                                  {(item.processes[i].pending || 0) +
-                                    (item.processes[i].rejected || 0) -
-                                    (item.processes[i].fulfilled || 0)}
+                                  🖐
+                                  {(statistic[key].processes[i].pending || 0) +
+                                    (statistic[key].processes[i].rejected ||
+                                      0) -
+                                    (statistic[key].processes[i].fulfilled ||
+                                      0)}
                                 </b>
+                                <p>Đơn giá</p>
+                                {workshop?.amounts
+                                  .filter(
+                                    (amount) =>
+                                      amount.processId === i &&
+                                      amount.productId === key
+                                  )
+                                  .map((amount) => (
+                                    <b>
+                                      🏷
+                                      {new Intl.NumberFormat("vi-VN", {
+                                        style: "currency",
+                                        currency: "VND",
+                                      }).format(amount.amount)}
+                                      <small>
+                                        &nbsp;(
+                                        {stringFromToDate(
+                                          amount.fromDate,
+                                          amount.toDate
+                                        )}
+                                        )
+                                      </small>
+                                    </b>
+                                  ))}
                                 <p>Tổng tiền</p>
                                 <b>
+                                  💵
                                   {new Intl.NumberFormat("vi-VN", {
                                     style: "currency",
                                     currency: "VND",
-                                  }).format(item.processes[i].subtotal)}
+                                  }).format(
+                                    statistic[key].processes[i].subtotal
+                                  )}
                                 </b>
                               </IonLabel>
                             </IonItem>

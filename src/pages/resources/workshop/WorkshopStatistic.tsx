@@ -207,21 +207,26 @@ const WorkshopStatistic: React.FC<Props> = () => {
                                   {processes.find((v) => v.id === i)?.pending}
                                 </i>
                               </p>
-                              <b>{statistic[key].processes[i].pending || 0}</b>
+                              <b>
+                                🤝
+                                {statistic[key].processes[i].pending || 0}
+                              </b>
                               <p>
                                 <i>
                                   {processes.find((v) => v.id === i)?.fulfilled}
                                 </i>
                               </p>
                               <b>
-                                {statistic[key].processes[i].fulfilled || 0}
+                                ✅{statistic[key].processes[i].fulfilled || 0}
                               </b>
                               <p>
                                 <i>
                                   {processes.find((v) => v.id === i)?.rejected}
                                 </i>
                               </p>
-                              <b>{statistic[key].processes[i].rejected || 0}</b>
+                              <b>
+                                👨‍🔧{statistic[key].processes[i].rejected || 0}
+                              </b>
                             </IonLabel>
                             <IonLabel>
                               <p>
@@ -229,6 +234,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                                 {processes.find((v) => v.id === i)?.fulfilled}
                               </p>
                               <b>
+                                🖐
                                 {(statistic[key].processes[i].pending || 0) +
                                   (statistic[key].processes[i].rejected || 0) -
                                   (statistic[key].processes[i].fulfilled || 0)}
@@ -242,20 +248,24 @@ const WorkshopStatistic: React.FC<Props> = () => {
                                 )
                                 .map((amount) => (
                                   <b>
+                                    🏷
                                     {new Intl.NumberFormat("vi-VN", {
                                       style: "currency",
                                       currency: "VND",
                                     }).format(amount.amount)}
                                     <small>
-                                      &nbsp;({stringFromToDate(
+                                      &nbsp;(
+                                      {stringFromToDate(
                                         amount.fromDate,
                                         amount.toDate
-                                      )})
+                                      )}
+                                      )
                                     </small>
                                   </b>
                                 ))}
                               <p>Tổng tiền</p>
                               <b>
+                                💵
                                 {new Intl.NumberFormat("vi-VN", {
                                   style: "currency",
                                   currency: "VND",
