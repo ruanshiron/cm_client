@@ -21,11 +21,13 @@ import { useProductForm } from "../../../hooks/useProductForm";
 import { closeOutline } from "ionicons/icons";
 import { useDispatch } from "react-redux";
 import { findProductById } from "../../../store/data/productSlice";
+import ImageCard from "../../../components/items/ImageCard";
 
 interface ProductUpdateProps {}
 
 const ProductUpdate: React.FC<ProductUpdateProps> = () => {
   const { id } = useParams<{ id: string }>();
+  const { uid } = useSelector((state) => state.user);
   const [presentCancelAlert] = useIonAlert();
 
   const product = useSelector((state) =>
@@ -43,7 +45,7 @@ const ProductUpdate: React.FC<ProductUpdateProps> = () => {
 
   useEffect(() => {
     if (!product) dispatch(findProductById(id));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -91,6 +93,10 @@ const ProductUpdate: React.FC<ProductUpdateProps> = () => {
         <IonGrid>
           <IonRow>
             <IonCol size="12" size-md="8" offsetMd="2">
+              <ImageCard
+                storageRef={`users/${uid}/products/${id}`}
+                uploadable
+              />
               <ProductForm form={form} />
             </IonCol>
           </IonRow>

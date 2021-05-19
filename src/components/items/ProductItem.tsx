@@ -6,7 +6,8 @@ import {
   IonLabel,
   IonList,
 } from "@ionic/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { storage } from "../../config/firebase";
 import { Product } from "../../models/product";
 import { useSelector } from "../../store";
 import { statisticSelector } from "../../store/data/productSlice";
@@ -19,6 +20,18 @@ export const ProductItem: React.FC<Props> = ({ product }) => {
   const statistic = useSelector((state) =>
     statisticSelector(state, product.id!)
   );
+  const { uid } = useSelector((state) => state.user);
+  const [avatar, setAvatar] = useState("");
+  useEffect(() => {
+    storage
+      .ref()
+      .child(`users/${uid}/products/${product.id}`)
+      .getDownloadURL()
+      .then((url) => {
+        setAvatar(url);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <IonCard
       button
@@ -29,7 +42,10 @@ export const ProductItem: React.FC<Props> = ({ product }) => {
         <IonList lines="full" style={{ border: "none" }}>
           <IonItem detail={false}>
             <IonAvatar slot="start">
-              <img src="/assets/icon/icon.png" alt="Speaker profile pic" />
+              <img
+                src={avatar || "/assets/icon/icon.png"}
+                alt="Speaker profile pic"
+              />
             </IonAvatar>
             <IonLabel>
               <b>{product.name}</b>

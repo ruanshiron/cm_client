@@ -207,7 +207,7 @@ const StageFilterModal: React.FC<Props> = ({ isOpen, onDidDismiss }) => {
               {processes.map((item, index) => (
                 <React.Fragment key={index}>
                   {["pending", "fulfilled", "rejected"].map((status) => (
-                    <IonSelectOption value={`${item}/${status}`}>
+                    <IonSelectOption key={status} value={`${item.id}/${status}`}>
                       {(item as any)[status]}
                     </IonSelectOption>
                   ))}

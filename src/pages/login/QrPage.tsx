@@ -15,10 +15,12 @@ import { arrowBack, qrCodeOutline } from "ionicons/icons";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import { functions } from "../../config/firebase";
 import { loginWithToken } from "../../helpers/firebaseHelper";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../store/loading/loadingSlice";
 
 const QrPage = () => {
   const [qrValue, setQrValue] = useState<string>();
-
+  const dispatch = useDispatch();
   const openScanner = async () => {
     const data = await BarcodeScanner.scan();
     console.log(`Barcode data: ${data.text}`);
@@ -27,6 +29,7 @@ const QrPage = () => {
   const isMobile = isPlatform("mobile");
 
   const handleSubmit = async () => {
+    dispatch(setLoading(true));
     if (qrValue) {
       try {
         const response = await functions.httpsCallable("createToken")(qrValue);
@@ -34,7 +37,9 @@ const QrPage = () => {
         if (token) {
           loginWithToken(token);
         }
+        dispatch(setLoading(false));
       } catch (error) {
+        dispatch(setLoading(false));
         console.log(error);
       }
     }

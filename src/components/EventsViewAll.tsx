@@ -98,8 +98,9 @@ export const EventsViewAll: React.FC<Props> = () => {
           );
         });
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch(setLoading(false));
+        console.error(error);
         toast("Có lỗi xảy ra!");
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -49,6 +49,7 @@ import {
 import { fetchAllProcesses } from "../../../store/data/processSlice";
 import EmptyComponent from "../../../components/EmptyComponent";
 import ProductSummary from "../../../components/statistics/ProductSummary";
+import ImageCard from "../../../components/items/ImageCard";
 
 interface ProductDetailProps {}
 
@@ -177,6 +178,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
               <IonLoading isOpen={!!(loading && !product)} />
               <IonCol size="12" size-md="8">
                 <EmptyComponent isEmpty={!product}>
+                  <ImageCard storageRef={`users/${uid}/products/${id}`} />
                   <IonCard className="list-card">
                     <IonCardContent>
                       <IonList style={{ border: "none " }} lines="full">

@@ -105,7 +105,11 @@ const workshopSlice = createSlice({
       .addCase(findWorkshopById.fulfilled, (state, action) => {
         let workshop = state.find((item) => item.id === action.payload.id);
         if (action.payload && !workshop) state.unshift(action.payload);
-        if (action.payload && workshop) workshop = action.payload;
+        if (action.payload && workshop?.id) {
+          return state.map((item) =>
+            item.id === action.payload.id ? action.payload : item
+          );
+        }
       });
   },
 });
@@ -140,9 +144,8 @@ export const statisticHarderSelector = createSelector(
         if ("processes" in tmp[value.productId]) {
           if (value.processId in tmp[value.productId].processes) {
             const subt = subtotal(value, workshop);
-            tmp[value.productId]["processes"][value.processId][
-              "subtotal"
-            ] += subt;
+            tmp[value.productId]["processes"][value.processId]["subtotal"] +=
+              subt;
             tmp[value.productId]["processes"][value.processId][
               "isNotFinished"
             ] =
