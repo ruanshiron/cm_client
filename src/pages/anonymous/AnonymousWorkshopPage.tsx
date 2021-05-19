@@ -23,11 +23,10 @@ import {
   calendarNumberOutline,
   ellipsisVertical,
   logOutOutline,
-  shirtOutline,
 } from "ionicons/icons";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { formatStringDate, stringFromToDate } from "../../utils/date";
+import { formatStringDate } from "../../utils/date";
 import { useSelector } from "../../store";
 import {
   findWorkshopById,
@@ -62,7 +61,7 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
   );
   const classes = useStyles();
   const processes = useSelector((state) => state.processes);
-  const { statistic, stages } = useSelector((state) =>
+  const { statistic, stages, total } = useSelector((state) =>
     statisticHarderSelector(state, id)
   );
   useEffect(() => {
@@ -146,29 +145,12 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
                     </IonList>
                   </IonCardContent>
                 </IonCard>
-                <IonCard className="list-card">
-                  <IonCardContent>
-                    <IonItem lines="none">
-                      <IonLabel>
-                        <u>
-                          <b>Tổng hợp</b>
-                        </u>
-                      </IonLabel>
-                      <IonNote slot="end">
-                        {stringFromToDate(
-                          workshop.statistic?.from,
-                          workshop.statistic?.to
-                        )}
-                      </IonNote>
-                    </IonItem>
-                  </IonCardContent>
-                </IonCard>
-
                 {statistic && (
                   <WorkshopSummary
                     statistic={statistic}
                     workshop={workshop}
                     processes={processes}
+                    total={total}
                   />
                 )}
 

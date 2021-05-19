@@ -65,7 +65,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
     state.workshops.find((item) => item.id === id)
   );
   const processes = useSelector((state) => state.processes);
-  const { statistic, stages } = useSelector((state) =>
+  const { statistic, stages, total } = useSelector((state) =>
     statisticHarderSelector(state, id)
   );
   useEffect(() => {
@@ -192,6 +192,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                   statistic={statistic}
                   workshop={workshop}
                   processes={processes}
+                  total={total}
                 />
               )}
               <IonCard className="list-card">

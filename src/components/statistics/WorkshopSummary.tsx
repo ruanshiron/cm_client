@@ -5,6 +5,8 @@ import {
   IonNote,
   IonIcon,
   IonCard,
+  IonText,
+  IonCardContent,
 } from "@ionic/react";
 import { shirtOutline } from "ionicons/icons";
 import React from "react";
@@ -16,15 +18,83 @@ interface Props {
   statistic: any;
   processes: Process[];
   workshop: Workshop;
+  total: any;
 }
 
 const WorkshopSummary: React.FC<Props> = ({
   statistic,
   processes,
   workshop,
+  total,
 }) => {
   return (
     <>
+      <IonCard className="list-card">
+        <IonCardContent>
+          <IonItem lines="none">
+            <IonLabel>
+              <u>
+                <b>Tổng hợp</b>
+              </u>
+            </IonLabel>
+            <IonNote slot="end">
+              {stringFromToDate(
+                workshop.statistic?.from,
+                workshop.statistic?.to
+              )}
+            </IonNote>
+          </IonItem>
+          {Object.keys(total).map((key, index) => (
+            <IonItem key={index}>
+              <IonLabel>
+                <IonText color="warning">
+                  <p>
+                    <i>{total[key].pending.label}</i>
+                  </p>
+                  <b>
+                    🤝
+                    {total[key].pending.value || 0}
+                  </b>
+                </IonText>
+                <IonText color="success">
+                  <p>
+                    <i>{total[key].fulfilled.label}</i>
+                  </p>
+                  <b>✅{total[key].fulfilled.value || 0}</b>
+                </IonText>
+                <IonText color="danger">
+                  <p>
+                    <i>{total[key].rejected.label}</i>
+                  </p>
+                  <b>🛠{total[key].rejected.value || 0}</b>
+                </IonText>
+              </IonLabel>
+              <IonLabel>
+                <p>
+                  <i>Chưa&nbsp;{total[key].fulfilled.label}</i>
+                </p>
+                <b>
+                  🖐
+                  {(total[key].pending.value || 0) +
+                    (total[key].rejected.value || 0) -
+                    (total[key].fulfilled.value || 0)}
+                </b>
+                <p>
+                  <i>Tổng tiền</i>
+                </p>
+                <b>
+                  💵
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(total[key].subtotal.value)}
+                </b>
+              </IonLabel>
+            </IonItem>
+          ))}
+        </IonCardContent>
+      </IonCard>
+
       {Object.keys(statistic).map((key, index) => (
         <IonCard>
           <IonList style={{ border: "none" }} key={index}>
@@ -39,21 +109,27 @@ const WorkshopSummary: React.FC<Props> = ({
             {Object.keys(statistic[key].processes).map((i, j) => (
               <IonItem key={j}>
                 <IonLabel>
-                  <p>
-                    <i>{processes.find((v) => v.id === i)?.pending}</i>
-                  </p>
-                  <b>
-                    🤝
-                    {statistic[key].processes[i].pending || 0}
-                  </b>
-                  <p>
-                    <i>{processes.find((v) => v.id === i)?.fulfilled}</i>
-                  </p>
-                  <b>✅{statistic[key].processes[i].fulfilled || 0}</b>
-                  <p>
-                    <i>{processes.find((v) => v.id === i)?.rejected}</i>
-                  </p>
-                  <b>👨‍🔧{statistic[key].processes[i].rejected || 0}</b>
+                  <IonText color="warning">
+                    <p>
+                      <i>{processes.find((v) => v.id === i)?.pending}</i>
+                    </p>
+                    <b>
+                      🤝
+                      {statistic[key].processes[i].pending || 0}
+                    </b>
+                  </IonText>
+                  <IonText color="success">
+                    <p>
+                      <i>{processes.find((v) => v.id === i)?.fulfilled}</i>
+                    </p>
+                    <b>✅{statistic[key].processes[i].fulfilled || 0}</b>
+                  </IonText>
+                  <IonText color="danger">
+                    <p>
+                      <i>{processes.find((v) => v.id === i)?.rejected}</i>
+                    </p>
+                    <b>🛠{statistic[key].processes[i].rejected || 0}</b>
+                  </IonText>
                 </IonLabel>
                 <IonLabel>
                   <p>

@@ -139,11 +139,12 @@ export const statisticHarderSelector = createSelector(
     const workshop = workshops.find((item) => item.id === workshopId);
     const filteredStages = stages[workshopId] || [];
     const tmp: { [key: string]: any } = {};
+    const smp: { [key: string]: any } = {};
     forEach(filteredStages, (value) => {
+      const subt = subtotal(value, workshop);
       if (value.productId in tmp) {
         if ("processes" in tmp[value.productId]) {
           if (value.processId in tmp[value.productId].processes) {
-            const subt = subtotal(value, workshop);
             tmp[value.productId]["processes"][value.processId]["subtotal"] +=
               subt;
             tmp[value.productId]["processes"][value.processId][
@@ -165,7 +166,6 @@ export const statisticHarderSelector = createSelector(
               ] = value.quantity;
             }
           } else {
-            const subt = subtotal(value, workshop);
             tmp[value.productId]["processes"][value.processId] = {
               [value.processStatus]: value.quantity,
               subtotal: subt,
@@ -173,7 +173,6 @@ export const statisticHarderSelector = createSelector(
             };
           }
         } else {
-          const subt = subtotal(value, workshop);
           tmp[value.productId]["processes"] = {
             [value.processStatus]: value.quantity,
             subtotal: subt,
@@ -181,7 +180,6 @@ export const statisticHarderSelector = createSelector(
           };
         }
       } else {
-        const subt = subtotal(value, workshop);
         tmp[value.productId] = {
           name: value.productName,
           processes: {
@@ -193,11 +191,40 @@ export const statisticHarderSelector = createSelector(
           },
         };
       }
+
+      if (value.processId in smp) {
+        smp[value.processId][value.processStatus]["label"] = value.processLabel;
+        smp[value.processId][value.processStatus]["value"] += value.quantity;
+        smp[value.processId]["subtotal"]["value"] += subt;
+        smp[value.processId]["subtotal"]["isNotFinished"] =
+          smp[value.processId]["subtotal"]["isNotFinished"] || !subt;
+      } else {
+        smp[value.processId] = {
+          pending: {
+            label: value.processStatus === "pending" ? value.processLabel : "",
+            value: value.processStatus === "pending" ? value.quantity : 0,
+          },
+          fulfilled: {
+            label:
+              value.processStatus === "fulfilled" ? value.processLabel : "",
+            value: value.processStatus === "fulfilled" ? value.quantity : 0,
+          },
+          rejected: {
+            label: value.processStatus === "rejected" ? value.processLabel : "",
+            value: value.processStatus === "rejected" ? value.quantity : 0,
+          },
+          subtotal: {
+            value: subt,
+            isNotFinished: !subt,
+          },
+        };
+      }
     });
 
     return {
       stages: filteredStages,
       statistic: tmp,
+      total: smp,
     };
   }
 );
