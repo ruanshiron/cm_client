@@ -75,7 +75,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
       toast("Xóa thành công!");
       dispatch(removeProduct(id));
 
-      router.goBack();
+      router.push("/tabs/product");
     } catch (error) {
       toast("Có lỗi xảy ra, vui lòng thử lại!");
     }

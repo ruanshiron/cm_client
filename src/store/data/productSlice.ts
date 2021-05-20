@@ -66,11 +66,15 @@ const productSlice = createSlice({
         return action.payload;
       })
       .addCase(findProductById.fulfilled, (state, action) => {
-        let product = state.find((item) => item.id === action.payload.id);
-        if (action.payload && !product) state.unshift(action.payload);
-        if (action.payload && product?.id){
-          return state.map((item) => item.id === action.payload.id ? action.payload : item)
-        };
+        if (action.payload?.id) {
+          let product = state.find((item) => item.id === action.payload.id);
+          if (action.payload && !product) state.unshift(action.payload);
+          if (action.payload && product?.id) {
+            return state.map((item) =>
+              item.id === action.payload.id ? action.payload : item
+            );
+          }
+        }
       });
   },
 });
@@ -128,7 +132,7 @@ export const statisticHarderSelector = createSelector(
     to,
   }),
   (stages, processes, { productId, from, to }) => {
-    const filteredStages = stages[productId] || []
+    const filteredStages = stages[productId] || [];
     const tmp: { [key: string]: { [key: string]: any } } = {};
     forEach(filteredStages, (value) => {
       if (value.processId in tmp) {

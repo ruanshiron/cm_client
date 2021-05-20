@@ -1,7 +1,6 @@
 import { database } from "../config/firebase";
 import firebase from "firebase/app";
 import _ from "lodash";
-import { formatISO } from "date-fns";
 
 const collection = "products";
 
@@ -15,8 +14,8 @@ export const initialProduct: Product = {
   note: "",
   processes: [],
   statistic: {
-    from: formatISO(new Date(), { representation: "date" }),
-    to: null,
+    from: "",
+    to: "",
   },
 };
 
