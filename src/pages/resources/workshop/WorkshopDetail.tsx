@@ -243,7 +243,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                       {workshop?.amounts.map((item, index) => (
                         <IonItem key={index}>
                           <IonIcon slot="start" icon={cashOutline} />
-                          <IonLabel>
+                          <IonLabel className="ion-text-wrap">
                             <b>{item.productName}</b>
                             <p>
                               giá&nbsp;[{item.processName}]&nbsp;từ&nbsp;
@@ -295,86 +295,61 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                                 </IonItem>
                                 {Object.keys(item.processes).map((i, j) => (
                                   <IonItem lines="full" key={j}>
-                                    <IonLabel
-                                      className="ion-text-center ion-text-wrap"
-                                      style={{ maxWidth: "40%" }}
-                                    >
+                                    <IonLabel>
+                                      <IonText color="warning">
+                                        <p>
+                                          <i>
+                                            {
+                                              processes.find((v) => v.id === i)
+                                                ?.pending
+                                            }
+                                          </i>
+                                        </p>
+                                        <b>
+                                          🤝
+                                          {item.processes[i].pending || 0}
+                                        </b>
+                                      </IonText>
+                                      <IonText color="success">
+                                        <p>
+                                          <i>
+                                            {
+                                              processes.find((v) => v.id === i)
+                                                ?.fulfilled
+                                            }
+                                          </i>
+                                        </p>
+                                        <b>
+                                          ✅{item.processes[i].fulfilled || 0}
+                                        </b>
+                                      </IonText>
+                                      <IonText color="danger">
+                                        <p>
+                                          <i>
+                                            {
+                                              processes.find((v) => v.id === i)
+                                                ?.rejected
+                                            }
+                                          </i>
+                                        </p>
+                                        <b>
+                                          🛠{item.processes[i].rejected || 0}
+                                        </b>
+                                      </IonText>
+                                    </IonLabel>
+                                    <IonLabel className="ion-text-wrap">
+                                      <p>
+                                        Chưa&nbsp;
+                                        {
+                                          processes.find((v) => v.id === i)
+                                            ?.fulfilled
+                                        }
+                                      </p>
                                       <b>
                                         {(item.processes[i].pending || 0) +
                                           (item.processes[i].rejected || 0) -
                                           (item.processes[i].fulfilled || 0)}
                                       </b>
-                                      &nbsp;
-                                      <p>
-                                        {
-                                          processes.find((v) => v.id === i)
-                                            ?.pending
-                                        }
-                                        &nbsp;(hiện tại)
-                                      </p>
-                                    </IonLabel>
-                                    <IonLabel>
-                                      <table className="small-table">
-                                        <tbody>
-                                          <tr>
-                                            <td>
-                                              <b>
-                                                {item.processes[i].pending || 0}
-                                              </b>
-                                            </td>
-                                            <td>
-                                              <p>
-                                                <i>
-                                                  {
-                                                    processes.find(
-                                                      (v) => v.id === i
-                                                    )?.pending
-                                                  }
-                                                  &nbsp;(toàn bộ)
-                                                </i>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>
-                                              <b>
-                                                {item.processes[i].fulfilled ||
-                                                  0}
-                                              </b>
-                                            </td>
-                                            <td>
-                                              <p>
-                                                <i>
-                                                  {
-                                                    processes.find(
-                                                      (v) => v.id === i
-                                                    )?.fulfilled
-                                                  }
-                                                </i>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>
-                                              <b>
-                                                {item.processes[i].rejected ||
-                                                  0}
-                                              </b>
-                                            </td>
-                                            <td>
-                                              <p>
-                                                <i>
-                                                  {
-                                                    processes.find(
-                                                      (v) => v.id === i
-                                                    )?.rejected
-                                                  }
-                                                </i>
-                                              </p>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
                                     </IonLabel>
                                   </IonItem>
                                 ))}

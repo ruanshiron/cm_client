@@ -137,7 +137,9 @@ export const statisticHarderSelector = createSelector(
   }),
   (stages, workshops, { workshopId }) => {
     const workshop = workshops.find((item) => item.id === workshopId);
-    const filteredStages = stages[workshopId] || [];
+    const filteredStages = (stages[workshopId] || [])
+      .slice()
+      .sort((a, b) => a.date.localeCompare(b.date));
     const tmp: { [key: string]: any } = {};
     const smp: { [key: string]: any } = {};
     forEach(filteredStages, (value) => {

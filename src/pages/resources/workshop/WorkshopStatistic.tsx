@@ -2,17 +2,12 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
   IonCol,
   IonContent,
   IonGrid,
   IonHeader,
   IonIcon,
-  IonItem,
-  IonLabel,
   IonLoading,
-  IonNote,
   IonPage,
   IonRow,
   IonTitle,
@@ -24,16 +19,6 @@ import { useParams } from "react-router";
 import { useSelector } from "../../../store";
 import { saveOutline } from "ionicons/icons";
 import { useDispatch } from "react-redux";
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
-import { useStyles } from "../../../hooks/useStyles";
 import { addStatisticStages } from "../../../store/data/stageSlice";
 import {
   findWorkshopById,
@@ -48,14 +33,13 @@ import Datetime from "../../../components/statistics/Datetime";
 import { setLoading } from "../../../store/loading/loadingSlice";
 import { getStages, parseStage } from "../../../models/stage";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
-import { stringFromToDate } from "../../../utils/date";
 import WorkshopSummary from "../../../components/statistics/WorkshopSummary";
+import StageTable from "../../../components/statistics/StageTable";
 
 interface Props {}
 
 const WorkshopStatistic: React.FC<Props> = () => {
   const [presentAlert] = useIonAlert();
-  const classes = useStyles();
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
   const form = useWorkshopForm();
@@ -169,24 +153,6 @@ const WorkshopStatistic: React.FC<Props> = () => {
                   );
                 }}
               />
-              <IonCard className="list-card">
-                <IonCardContent>
-                  <IonItem lines="none">
-                    <IonLabel>
-                      <u>
-                        <b>Tổng hợp</b>
-                      </u>
-                    </IonLabel>
-                    <IonNote slot="end">
-                      {stringFromToDate(
-                        workshop?.statistic?.from,
-                        workshop?.statistic?.to
-                      )}
-                    </IonNote>
-                  </IonItem>
-                </IonCardContent>
-              </IonCard>
-
               {statistic && workshop && (
                 <WorkshopSummary
                   statistic={statistic}
@@ -195,45 +161,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                   total={total}
                 />
               )}
-              <IonCard className="list-card">
-                <IonCardContent>
-                  <IonItem lines="none">
-                    <IonLabel>
-                      <u>
-                        <b>Bảng chi tiết</b>
-                      </u>
-                    </IonLabel>
-                  </IonItem>
-                  <TableContainer component={Paper}>
-                    <Table className={classes.table}>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Ngày</TableCell>
-                          <TableCell>Sản phẩm</TableCell>
-                          <TableCell>Quy trình</TableCell>
-                          <TableCell>Số lượng&nbsp;(sản phẩm)</TableCell>
-                          <TableCell>Kích cỡ</TableCell>
-                          <TableCell>Ghi chú</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {stages.map((item, index) => (
-                          <TableRow key={index}>
-                            <TableCell component="th" scope="row">
-                              {item.date}
-                            </TableCell>
-                            <TableCell>{item.productName}</TableCell>
-                            <TableCell>{item.processLabel}</TableCell>
-                            <TableCell>{item.quantity}</TableCell>
-                            <TableCell>{item.productSize}</TableCell>
-                            <TableCell>{item.note}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </IonCardContent>
-              </IonCard>
+              <StageTable stages={stages} />
             </IonCol>
           </IonRow>
         </IonGrid>

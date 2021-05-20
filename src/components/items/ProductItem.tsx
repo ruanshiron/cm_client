@@ -53,30 +53,28 @@ export const ProductItem: React.FC<Props> = ({ product }) => {
             </IonLabel>
           </IonItem>
           {statistic?.map((item, index) => (
-            <React.Fragment key={index}>
-              <IonItem>
-                <IonLabel color="warning" className="ion-text-center">
-                  <b>{item.pending.value}</b>
-                  <p>{item.pending.label}</p>
-                </IonLabel>
-                <IonLabel color="success" className="ion-text-center">
-                  <b>{item.fulfilled.value}</b>
-                  <p>{item.fulfilled.label}</p>
-                </IonLabel>
-                <IonLabel color="danger" className="ion-text-center">
-                  <b>{item.rejected.value}</b>
-                  <p>{item.rejected.label}</p>
-                </IonLabel>
-                <IonLabel className="ion-text-center">
-                  <b>
-                    {item.pending.value +
-                      item.rejected.value -
-                      item.fulfilled.value}
-                  </b>
-                  <p>Chưa&nbsp;{item.fulfilled.label}</p>
-                </IonLabel>
-              </IonItem>
-            </React.Fragment>
+            <IonItem key={index}>
+              <IonLabel color="warning" className="ion-text-center">
+                <b>{item.pending.value}</b>
+                <p>{item.pending.label}</p>
+              </IonLabel>
+              <IonLabel color="success" className="ion-text-center">
+                <b>{item.fulfilled.value}</b>
+                <p>{item.fulfilled.label}</p>
+              </IonLabel>
+              <IonLabel color="danger" className="ion-text-center">
+                <b>{item.rejected.value}</b>
+                <p>{item.rejected.label}</p>
+              </IonLabel>
+              <IonLabel className="ion-text-center">
+                <b>
+                  {item.pending.value +
+                    item.rejected.value -
+                    item.fulfilled.value}
+                </b>
+                <p>Chưa&nbsp;{item.fulfilled.label}</p>
+              </IonLabel>
+            </IonItem>
           ))}
         </IonList>
       </IonCardContent>

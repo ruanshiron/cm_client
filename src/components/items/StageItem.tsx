@@ -2,7 +2,7 @@ import { IonItem, IonLabel, IonNote, IonText } from "@ionic/react";
 import React from "react";
 import { Stage } from "../../models/stage";
 
-const color = (status?: string) => {
+export const color = (status?: string) => {
   if (!status) return "primary";
   if (status.endsWith("fulfilled")) return "success";
   if (status.endsWith("pending")) return "warning";

@@ -1,6 +1,5 @@
 import {
   IonBackButton,
-  IonBadge,
   IonButton,
   IonButtons,
   IonCard,
@@ -44,6 +43,7 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
+import { color } from "../../../components/items/StageItem";
 import { storage } from "../../../config/firebase";
 import { destroyStage } from "../../../models/stage";
 import { useSelector } from "../../../store";
@@ -186,8 +186,8 @@ const StageDetail: React.FC<StageDetailProps> = () => {
                       </IonItem>
                       <IonItem>
                         <IonIcon icon={help} slot="start" />
-                        <IonLabel>
-                          <IonBadge>{stage.processLabel}</IonBadge>
+                        <IonLabel color={color(stage.processStatus)}>
+                          <b>{stage.processLabel}</b>
                         </IonLabel>
                       </IonItem>
                       <IonItem>
