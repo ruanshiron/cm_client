@@ -79,14 +79,33 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
                     </span>
                   </div>
                 </div>
-                <div className="statistic-not-fulfilled-card">
-                  <h5>Chưa {total[key].fulfilled.label}</h5>
-                  <span>
-                    {(total[key].pending.value || 0) +
-                      (total[key].rejected.value || 0) -
-                      (total[key].fulfilled.value || 0)}
-                  </span>
-                </div>
+                {(total[key].pending.value || 0) +
+                  (total[key].rejected.value || 0) -
+                  (total[key].fulfilled.value || 0) >=
+                0 ? (
+                  <div className="statistic-not-fulfilled-card">
+                    <h5>Chưa {total[key].fulfilled.label}</h5>
+                    <span>
+                      {(total[key].pending.value || 0) +
+                        (total[key].rejected.value || 0) -
+                        (total[key].fulfilled.value || 0)}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="statistic-ex-fulfilled-card">
+                    <h5>{total[key].fulfilled.label} thừa</h5>
+                    <span>
+                      {
+                        -(
+                          (total[key].pending.value || 0) +
+                          (total[key].rejected.value || 0) -
+                          (total[key].fulfilled.value || 0)
+                        )
+                      }
+                    </span>
+                  </div>
+                )}
+                <div className="last-child"></div>
               </div>
             ))}
           </IonList>
@@ -224,14 +243,33 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
                     </span>
                   </div>
                 </div>
-                <div className="statistic-not-fulfilled-card">
-                  <h5>Chưa {statistic[key].processes[i].fulfilled.label}</h5>
-                  <span>
-                    {(statistic[key].processes[i].pending.value || 0) +
-                      (statistic[key].processes[i].rejected.value || 0) -
-                      (statistic[key].processes[i].fulfilled.value || 0)}
-                  </span>
-                </div>
+                {(statistic[key].processes[i].pending.value || 0) +
+                  (statistic[key].processes[i].rejected.value || 0) -
+                  (statistic[key].processes[i].fulfilled.value || 0) >=
+                0 ? (
+                  <div className="statistic-not-fulfilled-card">
+                    <h5>Chưa {statistic[key].processes[i].fulfilled.label}</h5>
+                    <span>
+                      {(statistic[key].processes[i].pending.value || 0) +
+                        (statistic[key].processes[i].rejected.value || 0) -
+                        (statistic[key].processes[i].fulfilled.value || 0)}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="statistic-ex-fulfilled-card">
+                    <h5>{statistic[key].processes[i].fulfilled.label} thừa</h5>
+                    <span>
+                      {
+                        -(
+                          (statistic[key].processes[i].pending.value || 0) +
+                          (statistic[key].processes[i].rejected.value || 0) -
+                          (statistic[key].processes[i].fulfilled.value || 0)
+                        )
+                      }
+                    </span>
+                  </div>
+                )}
+
                 {workshop?.amounts
                   .filter(
                     (amount) =>
