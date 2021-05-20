@@ -57,8 +57,10 @@ export interface StageFilterOptions {
 export const getStages = (user: string, options?: StageFilterOptions) => {
   let collection: firebase.firestore.Query<firebase.firestore.DocumentData> =
     ref(user).orderBy("date", "desc");
-  if (options?.from) collection = collection.where("date", ">=", options.from.substring(0, 10));
-  if (options?.to) collection = collection.where("date", "<=", options.to.substring(0, 10));
+  if (options?.from)
+    collection = collection.where("date", ">=", options.from.substring(0, 10));
+  if (options?.to)
+    collection = collection.where("date", "<=", options.to.substring(0, 10));
   if (options?.workshopId)
     collection = collection.where("workshopId", "==", options.workshopId);
   if (options?.productId)
@@ -72,21 +74,34 @@ export const getStages = (user: string, options?: StageFilterOptions) => {
   if (options?.lastVisible)
     collection = collection.startAfter(options.lastVisible);
 
-    console.log(options);
-    
+  console.log(options);
+
   return collection.limit(25).get();
 };
 
-export const getAllStages = (user: string) => {
-  return ref(user)
-    .get()
-    .then((snap) => {
-      return snap.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        timestamp: doc.data().timestamp?.toDate().toString(),
-      }));
-    });
+export const getAllStages = (user: string, options?: StageFilterOptions) => {
+  let collection: firebase.firestore.Query<firebase.firestore.DocumentData> =
+    ref(user).orderBy("date", "desc");
+  if (options?.from)
+    collection = collection.where("date", ">=", options.from.substring(0, 10));
+  if (options?.to)
+    collection = collection.where("date", "<=", options.to.substring(0, 10));
+  if (options?.workshopId)
+    collection = collection.where("workshopId", "==", options.workshopId);
+  if (options?.productId)
+    collection = collection.where("productId", "==", options.productId);
+  if (options?.productSize)
+    collection = collection.where("productSize", "==", options.productSize);
+  if (options?.processId)
+    collection = collection.where("processId", "==", options.processId);
+  if (options?.processStatus)
+    collection = collection.where("processStatus", "==", options.processStatus);
+  if (options?.lastVisible)
+    collection = collection.startAfter(options.lastVisible);
+
+  console.log(options);
+
+  return collection.get();
 };
 
 export const findStage = (user: string, id: string) => {

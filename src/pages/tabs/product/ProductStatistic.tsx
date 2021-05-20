@@ -46,7 +46,7 @@ import { Product } from "../../../models/product";
 import { toast } from "../../../utils/toast";
 import Datetime from "../../../components/statistics/Datetime";
 import ProductSummary from "../../../components/statistics/ProductSummary";
-import { getStages, parseStage } from "../../../models/stage";
+import { getAllStages, parseStage } from "../../../models/stage";
 import { setLoading } from "../../../store/loading/loadingSlice";
 
 interface ProductStatisticProps {}
@@ -77,7 +77,7 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
     if (!product) dispatch(findProductById(id));
     if (product) {
       dispatch(setLoading(true));
-      getStages(uid, {
+      getAllStages(uid, {
         from: product.statistic?.from,
         to: product.statistic?.to,
         productId: product.id,

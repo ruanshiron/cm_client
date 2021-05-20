@@ -31,7 +31,7 @@ import { Workshop } from "../../../models/workshop";
 import { toast } from "../../../utils/toast";
 import Datetime from "../../../components/statistics/Datetime";
 import { setLoading } from "../../../store/loading/loadingSlice";
-import { getStages, parseStage } from "../../../models/stage";
+import { getAllStages, parseStage } from "../../../models/stage";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
 import WorkshopSummary from "../../../components/statistics/WorkshopSummary";
 import StageTable from "../../../components/statistics/StageTable";
@@ -56,7 +56,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
     if (!workshop) dispatch(findWorkshopById(id));
     if (workshop) {
       dispatch(setLoading(true));
-      getStages(uid, {
+      getAllStages(uid, {
         from: workshop.statistic?.from,
         to: workshop.statistic?.to,
         workshopId: workshop.id,

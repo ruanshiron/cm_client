@@ -47,7 +47,7 @@ import { useStyles } from "../../hooks/useStyles";
 import { fetchAllProcesses } from "../../store/data/processSlice";
 import { addStatisticStages } from "../../store/data/stageSlice";
 import { setLoading } from "../../store/loading/loadingSlice";
-import { getStages, parseStage } from "../../models/stage";
+import { getAllStages, parseStage } from "../../models/stage";
 import WorkshopSummary from "../../components/statistics/WorkshopSummary";
 
 interface Props {}
@@ -76,7 +76,7 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
     if (!workshop) dispatch(findWorkshopById(id));
     if (workshop) {
       dispatch(setLoading(true));
-      getStages(uid, {
+      getAllStages(uid, {
         from: workshop.statistic?.from,
         to: workshop.statistic?.to,
         workshopId: workshop.id,
