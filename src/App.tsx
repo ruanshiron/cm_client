@@ -52,6 +52,7 @@ import AnonymousMenu from "./components/menus/AnonymousMenu";
 import SettingsPage from "./pages/settings/SettingsPage";
 import { ThemeProvider } from "@material-ui/styles";
 import { defaultMaterialTheme } from "./hooks/useStyles";
+import PasswordResetPage from "./pages/login/PasswordResetPage";
 
 setupConfig({
   rippleEffect: true,
@@ -125,6 +126,7 @@ const App: React.FC = () => {
                   <Route path="/login" component={LoginPage} exact />
                   <Route path="/signup" component={SignUpPage} exact />
                   <Route path="/qr" component={QrPage} exact />
+                  <Route path="/forgot" component={PasswordResetPage} exact />
                   <AnonymousPage />
                 </IonRouterOutlet>
               ))}

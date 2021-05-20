@@ -118,7 +118,7 @@ const SignUpPage = () => {
               expand="block"
               routerLink="/login"
             >
-              Đăng nhập
+              Quay lại trang đăng nhập
             </IonButton>
           </div>
         </IonGrid>
