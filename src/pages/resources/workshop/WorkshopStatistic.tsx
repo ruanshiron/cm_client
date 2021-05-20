@@ -146,7 +146,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                 }}
                 onCancelTo={() => {
                   dispatch(
-                    updateFromDate({
+                    updateToDate({
                       id,
                       to: "",
                     })
