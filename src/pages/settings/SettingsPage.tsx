@@ -18,6 +18,7 @@ import {
   IonToolbar,
   useIonAlert,
 } from "@ionic/react";
+import { format } from "date-fns";
 import {
   checkboxOutline,
   logInOutline,
@@ -31,7 +32,6 @@ import { auth } from "../../config/firebase";
 import { useSelector } from "../../store";
 
 import { signOut } from "../../store/user/userSlice";
-import { formatDate } from "../../utils/date";
 import { toast } from "../../utils/toast";
 
 interface SettingsPageProps {}
@@ -117,10 +117,11 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
                       <IonIcon icon={logInOutline} slot="start"></IonIcon>
                       <IonLabel>Ngày đăng ký</IonLabel>
                       <IonText slot="end">
-                        {formatDate(
+                        {format(
                           new Date(
                             auth.currentUser?.metadata.creationTime || ""
-                          )
+                          ),
+                          "dd/MM/yyyy"
                         )}
                       </IonText>
                     </IonItem>

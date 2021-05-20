@@ -1,5 +1,5 @@
 import { useIonRouter } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   Product,
@@ -8,6 +8,7 @@ import {
   saveProduct,
 } from "../models/product";
 import { useSelector } from "../store";
+import { fetchAllProcesses } from "../store/data/processSlice";
 import { addProduct, updateProduct } from "../store/data/productSlice";
 import { toast } from "../utils/toast";
 
@@ -46,6 +47,19 @@ export const useProductForm = (product = initialProduct) => {
   const setFieldsValue = (e: Partial<Product>) => {
     setFields((fields) => ({ ...fields, ...e }));
   };
+
+  useEffect(() => {
+    if (!product.id) {
+      setFieldsValue({ sizes: ["S", "M", "L"] });
+      if (processes.length > 0 && processes[0].id)
+        setFieldsValue({ processes: [processes[0].id] });
+    }
+  }, [product, processes]);
+
+  useEffect(() => {
+    if (processes.length <= 0) dispatch(fetchAllProcesses());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     fields,

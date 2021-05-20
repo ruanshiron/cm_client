@@ -85,14 +85,14 @@ const configPages: AppPage[] = [
 
 const Menu: React.FC = () => {
   const location = useLocation();
-  const { displayName } = useSelector((state) => state.user);
+  const { displayName, email } = useSelector((state) => state.user);
 
   return (
     <IonMenu id="side-menu" contentId="main" type="overlay" swipeGesture>
       <IonContent>
         <IonList id="tab-list">
           <IonListHeader>{"Xin chào " + displayName}</IonListHeader>
-          <IonNote>Quản lý</IonNote>
+          <IonNote>{email}</IonNote>
 
           {appPages.map((appPage, index) => {
             return (

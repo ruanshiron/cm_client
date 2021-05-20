@@ -20,7 +20,7 @@ interface ProductCreateProps {}
 const ProductCreate: React.FC<ProductCreateProps> = () => {
   const form = useProductForm();
   return (
-    <IonPage>
+    <IonPage className="list-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">

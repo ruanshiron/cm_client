@@ -113,7 +113,10 @@ export async function loginWithToken(token: string) {
 
 export async function createUserWithEmail(email: string, password: string) {
   try {
-    await firebase.auth().createUserWithEmailAndPassword(email, password);
+    const { user } = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password);
+    await user?.sendEmailVerification();
     window.location.replace("/");
     return true;
   } catch (error) {

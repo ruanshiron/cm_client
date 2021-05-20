@@ -10,7 +10,6 @@ import {
   IonToolbar,
   IonSlides,
   IonSlide,
-  IonFooter,
   IonList,
   IonItem,
   IonLabel,
@@ -340,11 +339,28 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton onClick={() => form.setShowForm(false)}>
-              <IonIcon slot="icon-only" icon={closeOutline} />
-            </IonButton>
+            {state !== "initiated" ? (
+              <IonButtons slot="start">
+                <IonButton onClick={handleSlideBack}>
+                  <IonIcon slot="icon-only" icon={arrowBack} />
+                </IonButton>
+              </IonButtons>
+            ) : (
+              <IonButton onClick={() => form.setShowForm(false)}>
+                <IonIcon slot="icon-only" icon={closeOutline} />
+              </IonButton>
+            )}
           </IonButtons>
           <IonTitle>{form.fields.id ? "Cập nhật" : "Thêm mới"}</IonTitle>
+          <IonButtons slot="end">
+            <IonButton
+              color="primary"
+              style={{ marginRight: 12 }}
+              onClick={() => form.submit()}
+            >
+              <IonIcon icon={checkmark} slot="start"></IonIcon> Hoàn thành
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -412,28 +428,6 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
           </IonSlide>
         </IonSlides>
       </IonContent>
-      <IonFooter className="ion-no-border">
-        <IonToolbar>
-          {state !== "initiated" && (
-            <IonButtons slot="start">
-              <IonButton onClick={handleSlideBack}>
-                <IonIcon slot="icon-only" icon={arrowBack} />
-              </IonButton>
-            </IonButtons>
-          )}
-          {state === "finished" && (
-            <IonButtons slot="end">
-              <IonButton
-                color="primary"
-                style={{ marginRight: 12 }}
-                onClick={() => form.submit()}
-              >
-                <IonIcon icon={checkmark} slot="start"></IonIcon> Hoàn thành
-              </IonButton>
-            </IonButtons>
-          )}
-        </IonToolbar>
-      </IonFooter>
     </IonModal>
   );
 };

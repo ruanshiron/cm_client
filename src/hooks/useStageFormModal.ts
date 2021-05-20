@@ -56,7 +56,10 @@ export const useStageFormModal = (stage = initialStage) => {
 
   const submit = async () => {
     if (submitted) return;
-    if (isInvalidStage(fields)) return;
+    if (isInvalidStage(fields)) {
+      toast("Hãy điền đầy đủ thông tin!");
+      return;
+    }
 
     setSubmitted(true);
     try {
