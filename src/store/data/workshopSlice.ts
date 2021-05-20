@@ -11,7 +11,7 @@ import {
   getAllWorkshops,
   Workshop,
 } from "../../models/workshop";
-import { processParser, subtotal } from "../../utils/data";
+import { estimatedSubtotal, processParser, subtotal } from "../../utils/data";
 import { RootState } from "../rootReducer";
 
 let initialState: Workshop[] = [];
@@ -141,9 +141,11 @@ export const statisticHarderSelector = createSelector(
       .slice()
       .sort((a, b) => a.date.localeCompare(b.date));
     const tmp: { [key: string]: any } = {};
+    const tmp2: { [key: string]: any } = {};
     const smp: { [key: string]: any } = {};
     forEach(filteredStages, (value) => {
       const subt = subtotal(value, workshop);
+      const esub = estimatedSubtotal(value, workshop);
       if (value.productId in tmp) {
         if ("processes" in tmp[value.productId]) {
           if (value.processId in tmp[value.productId].processes) {
@@ -194,10 +196,56 @@ export const statisticHarderSelector = createSelector(
         };
       }
 
+      if (value.productId in tmp2) {
+        tmp2[value.productId]["processes"][value.processId][
+          value.processStatus
+        ]["label"] = value.processLabel;
+        tmp2[value.productId]["processes"][value.processId][
+          value.processStatus
+        ]["value"] += value.quantity;
+        tmp2[value.productId]["processes"][value.processId]["subtotal"][
+          "value"
+        ] += subt;
+        tmp2[value.productId]["processes"][value.processId]["subtotal"][
+          "estimate"
+        ] += esub;
+        smp[value.processId]["subtotal"]["isNotFinished"] =
+          smp[value.processId]["subtotal"]["isNotFinished"] || !subt;
+      } else {
+        tmp2[value.productId] = {
+          name: value.productName,
+          processes: {
+            [value.processId]: {
+              pending: {
+                label:
+                  value.processStatus === "pending" ? value.processLabel : "",
+                value: value.processStatus === "pending" ? value.quantity : 0,
+              },
+              fulfilled: {
+                label:
+                  value.processStatus === "fulfilled" ? value.processLabel : "",
+                value: value.processStatus === "fulfilled" ? value.quantity : 0,
+              },
+              rejected: {
+                label:
+                  value.processStatus === "rejected" ? value.processLabel : "",
+                value: value.processStatus === "rejected" ? value.quantity : 0,
+              },
+              subtotal: {
+                value: subt,
+                estimate: esub,
+                isNotFinished: !subt,
+              },
+            },
+          },
+        };
+      }
+
       if (value.processId in smp) {
         smp[value.processId][value.processStatus]["label"] = value.processLabel;
         smp[value.processId][value.processStatus]["value"] += value.quantity;
         smp[value.processId]["subtotal"]["value"] += subt;
+        smp[value.processId]["subtotal"]["estimate"] += esub;
         smp[value.processId]["subtotal"]["isNotFinished"] =
           smp[value.processId]["subtotal"]["isNotFinished"] || !subt;
       } else {
@@ -217,6 +265,7 @@ export const statisticHarderSelector = createSelector(
           },
           subtotal: {
             value: subt,
+            estimate: esub,
             isNotFinished: !subt,
           },
         };
@@ -225,7 +274,7 @@ export const statisticHarderSelector = createSelector(
 
     return {
       stages: filteredStages,
-      statistic: tmp,
+      statistic: tmp2,
       total: smp,
     };
   }

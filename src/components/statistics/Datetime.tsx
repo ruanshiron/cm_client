@@ -46,7 +46,7 @@ const Datetime: React.FC<Props> = ({
   return (
     <IonCard className="list-card">
       <IonCardContent>
-        <IonList style={{ border: "none " }} lines="full">
+        <IonList style={{ border: "none " }}>
           <IonItem>
             <IonIcon slot="start" icon={calendarClearOutline} />
             <IonLabel>

@@ -26,16 +26,16 @@ const QrPage = () => {
   const { isLoading } = useSelector((state) => state.loading);
   const openScanner = async () => {
     const data = await BarcodeScanner.scan();
-    console.log(`Barcode data: ${data.text}`);
+    handleSubmit(data.text);
   };
 
-  const isMobile = isPlatform("mobile");
+  const isMobile = isPlatform("hybrid");
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (code = qrValue) => {
     dispatch(setLoading(true));
-    if (qrValue) {
+    if (code) {
       try {
-        const response = await functions.httpsCallable("createToken")(qrValue);
+        const response = await functions.httpsCallable("createToken")(code);
         const { token } = response.data;
         if (token) {
           loginWithToken(token);
@@ -80,7 +80,7 @@ const QrPage = () => {
               style={{ margin: 10 }}
               fill="solid"
               expand="block"
-              onClick={handleSubmit}
+              onClick={() => handleSubmit()}
             >
               Đi đến
             </IonButton>

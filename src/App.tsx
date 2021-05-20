@@ -11,6 +11,9 @@ import {
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 
+/* SCSS */
+import "./theme/style.scss";
+
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 
@@ -30,8 +33,6 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-/* SCSS */
-import "./theme/style.scss";
 
 import { useSelector } from "./store";
 import { useAuth } from "./hooks/useAuth";

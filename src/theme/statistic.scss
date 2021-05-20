@@ -1,0 +1,81 @@
+.statistic-container {
+  display: flex;
+  color: white;
+  padding: 6px;
+  overflow-x: auto;
+
+  h5 {
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-top: 1rem;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+
+  span {
+    font-size: 20px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .last-child {
+    padding: 3px;
+  }
+}
+
+.statistic-pending-card {
+  margin: 6px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #F08700;
+}
+
+.statistic-fulfilled-rejected-card {
+  margin: 6px;
+  border-radius: 8px;
+  background-color: #3945d0;
+
+  .fulfilled-rejected-wrapper {
+    display: flex;
+    .statistic-fulfilled {
+      padding: 12px 24px 0 12px;
+      border-radius: 8px 0 0 0;
+      flex: 1;
+      background-color: #048A81;
+    }
+    .statistic-rejected {
+      flex: 1;
+      text-align: right;
+      border-radius: 0 8px 0 0;
+      padding: 12px 12px 0 24px;
+      background-color: #9e000d;
+    }
+  }
+  .statistic-subtotal {
+    padding: 0 12px 12px 12px;
+  }
+}
+
+.amount-card {
+  padding: 12px;
+  margin: 6px;
+  border-radius: 8px;
+  background-color: #6D9F71;
+  vertical-align: text-bottom;
+  margin-top: auto;
+  h6 {
+    text-transform: uppercase;
+    font-size: 11px;
+    margin-top: 0;
+    margin-bottom: 2px;
+  }
+}
+
+.statistic-not-fulfilled-card {
+  padding: 12px;
+  margin: 6px;
+  border-radius: 8px;
+  background-color: #536B78;
+  vertical-align: text-bottom;
+  margin-bottom: auto;
+}

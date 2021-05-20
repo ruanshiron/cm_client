@@ -5,7 +5,6 @@ import {
   IonNote,
   IonIcon,
   IonCard,
-  IonText,
   IonCardContent,
 } from "@ionic/react";
 import { shirtOutline } from "ionicons/icons";
@@ -16,85 +15,83 @@ import { stringFromToDate } from "../../utils/date";
 
 interface Props {
   statistic: any;
+  total: any;
   processes: Process[];
   workshop: Workshop;
-  total: any;
 }
 
-const WorkshopSummary: React.FC<Props> = ({
-  statistic,
-  processes,
-  workshop,
-  total,
-}) => {
+const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
   return (
     <>
       <IonCard className="list-card">
         <IonCardContent>
-          <IonItem lines="none">
-            <IonLabel>
-              <u>
-                <b>Tổng hợp</b>
-              </u>
-            </IonLabel>
-            <IonNote slot="end">
-              {stringFromToDate(
-                workshop.statistic?.from,
-                workshop.statistic?.to
-              )}
-            </IonNote>
-          </IonItem>
-          {Object.keys(total).map((key, index) => (
-            <IonItem key={index}>
+          <IonList style={{ border: "none" }}>
+            <IonItem lines="none">
               <IonLabel>
-                <IonText color="warning">
-                  <p>
-                    <i>{total[key].pending.label}</i>
-                  </p>
-                  <b>
-                    🤝
-                    {total[key].pending.value || 0}
-                  </b>
-                </IonText>
-                <IonText color="success">
-                  <p>
-                    <i>{total[key].fulfilled.label}</i>
-                  </p>
-                  <b>✅{total[key].fulfilled.value || 0}</b>
-                </IonText>
-                <IonText color="danger">
-                  <p>
-                    <i>{total[key].rejected.label}</i>
-                  </p>
-                  <b>🛠{total[key].rejected.value || 0}</b>
-                </IonText>
+                <u>
+                  <b>Tổng hợp</b>
+                </u>
               </IonLabel>
-              <IonLabel>
-                <p>
-                  <i>Chưa&nbsp;{total[key].fulfilled.label}</i>
-                </p>
-                <b>
-                  🖐
-                  {(total[key].pending.value || 0) +
-                    (total[key].rejected.value || 0) -
-                    (total[key].fulfilled.value || 0)}
-                </b>
-                <p>
-                  <i>Tổng tiền</i>
-                </p>
-                <b>
-                  💵
-                  {new Intl.NumberFormat("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(total[key].subtotal.value)}
-                </b>
-              </IonLabel>
+              <IonNote slot="end">
+                {stringFromToDate(
+                  workshop.statistic?.from,
+                  workshop.statistic?.to
+                )}
+              </IonNote>
             </IonItem>
-          ))}
+            {Object.keys(total).map((key, index) => (
+              <div className="statistic-container">
+                <div className="statistic-pending-card">
+                  <h5>{total[key].pending.label}</h5>
+                  <span>{total[key].fulfilled.value || 0}</span>
+                  <h5>
+                    Tổng tiền <br />
+                    theo {total[key].pending.label}
+                  </h5>
+                  <span>
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(total[key].subtotal.estimate)}
+                  </span>
+                </div>
+                <div className="statistic-fulfilled-rejected-card">
+                  <div className="fulfilled-rejected-wrapper">
+                    <div className="statistic-fulfilled">
+                      <h5>{total[key].fulfilled.label}</h5>
+                      <span>{total[key].fulfilled.value}</span>
+                    </div>
+                    <div className="statistic-rejected">
+                      <h5>{total[key].rejected.label || "lỗi"}</h5>
+                      <span>{total[key].rejected.value}</span>
+                    </div>
+                  </div>
+                  <div className="statistic-subtotal">
+                    <h5>
+                      Tổng tiền <br />
+                      theo {total[key].fulfilled.label}
+                    </h5>
+                    <span>
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(total[key].subtotal.value)}
+                    </span>
+                  </div>
+                </div>
+                <div className="statistic-not-fulfilled-card">
+                  <h5>Chưa {total[key].fulfilled.label}</h5>
+                  <span>
+                    {(total[key].pending.value || 0) +
+                      (total[key].rejected.value || 0) -
+                      (total[key].fulfilled.value || 0)}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </IonList>
         </IonCardContent>
       </IonCard>
-
       {Object.keys(statistic).map((key, index) => (
         <IonCard>
           <IonList style={{ border: "none" }} key={index}>
@@ -106,41 +103,41 @@ const WorkshopSummary: React.FC<Props> = ({
               </IonLabel>
               <IonNote slot="end">đơn vị sản phẩm</IonNote>
             </IonItem>
-            {Object.keys(statistic[key].processes).map((i, j) => (
+            {/* {Object.keys(statistic[key].processes).map((i, j) => (
               <IonItem key={j}>
                 <IonLabel>
                   <IonText color="warning">
                     <p>
-                      <i>{processes.find((v) => v.id === i)?.pending}</i>
+                      <i>{statistic[key].processes[i].pending.label}</i>
                     </p>
                     <b>
                       🤝
-                      {statistic[key].processes[i].pending || 0}
+                      {statistic[key].processes[i].pending.value || 0}
                     </b>
                   </IonText>
                   <IonText color="success">
                     <p>
-                      <i>{processes.find((v) => v.id === i)?.fulfilled}</i>
+                      <i>{statistic[key].processes[i].fulfilled.label}</i>
                     </p>
-                    <b>✅{statistic[key].processes[i].fulfilled || 0}</b>
+                    <b>✅{statistic[key].processes[i].fulfilled.value || 0}</b>
                   </IonText>
                   <IonText color="danger">
                     <p>
-                      <i>{processes.find((v) => v.id === i)?.rejected}</i>
+                      <i>{statistic[key].processes[i].rejected.label}</i>
                     </p>
-                    <b>🛠{statistic[key].processes[i].rejected || 0}</b>
+                    <b>🛠{statistic[key].processes[i].rejected.value || 0}</b>
                   </IonText>
                 </IonLabel>
                 <IonLabel>
                   <p>
                     Chưa&nbsp;
-                    {processes.find((v) => v.id === i)?.fulfilled}
+                    <i>{statistic[key].processes[i].fulfilled.label}</i>
                   </p>
                   <b>
                     🖐
-                    {(statistic[key].processes[i].pending || 0) +
-                      (statistic[key].processes[i].rejected || 0) -
-                      (statistic[key].processes[i].fulfilled || 0)}
+                    {(statistic[key].processes[i].pending.value || 0) +
+                      (statistic[key].processes[i].rejected.value || 0) -
+                      (statistic[key].processes[i].fulfilled.value || 0)}
                   </b>
                   <p>Đơn giá</p>
                   {workshop?.amounts
@@ -161,16 +158,100 @@ const WorkshopSummary: React.FC<Props> = ({
                         </small>
                       </b>
                     ))}
-                  <p>Tổng tiền</p>
+                  <p>
+                    Tổng tiền (theo {statistic[key].processes[i].pending.label})
+                  </p>
                   <b>
                     💵
                     {new Intl.NumberFormat("vi-VN", {
                       style: "currency",
                       currency: "VND",
-                    }).format(statistic[key].processes[i].subtotal)}
+                    }).format(statistic[key].processes[i].subtotal.estimate)}
+                  </b>
+                  <p>Tổng tiền (thực tế)</p>
+                  <b>
+                    💵
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(statistic[key].processes[i].subtotal.value)}
                   </b>
                 </IonLabel>
               </IonItem>
+            ))} */}
+
+            {Object.keys(statistic[key].processes).map((i, j) => (
+              <div className="statistic-container">
+                <div className="statistic-pending-card">
+                  <h5>{statistic[key].processes[i].pending.label}</h5>
+                  <span>
+                    {statistic[key].processes[i].fulfilled.value || 0}
+                  </span>
+                  <h5>
+                    Tổng tiền <br />
+                    theo {statistic[key].processes[i].pending.label}
+                  </h5>
+                  <span>
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(statistic[key].processes[i].subtotal.estimate)}
+                  </span>
+                </div>
+                <div className="statistic-fulfilled-rejected-card">
+                  <div className="fulfilled-rejected-wrapper">
+                    <div className="statistic-fulfilled">
+                      <h5>{statistic[key].processes[i].fulfilled.label}</h5>
+                      <span>{statistic[key].processes[i].fulfilled.value}</span>
+                    </div>
+                    <div className="statistic-rejected">
+                      <h5>
+                        {statistic[key].processes[i].rejected.label || "lỗi"}
+                      </h5>
+                      <span>{statistic[key].processes[i].rejected.value}</span>
+                    </div>
+                  </div>
+                  <div className="statistic-subtotal">
+                    <h5>
+                      Tổng tiền <br />
+                      theo {statistic[key].processes[i].fulfilled.label}
+                    </h5>
+                    <span>
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(statistic[key].processes[i].subtotal.value)}
+                    </span>
+                  </div>
+                </div>
+                <div className="statistic-not-fulfilled-card">
+                  <h5>Chưa {statistic[key].processes[i].fulfilled.label}</h5>
+                  <span>
+                    {(statistic[key].processes[i].pending.value || 0) +
+                      (statistic[key].processes[i].rejected.value || 0) -
+                      (statistic[key].processes[i].fulfilled.value || 0)}
+                  </span>
+                </div>
+                {workshop?.amounts
+                  .filter(
+                    (amount) =>
+                      amount.processId === i && amount.productId === key
+                  )
+                  .map((amount) => (
+                    <div className="amount-card">
+                      <h6>{amount.fromDate}</h6>
+                      <h6>{amount.toDate}</h6>
+                      <h5>Đơn giá</h5>
+                      <span>
+                        {new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(amount.amount)}
+                      </span>
+                    </div>
+                  ))}
+                <div className="last-child"></div>
+              </div>
             ))}
           </IonList>
         </IonCard>

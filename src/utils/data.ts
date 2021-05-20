@@ -135,3 +135,19 @@ export const subtotal = (stage: Event.Stage, workshop?: Workshop) => {
     );
   }
 };
+
+export const estimatedSubtotal = (stage: Event.Stage, workshop?: Workshop) => {
+  if (!workshop) return 0;
+  const amount = workshop.amounts.find(
+    (item) =>
+      stage.processStatus === "pending" &&
+      item.processId === stage.processId &&
+      item.productId === stage.productId &&
+      isBetween(stage.date, item.fromDate, item.toDate)
+  );
+  if (!amount) {
+    return 0;
+  } else {
+    return stage.quantity * amount.amount;
+  }
+};
