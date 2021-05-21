@@ -120,7 +120,6 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
                 <b>{statistic[key].name}</b>
                 <p>{statistic[key]?.code}</p>
               </IonLabel>
-              <IonNote slot="end">đơn vị sản phẩm</IonNote>
             </IonItem>
             {/* {Object.keys(statistic[key].processes).map((i, j) => (
               <IonItem key={j}>
