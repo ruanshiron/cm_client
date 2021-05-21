@@ -18,6 +18,7 @@ export const initialStage: Stage = {
   processId: "",
   processStatus: "",
   processLabel: "",
+  note: "",
   date: formatISO(new Date(), { representation: "date" }),
 };
 
