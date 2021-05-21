@@ -43,7 +43,7 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
               <div className="statistic-container">
                 <div className="statistic-pending-card">
                   <h5>{total[key].pending.label}</h5>
-                  <span>{total[key].fulfilled.value || 0}</span>
+                  <span>{total[key].pending.value || 0}</span>
                   <h5>
                     Tổng tiền <br />
                     theo {total[key].pending.label}
