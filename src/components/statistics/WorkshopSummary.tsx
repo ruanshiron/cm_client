@@ -203,7 +203,7 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
                 <div className="statistic-pending-card">
                   <h5>{statistic[key].processes[i].pending.label}</h5>
                   <span>
-                    {statistic[key].processes[i].fulfilled.value || 0}
+                    {statistic[key].processes[i].pending.value || 0}
                   </span>
                   <h5>
                     Tổng tiền <br />
