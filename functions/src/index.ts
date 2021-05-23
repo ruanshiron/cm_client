@@ -345,3 +345,23 @@ export const updateStagesOnChangeProcess = functions.firestore
       return true;
     }
   });
+
+export const createFirstProcessOnCreateAccount = functions.auth
+  .user()
+  .onCreate((user) => {
+    if (user.email) {
+      return admin
+        .firestore()
+        .collection("users")
+        .doc(user.uid)
+        .collection("processes")
+        .add({
+          name: "hoàn thiện",
+          pending: "nhận",
+          fulfilled: "trả",
+          rejected: "sửa",
+        });
+    } else {
+      return "Not a user!";
+    }
+  });
