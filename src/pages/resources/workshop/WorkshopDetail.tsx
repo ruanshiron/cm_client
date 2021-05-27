@@ -11,15 +11,13 @@ import {
   IonIcon,
   IonInput,
   IonItem,
-  IonItemGroup,
   IonLabel,
   IonList,
-  IonListHeader,
   IonLoading,
-  IonNote,
   IonPage,
   IonRow,
-  IonText,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar,
   useIonActionSheet,
@@ -28,7 +26,6 @@ import {
 } from "@ionic/react";
 import {
   barChartOutline,
-  cashOutline,
   close,
   copyOutline,
   ellipsisVertical,
@@ -37,10 +34,9 @@ import {
   phonePortraitOutline,
   qrCodeOutline,
   refresh,
-  shirtOutline,
   trashOutline,
 } from "ionicons/icons";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../../store";
 import { destroyWorkshop } from "../../../models/workshop";
@@ -52,15 +48,18 @@ import {
 import { toast } from "../../../utils/toast";
 import QRCode from "qrcode.react";
 import copy from "copy-to-clipboard";
-import { stringFromToDate } from "../../../utils/date";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
 import FancyContent from "../../../components/EmptyComponent";
+import AmountCard from "../../../components/statistics/AmountCard";
+import WorkshopInstantSummary from "../../../components/statistics/WorkshopInstantSummary";
 
 interface WorkshopDetailProps {}
 
 export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   const [presentDeleteAlert] = useIonAlert();
   const [presentActionSheet] = useIonActionSheet();
+  const [segment, setSegment] =
+    useState<"info" | "statistic" | "amount">("statistic");
   const loading = useSelector((state) => state.loading.isLoading);
   const router = useIonRouter();
   const dispatch = useDispatch();
@@ -95,98 +94,122 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   }, []);
   return (
     <IonPage className="list-page">
-      <IonContent>
-        <IonHeader className="ion-no-border">
-          <IonToolbar>
-            <IonButtons slot="start">
-              <IonBackButton defaultHref="/workshops" />
-            </IonButtons>
-            <IonTitle>Xưởng</IonTitle>
-            {workshop && (
-              <IonButtons slot="end">
-                <IonButton onClick={() => dispatch(findWorkshopById(id))}>
-                  <IonIcon slot="icon-only" icon={refresh}></IonIcon>
-                </IonButton>
-                <IonButton routerLink={router.routeInfo.pathname + "/update"}>
-                  <IonIcon slot="icon-only" icon={pencilOutline}></IonIcon>
-                </IonButton>
-                <IonButton
-                  routerLink={
-                    router.routeInfo.pathname +
-                    (router.routeInfo.pathname.endsWith("/")
-                      ? "statistic"
-                      : "/statistic")
-                  }
-                >
-                  <IonIcon slot="icon-only" icon={barChartOutline} />
-                </IonButton>
-                <IonButton
-                  onClick={() =>
-                    presentActionSheet({
-                      buttons: [
-                        {
-                          text: "Xóa",
-                          icon: trashOutline,
-                          handler: () => {
-                            if (role !== "owner") {
-                              presentDeleteAlert({
-                                header: "Bạn không thể xóa",
-                                message:
-                                  "Bạn không có quyền xóa khi không phải chủ sở hữu",
-                                buttons: ["OK!"],
-                              });
-                              return;
-                            }
+      <IonHeader className="ion-no-border">
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonBackButton defaultHref="/workshops" />
+          </IonButtons>
+          <IonTitle>Xưởng {workshop?.name}</IonTitle>
+          {workshop && (
+            <IonButtons slot="end">
+              <IonButton onClick={() => dispatch(findWorkshopById(id))}>
+                <IonIcon slot="icon-only" icon={refresh}></IonIcon>
+              </IonButton>
+              <IonButton routerLink={router.routeInfo.pathname + "/update"}>
+                <IonIcon slot="icon-only" icon={pencilOutline}></IonIcon>
+              </IonButton>
+              <IonButton
+                routerLink={
+                  router.routeInfo.pathname +
+                  (router.routeInfo.pathname.endsWith("/")
+                    ? "statistic"
+                    : "/statistic")
+                }
+              >
+                <IonIcon slot="icon-only" icon={barChartOutline} />
+              </IonButton>
+              <IonButton
+                onClick={() =>
+                  presentActionSheet({
+                    buttons: [
+                      {
+                        text: "Xóa",
+                        icon: trashOutline,
+                        handler: () => {
+                          if (role !== "owner") {
                             presentDeleteAlert({
-                              header: "Xóa sản phẩm",
-                              message: "Bạn có chắc muốn xóa?",
-                              buttons: [
-                                "Hủy",
-                                {
-                                  text: "OK!",
-                                  handler: handleDeleteWorkshop,
-                                },
-                              ],
-                              onDidDismiss: (e) => console.log("did dismiss"),
+                              header: "Bạn không thể xóa",
+                              message:
+                                "Bạn không có quyền xóa khi không phải chủ sở hữu",
+                              buttons: ["OK!"],
                             });
-                          },
+                            return;
+                          }
+                          presentDeleteAlert({
+                            header: "Xóa sản phẩm",
+                            message: "Bạn có chắc muốn xóa?",
+                            buttons: [
+                              "Hủy",
+                              {
+                                text: "OK!",
+                                handler: handleDeleteWorkshop,
+                              },
+                            ],
+                            onDidDismiss: (e) => console.log("did dismiss"),
+                          });
                         },
-                        {
-                          text: "Xem thống kê chi tiết",
-                          icon: barChartOutline,
-                          handler: () => {
-                            router.push(
-                              router.routeInfo.pathname +
-                                (router.routeInfo.pathname.endsWith("/")
-                                  ? "statistic"
-                                  : "/statistic")
-                            );
-                          },
+                      },
+                      {
+                        text: "Xem thống kê chi tiết",
+                        icon: barChartOutline,
+                        handler: () => {
+                          router.push(
+                            router.routeInfo.pathname +
+                              (router.routeInfo.pathname.endsWith("/")
+                                ? "statistic"
+                                : "/statistic")
+                          );
                         },
-                        {
-                          text: "Sửa",
-                          icon: pencilOutline,
-                          handler: () => {
-                            router.push(router.routeInfo.pathname + "/update");
-                          },
+                      },
+                      {
+                        text: "Sửa",
+                        icon: pencilOutline,
+                        handler: () => {
+                          router.push(router.routeInfo.pathname + "/update");
                         },
-                        { text: "Thoát", icon: close },
-                      ],
-                    })
-                  }
-                >
-                  <IonIcon slot="icon-only" icon={ellipsisVertical}></IonIcon>
-                </IonButton>
-              </IonButtons>
-            )}
-          </IonToolbar>
-        </IonHeader>
-        <IonLoading isOpen={!!loading} />
+                      },
+                      { text: "Thoát", icon: close },
+                    ],
+                  })
+                }
+              >
+                <IonIcon slot="icon-only" icon={ellipsisVertical}></IonIcon>
+              </IonButton>
+            </IonButtons>
+          )}
+        </IonToolbar>
+        <IonToolbar>
+          <IonSegment
+            value={segment}
+            onIonChange={(e) => {
+              if (
+                e.detail.value === "info" ||
+                e.detail.value === "statistic" ||
+                e.detail.value === "amount"
+              )
+                setSegment(e.detail.value!);
+            }}
+          >
+            <IonSegmentButton value="info">
+              <IonLabel>Thông tin</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton value="statistic">
+              <IonLabel>Thống kê</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton value="amount">
+              <IonLabel>Giá công</IonLabel>
+            </IonSegmentButton>
+          </IonSegment>
+        </IonToolbar>
+      </IonHeader>
+
+      <IonLoading isOpen={!!loading} />
+      <IonContent>
         <IonGrid>
           <IonRow>
             <IonCol size="12" size-md="8" offsetMd="2">
               <FancyContent isEmpty={!workshop}>
-                <IonCard className="list-card">
+                <IonCard hidden={segment !== "info"} className="list-card">
                   <IonCardContent>
                     <IonList lines="full" style={{ border: "none" }}>
                       <IonItem>
@@ -231,135 +254,8 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                     </IonList>
                   </IonCardContent>
                 </IonCard>
-
-                <IonCard className="list-card">
-                  <IonCardContent>
-                    <IonList lines="none" style={{ border: "none" }}>
-                      <IonListHeader>
-                        <IonLabel>
-                          <b>Giá công</b>
-                        </IonLabel>
-                      </IonListHeader>
-                      {workshop?.amounts.map((item, index) => (
-                        <IonItem key={index}>
-                          <IonIcon slot="start" icon={cashOutline} />
-                          <IonLabel className="ion-text-wrap">
-                            <b>{item.productName}</b>
-                            <p>
-                              giá&nbsp;[{item.processName}]&nbsp;từ&nbsp;
-                              {stringFromToDate(item.fromDate, item.toDate)}
-                            </p>
-                          </IonLabel>
-                          <IonText color="dark">
-                            {new Intl.NumberFormat("vi-VN", {
-                              style: "currency",
-                              currency: "VND",
-                            }).format(item.amount)}
-                          </IonText>
-                        </IonItem>
-                      ))}
-                    </IonList>
-                  </IonCardContent>
-                </IonCard>
-                <IonCard className="list-card">
-                  <IonCardContent>
-                    <IonList
-                      lines="none"
-                      style={{ border: "none" }}
-                      color="dark"
-                    >
-                      <IonItem lines="none">
-                        <IonLabel>
-                          <u>
-                            <b>Thống kê tự động</b>
-                          </u>
-                        </IonLabel>
-                        <IonNote slot="end">
-                          {stringFromToDate(
-                            workshop?.statistic?.from,
-                            workshop?.statistic?.to
-                          )}
-                        </IonNote>
-                      </IonItem>
-                      {workshop?.statistic?.products &&
-                        Object.values(workshop?.statistic?.products).map(
-                          (item, index) => (
-                            <div className="border-full ion-margin" key={index}>
-                              <IonItemGroup>
-                                <IonItem lines="full">
-                                  <IonIcon slot="start" icon={shirtOutline} />
-                                  <IonLabel>
-                                    <b>{item.name}</b>
-                                    <p>{item?.code}</p>
-                                  </IonLabel>
-                                </IonItem>
-                                {Object.keys(item.processes).map((i, j) => (
-                                  <IonItem lines="full" key={j}>
-                                    <IonLabel>
-                                      <IonText color="warning">
-                                        <p>
-                                          <i>
-                                            {
-                                              processes.find((v) => v.id === i)
-                                                ?.pending
-                                            }
-                                          </i>
-                                        </p>
-                                        <b>
-                                          🤝
-                                          {item.processes[i].pending || 0}
-                                        </b>
-                                      </IonText>
-                                      <IonText color="success">
-                                        <p>
-                                          <i>
-                                            {
-                                              processes.find((v) => v.id === i)
-                                                ?.fulfilled
-                                            }
-                                          </i>
-                                        </p>
-                                        <b>
-                                          ✅{item.processes[i].fulfilled || 0}
-                                        </b>
-                                      </IonText>
-                                      <IonText color="danger">
-                                        <p>
-                                          <i>
-                                            {
-                                              processes.find((v) => v.id === i)
-                                                ?.rejected
-                                            }
-                                          </i>
-                                        </p>
-                                        <b>
-                                          🛠{item.processes[i].rejected || 0}
-                                        </b>
-                                      </IonText>
-                                    </IonLabel>
-                                    <IonLabel className="ion-text-wrap">
-                                      <p>
-                                        Chưa&nbsp;
-                                        {
-                                          processes.find((v) => v.id === i)
-                                            ?.fulfilled
-                                        }
-                                      </p>
-                                      <b>
-                                        {(item.processes[i].pending || 0) +
-                                          (item.processes[i].rejected || 0) -
-                                          (item.processes[i].fulfilled || 0)}
-                                      </b>
-                                    </IonLabel>
-                                  </IonItem>
-                                ))}
-                              </IonItemGroup>
-                            </div>
-                          )
-                        )}
-                    </IonList>
-                  </IonCardContent>
-                </IonCard>
+                <AmountCard hide={segment !== "amount"} />
+                <WorkshopInstantSummary hide={segment !== "statistic"} />
               </FancyContent>
             </IonCol>
           </IonRow>
