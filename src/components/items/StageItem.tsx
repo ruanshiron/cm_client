@@ -20,7 +20,7 @@ const StageItem: React.FC<{ stage: Stage }> = ({ stage }) => {
       <IonLabel className={color(stage.processStatus)}>
         <h2>{stage.workshopName}</h2>
         <p>
-          {stage.productName} / {stage.productSize}
+          {stage.productName} / {stage.productSize}{stage.productSizes?.join(", ")}
         </p>
       </IonLabel>
       <IonNote

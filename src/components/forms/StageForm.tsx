@@ -89,34 +89,65 @@ export const StageForm: React.FC<StageFormProps> = ({ form }) => {
             )}
           </IonSelect>
         </IonItem>
-        <IonItem>
-          <IonIcon slot="start" size="large" icon={bodyOutline} />
-          <IonLabel>
-            <b>Kích cỡ</b>
-          </IonLabel>
-          <IonSelect
-            okText="Chọn"
-            cancelText="Hủy"
-            interface="action-sheet"
-            placeholder="chọn kích cỡ"
-            value={form.fields?.productSize}
-            onIonChange={(e) =>
-              form.setFieldsValue({ productSize: e.detail.value! })
-            }
-          >
-            {form.selectedProcduct ? (
-              form.selectedProcduct.sizes.map((item, index) => (
-                <IonSelectOption key={index} value={item}>
-                  {item}
+        {form.fields.productSize ? (
+          <IonItem>
+            <IonIcon slot="start" size="large" icon={bodyOutline} />
+            <IonLabel>
+              <b>Kích cỡ</b>
+            </IonLabel>
+            <IonSelect
+              okText="Chọn"
+              cancelText="Hủy"
+              interface="action-sheet"
+              placeholder="chọn kích cỡ"
+              value={form.fields?.productSize}
+              onIonChange={(e) =>
+                form.setFieldsValue({ productSize: e.detail.value! })
+              }
+            >
+              {form.selectedProcduct ? (
+                form.selectedProcduct.sizes.map((item, index) => (
+                  <IonSelectOption key={index} value={item}>
+                    {item}
+                  </IonSelectOption>
+                ))
+              ) : (
+                <IonSelectOption value={form.fields.productSize}>
+                  {form.fields.productSize}
                 </IonSelectOption>
-              ))
-            ) : (
-              <IonSelectOption value={form.fields.productSize}>
-                {form.fields.productSize}
-              </IonSelectOption>
-            )}
-          </IonSelect>
-        </IonItem>
+              )}
+            </IonSelect>
+          </IonItem>
+        ) : (
+          <IonItem>
+            <IonIcon slot="start" size="large" icon={bodyOutline} />
+            <IonLabel>
+              <b>Kích cỡ</b>
+            </IonLabel>
+            <IonSelect
+              okText="Chọn"
+              cancelText="Hủy"
+              interface="action-sheet"
+              placeholder="chọn kích cỡ"
+              value={form.fields?.productSizes}
+              onIonChange={(e) =>
+                form.setFieldsValue({ productSizes: e.detail.value! })
+              }
+            >
+              {form.selectedProcduct ? (
+                form.selectedProcduct.sizes.map((item, index) => (
+                  <IonSelectOption key={index} value={item}>
+                    {item}
+                  </IonSelectOption>
+                ))
+              ) : (
+                <IonSelectOption value={form.fields.productSize}>
+                  {form.fields.productSize}
+                </IonSelectOption>
+              )}
+            </IonSelect>
+          </IonItem>
+        )}
         <IonItem>
           <IonIcon slot="start" size="large" icon={peopleCircleOutline} />
           <IonLabel>

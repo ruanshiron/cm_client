@@ -12,7 +12,7 @@ export const initialStage: Stage = {
   quantity: NaN,
   productId: "",
   productName: "",
-  productSize: "",
+  productSizes: [],
   workshopId: "",
   workshopName: "",
   processId: "",
@@ -27,7 +27,8 @@ export interface Stage {
   quantity: number;
   productId: string;
   productName: string;
-  productSize: string;
+  productSize?: string;
+  productSizes: string[],
   workshopId: string;
   workshopName: string;
   processId: string;
@@ -141,7 +142,6 @@ export const isInvalidStage = (fields: Stage) =>
   !fields.quantity ||
   !(fields.quantity > 0) ||
   !fields.productId.trim() ||
-  !fields.productSize.trim() ||
   !fields.processId.trim() ||
   !fields.date ||
   !fields.workshopId.trim();

@@ -181,8 +181,9 @@ const StageDetail: React.FC<StageDetailProps> = () => {
                       <IonItem>
                         <IonIcon icon={peopleCircleOutline} slot="start" />
                         <IonLabel>
-                          <b>Xưởng:</b> {stage.workshopName}
+                          <b>{stage.workshopName}</b>
                         </IonLabel>
+                        <IonNote slot="end">xưởng</IonNote>
                       </IonItem>
                       <IonItem>
                         <IonIcon icon={help} slot="start" />
@@ -204,13 +205,24 @@ const StageDetail: React.FC<StageDetailProps> = () => {
                         </IonLabel>
                         <IonNote slot="end">sản phẩm</IonNote>
                       </IonItem>
-                      <IonItem>
-                        <IonIcon icon={accessibilityOutline} slot="start" />
-                        <IonLabel>
-                          <b>{stage.productSize}</b>
-                        </IonLabel>
-                        <IonNote slot="end">kích cỡ</IonNote>
-                      </IonItem>
+                      {stage.productSize ? (
+                        <IonItem>
+                          <IonIcon icon={accessibilityOutline} slot="start" />
+                          <IonLabel>
+                            <b>{stage.productSize}</b>
+                          </IonLabel>
+                          <IonNote slot="end">kích cỡ</IonNote>
+                        </IonItem>
+                      ) : (
+                        <IonItem>
+                          <IonIcon icon={accessibilityOutline} slot="start" />
+                          <IonLabel>
+                            <b>{stage.productSizes.join(", ")}</b>
+                          </IonLabel>
+                          <IonNote slot="end">kích cỡ</IonNote>
+                        </IonItem>
+                      )}
+
                       <IonItem>
                         <IonIcon icon={documentTextOutline} slot="start" />
                         <IonLabel position="stacked">
@@ -227,7 +239,7 @@ const StageDetail: React.FC<StageDetailProps> = () => {
                 </IonCardContent>
               </IonCard>
 
-              {stage?.images && (
+              {stage?.images && stage.images.length > 0 && (
                 <IonCard className="list-card">
                   <IonCardContent>
                     <IonListHeader>

@@ -13,7 +13,8 @@ import {
 import { filterOutline } from "ionicons/icons";
 import React, { useState } from "react";
 import { EventsViewAll } from "../../../components/EventsViewAll";
-import EventFab from "../../../components/fabs/EventFab";
+// import EventFab from "../../../components/fabs/EventFab";
+import StageFab from "../../../components/fabs/StageFab";
 import StageFilterModal from "../../../components/modals/StageFilterModal";
 import { useSelector } from "../../../store";
 
@@ -30,7 +31,8 @@ const DiaryPage: React.FC<DiaryPageProps> = () => {
   const isLoading = useSelector((state) => state.loading.isLoading);
   return (
     <IonPage id="diary-page">
-      <EventFab />
+      {/* <EventFab /> */}
+      <StageFab />
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">

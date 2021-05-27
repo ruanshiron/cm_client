@@ -211,6 +211,7 @@ const QuantityInput: React.FC<{
             <IonInput
               style={{ fontSize: 36 }}
               value={quantity || undefined}
+              type="number"
               pattern="[0-9]"
               onIonChange={(e) =>
                 onChangeQuantity(parseInt(e.detail.value!, 0))
@@ -394,7 +395,7 @@ export const StageModal: React.FC<StageModalProps> = ({ form }) => {
           <IonSlide>
             <SizeSelecter
               items={form.selectedProcduct?.sizes || []}
-              value={form.fields.productSize}
+              value={form.fields.productSize || ""}
               onChange={handleChangeSize}
             />
           </IonSlide>
