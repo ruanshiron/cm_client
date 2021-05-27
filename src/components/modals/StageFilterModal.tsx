@@ -16,7 +16,6 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import {
-  bodyOutline,
   calendarClearOutline,
   calendarNumberOutline,
   helpCircleOutline,
@@ -55,9 +54,9 @@ const StageFilterModal: React.FC<Props> = ({ isOpen, onDidDismiss }) => {
     (stageFilter.processId || "") + "/" + (stageFilter.processStatus || "")
   );
   const { products, workshops, processes } = useSelector((state) => state);
-  const selectedProduct = useSelector((state) =>
-    state.products.find((item) => item.id === productId)
-  );
+  // const selectedProduct = useSelector((state) =>
+  //   state.products.find((item) => item.id === productId)
+  // );
   const handleSubmit = () => {
     const [processId, processStatus] = process.split("/");
     const filter: StageFilterOptions = {
@@ -177,7 +176,7 @@ const StageFilterModal: React.FC<Props> = ({ isOpen, onDidDismiss }) => {
               ))}
             </IonSelect>
           </IonItem>
-          <IonItem>
+          {/* <IonItem>
             <IonIcon icon={bodyOutline} slot="start" />
             <IonLabel>Kích cỡ</IonLabel>
             <IonSelect
@@ -193,7 +192,7 @@ const StageFilterModal: React.FC<Props> = ({ isOpen, onDidDismiss }) => {
                 </IonSelectOption>
               ))}
             </IonSelect>
-          </IonItem>
+          </IonItem> */}
           <IonItem>
             <IonIcon icon={helpCircleOutline} slot="start" />
             <IonLabel>Quy trình</IonLabel>

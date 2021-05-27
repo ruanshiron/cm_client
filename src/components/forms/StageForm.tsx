@@ -129,6 +129,7 @@ export const StageForm: React.FC<StageFormProps> = ({ form }) => {
               cancelText="Hủy"
               interface="action-sheet"
               placeholder="chọn kích cỡ"
+              multiple
               value={form.fields?.productSizes}
               onIonChange={(e) =>
                 form.setFieldsValue({ productSizes: e.detail.value! })
