@@ -205,7 +205,7 @@ export const ProductStatistic: React.FC<ProductStatisticProps> = () => {
                             <TableCell>{item.workshopName}</TableCell>
                             <TableCell>{item.processLabel}</TableCell>
                             <TableCell>{item.quantity}</TableCell>
-                            <TableCell>{item.productSize}</TableCell>
+                            <TableCell>{item.productSize || item.productSizes?.join(", ")}</TableCell>
                             <TableCell>{item.note}</TableCell>
                           </TableRow>
                         ))}
