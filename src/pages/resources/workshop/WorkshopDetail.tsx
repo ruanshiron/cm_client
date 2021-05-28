@@ -94,12 +94,12 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   }, []);
   return (
     <IonPage className="list-page">
-      <IonHeader className="ion-no-border">
+      <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton defaultHref="/workshops" />
           </IonButtons>
-          <IonTitle>Xưởng {workshop?.name}</IonTitle>
+          <IonTitle>{workshop?.name}</IonTitle>
           {workshop && (
             <IonButtons slot="end">
               <IonButton onClick={() => dispatch(findWorkshopById(id))}>

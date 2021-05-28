@@ -54,7 +54,7 @@ const WorkshopSelectItem: React.FC<Props> = ({ value, onChange }) => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <IonList>
+          <IonList lines="full">
             {workshops.map((item, index) => (
               <IonItem key={index} button onClick={() => handleClickItem(item)}>
                 <IonText slot="start">

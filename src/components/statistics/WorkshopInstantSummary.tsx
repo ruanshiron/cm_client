@@ -29,13 +29,18 @@ const WorkshopInstantSummary: React.FC<Props> = ({ hide }) => {
   return (
     <>
       <IonCard>
-        <IonItem>
+        <IonItem lines="full">
           <IonIcon slot="start" icon={calendarOutline} />
-          <IonLabel>
-            {stringFromToDate(
-              workshop?.statistic?.from,
-              workshop?.statistic?.to
-            )}
+          <IonLabel className="ion-text-wrap">
+            Thống kê nhanh của xưởng <b>{workshop?.name}</b> theo khoảng thời
+            gian:
+            <br />
+            <b>
+              {stringFromToDate(
+                workshop?.statistic?.from,
+                workshop?.statistic?.to
+              )}
+            </b>
           </IonLabel>
         </IonItem>
         <IonButton
@@ -49,7 +54,7 @@ const WorkshopInstantSummary: React.FC<Props> = ({ hide }) => {
           expand="block"
         >
           <IonIcon slot="start" icon={barChartOutline} />
-          Xem chi tiết
+          Nhấn để xem chi tiết
         </IonButton>
       </IonCard>
       {workshop?.statistic?.products &&
