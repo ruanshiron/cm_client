@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonButton,
   IonButtons,
@@ -19,9 +19,11 @@ import { loginWithToken } from "../../helpers/firebaseHelper";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/loading/loadingSlice";
 import { useSelector } from "../../store";
+import { useParams } from "react-router";
 
 const QrPage = () => {
   const [qrValue, setQrValue] = useState<string>();
+  const { code } = useParams<{ code: string }>();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.loading);
   const openScanner = async () => {
@@ -47,6 +49,11 @@ const QrPage = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (code) handleSubmit(code);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code]);
 
   return (
     <IonPage>

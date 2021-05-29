@@ -26,8 +26,9 @@ import {
 } from "@ionic/react";
 import {
   barChartOutline,
+  barcodeOutline,
   close,
-  copyOutline,
+  earthOutline,
   ellipsisVertical,
   pencilOutline,
   personOutline,
@@ -82,8 +83,38 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
     }
   };
   const handleCopy = () => {
-    copy(workshop?.code || "Hãy tạo mã trước!");
-    toast(workshop?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!");
+    presentActionSheet({
+      buttons: [
+        {
+          icon: earthOutline,
+          text: "Sao chép liên kết",
+          handler: () => {
+            if (workshop?.code) {
+              copy(window.location.hostname + "/qr/" + workshop.code);
+            }
+            toast(
+              workshop?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!"
+            );
+          },
+        },
+        {
+          icon: barcodeOutline,
+          text: "Chỉ sao chép mã",
+          handler: () => {
+            if (workshop?.code) {
+              copy(workshop.code);
+            }
+            toast(
+              workshop?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!"
+            );
+          },
+        },
+        {
+          icon: close,
+          text: "Hủy",
+        },
+      ],
+    });
   };
   useEffect(() => {
     if (!workshop) dispatch(findWorkshopById(id));
@@ -223,24 +254,16 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                         ></IonIcon>
                         <IonLabel>{workshop?.phonenumber}</IonLabel>
                       </IonItem>
-                      <IonItem>
+                      <IonItem button onClick={handleCopy}>
                         <IonIcon icon={qrCodeOutline} slot="start"></IonIcon>
                         <IonInput
                           value={workshop?.code || "Hãy tạo code mới"}
                           readonly
                           onIonChange={() => {}}
                         />
-                        <IonButtons slot="end">
-                          <IonButton onClick={handleCopy}>
-                            <IonIcon
-                              slot="icon-only"
-                              icon={copyOutline}
-                            ></IonIcon>
-                          </IonButton>
-                        </IonButtons>
                       </IonItem>
                       {workshop?.code && (
-                        <IonItem>
+                        <IonItem  button onClick={handleCopy}>
                           <QRCode
                             style={{ margin: "auto" }}
                             id="qrcode"
