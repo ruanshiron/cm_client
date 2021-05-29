@@ -209,7 +209,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
             </IonButtons>
           )}
         </IonToolbar>
-        <IonToolbar>
+        <IonToolbar hidden={!workshop}>
           <IonSegment
             value={segment}
             onIonChange={(e) => {
@@ -236,10 +236,10 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
 
       <IonLoading isOpen={!!loading} />
       <IonContent>
-        <IonGrid>
-          <IonRow>
-            <IonCol size="12" size-md="8" offsetMd="2">
-              <FancyContent isEmpty={!workshop}>
+        <FancyContent isEmpty={!workshop}>
+          <IonGrid>
+            <IonRow>
+              <IonCol size="12" size-md="8" offsetMd="2">
                 <IonCard hidden={segment !== "info"} className="list-card">
                   <IonCardContent>
                     <IonList lines="full" style={{ border: "none" }}>
@@ -263,7 +263,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                         />
                       </IonItem>
                       {workshop?.code && (
-                        <IonItem  button onClick={handleCopy}>
+                        <IonItem button onClick={handleCopy}>
                           <QRCode
                             style={{ margin: "auto" }}
                             id="qrcode"
@@ -279,10 +279,10 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                 </IonCard>
                 <AmountCard hide={segment !== "amount"} />
                 <WorkshopInstantSummary hide={segment !== "statistic"} />
-              </FancyContent>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </FancyContent>
       </IonContent>
     </IonPage>
   );
