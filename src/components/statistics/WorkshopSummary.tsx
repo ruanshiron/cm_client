@@ -20,7 +20,19 @@ interface Props {
   workshop: Workshop;
 }
 
-const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
+const WorkshopSummary: React.FC<Props> = ({
+  statistic,
+  workshop,
+  total,
+  processes,
+}) => {
+  const label = (id: string, status: "pending" | "fulfilled" | "rejected") => {
+    const process = processes.find((item) => item.id === id);
+    console.log(id);
+
+    if (process) return process[status];
+    else return "đang tải...";
+  };
   return (
     <>
       <IonCard className="list-card">
@@ -40,13 +52,13 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
               </IonNote>
             </IonItem>
             {Object.keys(total).map((key, index) => (
-              <div className="statistic-container">
+              <div key={index} className="statistic-container">
                 <div className="statistic-pending-card">
-                  <h5>{total[key].pending.label}</h5>
-                  <span>{total[key].pending.value || 0}</span>
+                  <h5>{label(key, "pending")}</h5>
+                  <span>{total[key].pending || 0}</span>
                   <h5>
                     Tổng tiền <br />
-                    theo {total[key].pending.label}
+                    theo {label(key, "pending")}
                   </h5>
                   <span>
                     {new Intl.NumberFormat("vi-VN", {
@@ -58,18 +70,18 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
                 <div className="statistic-fulfilled-rejected-card">
                   <div className="fulfilled-rejected-wrapper">
                     <div className="statistic-fulfilled">
-                      <h5>{total[key].fulfilled.label}</h5>
-                      <span>{total[key].fulfilled.value}</span>
+                      <h5>{label(key, "fulfilled")}</h5>
+                      <span>{total[key].fulfilled}</span>
                     </div>
                     <div className="statistic-rejected">
-                      <h5>{total[key].rejected.label || "lỗi"}</h5>
-                      <span>{total[key].rejected.value}</span>
+                      <h5>{label(key, "rejected")}</h5>
+                      <span>{total[key].rejected}</span>
                     </div>
                   </div>
                   <div className="statistic-subtotal">
                     <h5>
                       Tổng tiền <br />
-                      theo {total[key].fulfilled.label}
+                      theo {label(key, "fulfilled")}
                     </h5>
                     <span>
                       {new Intl.NumberFormat("vi-VN", {
@@ -79,27 +91,27 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
                     </span>
                   </div>
                 </div>
-                {(total[key].pending.value || 0) +
-                  (total[key].rejected.value || 0) -
-                  (total[key].fulfilled.value || 0) >=
+                {(total[key].pending || 0) +
+                  (total[key].rejected || 0) -
+                  (total[key].fulfilled || 0) >=
                 0 ? (
                   <div className="statistic-not-fulfilled-card">
-                    <h5>Chưa {total[key].fulfilled.label}</h5>
+                    <h5>Chưa {label(key, "fulfilled")}</h5>
                     <span>
-                      {(total[key].pending.value || 0) +
-                        (total[key].rejected.value || 0) -
-                        (total[key].fulfilled.value || 0)}
+                      {(total[key].pending || 0) +
+                        (total[key].rejected || 0) -
+                        (total[key].fulfilled || 0)}
                     </span>
                   </div>
                 ) : (
                   <div className="statistic-ex-fulfilled-card">
-                    <h5>{total[key].fulfilled.label} thừa</h5>
+                    <h5>{label(key, "fulfilled")} thừa</h5>
                     <span>
                       {
                         -(
-                          (total[key].pending.value || 0) +
-                          (total[key].rejected.value || 0) -
-                          (total[key].fulfilled.value || 0)
+                          (total[key].pending || 0) +
+                          (total[key].rejected || 0) -
+                          (total[key].fulfilled || 0)
                         )
                       }
                     </span>
@@ -130,7 +142,7 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
                     </p>
                     <b>
                       🤝
-                      {statistic[key].processes[i].pending.value || 0}
+                      {statistic[key].processes[i].pending || 0}
                     </b>
                   </IonText>
                   <IonText color="success">
@@ -199,15 +211,13 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
             ))} */}
 
             {Object.keys(statistic[key].processes).map((i, j) => (
-              <div className="statistic-container">
+              <div key={j} className="statistic-container">
                 <div className="statistic-pending-card">
-                  <h5>{statistic[key].processes[i].pending.label}</h5>
-                  <span>
-                    {statistic[key].processes[i].pending.value || 0}
-                  </span>
+                  <h5>{label(i, "pending")}</h5>
+                  <span>{statistic[key].processes[i].pending || 0}</span>
                   <h5>
                     Tổng tiền <br />
-                    theo {statistic[key].processes[i].pending.label}
+                    theo {label(i, "pending")}
                   </h5>
                   <span>
                     {new Intl.NumberFormat("vi-VN", {
@@ -219,20 +229,18 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
                 <div className="statistic-fulfilled-rejected-card">
                   <div className="fulfilled-rejected-wrapper">
                     <div className="statistic-fulfilled">
-                      <h5>{statistic[key].processes[i].fulfilled.label}</h5>
-                      <span>{statistic[key].processes[i].fulfilled.value}</span>
+                      <h5>{label(i, "fulfilled")}</h5>
+                      <span>{statistic[key].processes[i].fulfilled}</span>
                     </div>
                     <div className="statistic-rejected">
-                      <h5>
-                        {statistic[key].processes[i].rejected.label || "lỗi"}
-                      </h5>
-                      <span>{statistic[key].processes[i].rejected.value}</span>
+                      <h5>{label(i, "rejected")}</h5>
+                      <span>{statistic[key].processes[i].rejected}</span>
                     </div>
                   </div>
                   <div className="statistic-subtotal">
                     <h5>
                       Tổng tiền <br />
-                      theo {statistic[key].processes[i].fulfilled.label}
+                      theo {label(i, "fulfilled")}
                     </h5>
                     <span>
                       {new Intl.NumberFormat("vi-VN", {
@@ -242,27 +250,27 @@ const WorkshopSummary: React.FC<Props> = ({ statistic, workshop, total }) => {
                     </span>
                   </div>
                 </div>
-                {(statistic[key].processes[i].pending.value || 0) +
-                  (statistic[key].processes[i].rejected.value || 0) -
-                  (statistic[key].processes[i].fulfilled.value || 0) >=
+                {(statistic[key].processes[i].pending || 0) +
+                  (statistic[key].processes[i].rejected || 0) -
+                  (statistic[key].processes[i].fulfilled || 0) >=
                 0 ? (
                   <div className="statistic-not-fulfilled-card">
-                    <h5>Chưa {statistic[key].processes[i].fulfilled.label}</h5>
+                    <h5>Chưa {label(i, "fulfilled")}</h5>
                     <span>
-                      {(statistic[key].processes[i].pending.value || 0) +
-                        (statistic[key].processes[i].rejected.value || 0) -
-                        (statistic[key].processes[i].fulfilled.value || 0)}
+                      {(statistic[key].processes[i].pending || 0) +
+                        (statistic[key].processes[i].rejected || 0) -
+                        (statistic[key].processes[i].fulfilled || 0)}
                     </span>
                   </div>
                 ) : (
                   <div className="statistic-ex-fulfilled-card">
-                    <h5>{statistic[key].processes[i].fulfilled.label} thừa</h5>
+                    <h5>{label(i, "fulfilled")} thừa</h5>
                     <span>
                       {
                         -(
-                          (statistic[key].processes[i].pending.value || 0) +
-                          (statistic[key].processes[i].rejected.value || 0) -
-                          (statistic[key].processes[i].fulfilled.value || 0)
+                          (statistic[key].processes[i].pending || 0) +
+                          (statistic[key].processes[i].rejected || 0) -
+                          (statistic[key].processes[i].fulfilled || 0)
                         )
                       }
                     </span>

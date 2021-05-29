@@ -24,7 +24,7 @@ const WorkshopInstantSummary: React.FC<Props> = ({ hide }) => {
   const workshop = useSelector((state) =>
     state.workshops.find((v) => v.id === id)
   );
-  // const processes = useSelector((state) => state.processes);
+  const processes = useSelector((state) => state.processes);
   if (hide) return null;
   return (
     <>
@@ -69,7 +69,7 @@ const WorkshopInstantSummary: React.FC<Props> = ({ hide }) => {
                     <p>{item?.code}</p>
                   </IonLabel>
                 </IonItem>
-                {/* {Object.keys(item.processes).map((i, j) => (
+                {Object.keys(item.processes).map((i, j) => (
                   <IonItem lines="full" key={j}>
                     <IonLabel className="ion-text-center" color="warning">
                       <b>{item.processes[i].pending || 0}</b>
@@ -101,7 +101,7 @@ const WorkshopInstantSummary: React.FC<Props> = ({ hide }) => {
                       </p>
                     </IonLabel>
                   </IonItem>
-                ))} */}
+                ))}
               </IonItemGroup>
             </IonCardContent>
           </IonCard>

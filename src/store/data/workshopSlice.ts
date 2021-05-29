@@ -199,10 +199,7 @@ export const statisticHarderSelector = createSelector(
       if (value.productId in tmp2) {
         tmp2[value.productId]["processes"][value.processId][
           value.processStatus
-        ]["label"] = value.processLabel;
-        tmp2[value.productId]["processes"][value.processId][
-          value.processStatus
-        ]["value"] += value.quantity;
+        ] += value.quantity;
         tmp2[value.productId]["processes"][value.processId]["subtotal"][
           "value"
         ] += subt;
@@ -216,21 +213,10 @@ export const statisticHarderSelector = createSelector(
           name: value.productName,
           processes: {
             [value.processId]: {
-              pending: {
-                label:
-                  value.processStatus === "pending" ? value.processLabel : "",
-                value: value.processStatus === "pending" ? value.quantity : 0,
-              },
-              fulfilled: {
-                label:
-                  value.processStatus === "fulfilled" ? value.processLabel : "",
-                value: value.processStatus === "fulfilled" ? value.quantity : 0,
-              },
-              rejected: {
-                label:
-                  value.processStatus === "rejected" ? value.processLabel : "",
-                value: value.processStatus === "rejected" ? value.quantity : 0,
-              },
+              pending: value.processStatus === "pending" ? value.quantity : 0,
+              fulfilled:
+                value.processStatus === "fulfilled" ? value.quantity : 0,
+              rejected: value.processStatus === "rejected" ? value.quantity : 0,
               subtotal: {
                 value: subt,
                 estimate: esub,
@@ -242,27 +228,16 @@ export const statisticHarderSelector = createSelector(
       }
 
       if (value.processId in smp) {
-        smp[value.processId][value.processStatus]["label"] = value.processLabel;
-        smp[value.processId][value.processStatus]["value"] += value.quantity;
+        smp[value.processId][value.processStatus] += value.quantity;
         smp[value.processId]["subtotal"]["value"] += subt;
         smp[value.processId]["subtotal"]["estimate"] += esub;
         smp[value.processId]["subtotal"]["isNotFinished"] =
           smp[value.processId]["subtotal"]["isNotFinished"] || !subt;
       } else {
         smp[value.processId] = {
-          pending: {
-            label: value.processStatus === "pending" ? value.processLabel : "",
-            value: value.processStatus === "pending" ? value.quantity : 0,
-          },
-          fulfilled: {
-            label:
-              value.processStatus === "fulfilled" ? value.processLabel : "",
-            value: value.processStatus === "fulfilled" ? value.quantity : 0,
-          },
-          rejected: {
-            label: value.processStatus === "rejected" ? value.processLabel : "",
-            value: value.processStatus === "rejected" ? value.quantity : 0,
-          },
+          pending: value.processStatus === "pending" ? value.quantity : 0,
+          fulfilled: value.processStatus === "fulfilled" ? value.quantity : 0,
+          rejected: value.processStatus === "rejected" ? value.quantity : 0,
           subtotal: {
             value: subt,
             estimate: esub,
