@@ -2,19 +2,16 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
   IonCol,
   IonContent,
   IonGrid,
   IonHeader,
   IonIcon,
-  IonInput,
-  IonItem,
   IonLabel,
-  IonList,
   IonLoading,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonRow,
   IonSegment,
   IonSegmentButton,
@@ -26,33 +23,29 @@ import {
 } from "@ionic/react";
 import {
   barChartOutline,
-  barcodeOutline,
   close,
-  earthOutline,
   ellipsisVertical,
   pencilOutline,
-  personOutline,
-  phonePortraitOutline,
-  qrCodeOutline,
   refresh,
   trashOutline,
 } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../../store";
-import { destroyWorkshop } from "../../../models/workshop";
+import { destroyWorkshop, findWorkshop } from "../../../models/workshop";
 import { useDispatch } from "react-redux";
 import {
   removeWorkshop,
   findWorkshopById,
+  updateWorkshop,
 } from "../../../store/data/workshopSlice";
 import { toast } from "../../../utils/toast";
-import QRCode from "qrcode.react";
-import copy from "copy-to-clipboard";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
 import FancyContent from "../../../components/EmptyComponent";
 import AmountCard from "../../../components/statistics/AmountCard";
 import WorkshopInstantSummary from "../../../components/statistics/WorkshopInstantSummary";
+import { RefresherEventDetail } from "@ionic/core";
+import WorkshopInfoTab from "../../../components/statistics/WorkshopInfoTab";
 
 interface WorkshopDetailProps {}
 
@@ -82,39 +75,18 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
       toast("Có lỗi xảy ra, vui lòng thử lại!");
     }
   };
-  const handleCopy = () => {
-    presentActionSheet({
-      buttons: [
-        {
-          icon: earthOutline,
-          text: "Sao chép liên kết",
-          handler: () => {
-            if (workshop?.code) {
-              copy(window.location.hostname + "/qr/" + workshop.code);
-            }
-            toast(
-              workshop?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!"
-            );
-          },
-        },
-        {
-          icon: barcodeOutline,
-          text: "Chỉ sao chép mã",
-          handler: () => {
-            if (workshop?.code) {
-              copy(workshop.code);
-            }
-            toast(
-              workshop?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!"
-            );
-          },
-        },
-        {
-          icon: close,
-          text: "Hủy",
-        },
-      ],
-    });
+  const handleRefresh = (event: CustomEvent<RefresherEventDetail>) => {
+    findWorkshop(uid, id)
+      .then((doc) => {
+        if (doc) {
+          dispatch(updateWorkshop(doc));
+        }
+        event.detail.complete();
+      })
+      .catch(() => {
+        toast("Có lỗi xảy ra, không thể làm mới!");
+        event.detail.complete();
+      });
   };
   useEffect(() => {
     if (!workshop) dispatch(findWorkshopById(id));
@@ -236,47 +208,14 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
 
       <IonLoading isOpen={!!loading} />
       <IonContent>
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
         <FancyContent isEmpty={!workshop}>
           <IonGrid>
             <IonRow>
               <IonCol size="12" size-md="8" offsetMd="2">
-                <IonCard hidden={segment !== "info"} className="list-card">
-                  <IonCardContent>
-                    <IonList lines="full" style={{ border: "none" }}>
-                      <IonItem>
-                        <IonIcon icon={personOutline} slot="start"></IonIcon>
-                        <IonLabel>{workshop?.name}</IonLabel>
-                      </IonItem>
-                      <IonItem>
-                        <IonIcon
-                          icon={phonePortraitOutline}
-                          slot="start"
-                        ></IonIcon>
-                        <IonLabel>{workshop?.phonenumber}</IonLabel>
-                      </IonItem>
-                      <IonItem button onClick={handleCopy}>
-                        <IonIcon icon={qrCodeOutline} slot="start"></IonIcon>
-                        <IonInput
-                          value={workshop?.code || "Hãy tạo code mới"}
-                          readonly
-                          onIonChange={() => {}}
-                        />
-                      </IonItem>
-                      {workshop?.code && (
-                        <IonItem button onClick={handleCopy}>
-                          <QRCode
-                            style={{ margin: "auto" }}
-                            id="qrcode"
-                            value={workshop?.code}
-                            size={290}
-                            level={"H"}
-                            includeMargin={true}
-                          />
-                        </IonItem>
-                      )}
-                    </IonList>
-                  </IonCardContent>
-                </IonCard>
+                <WorkshopInfoTab hide={segment !== "info"} />
                 <AmountCard hide={segment !== "amount"} />
                 <WorkshopInstantSummary hide={segment !== "statistic"} />
               </IonCol>
