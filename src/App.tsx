@@ -126,6 +126,7 @@ const App: React.FC = () => {
                   />
                   <Route path="/login" component={LoginPage} exact />
                   <Route path="/signup" component={SignUpPage} exact />
+                  <Route path="/qr" component={QrPage} exact />
                   <Route path="/qr/:code" component={QrPage} exact />
                   <Route path="/forgot" component={PasswordResetPage} exact />
                   <AnonymousPage />

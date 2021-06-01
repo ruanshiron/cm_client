@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/loading/loadingSlice";
 import { useSelector } from "../../store";
 import { useParams } from "react-router";
+import { toast } from "../../utils/toast";
 
 const QrPage = () => {
   const [qrValue, setQrValue] = useState<string>();
@@ -38,14 +39,18 @@ const QrPage = () => {
     if (code) {
       try {
         const response = await functions.httpsCallable("createToken")(code);
-        const { token } = response.data;
+        const { token, error } = response.data;
         if (token) {
           loginWithToken(token);
+        }
+        if (error) {
+          toast("Không thể đăng nhập với mã trên!");
         }
         dispatch(setLoading(false));
       } catch (error) {
         dispatch(setLoading(false));
         console.log(error);
+        toast("Không thể đăng nhập với mã trên!");
       }
     }
   };
