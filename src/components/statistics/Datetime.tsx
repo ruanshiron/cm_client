@@ -6,8 +6,16 @@ import {
   IonIcon,
   IonLabel,
   IonDatetime,
+  IonButton,
+  IonRow,
+  IonCol,
 } from "@ionic/react";
-import { calendarClearOutline, calendarNumberOutline } from "ionicons/icons";
+import {
+  calendarClearOutline,
+  calendarNumberOutline,
+  refreshOutline,
+  saveOutline,
+} from "ionicons/icons";
 import { DatetimeChangeEventDetail } from "@ionic/core";
 import React from "react";
 
@@ -33,6 +41,8 @@ interface Props {
   onCancelFrom: (e: CustomEvent<void>) => void;
   onChangeTo: (e: CustomEvent<DatetimeChangeEventDetail>) => void;
   onCancelTo: (e: CustomEvent<void>) => void;
+  onReset?: () => void;
+  onSave?: () => void;
 }
 
 const Datetime: React.FC<Props> = ({
@@ -42,6 +52,8 @@ const Datetime: React.FC<Props> = ({
   onChangeTo,
   onCancelFrom,
   onCancelTo,
+  onReset,
+  onSave,
 }) => {
   return (
     <IonCard className="list-card">
@@ -77,6 +89,28 @@ const Datetime: React.FC<Props> = ({
               onIonCancel={onCancelTo}
             ></IonDatetime>
           </IonItem>
+          <IonRow>
+            {onReset && (
+              <IonCol>
+                <IonButton
+                  fill="clear"
+                  expand="block"
+                  onClick={() => onReset()}
+                >
+                  <IonIcon icon={refreshOutline} slot="start" />
+                  Đặt lại
+                </IonButton>
+              </IonCol>
+            )}
+            {onSave && (
+              <IonCol>
+                <IonButton fill="clear" expand="block" onClick={() => onSave()}>
+                  <IonIcon icon={saveOutline} slot="start" />
+                  Lưu
+                </IonButton>
+              </IonCol>
+            )}
+          </IonRow>
         </IonList>
       </IonCardContent>
     </IonCard>

@@ -8,51 +8,19 @@ import {
   IonList,
   IonListHeader,
   IonNote,
-  useIonActionSheet,
-  useIonRouter,
 } from "@ionic/react";
-import {
-  close,
-  createOutline,
-  documentsOutline,
-  information,
-  shirtOutline,
-} from "ionicons/icons";
+import { shirtOutline } from "ionicons/icons";
 import React from "react";
 import { Customer } from "../../models/customer";
 import { formatStringDate } from "../../utils/date";
 
 export const CustomerItem: React.FC<{ data: Customer }> = ({ data }) => {
-  const [present] = useIonActionSheet();
-  const router = useIonRouter();
-  const handleClick = () => {
-    present({
-      buttons: [
-        {
-          icon: createOutline,
-          text: "Thêm đơn hàng",
-          handler: () =>
-            router.push("/tabs/customers/" + data.id + "/orders/create"),
-        },
-        {
-          icon: documentsOutline,
-          text: "Danh sách đơn hàng",
-          handler: () => router.push("/tabs/customers/" + data.id + "/orders"),
-        },
-        {
-          icon: information,
-          text: "Thông tin chi tiết",
-          handler: () => router.push("/tabs/customers/" + data.id),
-        },
-        {
-          icon: close,
-          text: "Thoát",
-        },
-      ],
-    });
-  };
   return (
-    <IonCard button className="list-card" onClick={() => handleClick()}>
+    <IonCard
+      button
+      className="list-card"
+      routerLink={"/tabs/customers/" + data.id}
+    >
       <IonCardContent>
         <IonList style={{ border: "none" }}>
           <IonItem detail={false}>

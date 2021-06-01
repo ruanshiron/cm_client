@@ -36,7 +36,9 @@ export const OrderItem: React.FC<{ order: Order; readonly?: boolean }> = ({
           icon: create,
           text: "Sửa",
           handler: () => {
-            router.push(router.routeInfo.pathname + "/" + order.id + "/update");
+            router.push(
+              router.routeInfo.pathname + "/orders/" + order.id + "/update"
+            );
           },
         },
         {

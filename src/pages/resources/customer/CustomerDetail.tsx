@@ -2,19 +2,16 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
   IonCol,
   IonContent,
   IonGrid,
   IonHeader,
   IonIcon,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonList,
+  IonLoading,
   IonPage,
   IonRow,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar,
   useIonActionSheet,
@@ -24,24 +21,23 @@ import {
 import {
   add,
   close,
-  copyOutline,
-  documentsOutline,
   ellipsisVertical,
   pencilOutline,
-  personOutline,
-  phonePortraitOutline,
-  qrCodeOutline,
   trashOutline,
 } from "ionicons/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
 import { destroyCustomer } from "../../../models/customer";
 import { useSelector } from "../../../store";
-import { removeCustomer } from "../../../store/data/customerSlice";
+import {
+  findCustomerById,
+  removeCustomer,
+} from "../../../store/data/customerSlice";
 import { toast } from "../../../utils/toast";
-import QRCode from "qrcode.react";
-import copy from "copy-to-clipboard";
+import FancyContent from "../../../components/EmptyComponent";
+import CustomerInfoTab from "../../../components/statistics/CustomerInfoTab";
+import OrderTab from "../../../components/statistics/OrderTab";
 
 interface CustomerDetailProps {}
 
@@ -55,6 +51,8 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
   const customer = useSelector((state) =>
     state.customers.find((v) => v.id === id)
   );
+  const { isLoading } = useSelector((state) => state.loading);
+  const [segment, setSegment] = useState<"info" | "order">("order");
 
   const handleDeleteCustomer = async () => {
     try {
@@ -69,135 +67,98 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
     }
   };
 
-  const handleCopy = () => {
-    copy(customer?.code || "Hãy tạo mã trước!");
-    toast(customer?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!");
+  const handleActionClick = () => {
+    presentActionSheet({
+      buttons: [
+        {
+          text: "Xóa",
+          icon: trashOutline,
+          handler: () => {
+            if (role !== "owner") {
+              presentDeleteAlert({
+                header: "Bạn không thể xóa",
+                message: "Bạn không có quyền xóa khi không phải chủ sở hữu",
+                buttons: ["OK!"],
+              });
+              return;
+            }
+            presentDeleteAlert({
+              header: "Xóa khách hàng",
+              message: "Bạn có chắc muốn xóa?",
+              buttons: [
+                "Hủy",
+                {
+                  text: "OK!",
+                  handler: handleDeleteCustomer,
+                },
+              ],
+              onDidDismiss: (e) => console.log("did dismiss"),
+            });
+          },
+        },
+        {
+          text: "Sửa",
+          icon: pencilOutline,
+          handler: () => {
+            router.push(router.routeInfo.pathname + "/update");
+          },
+        },
+        { text: "Thoát", icon: close },
+      ],
+    });
   };
+
+  useEffect(() => {
+    if (!customer) dispatch(findCustomerById(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <IonPage className="list-page">
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonBackButton defaultHref="/customers" />
+          </IonButtons>
+          <IonTitle>{customer?.name}</IonTitle>
+          <IonButtons slot="end">
+            <IonButton
+              routerLink={router.routeInfo.pathname + "/orders/create"}
+            >
+              <IonIcon slot="icon-only" icon={add} />
+            </IonButton>
+            <IonButton onClick={handleActionClick}>
+              <IonIcon slot="icon-only" icon={ellipsisVertical}></IonIcon>
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+        <IonToolbar hidden={!customer}>
+          <IonSegment
+            value={segment}
+            onIonChange={(e) => {
+              if (e.detail.value === "info" || e.detail.value === "order")
+                setSegment(e.detail.value!);
+            }}
+          >
+            <IonSegmentButton value="info">
+              Thông tin khách hàng
+            </IonSegmentButton>
+            <IonSegmentButton value="order">Đơn hàng</IonSegmentButton>
+          </IonSegment>
+        </IonToolbar>
+      </IonHeader>
+      <IonLoading isOpen={isLoading} />
       <IonContent>
-        <IonHeader className="ion-no-border">
-          <IonToolbar>
-            <IonButtons slot="start">
-              <IonBackButton defaultHref="/customers" />
-            </IonButtons>
-            <IonTitle>Khách hàng</IonTitle>
-            <IonButtons slot="end">
-              <IonButton
-                routerLink={router.routeInfo.pathname + "/orders/create"}
-              >
-                <IonIcon slot="icon-only" icon={add} />
-              </IonButton>
-              <IonButton routerLink={router.routeInfo.pathname + "/orders"}>
-                <IonIcon slot="icon-only" icon={documentsOutline} />
-              </IonButton>
-              <IonButton
-                onClick={() =>
-                  presentActionSheet({
-                    buttons: [
-                      {
-                        text: "Xóa",
-                        icon: trashOutline,
-                        handler: () => {
-                          if (role !== "owner") {
-                            presentDeleteAlert({
-                              header: "Bạn không thể xóa",
-                              message:
-                                "Bạn không có quyền xóa khi không phải chủ sở hữu",
-                              buttons: ["OK!"],
-                            });
-                            return;
-                          }
-                          presentDeleteAlert({
-                            header: "Xóa khách hàng",
-                            message: "Bạn có chắc muốn xóa?",
-                            buttons: [
-                              "Hủy",
-                              {
-                                text: "OK!",
-                                handler: handleDeleteCustomer,
-                              },
-                            ],
-                            onDidDismiss: (e) => console.log("did dismiss"),
-                          });
-                        },
-                      },
-                      {
-                        text: "Sửa",
-                        icon: pencilOutline,
-                        handler: () => {
-                          router.push(router.routeInfo.pathname + "/update");
-                        },
-                      },
-                      {
-                        text: "Danh sách đơn hàng",
-                        icon: documentsOutline,
-                        handler: () => {
-                          router.push(router.routeInfo.pathname + "/orders");
-                        },
-                      },
-                      { text: "Thoát", icon: close },
-                    ],
-                  })
-                }
-              >
-                <IonIcon slot="icon-only" icon={ellipsisVertical}></IonIcon>
-              </IonButton>
-            </IonButtons>
-          </IonToolbar>
-        </IonHeader>
-        <IonGrid>
-          <IonRow>
-            <IonCol size="12" size-md="8" offsetMd="2">
-              <IonCard className="list-card">
-                <IonCardContent>
-                  <IonList lines="full" style={{ border: "none" }}>
-                    <IonItem>
-                      <IonIcon icon={personOutline} slot="start"></IonIcon>
-                      <IonLabel slot="start">{customer?.name}</IonLabel>
-                    </IonItem>
-                    <IonItem>
-                      <IonIcon
-                        icon={phonePortraitOutline}
-                        slot="start"
-                      ></IonIcon>
-                      <IonLabel slot="start">{customer?.phonenumber}</IonLabel>
-                    </IonItem>
-                  </IonList>
-                </IonCardContent>
-              </IonCard>
-              <IonCard className="list-card">
-                <IonCardContent>
-                  <IonItem>
-                    <IonIcon icon={qrCodeOutline} slot="start"></IonIcon>
-                    <IonInput
-                      value={customer?.code || "Hãy tạo code mới"}
-                      onIonChange={() => {}}
-                    />
-                    <IonButtons slot="end">
-                      <IonButton onClick={handleCopy}>
-                        <IonIcon slot="icon-only" icon={copyOutline}></IonIcon>
-                      </IonButton>
-                    </IonButtons>
-                  </IonItem>
-                  {customer?.code && (
-                    <IonItem>
-                      <QRCode
-                        style={{ margin: "auto" }}
-                        id="qrcode"
-                        value={customer?.code}
-                        size={290}
-                        level={"H"}
-                        includeMargin={true}
-                      />
-                    </IonItem>
-                  )}
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
+        <FancyContent isEmpty={!customer}>
+          <IonGrid>
+            <IonRow className="ion-justify-content-center">
+              <IonCol size="12" sizeLg="8">
+                <CustomerInfoTab hide={segment !== "info"} />
+                <OrderTab hide={segment !== "order"} />
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </FancyContent>
       </IonContent>
     </IonPage>
   );
