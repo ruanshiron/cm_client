@@ -10,6 +10,7 @@ import employeeSlice from "./data/employeeSlice";
 import processSlice from "./data/processSlice";
 import toastSlice from "./toast/toastSlice";
 import diaryPageSlice from "./page/diaryPageSlice";
+import paymentSlice from "./data/paymentSlice";
 
 const rootReducer = combineReducers({
   // User
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   customers: customerSlice.reducer,
   employees: employeeSlice.reducer,
   processes: processSlice.reducer,
+  payments: paymentSlice.reducer,
 
   // Page
   diaryPage: diaryPageSlice.reducer,

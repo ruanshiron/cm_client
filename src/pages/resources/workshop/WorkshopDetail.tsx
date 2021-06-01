@@ -8,8 +8,8 @@ import {
   IonHeader,
   IonIcon,
   IonLabel,
-  IonLoading,
   IonPage,
+  IonProgressBar,
   IonRefresher,
   IonRefresherContent,
   IonRow,
@@ -46,6 +46,7 @@ import AmountCard from "../../../components/statistics/AmountCard";
 import WorkshopInstantSummary from "../../../components/statistics/WorkshopInstantSummary";
 import { RefresherEventDetail } from "@ionic/core";
 import WorkshopInfoTab from "../../../components/statistics/WorkshopInfoTab";
+import WorkshopPaymentTab from "../../../components/statistics/WorkshopPaymentTab";
 
 interface WorkshopDetailProps {}
 
@@ -53,7 +54,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   const [presentDeleteAlert] = useIonAlert();
   const [presentActionSheet] = useIonActionSheet();
   const [segment, setSegment] =
-    useState<"info" | "statistic" | "amount">("statistic");
+    useState<"info" | "statistic" | "amount" | "payment">("statistic");
   const loading = useSelector((state) => state.loading.isLoading);
   const router = useIonRouter();
   const dispatch = useDispatch();
@@ -183,11 +184,13 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
         </IonToolbar>
         <IonToolbar hidden={!workshop}>
           <IonSegment
+            scrollable
             value={segment}
             onIonChange={(e) => {
               if (
                 e.detail.value === "info" ||
                 e.detail.value === "statistic" ||
+                e.detail.value === "payment" ||
                 e.detail.value === "amount"
               )
                 setSegment(e.detail.value!);
@@ -202,11 +205,18 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
             <IonSegmentButton value="amount">
               <IonLabel>Giá công</IonLabel>
             </IonSegmentButton>
+            <IonSegmentButton value="payment">
+              <IonLabel>Thanh toán</IonLabel>
+            </IonSegmentButton>
           </IonSegment>
         </IonToolbar>
       </IonHeader>
 
-      <IonLoading isOpen={!!loading} />
+      <IonProgressBar
+        className={loading ? "" : "ion-hide"}
+        type="indeterminate"
+        slot="fixed"
+      />
       <IonContent>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
@@ -218,6 +228,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
                 <WorkshopInfoTab hide={segment !== "info"} />
                 <AmountCard hide={segment !== "amount"} />
                 <WorkshopInstantSummary hide={segment !== "statistic"} />
+                <WorkshopPaymentTab hide={segment !== "payment"} />
               </IonCol>
             </IonRow>
           </IonGrid>

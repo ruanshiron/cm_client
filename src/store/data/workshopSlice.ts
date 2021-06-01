@@ -130,86 +130,38 @@ export default workshopSlice;
 export const statisticHarderSelector = createSelector(
   (state: RootState) => state.stages,
   (state: RootState) => state.workshops,
+  (state: RootState) => state.payments,
   (_state: RootState, workshopId: string, from?: string, to?: string) => ({
     workshopId,
     from,
     to,
   }),
-  (stages, workshops, { workshopId }) => {
+  (stages, workshops, payments, { workshopId }) => {
     const workshop = workshops.find((item) => item.id === workshopId);
+    const filteredPayments = (payments[workshopId] || []).slice();
     const filteredStages = (stages[workshopId] || [])
       .slice()
       .sort((a, b) => a.date.localeCompare(b.date));
     const tmp: { [key: string]: any } = {};
-    const tmp2: { [key: string]: any } = {};
     const smp: { [key: string]: any } = {};
     forEach(filteredStages, (value) => {
       const subt = subtotal(value, workshop);
       const esub = estimatedSubtotal(value, workshop);
-      if (value.productId in tmp) {
-        if ("processes" in tmp[value.productId]) {
-          if (value.processId in tmp[value.productId].processes) {
-            tmp[value.productId]["processes"][value.processId]["subtotal"] +=
-              subt;
-            tmp[value.productId]["processes"][value.processId][
-              "isNotFinished"
-            ] =
-              tmp[value.productId]["processes"][value.processId][
-                "isNotFinished"
-              ] || !subt;
-            if (
-              value.processStatus in
-              tmp[value.productId]["processes"][value.processId]
-            ) {
-              tmp[value.productId]["processes"][value.processId][
-                value.processStatus
-              ] += value.quantity;
-            } else {
-              tmp[value.productId]["processes"][value.processId][
-                value.processStatus
-              ] = value.quantity;
-            }
-          } else {
-            tmp[value.productId]["processes"][value.processId] = {
-              [value.processStatus]: value.quantity,
-              subtotal: subt,
-              isNotFinished: !subt,
-            };
-          }
-        } else {
-          tmp[value.productId]["processes"] = {
-            [value.processStatus]: value.quantity,
-            subtotal: subt,
-            isNotFinished: !subt,
-          };
-        }
-      } else {
-        tmp[value.productId] = {
-          name: value.productName,
-          processes: {
-            [value.processId]: {
-              [value.processStatus]: value.quantity,
-              subtotal: subt,
-              isNotFinished: !subt,
-            },
-          },
-        };
-      }
 
-      if (value.productId in tmp2) {
-        tmp2[value.productId]["processes"][value.processId][
+      if (value.productId in tmp) {
+        tmp[value.productId]["processes"][value.processId][
           value.processStatus
         ] += value.quantity;
-        tmp2[value.productId]["processes"][value.processId]["subtotal"][
+        tmp[value.productId]["processes"][value.processId]["subtotal"][
           "value"
         ] += subt;
-        tmp2[value.productId]["processes"][value.processId]["subtotal"][
+        tmp[value.productId]["processes"][value.processId]["subtotal"][
           "estimate"
         ] += esub;
         smp[value.processId]["subtotal"]["isNotFinished"] =
           smp[value.processId]["subtotal"]["isNotFinished"] || !subt;
       } else {
-        tmp2[value.productId] = {
+        tmp[value.productId] = {
           name: value.productName,
           processes: {
             [value.processId]: {
@@ -249,8 +201,9 @@ export const statisticHarderSelector = createSelector(
 
     return {
       stages: filteredStages,
-      statistic: tmp2,
+      statistic: tmp,
       total: smp,
+      payment: filteredPayments.map((v) => v.amount).reduce((a, b) => a + b, 0),
     };
   }
 );

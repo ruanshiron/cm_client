@@ -69,7 +69,7 @@ export const isBetween = (date: string, from?: string, to?: string) => {
 export const stringFromToDate = (from?: string, to?: string) => {
   return (
     (from ? format(new Date(from), "dd/MM/yyyy") : "trước") +
-    " ~ " +
+    " → " +
     (to ? format(new Date(to), "dd/MM/yyyy") : "nay")
   );
 };

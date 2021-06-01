@@ -75,9 +75,6 @@ export const getStages = (user: string, options?: StageFilterOptions) => {
     collection = collection.where("processStatus", "==", options.processStatus);
   if (options?.lastVisible)
     collection = collection.startAfter(options.lastVisible);
-
-  console.log(options);
-
   return collection.limit(25).get();
 };
 

@@ -32,9 +32,9 @@ import { toast } from "../../../utils/toast";
 import Datetime from "../../../components/statistics/Datetime";
 import { setLoading } from "../../../store/loading/loadingSlice";
 import { getAllStages, parseStage } from "../../../models/stage";
-import { fetchAllProcesses } from "../../../store/data/processSlice";
 import WorkshopSummary from "../../../components/statistics/WorkshopSummary";
 import StageTable from "../../../components/statistics/StageTable";
+import { fetchAllProcesses } from "../../../store/data/processSlice";
 
 interface Props {}
 
@@ -49,7 +49,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
     state.workshops.find((item) => item.id === id)
   );
   const processes = useSelector((state) => state.processes);
-  const { statistic, stages, total} = useSelector((state) =>
+  const { statistic, stages, total, payment } = useSelector((state) =>
     statisticHarderSelector(state, id)
   );
   useEffect(() => {
@@ -67,10 +67,6 @@ const WorkshopStatistic: React.FC<Props> = () => {
       });
     }
   }, [dispatch, id, uid, workshop]);
-  useEffect(() => {
-    if (stages.length <= 0) dispatch(fetchAllProcesses());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
   const handleSaveStatistic = () => {
     if (workshop) {
       presentAlert({
@@ -95,6 +91,10 @@ const WorkshopStatistic: React.FC<Props> = () => {
       toast("Không tìm thấy sản phẩm này!");
     }
   };
+  useEffect(() => {
+    if (processes.length <= 0) dispatch(fetchAllProcesses());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <IonPage className="list-page">
       <IonHeader>
@@ -159,6 +159,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                   workshop={workshop}
                   processes={processes}
                   total={total}
+                  payment={payment}
                 />
               )}
               <StageTable stages={stages} />

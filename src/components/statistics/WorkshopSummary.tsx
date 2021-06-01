@@ -18,6 +18,7 @@ interface Props {
   total: any;
   processes: Process[];
   workshop: Workshop;
+  payment: number;
 }
 
 const WorkshopSummary: React.FC<Props> = ({
@@ -25,11 +26,10 @@ const WorkshopSummary: React.FC<Props> = ({
   workshop,
   total,
   processes,
+  payment,
 }) => {
   const label = (id: string, status: "pending" | "fulfilled" | "rejected") => {
     const process = processes.find((item) => item.id === id);
-    console.log(id);
-
     if (process) return process[status];
     else return "đang tải...";
   };
@@ -117,6 +117,16 @@ const WorkshopSummary: React.FC<Props> = ({
                     </span>
                   </div>
                 )}
+
+                <div className="amount-card">
+                  <h5>Đã thanh toán/ tạm ứng</h5>
+                  <span>
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(payment)}
+                  </span>
+                </div>
                 <div className="last-child"></div>
               </div>
             ))}
@@ -124,8 +134,8 @@ const WorkshopSummary: React.FC<Props> = ({
         </IonCardContent>
       </IonCard>
       {Object.keys(statistic).map((key, index) => (
-        <IonCard>
-          <IonList style={{ border: "none" }} key={index}>
+        <IonCard key={index}>
+          <IonList style={{ border: "none" }}>
             <IonItem lines="full">
               <IonIcon slot="start" icon={shirtOutline} />
               <IonLabel>
@@ -282,8 +292,8 @@ const WorkshopSummary: React.FC<Props> = ({
                     (amount) =>
                       amount.processId === i && amount.productId === key
                   )
-                  .map((amount) => (
-                    <div className="amount-card">
+                  .map((amount, i) => (
+                    <div key={i} className="amount-card">
                       <h6>{amount.fromDate}</h6>
                       <h6>{amount.toDate}</h6>
                       <h5>Đơn giá</h5>

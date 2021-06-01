@@ -31,7 +31,7 @@ const AnonymousWorkshopStatisticTab: React.FC<Props> = ({
   processes,
 }) => {
   const { id } = useSelector((state) => state.user);
-  const { statistic, stages, total } = useSelector((state) =>
+  const { statistic, stages, total, payment } = useSelector((state) =>
     statisticHarderSelector(state, id)
   );
   if (!workshop || hide) return null;
@@ -65,6 +65,7 @@ const AnonymousWorkshopStatisticTab: React.FC<Props> = ({
             workshop={workshop}
             processes={processes}
             total={total}
+            payment={payment}
           />
         )}
 
