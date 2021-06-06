@@ -12,6 +12,7 @@ const PendingStageFab = () => {
       .add()
       .then(() => {
         toast("Lưu thành công");
+        setShowModal(false);
       })
       .catch((error) => {
         toast(error.message);
