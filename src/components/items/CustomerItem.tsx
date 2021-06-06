@@ -18,7 +18,8 @@ export const CustomerItem: React.FC<{ data: Customer }> = ({ data }) => {
   return (
     <IonCard
       button
-      className="list-card"
+      style={{ boxShadow: "none" }}
+      className="list-card border-full"
       routerLink={"/tabs/customers/" + data.id}
     >
       <IonCardContent>

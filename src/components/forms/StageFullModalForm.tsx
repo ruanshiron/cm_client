@@ -25,6 +25,7 @@ import WorkshopSelectItem from "../items/WorkshopSelectItem";
 
 interface Props {
   form: ReturnType<typeof useStageFullModalForm>;
+  disableMore?: boolean;
 }
 
 const StageFullModalForm: React.FC<Props> = ({
@@ -49,6 +50,7 @@ const StageFullModalForm: React.FC<Props> = ({
     setImages,
     loading,
   },
+  disableMore,
 }) => {
   const imagesInput = useRef<HTMLInputElement>(null);
   const [more, setMore] = useState(false);
@@ -93,6 +95,7 @@ const StageFullModalForm: React.FC<Props> = ({
           setStatus(status);
         }}
       />
+
       {more ? (
         <IonItemGroup>
           <IonItemDivider />
@@ -122,9 +125,11 @@ const StageFullModalForm: React.FC<Props> = ({
           </IonRow>
         </IonItemGroup>
       ) : (
-        <IonButton expand="full" fill="clear" onClick={() => setMore(true)}>
-          Chi tiết hơn
-        </IonButton>
+        !disableMore && (
+          <IonButton expand="full" fill="clear" onClick={() => setMore(true)}>
+            Chi tiết hơn
+          </IonButton>
+        )
       )}
       <input
         className="ion-hide"

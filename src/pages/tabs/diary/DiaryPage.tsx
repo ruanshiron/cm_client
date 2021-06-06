@@ -7,21 +7,24 @@ import {
   IonMenuButton,
   IonPage,
   IonProgressBar,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { filterOutline } from "ionicons/icons";
 import React, { useState } from "react";
 import { EventsViewAll } from "../../../components/EventsViewAll";
-// import EventFab from "../../../components/fabs/EventFab";
 import StageFab from "../../../components/fabs/StageFab";
 import StageFilterModal from "../../../components/modals/StageFilterModal";
+import PendingStageList from "../../../components/PendingStageList";
 import { useSelector } from "../../../store";
 
 interface DiaryPageProps {}
 
 const DiaryPage: React.FC<DiaryPageProps> = () => {
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [segemnt, setSegment] = useState<string>("all");
   const hasFilter = useSelector((state) =>
     Object.values(state.diaryPage.stageFilter).reduce(
       (a, b) => !!a || !!b,
@@ -39,19 +42,30 @@ const DiaryPage: React.FC<DiaryPageProps> = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Nhật ký</IonTitle>
-          <IonButtons slot="end">
-            <IonButton
-              className="notification-button"
-              onClick={() => setShowFilterModal(true)}
-            >
-              <IonIcon slot="icon-only" icon={filterOutline} />
-              {hasFilter && (
-                <IonBadge className="notifications-badge" color="danger">
-                  {" "}
-                </IonBadge>
-              )}
-            </IonButton>
-          </IonButtons>
+          {segemnt === "all" && (
+            <IonButtons slot="end">
+              <IonButton
+                className="notification-button"
+                onClick={() => setShowFilterModal(true)}
+              >
+                <IonIcon slot="icon-only" icon={filterOutline} />
+                {hasFilter && (
+                  <IonBadge className="notifications-badge" color="danger">
+                    {" "}
+                  </IonBadge>
+                )}
+              </IonButton>
+            </IonButtons>
+          )}
+        </IonToolbar>
+        <IonToolbar>
+          <IonSegment
+            value={segemnt}
+            onIonChange={(e) => setSegment(e.detail.value!)}
+          >
+            <IonSegmentButton value="all">Tất cả</IonSegmentButton>
+            <IonSegmentButton value="pending">Đang đợi</IonSegmentButton>
+          </IonSegment>
         </IonToolbar>
       </IonHeader>
       <IonProgressBar
@@ -59,8 +73,8 @@ const DiaryPage: React.FC<DiaryPageProps> = () => {
         type="indeterminate"
         slot="fixed"
       />
-      <EventsViewAll />
-
+      {segemnt === "all" && <EventsViewAll />}
+      {segemnt === "pending" && <PendingStageList />}
       <StageFilterModal
         isOpen={showFilterModal}
         onDidDismiss={() => setShowFilterModal(false)}

@@ -17,7 +17,7 @@ interface Props {
 
 export const Item: React.FC<Props> = ({ title, subtitle, baseUrl, id }) => {
   return (
-    <IonCard className="list-card">
+    <IonCard style={{ boxShadow: "none" }} className="list-card border-full">
       <IonCardContent>
         <IonList lines="none" style={{ border: "none" }}>
           <IonItem button routerLink={`${baseUrl}/${id}`}>

@@ -1,24 +1,33 @@
 import {
+  IonBadge,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCol,
-  IonContent,
-  IonGrid,
   IonHeader,
   IonIcon,
   IonPage,
-  IonRow,
+  IonProgressBar,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar,
   useIonActionSheet,
 } from "@ionic/react";
-import { ellipsisVertical, logOutOutline } from "ionicons/icons";
-import React, { useEffect } from "react";
+import {
+  close,
+  filterOutline,
+  logOutOutline,
+  menuOutline,
+} from "ionicons/icons";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { EmployeeStageList } from "../../components/EmployeeStageList";
+import PendingStageFab from "../../components/fabs/PendingStageFab";
+import StageFilterModal from "../../components/modals/StageFilterModal";
+import PendingStageList from "../../components/PendingStageList";
 import { useSelector } from "../../store";
 import { findEmployeeById } from "../../store/data/employeeSlice";
+import { fetchAllProducts } from "../../store/data/productSlice";
+import { fetchAllWorkshops } from "../../store/data/workshopSlice";
 
 import { signOut } from "../../store/user/userSlice";
 
@@ -27,56 +36,98 @@ interface Props {}
 const AnonymousEmployeePage: React.FC<Props> = () => {
   const dispatch = useDispatch();
   const [presentActionSheet] = useIonActionSheet();
-  const id = useSelector((state) => state.user.id);
+  const { id } = useSelector((state) => state.user);
   const employee = useSelector((state) =>
     state.employees.find((item) => item.id === state.user.id)
   );
+
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [segemnt, setSegment] = useState<string>("all");
+  const hasFilter = useSelector((state) =>
+    Object.values(state.diaryPage.stageFilter).reduce(
+      (a, b) => !!a || !!b,
+      false
+    )
+  );
+  const isLoading = useSelector((state) => state.loading.isLoading);
 
   useEffect(() => {
     dispatch(findEmployeeById(id));
   }, [dispatch, id]);
 
+  useEffect(() => {
+    dispatch(fetchAllProducts());
+    dispatch(fetchAllWorkshops());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <IonPage className="list-page">
-      <IonContent>
-        <IonHeader className="ion-no-border">
-          <IonToolbar>
-            <IonTitle>
-              {employee?.name} ・ {employee?.phonenumber}
-            </IonTitle>
+    <IonPage id="diary-page" className="list-page">
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonButton
+              onClick={() =>
+                presentActionSheet({
+                  header: `Chào ${employee?.name}`,
+                  buttons: [
+                    {
+                      text: "Đăng xuất",
+                      icon: logOutOutline,
+                      handler: () => {
+                        dispatch(signOut());
+                      },
+                    },
+                    {
+                      text: "Hủy",
+                      icon: close,
+                    },
+                  ],
+                })
+              }
+            >
+              <IonIcon slot="icon-only" icon={menuOutline}></IonIcon>
+            </IonButton>
+          </IonButtons>
+          <IonTitle>{employee?.name}</IonTitle>
+          {segemnt === "all" && (
             <IonButtons slot="end">
               <IonButton
-                onClick={() =>
-                  presentActionSheet({
-                    buttons: [
-                      {
-                        text: "Đăng xuất",
-                        icon: logOutOutline,
-                        handler: () => {
-                          dispatch(signOut());
-                        },
-                      },
-                    ],
-                  })
-                }
+                className="notification-button"
+                onClick={() => setShowFilterModal(true)}
               >
-                <IonIcon slot="icon-only" icon={ellipsisVertical}></IonIcon>
+                <IonIcon slot="icon-only" icon={filterOutline} />
+                {hasFilter && (
+                  <IonBadge className="notifications-badge" color="danger">
+                    {" "}
+                  </IonBadge>
+                )}
               </IonButton>
             </IonButtons>
-          </IonToolbar>
-        </IonHeader>
-        <IonGrid fixed>
-          {employee && (
-            <IonRow>
-              <IonCol>
-                <IonCard className="list-card">
-                  <IonCardContent></IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>
           )}
-        </IonGrid>
-      </IonContent>
+        </IonToolbar>
+        <IonToolbar>
+          <IonSegment
+            value={segemnt}
+            onIonChange={(e) => setSegment(e.detail.value!)}
+          >
+            <IonSegmentButton value="all">Tất cả</IonSegmentButton>
+            <IonSegmentButton value="pending">Đang đợi</IonSegmentButton>
+          </IonSegment>
+        </IonToolbar>
+      </IonHeader>
+      <IonProgressBar
+        className={isLoading ? "" : "ion-hide"}
+        type="indeterminate"
+        slot="fixed"
+      />
+      {segemnt === "all" && <EmployeeStageList />}
+      {segemnt === "pending" && <PendingStageList />}
+      <StageFilterModal
+        isOpen={showFilterModal}
+        onDidDismiss={() => setShowFilterModal(false)}
+      />
+      <PendingStageFab />
     </IonPage>
   );
 };

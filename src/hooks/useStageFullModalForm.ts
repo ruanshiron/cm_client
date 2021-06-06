@@ -11,6 +11,7 @@ import { addStage, updateStage, uploadImages } from "../store/data/stageSlice";
 const TODAY = new Date().toISOString();
 
 export const useStageFullModalForm = () => {
+  const { products, workshops, processes } = useSelector((state) => state);
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState<string>();
   const [date, setDate] = useState<string>(TODAY);
@@ -80,16 +81,28 @@ export const useStageFullModalForm = () => {
     return onUpload(images, `users/${uid}/stages/${id}`);
   };
 
-  const reset = () => {
-    setQuantity(undefined);
-    setDate(TODAY);
-    setProduct(undefined);
-    setWorkshop(undefined);
-    setProcess(undefined);
-    setSizes([]);
-    setStatus(undefined);
-    setNote(undefined);
-    setImages([]);
+  const reset = (stage?: Stage) => {
+    if (!stage) {
+      setQuantity(undefined);
+      setDate(TODAY);
+      setProduct(undefined);
+      setWorkshop(undefined);
+      setProcess(undefined);
+      setSizes([]);
+      setStatus(undefined);
+      setNote(undefined);
+      setImages([]);
+    } else {
+      setQuantity(stage.quantity.toString());
+      setDate(stage.date);
+      setProduct(products.find((item) => item.id === stage.productId));
+      setWorkshop(workshops.find((item) => item.id === stage.workshopId));
+      setProcess(processes.find((item) => item.id === stage.processId));
+      setSizes(stage.productSizes);
+      setStatus(stage.processStatus);
+      setNote(stage.note);
+      setImages([]);
+    }
   };
 
   return {
@@ -113,5 +126,6 @@ export const useStageFullModalForm = () => {
     setNote,
     submit,
     loading,
+    reset,
   };
 };

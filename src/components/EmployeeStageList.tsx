@@ -18,21 +18,25 @@ import {
   filteredStages,
   resetAllStages,
 } from "../store/data/stageSlice";
-import StageItem from "./items/StageItem";
 import { RefresherEventDetail } from "@ionic/core";
 import { useDispatch } from "react-redux";
-import { getStages, Group } from "../models/stage";
+import { getStages, Group, Stage } from "../models/stage";
 import { formatStringDate } from "../utils/date";
 import { toast } from "../utils/toast";
 import { setLoading } from "../store/loading/loadingSlice";
+import EmployeeStageItem from "./items/EmployeeStageItem";
+import PendingStageModal from "./modals/PendingStageModal";
+import { usePendingStageForm } from "../hooks/usePendingStageForm";
 
 interface Props {}
 
-export const EventsViewAll: React.FC<Props> = () => {
+export const EmployeeStageList: React.FC<Props> = () => {
   const groups: Group[] = useSelector(filteredStages);
   const { stageFilter } = useSelector((state) => state.diaryPage);
   const uid = useSelector((state) => state.user.uid);
   const [lastVisible, setLastVisible] = useState<any>();
+  const form = usePendingStageForm();
+  const [showModal, setShowModal] = useState(false);
   const [isNoMoreStage, setIsNoMoreStage] = useState(false);
   const dispatch = useDispatch();
   const handleRefesh = (event: CustomEvent<RefresherEventDetail>) => {
@@ -80,6 +84,21 @@ export const EventsViewAll: React.FC<Props> = () => {
         toast("Có lỗi xảy ra!");
       });
   };
+  const handleClickItem = (item: Stage) => {
+    form.reset({ id: item.id, type: "modified", data: item });
+    setShowModal(true);
+  };
+  const handleSubmitItem = () => {
+    form
+      .update()
+      .then(() => {
+        setShowModal(false);
+        toast("Đã them vào danh sách đợi");
+      })
+      .catch((error) => {
+        toast(error.message);
+      });
+  };
   useEffect(() => {
     dispatch(setLoading(true));
     dispatch(resetAllStages());
@@ -106,36 +125,49 @@ export const EventsViewAll: React.FC<Props> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stageFilter]);
   return (
-    <IonContent>
-      <IonRefresher slot="fixed" onIonRefresh={handleRefesh}>
-        <IonRefresherContent></IonRefresherContent>
-      </IonRefresher>
-      <IonGrid>
-        <IonRow
-          style={{ paddingBottom: isNoMoreStage ? 184 : 100 }}
-          className="ion-justify-content-center"
-        >
-          <IonCol style={{ paddingBottom: 100 }} size="12" size-md="8">
-            {groups.map((group, i) => (
-              <IonList className="fadin border-full-2 ion-margin-top" key={i}>
-                <IonItemDivider className="top-divider" color="white">
-                  <IonLabel>{formatStringDate(group.name)}</IonLabel>
-                </IonItemDivider>
-                {group.events.map((item, j) => (
-                  <StageItem stage={item} key={j} />
-                ))}
-              </IonList>
-            ))}
-          </IonCol>
-          <IonInfiniteScroll
-            disabled={isNoMoreStage}
-            threshold="100px"
-            onIonInfinite={handleLoadMore}
+    <>
+      <IonContent>
+        <IonRefresher slot="fixed" onIonRefresh={handleRefesh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
+        <IonGrid>
+          <IonRow
+            style={{ paddingBottom: isNoMoreStage ? 184 : 100 }}
+            className="ion-justify-content-center"
           >
-            <IonInfiniteScrollContent loadingText="Đang tải..." />
-          </IonInfiniteScroll>
-        </IonRow>
-      </IonGrid>
-    </IonContent>
+            <IonCol style={{ paddingBottom: 100 }} size="12" size-md="8">
+              {groups.map((group, i) => (
+                <IonList className="fadin border-full ion-margin-top" key={i}>
+                  <IonItemDivider className="top-divider" color="white">
+                    <IonLabel>{formatStringDate(group.name)}</IonLabel>
+                  </IonItemDivider>
+                  {group.events.map((item, j) => (
+                    <EmployeeStageItem
+                      onClick={() => handleClickItem(item)}
+                      stage={item}
+                      key={j}
+                    />
+                  ))}
+                </IonList>
+              ))}
+            </IonCol>
+            <IonInfiniteScroll
+              disabled={isNoMoreStage}
+              threshold="100px"
+              onIonInfinite={handleLoadMore}
+            >
+              <IonInfiniteScrollContent loadingText="Đang tải..." />
+            </IonInfiniteScroll>
+          </IonRow>
+        </IonGrid>
+      </IonContent>
+      <PendingStageModal
+        isOpen={showModal}
+        disableMore
+        onDismiss={() => setShowModal(false)}
+        onSubmit={handleSubmitItem}
+        form={form}
+      />
+    </>
   );
 };

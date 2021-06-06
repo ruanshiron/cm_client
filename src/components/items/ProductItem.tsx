@@ -35,11 +35,12 @@ export const ProductItem: React.FC<Props> = ({ product }) => {
   return (
     <IonCard
       button
-      className="list-card"
+      style={{ boxShadow: "none" }}
+      className="list-card border-full"
       routerLink={"/tabs/product/" + product.id}
     >
       <IonCardContent>
-        <IonList lines="full" style={{ border: "none" }}>
+        <IonList style={{ border: "none" }}>
           <IonItem detail={false}>
             <IonAvatar slot="start">
               <img

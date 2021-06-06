@@ -33,7 +33,6 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-
 import { useSelector } from "./store";
 import { useAuth } from "./hooks/useAuth";
 import LoginPage from "./pages/login/LoginPage";
@@ -46,14 +45,10 @@ import { vi } from "date-fns/locale";
 import AnonymousWorkshopPage from "./pages/anonymous/AnonymousWorkshopPage";
 import AnonymousCustomerPage from "./pages/anonymous/AnonymousCustomerPage";
 import AnonymousPage from "./pages/anonymous/AnonymousPage";
-import DiaryPage from "./pages/tabs/diary/DiaryPage";
-import StageDetail from "./pages/tabs/diary/StageDetail";
-import StageUpdate from "./pages/tabs/diary/StageUpdate";
-import AnonymousMenu from "./components/menus/AnonymousMenu";
-import SettingsPage from "./pages/settings/SettingsPage";
 import { ThemeProvider } from "@material-ui/styles";
 import { defaultMaterialTheme } from "./hooks/useStyles";
 import PasswordResetPage from "./pages/login/PasswordResetPage";
+import AnonymousEmployeePage from "./pages/anonymous/AnonymousEmployeePage";
 
 setupConfig({
   rippleEffect: true,
@@ -70,26 +65,7 @@ const RoleBaseView: React.FC<{ role: string }> = ({ role }) => {
         </IonSplitPane>
       );
     case "employees":
-      return (
-        <>
-          <AnonymousMenu />
-          <IonRouterOutlet id="main">
-            <Route
-              path="/"
-              render={() => <Redirect to="/tabs/diary" />}
-              exact
-            />
-            <Route path="/tabs/diary" component={DiaryPage} exact />
-            <Route path="/tabs/diary/:id" component={StageDetail} exact />
-            <Route
-              path="/tabs/diary/:id/update"
-              component={StageUpdate}
-              exact
-            />
-            <Route path="/settings" component={SettingsPage} exact />
-          </IonRouterOutlet>
-        </>
-      );
+      return <AnonymousEmployeePage />;
     case "workshops":
       return <AnonymousWorkshopPage />;
     case "customers":
