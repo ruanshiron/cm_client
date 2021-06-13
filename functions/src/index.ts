@@ -365,3 +365,27 @@ export const createFirstProcessOnCreateAccount = functions.auth
       return "Not a user!";
     }
   });
+
+export const createRequest = functions.firestore
+  .document("users/{userId}/pending_stages/{pendingStageId}")
+  .onCreate((snap, context) => {
+    const TYPE: { [key: string]: string } = {
+      added: "➕thêm",
+      removed: "🗑xóa",
+      modified: "📝sửa",
+    };
+    const { data, modifier, type } = snap.data();
+    const notification = {
+      title: `${modifier} đã tạo một yêu cầu`,
+      body: `${modifier} đã ${TYPE[type]} [${data.date}, ${data.workshopName} ${data.processLabel} ${data.quantity} ${data.productName} ]`,
+    };
+    return admin
+      .messaging()
+      .sendToTopic(context.params.userId, { notification })
+      .then((response) => {
+        console.log("Successfully sent message:", response);
+      })
+      .catch((error) => {
+        console.log("Error sending message:", error);
+      });
+  });

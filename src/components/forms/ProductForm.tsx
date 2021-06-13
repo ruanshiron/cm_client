@@ -9,13 +9,10 @@ import {
   IonSelectOption,
   IonTextarea,
 } from "@ionic/react";
-import {
-  accessibilityOutline,
-  barcodeOutline,
-  textOutline,
-} from "ionicons/icons";
+import { barcodeOutline, textOutline } from "ionicons/icons";
 import React from "react";
 import { useProductForm } from "../../hooks/useProductForm";
+import SizePackageSelectItem from "../items/SizePackageSelectItem";
 
 interface ProductFormProps {
   form: ReturnType<typeof useProductForm>;
@@ -46,29 +43,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ form }) => {
               }
             ></IonInput>
           </IonItem>
-          <IonItem lines="none">
-            <IonIcon icon={accessibilityOutline} slot="start" />
-            <IonLabel>
-              <b>Kích cỡ</b>
-            </IonLabel>
-            <IonSelect
-              value={form.fields.sizes}
-              onIonChange={(e) =>
-                form.setFieldsValue({ sizes: e.detail.value! })
-              }
-              multiple={true}
-              cancelText="Hủy"
-              okText="Ok!"
-            >
-              <IonSelectOption value="XS">XS</IonSelectOption>
-              <IonSelectOption value="S">S</IonSelectOption>
-              <IonSelectOption value="M">M</IonSelectOption>
-              <IonSelectOption value="L">L</IonSelectOption>
-              <IonSelectOption value="XL">XL</IonSelectOption>
-              <IonSelectOption value="XXL">XXL</IonSelectOption>
-              <IonSelectOption value="XXXL">XXXL</IonSelectOption>
-            </IonSelect>
-          </IonItem>
+          <SizePackageSelectItem
+            values={form.fields.sizes}
+            onConfirm={(sizes) => form.setFieldsValue({ sizes })}
+          />
         </IonCardContent>
       </IonCard>
 

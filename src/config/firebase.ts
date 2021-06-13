@@ -25,11 +25,11 @@ firebase.firestore().settings({
   cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
 });
 
-if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-  firebase.firestore().settings({ host: "localhost:8080", ssl: false });
-  firebase.auth().useEmulator("http://localhost:9099/");
-  firebase.functions().useEmulator("localhost", 5001);
-}
+// if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+//   firebase.firestore().settings({ host: "localhost:8080", ssl: false });
+//   firebase.auth().useEmulator("http://localhost:9099/");
+//   firebase.functions().useEmulator("localhost", 5001);
+// }
 
 // firebase.firestore().enablePersistence();
 

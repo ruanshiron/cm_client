@@ -50,7 +50,7 @@ export const useProductForm = (product = initialProduct) => {
 
   useEffect(() => {
     if (!product.id) {
-      setFieldsValue({ sizes: ["S", "M", "L"] });
+      setFieldsValue({ sizes: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"] });
       if (processes.length > 0 && processes[0].id)
         setFieldsValue({ processes: [processes[0].id] });
     }

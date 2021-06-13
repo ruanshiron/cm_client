@@ -24,6 +24,7 @@ import {
   logInOutline,
   logOutOutline,
   mailOutline,
+  notificationsOutline,
   textOutline,
 } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
@@ -33,6 +34,11 @@ import { useSelector } from "../../store";
 
 import { signOut } from "../../store/user/userSlice";
 import { toast } from "../../utils/toast";
+
+import { Plugins } from "@capacitor/core";
+import { FCM } from "@capacitor-community/fcm";
+const { PushNotifications } = Plugins;
+const fcm = new FCM();
 
 interface SettingsPageProps {}
 
@@ -61,6 +67,30 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
         toast("Có lỗi xảy ra, không thể hoàn thành thao tác!");
       });
   };
+
+  const handleToggleNoti = () => {
+    PushNotifications.requestPermission()
+      .then(() => {
+        PushNotifications.register()
+          .then(() => {
+            //
+            // Subscribe to a specific topic
+            // you can use `FCMPlugin` or just `fcm`
+            fcm
+              .subscribeTo({ topic: user.uid })
+              .then((r) =>
+                alert(
+                  `Thông báo với ${user.uid} đã được bật nếu muốn tắt hãy tắt trong thiết bị của bạn`
+                )
+              )
+              .catch((err) => console.log(err));
+          })
+          .catch((err) => alert(JSON.stringify(err)));
+      })
+      .catch((err) => {
+        alert(JSON.stringify(err));
+      });
+  };
   useEffect(() => {});
   return (
     <IonPage className="list-page">
@@ -79,6 +109,10 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
               <IonCard className="list-card ion-margin-top">
                 <IonCardContent>
                   <IonList style={{ border: "none" }}>
+                    <IonItem button onClick={() => handleToggleNoti()}>
+                      <IonIcon slot="start" icon={notificationsOutline} />
+                      <IonLabel>Bật thông báo</IonLabel>
+                    </IonItem>
                     <IonItem>
                       <IonIcon icon={mailOutline} slot="start"></IonIcon>
                       <IonLabel>Email</IonLabel>
