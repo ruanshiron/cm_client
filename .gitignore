@@ -31,3 +31,5 @@ resources/windows/icon
 resources/windows/splash
 
 *.log
+
+android/app/google-services.json
