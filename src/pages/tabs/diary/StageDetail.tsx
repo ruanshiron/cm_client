@@ -222,18 +222,19 @@ const StageDetail: React.FC<StageDetailProps> = () => {
                           <IonNote slot="end">kích cỡ</IonNote>
                         </IonItem>
                       )}
-
-                      <IonItem>
-                        <IonIcon icon={documentTextOutline} slot="start" />
-                        <IonLabel position="stacked">
-                          <b>Ghi chú</b>
-                        </IonLabel>
-                        <IonTextarea
-                          readonly
-                          value={stage.note}
-                          unselectable="off"
-                        ></IonTextarea>
-                      </IonItem>
+                      {stage.note && (
+                        <IonItem>
+                          <IonIcon icon={documentTextOutline} slot="start" />
+                          <IonLabel position="stacked">
+                            <b>Ghi chú</b>
+                          </IonLabel>
+                          <IonTextarea
+                            readonly
+                            value={stage.note}
+                            unselectable="off"
+                          ></IonTextarea>
+                        </IonItem>
+                      )}
                     </IonList>
                   )}
                 </IonCardContent>

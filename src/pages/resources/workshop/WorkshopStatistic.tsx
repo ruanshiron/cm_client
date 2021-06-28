@@ -17,7 +17,7 @@ import {
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../../store";
-import { saveOutline } from "ionicons/icons";
+import { refreshOutline } from "ionicons/icons";
 import { useDispatch } from "react-redux";
 import { addStatisticStages } from "../../../store/data/stageSlice";
 import {
@@ -91,6 +91,20 @@ const WorkshopStatistic: React.FC<Props> = () => {
       toast("Không tìm thấy sản phẩm này!");
     }
   };
+  const handleRefresh = () => {
+    if (workshop) {
+      dispatch(setLoading(true));
+      getAllStages(uid, {
+        from: workshop.statistic?.from,
+        to: workshop.statistic?.to,
+        workshopId: workshop.id,
+      }).then((snap) => {
+        const stages = snap.docs.map(parseStage);
+        dispatch(addStatisticStages({ id, stages }));
+        dispatch(setLoading(false));
+      });
+    }
+  };
   useEffect(() => {
     if (processes.length <= 0) dispatch(fetchAllProcesses());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -106,8 +120,8 @@ const WorkshopStatistic: React.FC<Props> = () => {
             {workshop?.name}・{workshop?.phonenumber}
           </IonTitle>
           <IonButtons slot="end">
-            <IonButton title="Lưu" onClick={() => handleSaveStatistic()}>
-              <IonIcon slot="icon-only" icon={saveOutline} />
+            <IonButton title="Lưu" onClick={() => handleRefresh()}>
+              <IonIcon slot="icon-only" icon={refreshOutline} />
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -115,7 +129,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
       <IonContent>
         <IonGrid>
           <IonRow className="ion-justify-content-center">
-            <IonLoading isOpen={!!(loading && !workshop)} />
+            <IonLoading isOpen={!!loading} />
             <IonCol size="12" size-lg="8">
               <Datetime
                 fromValue={workshop?.statistic?.from}
@@ -136,7 +150,31 @@ const WorkshopStatistic: React.FC<Props> = () => {
                     })
                   );
                 }}
-                onCancelFrom={() => {
+                // onCancelFrom={() => {
+                //   dispatch(
+                //     updateFromDate({
+                //       id,
+                //       from: "",
+                //     })
+                //   );
+                // }}
+                // onCancelTo={() => {
+                //   dispatch(
+                //     updateToDate({
+                //       id,
+                //       to: "",
+                //     })
+                //   );
+                // }}
+                onCancelFrom={() => {}}
+                onCancelTo={() => {}}
+                onReset={() => {
+                  dispatch(
+                    updateToDate({
+                      id,
+                      to: "",
+                    })
+                  );
                   dispatch(
                     updateFromDate({
                       id,
@@ -144,14 +182,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                     })
                   );
                 }}
-                onCancelTo={() => {
-                  dispatch(
-                    updateToDate({
-                      id,
-                      to: "",
-                    })
-                  );
-                }}
+                onSave={handleSaveStatistic}
               />
               {statistic && workshop && (
                 <WorkshopSummary
