@@ -23,18 +23,27 @@ import {
 } from "ionicons/icons";
 import React, { useState } from "react";
 import { Process } from "../../models/process";
+import { Product } from "../../models/product";
 import { useSelector } from "../../store";
 import { color } from "./StageItem";
 
 interface Props {
+  product?: Product;
   value?: Process;
   status?: string;
   onChange: (value: Process, status: string) => void;
 }
 
-const ProcessSelectItem: React.FC<Props> = ({ value, status, onChange }) => {
+const ProcessSelectItem: React.FC<Props> = ({
+  product,
+  value,
+  status,
+  onChange,
+}) => {
   const [showModal, setShowModal] = useState(false);
-  const { processes } = useSelector((state) => state);
+  const processes = useSelector((state) =>
+    state.processes.filter((i) => product?.processes.includes(i.id!))
+  );
   const handleCancel = () => {
     setShowModal(false);
   };

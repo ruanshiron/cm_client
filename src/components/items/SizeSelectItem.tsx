@@ -21,14 +21,13 @@ import {
 } from "ionicons/icons";
 import React, { useState } from "react";
 
-const SIZES = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
-
 interface Props {
+  options: string[];
   values: string[];
   onConfirm: (values: string[]) => void;
 }
 
-const SizeSelectItem: React.FC<Props> = ({ values, onConfirm }) => {
+const SizeSelectItem: React.FC<Props> = ({ options, values, onConfirm }) => {
   const [sizes, setSizes] = useState<string[]>(values);
   const [showModal, setShowModal] = useState(false);
   const isSelected = (size: string) => {
@@ -91,12 +90,12 @@ const SizeSelectItem: React.FC<Props> = ({ values, onConfirm }) => {
                 </IonLabel>
               </IonItem>
             ) : (
-              <IonItem button onClick={() => setSizes(SIZES)}>
+              <IonItem button onClick={() => setSizes(options)}>
                 <IonLabel style={{ textAlign: "center" }}>Chọn tất cả</IonLabel>
               </IonItem>
             )}
 
-            {SIZES.map((item, index) => (
+            {options.map((item, index) => (
               <IonItem key={index} button onClick={() => handleClickItem(item)}>
                 {isSelected(item) ? (
                   <IonIcon

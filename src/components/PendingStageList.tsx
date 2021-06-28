@@ -8,6 +8,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonLoading,
   IonNote,
   IonRow,
   IonText,
@@ -21,6 +22,7 @@ import { usePendingStageForm } from "../hooks/usePendingStageForm";
 import PendingStageModal from "./modals/PendingStageModal";
 import { toast } from "../utils/toast";
 import { format } from "date-fns";
+import NoDataView from "./NoDataView";
 
 const TYPE: { [key: string]: string } = {
   added: "➕thêm",
@@ -30,6 +32,7 @@ const TYPE: { [key: string]: string } = {
 
 const PendingStageList = () => {
   const { uid, role } = useSelector((state) => state.user);
+  const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [pendingStages, setPendingStages] = useState<PendingStage[]>([]);
   const form = usePendingStageForm();
@@ -75,7 +78,9 @@ const PendingStageList = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const unsubcribe = getAllPendingStages(uid).onSnapshot((snap) => {
+      setIsLoading(false);
       snap.docChanges().forEach((change) => {
         if (change.type === "added") {
           if (!pendingStages.find((item) => item.id === change.doc.id)) {
@@ -125,7 +130,14 @@ const PendingStageList = () => {
       <IonContent>
         <IonGrid>
           <IonRow className="ion-justify-content-center">
-            <IonCol style={{ paddingBottom: 100 }} size="12" size-md="8">
+            <IonLoading isOpen={isLoading} />
+            {!isLoading && pendingStages.length === 0 && <NoDataView />}
+            <IonCol
+              style={{ paddingBottom: 100 }}
+              size="12"
+              sizeMd="8"
+              sizeLg="6"
+            >
               {pendingStages.map((item, index) => (
                 <IonList
                   lines="none"

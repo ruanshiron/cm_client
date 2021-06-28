@@ -17,6 +17,7 @@ import { add } from "ionicons/icons";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ProductItem } from "../../../components/items/ProductItem";
+import NoDataView from "../../../components/NoDataView";
 import { useSelector } from "../../../store";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
 import { fetchAllProducts } from "../../../store/data/productSlice";
@@ -26,6 +27,7 @@ interface ProductPageProps {}
 const ProductPage: React.FC<ProductPageProps> = () => {
   const router = useIonRouter();
   const products = useSelector((state) => state.products);
+  const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
   useEffect(() => {
     if (products.length <= 0) {
@@ -58,6 +60,9 @@ const ProductPage: React.FC<ProductPageProps> = () => {
         </IonHeader>
         <IonGrid fixed>
           <IonRow className="ion-justify-content-center">
+            {!isLoading && products.length === 0 && (
+              <NoDataView addRouterLink={router.routeInfo.pathname + "/create"} />
+            )}
             {products.map((product) => (
               <IonCol size="12" size-md="8" key={product.id}>
                 <ProductItem product={product} />

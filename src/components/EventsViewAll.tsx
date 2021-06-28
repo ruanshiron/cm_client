@@ -25,6 +25,7 @@ import { getStages, Group } from "../models/stage";
 import { formatStringDate } from "../utils/date";
 import { toast } from "../utils/toast";
 import { setLoading } from "../store/loading/loadingSlice";
+import NoDataView from "./NoDataView";
 
 interface Props {}
 
@@ -32,6 +33,7 @@ export const EventsViewAll: React.FC<Props> = () => {
   const groups: Group[] = useSelector(filteredStages);
   const { stageFilter } = useSelector((state) => state.diaryPage);
   const uid = useSelector((state) => state.user.uid);
+  const { isLoading } = useSelector((state) => state.loading);
   const [lastVisible, setLastVisible] = useState<any>();
   const [isNoMoreStage, setIsNoMoreStage] = useState(false);
   const dispatch = useDispatch();
@@ -115,7 +117,8 @@ export const EventsViewAll: React.FC<Props> = () => {
           style={{ paddingBottom: isNoMoreStage ? 184 : 100 }}
           className="ion-justify-content-center"
         >
-          <IonCol style={{ paddingBottom: 100 }} size="12" size-md="8">
+          {!isLoading && groups.length === 0 && <NoDataView />}
+          <IonCol style={{ paddingBottom: 100 }} size="12" sizeMd="8" sizeLg="6">
             {groups.map((group, i) => (
               <IonList className="fadin border-full-2 ion-margin-top" key={i}>
                 <IonItemDivider className="top-divider" color="white">

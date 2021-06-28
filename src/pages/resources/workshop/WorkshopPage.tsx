@@ -17,6 +17,7 @@ import { add } from "ionicons/icons";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Item } from "../../../components/items/Item";
+import NoDataView from "../../../components/NoDataView";
 import { useSelector } from "../../../store";
 import { fetchAllWorkshops } from "../../../store/data/workshopSlice";
 
@@ -24,6 +25,7 @@ interface WorkshopPageProps {}
 
 const WorkshopPage: React.FC<WorkshopPageProps> = () => {
   const workshops = useSelector((state) => state.workshops);
+  const { isLoading } = useSelector((state) => state.loading);
   const router = useIonRouter();
   const dispatch = useDispatch();
 
@@ -54,6 +56,11 @@ const WorkshopPage: React.FC<WorkshopPageProps> = () => {
         </IonHeader>
         <IonGrid fixed>
           <IonRow className="ion-justify-content-center">
+            {!isLoading && workshops.length === 0 && (
+              <NoDataView
+                addRouterLink={router.routeInfo.pathname + "/create"}
+              />
+            )}
             {workshops.map((workshop) => (
               <IonCol size="12" size-md="8" key={workshop.id}>
                 <Item

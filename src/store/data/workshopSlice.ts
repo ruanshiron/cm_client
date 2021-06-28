@@ -149,17 +149,30 @@ export const statisticHarderSelector = createSelector(
       const esub = estimatedSubtotal(value, workshop);
 
       if (value.productId in tmp) {
-        tmp[value.productId]["processes"][value.processId][
-          value.processStatus
-        ] += value.quantity;
-        tmp[value.productId]["processes"][value.processId]["subtotal"][
-          "value"
-        ] += subt;
-        tmp[value.productId]["processes"][value.processId]["subtotal"][
-          "estimate"
-        ] += esub;
-        smp[value.processId]["subtotal"]["isNotFinished"] =
-          smp[value.processId]["subtotal"]["isNotFinished"] || !subt;
+        if (value.processId in tmp[value.productId]["processes"]) {
+          tmp[value.productId]["processes"][value.processId][
+            value.processStatus
+          ] += value.quantity;
+          tmp[value.productId]["processes"][value.processId]["subtotal"][
+            "value"
+          ] += subt;
+          tmp[value.productId]["processes"][value.processId]["subtotal"][
+            "estimate"
+          ] += esub;
+          smp[value.processId]["subtotal"]["isNotFinished"] =
+            smp[value.processId]["subtotal"]["isNotFinished"] || !subt;
+        } else {
+          tmp[value.productId]["processes"][value.processId] = {
+            pending: value.processStatus === "pending" ? value.quantity : 0,
+            fulfilled: value.processStatus === "fulfilled" ? value.quantity : 0,
+            rejected: value.processStatus === "rejected" ? value.quantity : 0,
+            subtotal: {
+              value: subt,
+              estimate: esub,
+              isNotFinished: !subt,
+            },
+          };
+        }
       } else {
         tmp[value.productId] = {
           name: value.productName,

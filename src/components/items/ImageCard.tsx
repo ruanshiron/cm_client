@@ -25,7 +25,7 @@ const ImageCard: React.FC<Props> = ({ storageRef, uploadable = false }) => {
             .putString(photo.dataUrl, "data_url")
             .then(() => {
               toast("Đã tải ảnh lênÏ");
-            });
+            })
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,7 +47,11 @@ const ImageCard: React.FC<Props> = ({ storageRef, uploadable = false }) => {
   }, []);
   if (src || uploadable)
     return (
-      <IonCard onClick={triggerCamera} button={uploadable} style={{maxHeight: 500}}>
+      <IonCard
+        onClick={triggerCamera}
+        button={uploadable}
+        style={{ maxHeight: 500 }}
+      >
         {uploadable ? (
           photo ? (
             <IonImg src={photo.dataUrl}></IonImg>

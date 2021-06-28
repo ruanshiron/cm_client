@@ -37,6 +37,7 @@ import { toast } from "../../utils/toast";
 
 import { Plugins } from "@capacitor/core";
 import { FCM } from "@capacitor-community/fcm";
+import FeedbackItem from "../../components/items/FeedbackItem";
 const { PushNotifications } = Plugins;
 const fcm = new FCM();
 
@@ -172,6 +173,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
                         </IonText>
                       )}
                     </IonItem>
+                    <FeedbackItem />
                   </IonList>
                 </IonCardContent>
               </IonCard>

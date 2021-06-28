@@ -389,3 +389,32 @@ export const createRequest = functions.firestore
         console.log("Error sending message:", error);
       });
   });
+
+export const listUsers = functions.https.onCall(async (data, context) => {
+  const uid = context.auth?.uid;
+  const nextPageToken = data || undefined;
+
+  if (!uid) {
+    throw new Error("Yêu cầu đăng nhập!");
+  } else {
+    const listUsersResult = await admin.auth().listUsers(1000, nextPageToken);
+    return listUsersResult;
+  }
+});
+
+export const updateUser = functions.https.onCall(async (data, context) => {
+  const { uid, disabled, email } = data || undefined;
+
+  if (!context.auth?.uid) {
+    throw new Error("Yêu cầu đăng nhập!");
+  } else {
+    const data: any = {};
+    if (disabled) {
+      data["disabled"] = true;
+    }
+    if (email) {
+      data["email"] = email;
+    }
+    return admin.auth().updateUser(uid, data);
+  }
+});

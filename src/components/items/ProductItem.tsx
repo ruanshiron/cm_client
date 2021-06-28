@@ -29,7 +29,8 @@ export const ProductItem: React.FC<Props> = ({ product }) => {
       .getDownloadURL()
       .then((url) => {
         setAvatar(url);
-      });
+      })
+      .catch((e) => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

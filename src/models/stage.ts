@@ -28,7 +28,7 @@ export interface Stage {
   productId: string;
   productName: string;
   productSize?: string;
-  productSizes: string[],
+  productSizes: string[];
   workshopId: string;
   workshopName: string;
   processId: string;
@@ -97,8 +97,6 @@ export const getAllStages = (user: string, options?: StageFilterOptions) => {
     collection = collection.where("processStatus", "==", options.processStatus);
   if (options?.lastVisible)
     collection = collection.startAfter(options.lastVisible);
-
-  console.log(options);
 
   return collection.get();
 };

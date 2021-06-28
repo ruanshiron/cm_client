@@ -82,12 +82,17 @@ const StageFullModalForm: React.FC<Props> = ({
         value={product}
         onChange={(value) => setProduct(value)}
       />
-      <SizeSelectItem values={sizes} onConfirm={(values) => setSizes(values)} />
+      <SizeSelectItem
+        options={product?.sizes || []}
+        values={sizes}
+        onConfirm={(values) => setSizes(values)}
+      />
       <WorkshopSelectItem
         value={workshop}
         onChange={(value) => setWorkshop(value)}
       />
       <ProcessSelectItem
+        product={product}
         value={process}
         status={status}
         onChange={(value, status) => {

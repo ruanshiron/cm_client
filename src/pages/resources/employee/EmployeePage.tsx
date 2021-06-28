@@ -25,12 +25,14 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "../../../store";
 import { Item } from "../../../components/items/Item";
 import { fetchAllEmployees } from "../../../store/data/employeeSlice";
+import NoDataView from "../../../components/NoDataView";
 
 interface EmployeePageProps {}
 
 const EmployeePage: React.FC<EmployeePageProps> = () => {
   const [presentActionSheet] = useIonActionSheet();
   const employees = useSelector((state) => state.employees);
+  const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
   const router = useIonRouter();
 
@@ -83,6 +85,11 @@ const EmployeePage: React.FC<EmployeePageProps> = () => {
         </IonHeader>
         <IonGrid fixed>
           <IonRow className="ion-justify-content-center">
+            {!isLoading && employees.length === 0 && (
+              <NoDataView
+                addRouterLink={router.routeInfo.pathname + "/create"}
+              />
+            )}
             {employees.map((employee) => (
               <IonCol size="12" size-lg="8" key={employee.id}>
                 <Item

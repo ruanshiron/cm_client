@@ -17,6 +17,7 @@ import { add } from "ionicons/icons";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { CustomerItem } from "../../../components/items/CustomerItem";
+import NoDataView from "../../../components/NoDataView";
 import { useSelector } from "../../../store";
 import { fetchAllCustomers } from "../../../store/data/customerSlice";
 
@@ -26,6 +27,7 @@ const CustomerPage: React.FC<CustomerPageProps> = () => {
   const dispatch = useDispatch();
   const router = useIonRouter();
   const customers = useSelector((state) => state.customers);
+  const { isLoading } = useSelector((state) => state.loading);
   useEffect(() => {
     dispatch(fetchAllCustomers());
   }, [dispatch]);
@@ -53,6 +55,11 @@ const CustomerPage: React.FC<CustomerPageProps> = () => {
         </IonHeader>
         <IonGrid fixed>
           <IonRow className="ion-justify-content-center">
+            {!isLoading && customers.length === 0 && (
+              <NoDataView
+                addRouterLink={router.routeInfo.pathname + "/create"}
+              />
+            )}
             {customers.map((customer) => (
               <IonCol size="12" size-lg="8" key={customer.id}>
                 <CustomerItem data={customer} />

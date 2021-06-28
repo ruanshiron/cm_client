@@ -132,6 +132,7 @@ const PendingStageModal: React.FC<Props> = ({
             onChange={(value) => setProduct(value)}
           />
           <SizeSelectItem
+            options={product?.sizes || []}
             values={sizes}
             onConfirm={(values) => setSizes(values)}
           />
