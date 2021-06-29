@@ -23,25 +23,30 @@ import {
 } from "@ionic/react";
 import copy from "copy-to-clipboard";
 import {
-  callOutline,
-  callSharp,
+  barcodeOutline,
   close,
-  copyOutline,
+  earthOutline,
   ellipsisVertical,
   pencilOutline,
   personOutline,
   phonePortraitOutline,
+  pulseOutline,
   qrCodeOutline,
   trashOutline,
 } from "ionicons/icons";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
-import { destroyEmployee } from "../../../models/employee";
+import { destroyEmployee, saveEmployee } from "../../../models/employee";
 import { useSelector } from "../../../store";
-import { removeEmployee } from "../../../store/data/employeeSlice";
+import {
+  findEmployeeById,
+  removeEmployee,
+  updateEmployee,
+} from "../../../store/data/employeeSlice";
 import QRCode from "qrcode.react";
 import { toast } from "../../../utils/toast";
+import { v4 } from "uuid";
 
 interface EmployeeDetailProps {}
 
@@ -68,11 +73,77 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
       toast("Có lỗi xảy ra, vui lòng thử lại!");
     }
   };
-
-  const handleCopy = () => {
-    copy(employee?.code || "Hãy tạo mã trước!");
-    toast(employee?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!");
+  const handleUpdateCode = async () => {
+    const code = v4();
+    try {
+      await saveEmployee(uid, {
+        ...employee,
+        code,
+      });
+      toast("Lưu thành công.");
+      if (employee?.id) dispatch(updateEmployee({ ...employee, code }));
+    } catch {
+      toast("Có lỗi xảy ra, vui lòng thử lại.");
+    }
   };
+
+  const handleCode = () => {
+    if (employee?.code) {
+      presentActionSheet({
+        buttons: [
+          {
+            icon: earthOutline,
+            text: "Sao chép liên kết",
+            handler: () => {
+              if (employee?.code) {
+                copy(window.location.hostname + "/qr/" + employee.code);
+              }
+              toast(
+                employee?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!"
+              );
+            },
+          },
+          {
+            icon: barcodeOutline,
+            text: "Chỉ sao chép mã",
+            handler: () => {
+              if (employee?.code) {
+                copy(employee.code);
+              }
+              toast(
+                employee?.code ? "Sao chép thành công!" : "Hãy tạo mã trước!"
+              );
+            },
+          },
+          {
+            icon: close,
+            text: "Hủy",
+          },
+        ],
+      });
+    } else {
+      presentActionSheet({
+        buttons: [
+          {
+            icon: pulseOutline,
+            text: "Tạo mã",
+            handler: () => {
+              handleUpdateCode();
+            },
+          },
+          {
+            icon: close,
+            text: "Hủy",
+          },
+        ],
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (!employee) dispatch(findEmployeeById(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <IonPage className="list-page">
@@ -84,13 +155,6 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
             </IonButtons>
             <IonTitle>Công nhân</IonTitle>
             <IonButtons slot="end">
-              <IonButton>
-                <IonIcon
-                  slot="icon-only"
-                  ios={callOutline}
-                  md={callSharp}
-                ></IonIcon>
-              </IonButton>
               <IonButton
                 onClick={() =>
                   presentActionSheet({
@@ -161,20 +225,15 @@ export const EmployeeDetail: React.FC<EmployeeDetailProps> = () => {
               </IonCard>
               <IonCard className="list-card">
                 <IonCardContent>
-                  <IonItem>
+                  <IonItem button onClick={handleCode}>
                     <IonIcon icon={qrCodeOutline} slot="start"></IonIcon>
                     <IonInput
                       value={employee?.code || "Hãy tạo code mới"}
                       onIonChange={() => {}}
                     />
-                    <IonButtons slot="end">
-                      <IonButton onClick={handleCopy}>
-                        <IonIcon slot="icon-only" icon={copyOutline}></IonIcon>
-                      </IonButton>
-                    </IonButtons>
                   </IonItem>
                   {employee?.code && (
-                    <IonItem>
+                    <IonItem button onClick={handleCode}>
                       <QRCode
                         style={{ margin: "auto" }}
                         id="qrcode"
