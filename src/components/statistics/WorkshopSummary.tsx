@@ -9,6 +9,7 @@ import {
 } from "@ionic/react";
 import { shirtOutline } from "ionicons/icons";
 import React from "react";
+import { Amount2 } from "../../models/amount";
 import { Process } from "../../models/process";
 import { Workshop } from "../../models/workshop";
 import { stringFromToDate } from "../../utils/date";
@@ -19,6 +20,7 @@ interface Props {
   processes: Process[];
   workshop: Workshop;
   payment: number;
+  amounts?: Amount2[];
 }
 
 const WorkshopSummary: React.FC<Props> = ({
@@ -27,6 +29,7 @@ const WorkshopSummary: React.FC<Props> = ({
   total,
   processes,
   payment,
+  amounts,
 }) => {
   const label = (id: string, status: "pending" | "fulfilled" | "rejected") => {
     const process = processes.find((item) => item.id === id);
@@ -287,21 +290,21 @@ const WorkshopSummary: React.FC<Props> = ({
                   </div>
                 )}
 
-                {workshop?.amounts
-                  .filter(
+                {amounts
+                  ?.filter(
                     (amount) =>
                       amount.processId === i && amount.productId === key
                   )
                   .map((amount, i) => (
                     <div key={i} className="amount-card">
-                      <h6>{amount.fromDate}</h6>
-                      <h6>{amount.toDate}</h6>
+                      <h6>{amount.from}</h6>
+                      <h6>{amount.to}</h6>
                       <h5>Đơn giá</h5>
                       <span>
                         {new Intl.NumberFormat("vi-VN", {
                           style: "currency",
                           currency: "VND",
-                        }).format(amount.amount)}
+                        }).format(amount.value)}
                       </span>
                     </div>
                   ))}

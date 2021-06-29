@@ -1,4 +1,4 @@
-export interface Amount {
+export interface Amount2 {
   workshopId: string;
   workshopName: string;
   productId: string;
@@ -6,7 +6,7 @@ export interface Amount {
   productCode: string;
   processId: string;
   processName: string;
-  amount: number;
   from?: string;
   to?: string;
+  value: number;
 }

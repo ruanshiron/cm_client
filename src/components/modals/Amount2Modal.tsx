@@ -132,7 +132,7 @@ const Amount2Modal: React.FC<Props> = ({
       workshopId,
       workshopName: workshops.find((i) => i.id === workshopId)?.name || "",
       processId,
-      processName: processes.find((i) => i.id === productId)?.name || "",
+      processName: processes.find((i) => i.id === processId)?.name || "",
       value: parseInt(value),
       from: from ? from.substring(0, 10) : "",
       to: to ? to.substring(0, 10) : "",

@@ -14,7 +14,7 @@ import {
   IonToolbar,
   useIonAlert,
 } from "@ionic/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../../store";
 import { refreshOutline } from "ionicons/icons";
@@ -22,7 +22,7 @@ import { useDispatch } from "react-redux";
 import { addStatisticStages } from "../../../store/data/stageSlice";
 import {
   findWorkshopById,
-  statisticHarderSelector,
+  statistic2HarderSelector,
   updateFromDate,
   updateToDate,
 } from "../../../store/data/workshopSlice";
@@ -35,6 +35,7 @@ import { getAllStages, parseStage } from "../../../models/stage";
 import WorkshopSummary from "../../../components/statistics/WorkshopSummary";
 import StageTable from "../../../components/statistics/StageTable";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
+import { database } from "../../../config/firebase";
 
 interface Props {}
 
@@ -42,6 +43,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
   const [presentAlert] = useIonAlert();
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
+  const [amounts, setAmounts] = useState<any[]>([]);
   const form = useWorkshopForm();
   const uid = useSelector((state) => state.user.uid);
   const loading = useSelector((state) => state.loading.isLoading);
@@ -50,7 +52,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
   );
   const processes = useSelector((state) => state.processes);
   const { statistic, stages, total, payment } = useSelector((state) =>
-    statisticHarderSelector(state, id)
+    statistic2HarderSelector(state, id, amounts)
   );
   useEffect(() => {
     if (!workshop) dispatch(findWorkshopById(id));
@@ -66,6 +68,15 @@ const WorkshopStatistic: React.FC<Props> = () => {
         dispatch(setLoading(false));
       });
     }
+    database
+      .collection("users")
+      .doc(uid)
+      .collection("amounts")
+      .where("workshopId", "==", id)
+      .get()
+      .then((snap) => {
+        setAmounts(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      });
   }, [dispatch, id, uid, workshop]);
   const handleSaveStatistic = () => {
     if (workshop) {
@@ -191,6 +202,7 @@ const WorkshopStatistic: React.FC<Props> = () => {
                   processes={processes}
                   total={total}
                   payment={payment}
+                  amounts={amounts}
                 />
               )}
               <StageTable stages={stages} />
