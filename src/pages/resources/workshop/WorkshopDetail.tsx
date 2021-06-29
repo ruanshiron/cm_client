@@ -47,14 +47,16 @@ import WorkshopInstantSummary from "../../../components/statistics/WorkshopInsta
 import { RefresherEventDetail } from "@ionic/core";
 import WorkshopInfoTab from "../../../components/statistics/WorkshopInfoTab";
 import WorkshopPaymentTab from "../../../components/statistics/WorkshopPaymentTab";
+import AmountsContent from "../../../components/contents/AmountsContent";
 
 interface WorkshopDetailProps {}
 
 export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
   const [presentDeleteAlert] = useIonAlert();
   const [presentActionSheet] = useIonActionSheet();
-  const [segment, setSegment] =
-    useState<"info" | "statistic" | "amount" | "payment">("statistic");
+  const [segment, setSegment] = useState<
+    "info" | "statistic" | "amount" | "payment"
+  >("statistic");
   const loading = useSelector((state) => state.loading.isLoading);
   const router = useIonRouter();
   const dispatch = useDispatch();
@@ -217,7 +219,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
         type="indeterminate"
         slot="fixed"
       />
-      <IonContent>
+      <IonContent hidden={segment === "amount"}>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
@@ -234,6 +236,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
           </IonGrid>
         </FancyContent>
       </IonContent>
+      <AmountsContent hidden={segment !== "amount"} workshop />
     </IonPage>
   );
 };

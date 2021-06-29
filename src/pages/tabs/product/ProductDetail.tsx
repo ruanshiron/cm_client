@@ -18,13 +18,15 @@ import {
   IonNote,
   IonPage,
   IonRow,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar,
   useIonActionSheet,
   useIonAlert,
   useIonRouter,
 } from "@ionic/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "../../../store";
 import {
@@ -50,12 +52,15 @@ import { fetchAllProcesses } from "../../../store/data/processSlice";
 import EmptyComponent from "../../../components/EmptyComponent";
 import ProductSummary from "../../../components/statistics/ProductSummary";
 import ImageCard from "../../../components/items/ImageCard";
+import PricesContent from "../../../components/contents/PricesContent";
+import AmountsContent from "../../../components/contents/AmountsContent";
 
 interface ProductDetailProps {}
 
 export const ProductDetail: React.FC<ProductDetailProps> = () => {
   const router = useIonRouter();
   const dispatch = useDispatch();
+  const [segment, setSegment] = useState("info");
   const { id } = useParams<{ id: string }>();
   const { uid, role } = useSelector((state) => state.user);
   const loading = useSelector((state) => state.loading.isLoading);
@@ -171,13 +176,23 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
               </IonButtons>
             )}
           </IonToolbar>
+          <IonToolbar hidden={!product}>
+            <IonSegment
+              value={segment}
+              onIonChange={(e) => setSegment(e.detail.value!)}
+            >
+              <IonSegmentButton value="info">Thông tin</IonSegmentButton>
+              <IonSegmentButton value="prices">Giá bán</IonSegmentButton>
+              <IonSegmentButton value="amounts">Giá công</IonSegmentButton>
+            </IonSegment>
+          </IonToolbar>
         </IonHeader>
-        <IonContent>
-          <IonGrid>
-            <IonRow className="ion-justify-content-center">
-              <IonLoading isOpen={!!(loading && !product)} />
-              <IonCol size="12" size-md="8">
-                <EmptyComponent isEmpty={!product}>
+        <IonContent hidden={segment !== "info"}>
+          <EmptyComponent isEmpty={!product}>
+            <IonGrid>
+              <IonRow className="ion-justify-content-center">
+                <IonLoading isOpen={!!(loading && !product)} />
+                <IonCol size="12" size-md="8">
                   <ImageCard storageRef={`users/${uid}/products/${id}`} />
                   <IonCard className="list-card">
                     <IonCardContent>
@@ -248,11 +263,13 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
                     </IonCardContent>
                   </IonCard>
                   <ProductSummary product={product} statistic={statistic} />
-                </EmptyComponent>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </EmptyComponent>
         </IonContent>
+        <PricesContent hidden={segment !== "prices"} />
+        <AmountsContent hidden={segment !== "amounts"} />
       </IonPage>
     </>
   );
