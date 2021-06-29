@@ -141,6 +141,7 @@ const PendingStageModal: React.FC<Props> = ({
             onChange={(value) => setWorkshop(value)}
           />
           <ProcessSelectItem
+            product={product}
             value={process}
             status={status}
             onChange={(value, status) => {
