@@ -165,7 +165,7 @@ const AmountsContent: React.FC<Props> = ({ hidden, workshop }) => {
                           <b>
                             {item.productName} ({item.productCode})
                           </b>
-                          <p>👩🏻‍🏭&nbsp;{item.workshopName}</p>
+                          <p>👩🏻‍🏭&nbsp;{item.workshopName} | {item.processName}</p>
                         </IonLabel>
                         <IonText className="ion-text-right" color="dark">
                           {new Intl.NumberFormat("vi-VN", {

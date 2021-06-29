@@ -6,6 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import { forEach, keys } from "lodash";
 import { getAllOrders, Order } from "../../models/order";
+import { Price } from "../../models/price";
 import { isBetween } from "../../utils/date";
 import { RootState } from "../rootReducer";
 
@@ -51,27 +52,47 @@ export const { removeOrder, addOrder, updateOrder } = orderSlice.actions;
 
 export default orderSlice;
 
+const subtotal = (productId: string, date: string, prices: Price[]) => {
+  const price = prices.find(
+    (i) => i.productId === productId && isBetween(date, i.from, i.to)
+  );
+  if (!price) {
+    return 0;
+  } else {
+    return price.value;
+  }
+};
+
 export const statisticSelector = createSelector(
   (state: RootState) => state.orders,
   (state: RootState) => state.customers,
-  (_state: RootState, customerId: string) => customerId,
-  (orders, customers, customerId) => {
+  (_state: RootState, customerId: string, prices: Price[]) => ({
+    customerId,
+    prices,
+  }),
+  (orders, customers, { customerId, prices }) => {
     const customer = customers.find((item) => item.id === customerId);
     const filtedOrders = orders.filter(
       (item) =>
         item.customerId === customerId &&
         isBetween(item.date, customer?.statistic?.from, customer?.statistic?.to)
     );
+    const filtedPrices = prices.filter((i) => i.customerId === customerId);
+    let all_subtotal = 0;
     const tmp: any = {};
     forEach(filtedOrders, (order) => {
       forEach(order.lines, (line) => {
+        const sub = subtotal(line.productId, order.date, filtedPrices);
+        all_subtotal += sub;
         if (line.productId in tmp) {
           tmp[line.productId].quantity += line.quantity;
           tmp[line.productId].productName = line.productName;
+          tmp[line.productId].subtotal += sub;
         } else {
           tmp[line.productId] = {
             quantity: line.quantity,
             productName: line.productName,
+            subtotal: sub,
           };
         }
       });
@@ -82,7 +103,9 @@ export const statisticSelector = createSelector(
         productId: tmp[key].productId,
         productName: tmp[key].productName,
         quantity: tmp[key].quantity,
+        subtotal: tmp[key].subtotal,
       })),
+      subtotal: all_subtotal,
     };
   }
 );
