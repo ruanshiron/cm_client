@@ -5,13 +5,20 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import { chain, filter, forEach } from "lodash";
+import { Amount2 } from "../../models/amount";
 import {
   Amount,
   findWorkshop,
   getAllWorkshops,
   Workshop,
 } from "../../models/workshop";
-import { estimatedSubtotal, processParser, subtotal } from "../../utils/data";
+import {
+  estimatedSubtotal,
+  estimatedSubtotal2,
+  processParser,
+  subtotal,
+  subtotal2,
+} from "../../utils/data";
 import { RootState } from "../rootReducer";
 
 let initialState: Workshop[] = [];
@@ -147,6 +154,99 @@ export const statisticHarderSelector = createSelector(
     forEach(filteredStages, (value) => {
       const subt = subtotal(value, workshop);
       const esub = estimatedSubtotal(value, workshop);
+
+      if (value.productId in tmp) {
+        if (value.processId in tmp[value.productId]["processes"]) {
+          tmp[value.productId]["processes"][value.processId][
+            value.processStatus
+          ] += value.quantity;
+          tmp[value.productId]["processes"][value.processId]["subtotal"][
+            "value"
+          ] += subt;
+          tmp[value.productId]["processes"][value.processId]["subtotal"][
+            "estimate"
+          ] += esub;
+          smp[value.processId]["subtotal"]["isNotFinished"] =
+            smp[value.processId]["subtotal"]["isNotFinished"] || !subt;
+        } else {
+          tmp[value.productId]["processes"][value.processId] = {
+            pending: value.processStatus === "pending" ? value.quantity : 0,
+            fulfilled: value.processStatus === "fulfilled" ? value.quantity : 0,
+            rejected: value.processStatus === "rejected" ? value.quantity : 0,
+            subtotal: {
+              value: subt,
+              estimate: esub,
+              isNotFinished: !subt,
+            },
+          };
+        }
+      } else {
+        tmp[value.productId] = {
+          name: value.productName,
+          processes: {
+            [value.processId]: {
+              pending: value.processStatus === "pending" ? value.quantity : 0,
+              fulfilled:
+                value.processStatus === "fulfilled" ? value.quantity : 0,
+              rejected: value.processStatus === "rejected" ? value.quantity : 0,
+              subtotal: {
+                value: subt,
+                estimate: esub,
+                isNotFinished: !subt,
+              },
+            },
+          },
+        };
+      }
+
+      if (value.processId in smp) {
+        smp[value.processId][value.processStatus] += value.quantity;
+        smp[value.processId]["subtotal"]["value"] += subt;
+        smp[value.processId]["subtotal"]["estimate"] += esub;
+        smp[value.processId]["subtotal"]["isNotFinished"] =
+          smp[value.processId]["subtotal"]["isNotFinished"] || !subt;
+      } else {
+        smp[value.processId] = {
+          pending: value.processStatus === "pending" ? value.quantity : 0,
+          fulfilled: value.processStatus === "fulfilled" ? value.quantity : 0,
+          rejected: value.processStatus === "rejected" ? value.quantity : 0,
+          subtotal: {
+            value: subt,
+            estimate: esub,
+            isNotFinished: !subt,
+          },
+        };
+      }
+    });
+
+    return {
+      stages: filteredStages,
+      statistic: tmp,
+      total: smp,
+      payment: filteredPayments.map((v) => v.amount).reduce((a, b) => a + b, 0),
+    };
+  }
+);
+
+export const statistic2HarderSelector = createSelector(
+  (state: RootState) => state.stages,
+  (state: RootState) => state.workshops,
+  (state: RootState) => state.payments,
+  (_state: RootState, workshopId: string, amounts: Amount2[]) => ({
+    workshopId,
+    amounts,
+  }),
+  (stages, workshops, payments, { workshopId, amounts }) => {
+    const filteredPayments = (payments[workshopId] || []).slice();
+    const filteredStages = (stages[workshopId] || [])
+      .slice()
+      .sort((a, b) => a.date.localeCompare(b.date));
+    const filteredAmounts = amounts.filter((i) => i.workshopId === workshopId);
+    const tmp: { [key: string]: any } = {};
+    const smp: { [key: string]: any } = {};
+    forEach(filteredStages, (value) => {
+      const subt = subtotal2(value, filteredAmounts);
+      const esub = estimatedSubtotal2(value, filteredAmounts);
 
       if (value.productId in tmp) {
         if (value.processId in tmp[value.productId]["processes"]) {

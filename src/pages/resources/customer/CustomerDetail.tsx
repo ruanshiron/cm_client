@@ -38,6 +38,7 @@ import { toast } from "../../../utils/toast";
 import FancyContent from "../../../components/EmptyComponent";
 import CustomerInfoTab from "../../../components/statistics/CustomerInfoTab";
 import OrderTab from "../../../components/statistics/OrderTab";
+import PricesContent from "../../../components/contents/PricesContent";
 
 interface CustomerDetailProps {}
 
@@ -52,7 +53,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
     state.customers.find((v) => v.id === id)
   );
   const { isLoading } = useSelector((state) => state.loading);
-  const [segment, setSegment] = useState<"info" | "order">("order");
+  const [segment, setSegment] = useState("order");
 
   const handleDeleteCustomer = async () => {
     try {
@@ -136,19 +137,19 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
           <IonSegment
             value={segment}
             onIonChange={(e) => {
-              if (e.detail.value === "info" || e.detail.value === "order")
-                setSegment(e.detail.value!);
+              setSegment(e.detail.value!);
             }}
           >
             <IonSegmentButton value="info">
               Thông tin khách hàng
             </IonSegmentButton>
             <IonSegmentButton value="order">Đơn hàng</IonSegmentButton>
+            <IonSegmentButton value="prices">Đơn giá</IonSegmentButton>
           </IonSegment>
         </IonToolbar>
       </IonHeader>
       <IonLoading isOpen={isLoading} />
-      <IonContent>
+      <IonContent hidden={segment === "prices"}>
         <FancyContent isEmpty={!customer}>
           <IonGrid>
             <IonRow className="ion-justify-content-center">
@@ -160,6 +161,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
           </IonGrid>
         </FancyContent>
       </IonContent>
+      <PricesContent hidden={segment !== "prices"} customer />
     </IonPage>
   );
 };

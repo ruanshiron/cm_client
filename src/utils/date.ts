@@ -78,7 +78,7 @@ export const formatStringDate = (date?: string) => {
   if (!date) {
     return "~";
   } else {
-    return format(new Date(date), "EEEE, dd MMMM, yyyy", {
+    return format(new Date(date), "dd MMMM, yyyy", {
       locale: vi,
     });
   }

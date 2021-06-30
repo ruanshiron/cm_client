@@ -21,9 +21,9 @@ try {
   }
 }
 
-firebase.firestore().settings({
-  cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
-});
+// firebase.firestore().settings({
+//   cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
+// });
 
 // if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
 //   firebase.firestore().settings({ host: "localhost:8080", ssl: false });

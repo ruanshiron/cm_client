@@ -3,6 +3,7 @@ import _ from "lodash";
 import { Process, ProcessEnum } from "../models/process";
 import { Workshop } from "../models/workshop";
 import { isBetween } from "./date";
+import { Amount2 } from "../models/amount";
 
 export const filter = (events: Event.Stage[]) =>
   _.chain(events)
@@ -149,5 +150,40 @@ export const estimatedSubtotal = (stage: Event.Stage, workshop?: Workshop) => {
     return 0;
   } else {
     return stage.quantity * amount.amount;
+  }
+};
+
+export const subtotal2 = (stage: Event.Stage, amounts: Amount2[]) => {
+  const amount = amounts.find(
+    (item) =>
+      (stage.processStatus === "fulfilled" ||
+        stage.processStatus === "rejected") &&
+      item.processId === stage.processId &&
+      item.productId === stage.productId &&
+      isBetween(stage.date, item.from, item.to)
+  );
+  if (!amount) {
+    return 0;
+  } else {
+    return (
+      stage.quantity *
+      amount.value *
+      (stage.processStatus === "fulfilled" ? 1 : -1)
+    );
+  }
+};
+
+export const estimatedSubtotal2 = (stage: Event.Stage, amounts: Amount2[]) => {
+  const amount = amounts.find(
+    (item) =>
+      stage.processStatus === "pending" &&
+      item.processId === stage.processId &&
+      item.productId === stage.productId &&
+      isBetween(stage.date, item.from, item.to)
+  );
+  if (!amount) {
+    return 0;
+  } else {
+    return stage.quantity * amount.value;
   }
 };
