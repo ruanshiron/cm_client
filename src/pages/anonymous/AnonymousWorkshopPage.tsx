@@ -6,14 +6,12 @@ import {
   IonHeader,
   IonIcon,
   IonPage,
-  IonSegment,
-  IonSegmentButton,
   IonTitle,
   IonToolbar,
   useIonActionSheet,
 } from "@ionic/react";
 import { ellipsisVertical, logOutOutline } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "../../store";
 import { findWorkshopById } from "../../store/data/workshopSlice";
@@ -62,7 +60,6 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
     dispatch(findWorkshopById(id));
   }, [dispatch, id]);
 
-  const [segment, setSegment] = useState<"statistic" | "request">("statistic");
   return (
     <IonPage className="list-page">
       <IonHeader>
@@ -90,7 +87,7 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
             </IonButton>
           </IonButtons>
         </IonToolbar>
-        <IonToolbar>
+        {/* <IonToolbar>
           <IonSegment
             value={segment}
             onIonChange={(e) => {
@@ -105,12 +102,11 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
             <IonSegmentButton value="statistic">Thống kê</IonSegmentButton>
             <IonSegmentButton value="request">Yêu cầu</IonSegmentButton>
           </IonSegment>
-        </IonToolbar>
+        </IonToolbar> */}
       </IonHeader>
       <IonContent>
         <IonGrid fixed>
           <AnonymousWorkshopStatisticTab
-            hide={segment !== "statistic"}
             workshop={workshop}
             processes={processes}
           />
