@@ -124,7 +124,7 @@ const Amount2Modal: React.FC<Props> = ({
       });
       return;
     }
-
+    setLoading(true);
     const amount = {
       productId,
       productName: products.find((i) => i.id === productId)?.name || "",
@@ -146,6 +146,7 @@ const Amount2Modal: React.FC<Props> = ({
         .doc(id)
         .set(amount)
         .then(() => {
+          setLoading(false);
           presentToast({
             message: "Đã lưu giá công",
             duration: 2000,
@@ -154,6 +155,7 @@ const Amount2Modal: React.FC<Props> = ({
           onDidDismiss();
         })
         .catch(() => {
+          setLoading(false);
           presentToast({
             message: "Có lỗi xảy ra không thể lưu",
             duration: 2000,
@@ -167,6 +169,7 @@ const Amount2Modal: React.FC<Props> = ({
         .collection("amounts")
         .add(amount)
         .then(() => {
+          setLoading(false);
           presentToast({
             message: "Đã thêm giá công",
             duration: 2000,
@@ -175,6 +178,7 @@ const Amount2Modal: React.FC<Props> = ({
           onDidDismiss();
         })
         .catch(() => {
+          setLoading(false);
           presentToast({
             message: "Có lỗi xảy ra không thể thêm",
             duration: 2000,

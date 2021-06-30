@@ -10,12 +10,15 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonRefresher,
+  IonRefresherContent,
   IonRow,
   IonText,
   useIonActionSheet,
   useIonAlert,
   useIonToast,
 } from "@ionic/react";
+import { RefresherEventDetail } from "@ionic/core";
 import { add, close, createOutline, trashOutline } from "ionicons/icons";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -54,6 +57,21 @@ const AmountsContent: React.FC<Props> = ({ hidden, workshop }) => {
     setEditId(undefined);
     setShowModal(false);
     loadData();
+  };
+  const handleRefesh = (event: CustomEvent<RefresherEventDetail>) => {
+    database
+      .collection("users")
+      .doc(uid)
+      .collection("amounts")
+      .where(workshop ? "workshopId" : "productId", "==", id)
+      .get()
+      .then((snap) => {
+        event.detail.complete();
+        setAmounts(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      })
+      .catch(() => {
+        event.detail.complete();
+      });
   };
   const handleClickItem = (item: any) => {
     const prompt =
@@ -128,6 +146,9 @@ const AmountsContent: React.FC<Props> = ({ hidden, workshop }) => {
   }, [loadData]);
   return (
     <IonContent hidden={hidden}>
+      <IonRefresher slot="fixed" onIonRefresh={handleRefesh}>
+        <IonRefresherContent></IonRefresherContent>
+      </IonRefresher>
       <IonFab vertical="bottom" horizontal="end" slot="fixed">
         <IonFabButton onClick={() => setShowModal(true)}>
           <IonIcon icon={add} />
@@ -165,7 +186,9 @@ const AmountsContent: React.FC<Props> = ({ hidden, workshop }) => {
                           <b>
                             {item.productName} ({item.productCode})
                           </b>
-                          <p>👩🏻‍🏭&nbsp;{item.workshopName} | {item.processName}</p>
+                          <p>
+                            {item.workshopName} | {item.processName}
+                          </p>
                         </IonLabel>
                         <IonText className="ion-text-right" color="dark">
                           {new Intl.NumberFormat("vi-VN", {
