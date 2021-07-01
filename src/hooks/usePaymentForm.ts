@@ -32,6 +32,7 @@ export const usePaymentForm = () => {
     }
     setLoading(true);
     const payment: Payment = {
+      uid,
       note,
       date: date.substring(0, 10),
       amount: iAmount,

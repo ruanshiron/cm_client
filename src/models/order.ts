@@ -29,12 +29,22 @@ export interface Line {
 
 export interface Order {
   id?: string;
+  uid?: string;
   customerId?: string;
   lines: Line[];
   date: string;
   note?: string;
   createdAt?: any;
 }
+
+export const getOrders = (user: string, limit = 5) => {
+  return database
+    .collectionGroup("orders")
+    .where("uid", "==", user)
+    .orderBy("date", "desc")
+    .limit(limit)
+    .get();
+};
 
 export const getAllOrders = (user: string, customerId: string) => {
   return ref(user)

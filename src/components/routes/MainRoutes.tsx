@@ -20,6 +20,7 @@ import SettingsPage from "../../pages/settings/SettingsPage";
 import MainTabs from "../../pages/tabs/MainTabs";
 import OrderCreate from "../../pages/resources/customer/orders/OrderCreate";
 import HomeOrTutorial from "../HomeOrTutorial";
+import DashboardPage from "../../pages/tabs/dashboard/DashboardPage";
 
 
 
@@ -52,6 +53,8 @@ const MainRoutes = () => {
       <Route path="/settings" component={SettingsPage} exact />
 
       <Route path="/processes" component={ProcessesPage} exact />
+
+      <Route path="/dashboard" component={DashboardPage} exact />
 
       <Route path="/" component={HomeOrTutorial} exact />
     </IonRouterOutlet>

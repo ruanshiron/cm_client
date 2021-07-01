@@ -49,7 +49,9 @@ const OrderCreate: React.FC<OrderCreateProps> = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/tabs/product"></IonBackButton>
           </IonButtons>
-          <IonTitle>Thêm đơn hàng của {customer?.name}</IonTitle>
+          <IonTitle>
+            {orderId ? "Sửa" : "Thêm"} đơn hàng của {customer?.name}
+          </IonTitle>
           <IonButtons slot="end">
             <IonButton type="submit" onClick={() => form.submit()}>
               Lưu

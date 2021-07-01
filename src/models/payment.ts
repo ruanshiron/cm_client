@@ -10,6 +10,7 @@ const ref = (user: string, workshopId: string) =>
     .collection("payments");
 
 export interface Payment {
+  uid?: string;
   id?: string;
   note: string;
   amount: number;

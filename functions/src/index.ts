@@ -6,6 +6,9 @@ admin.initializeApp();
 // // https://firebase.google.com/docs/functions/typescript
 //
 
+exports.counters = require('./counters');
+exports.metrics = require('./metrics');
+
 const findCodeInCollection = async (collection: string, code: string) => {
   return await admin
     .firestore()

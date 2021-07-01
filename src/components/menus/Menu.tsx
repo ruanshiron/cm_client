@@ -8,6 +8,7 @@ import {
   settingsOutline,
   cutOutline,
   todayOutline,
+  layersOutline,
 } from "ionicons/icons";
 import {
   IonContent,
@@ -30,6 +31,12 @@ interface AppPage {
 }
 
 const appPages: AppPage[] = [
+  {
+    title: "Tổng hợp",
+    url: "/dashboard",
+    iosIcon: layersOutline,
+    mdIcon: layersOutline,
+  },
   {
     title: "Nhật ký",
     url: "/tabs/diary",

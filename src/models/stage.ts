@@ -54,6 +54,7 @@ export interface StageFilterOptions {
   processId?: string;
   processStatus?: string;
   lastVisible?: any;
+  limit?: number;
 }
 
 export const getStages = (user: string, options?: StageFilterOptions) => {
@@ -75,7 +76,7 @@ export const getStages = (user: string, options?: StageFilterOptions) => {
     collection = collection.where("processStatus", "==", options.processStatus);
   if (options?.lastVisible)
     collection = collection.startAfter(options.lastVisible);
-  return collection.limit(25).get();
+  return collection.limit(options?.limit || 25).get();
 };
 
 export const getAllStages = (user: string, options?: StageFilterOptions) => {

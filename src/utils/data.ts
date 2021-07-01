@@ -187,3 +187,20 @@ export const estimatedSubtotal2 = (stage: Event.Stage, amounts: Amount2[]) => {
     return stage.quantity * amount.value;
   }
 };
+
+export const processMetrics = (stages: Event.Stage[]) => {
+  const result: any = {};
+  stages.forEach((stage) => {
+    if (stage.processId in result) {
+      if (stage.processStatus in result[stage.processId])
+        result[stage.processId][stage.processStatus] += stage.quantity;
+    } else {
+      result[stage.processId] = {
+        pending: stage.processStatus === "pending" ? stage.quantity : 0,
+        fulfilled: stage.processStatus === "fulfilled" ? stage.quantity : 0,
+        rejected: stage.processStatus === "rejected" ? stage.quantity : 0,
+      };
+    }
+  });
+  return result;
+};

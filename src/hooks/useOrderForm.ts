@@ -9,6 +9,7 @@ import {
   initialLine,
 } from "../models/order";
 import { useSelector } from "../store";
+import { addOrder, updateOrder } from "../store/data/orderSlice";
 import { fetchAllProducts } from "../store/data/productSlice";
 import { toast } from "../utils/toast";
 
@@ -36,11 +37,19 @@ export const useOrderForm = (customerId: string) => {
     }));
 
     try {
-      await saveOrder(uid, customerId, params);
+      const newOrder = (await saveOrder(uid, customerId, {
+        uid,
+        ...params,
+      })) as any;
       setFields(initialOrder);
       router.goBack();
       toast("Lưu thành công.");
       // TODO: Do not fetch again
+      if (fields.id) {
+        dispatch(updateOrder({ ...fields, customerId }));
+      } else {
+        dispatch(addOrder({ ...fields, id: newOrder.id, customerId }));
+      }
     } catch {
       toast("Có lỗi xảy ra, vui lòng thử lại.");
     }
