@@ -21,8 +21,12 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { createOutline } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
+import {
+  createOutline,
+  statsChartOutline,
+  statsChartSharp,
+} from "ionicons/icons";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import StageItem from "../../../components/items/StageItem";
 import { database } from "../../../config/firebase";
@@ -30,8 +34,10 @@ import { getOrders } from "../../../models/order";
 import { getStages, Stage } from "../../../models/stage";
 import { useSelector } from "../../../store";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
-import { filter, processMetrics } from "../../../utils/data";
+import { CHART_COLOR, filter, processMetrics } from "../../../utils/data";
 import { formatStringDate } from "../../../utils/date";
+import { PieChart } from "react-minimal-pie-chart";
+import { Bar } from "react-chartjs-2";
 
 const Item: React.FC<{ padding?: boolean }> = ({ children, padding }) => {
   return (
@@ -77,6 +83,7 @@ const ProcessMetrics: React.FC<{ isEditting: boolean; metrics: any }> = ({
     user: { uid },
   } = useSelector((state) => state);
   const dispatch = useDispatch();
+  const [chart, setChart] = useState(false);
   const handleUpdate = () => {
     database
       .collection("users")
@@ -101,32 +108,85 @@ const ProcessMetrics: React.FC<{ isEditting: boolean; metrics: any }> = ({
       <IonList lines="full" style={{ border: "none" }}>
         <IonListHeader>
           <IonLabel>Quy trình sản xuất</IonLabel>
-          {isEditting && (
-            <IonButton onClick={handleUpdate} size="small">
-              Cập nhật
-            </IonButton>
-          )}
+          <IonButton onClick={() => setChart((c) => !c)} size="small">
+            <IonIcon icon={chart ? statsChartSharp : statsChartOutline} />
+          </IonButton>
         </IonListHeader>
-        {Object.keys(metrics)
-          .sort()
-          .map((key) => (
-            <IonItem>
-              <IonLabel slot="start">
-                <b>{processes.find((i) => i.id === key)?.name}</b>
-                <p>
-                  <span>{metrics[key]?.fulfilled || 0}</span>
-                  <span className="ion-margin">/</span>
-                  <span>{metrics[key]?.pending || 0}</span>
-                  <small className="ion-margin">sp</small>
-                </p>
-              </IonLabel>
-              <IonProgressBar
-                style={{ height: 10 }}
-                value={(metrics[key]?.fulfilled || 0) / metrics[key]?.pending}
-              />
-            </IonItem>
-          ))}
+        {chart ? (
+          <Bar
+            style={{ padding: 12 }}
+            type
+            data={{
+              labels: Object.keys(metrics)
+                .sort()
+                .map((key) => processes.find((i) => i.id === key)?.name),
+              datasets: [
+                {
+                  label: "tổng",
+                  data: Object.keys(metrics)
+                    .sort()
+                    .map((key) => metrics[key]?.pending),
+                  backgroundColor: "rgb(54, 162, 235)",
+                },
+                {
+                  label: "xong",
+                  data: Object.keys(metrics)
+                    .sort()
+                    .map((key) => metrics[key]?.fulfilled),
+                  backgroundColor: "rgb(75, 192, 192)",
+                },
+                {
+                  label: "lỗi",
+                  data: Object.keys(metrics)
+                    .sort()
+                    .map((key) => metrics[key]?.rejected),
+                  backgroundColor: "rgb(255, 99, 132)",
+                },
+              ],
+            }}
+            options={{
+              scales: {
+                yAxes: [
+                  {
+                    ticks: {
+                      beginAtZero: true,
+                    },
+                  },
+                ],
+              },
+            }}
+          />
+        ) : (
+          Object.keys(metrics)
+            .sort()
+            .map((key) => (
+              <IonItem>
+                <IonLabel slot="start">
+                  <b>{processes.find((i) => i.id === key)?.name}</b>
+                  <p>
+                    <span style={{ color: "rgb(54, 162, 235)" }}>
+                      {metrics[key]?.pending || 0}
+                    </span>
+                    <span className="ion-margin">/</span>
+                    <span style={{ color: "rgb(75, 192, 192)" }}>
+                      {metrics[key]?.fulfilled || 0}
+                    </span>
+                    <span className="ion-margin">/</span>
+                    <span style={{ color: "rgb(255, 99, 132)" }}>
+                      {metrics[key]?.rejected || 0}
+                    </span>
+                    <small className="ion-margin">sp</small>
+                  </p>
+                </IonLabel>
+                <IonProgressBar
+                  style={{ height: 10 }}
+                  value={(metrics[key]?.fulfilled || 0) / metrics[key]?.pending}
+                />
+              </IonItem>
+            ))
+        )}
       </IonList>
+      {isEditting && <UpdateButton onClick={handleUpdate} />}
     </Item>
   );
 };
@@ -149,52 +209,79 @@ const RecentPayments = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <Item>
-      <IonList lines="full" style={{ border: "none" }}>
-        <IonListHeader>
-          <IonLabel>Thành toán gần nhất</IonLabel>
-        </IonListHeader>
-        {payments.map((item) => (
-          <IonItem key={item.id}>
-            <IonText>{item.note}</IonText>
-            <IonText slot="end">
-              {new Intl.NumberFormat("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              }).format(item.amount)}
-            </IonText>
-          </IonItem>
-        ))}
-      </IonList>
-    </Item>
+    <>
+      <IonListHeader>
+        <IonLabel>Thanh toán gần nhất</IonLabel>
+      </IonListHeader>
+      <Item>
+        <IonList lines="full" style={{ border: "none" }}>
+          {payments.map((item) => (
+            <IonItem key={item.id}>
+              <IonText>{item.note}</IonText>
+              <IonText slot="end">
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(item.amount)}
+              </IonText>
+            </IonItem>
+          ))}
+        </IonList>
+      </Item>
+    </>
   );
 };
 
 const SellingsMetrics: React.FC<{ metrics: any }> = ({ metrics }) => {
-  return (
-    <IonList lines="full" style={{ border: "none" }}>
-      <IonListHeader>
-        <IonLabel>
-          <b>
-            {Object.values(metrics)
-              .map((m: any) => m.value)
-              .reduce((a, b) => {
-                return a + b;
-              }, 0)}
-          </b>
-          &nbsp;sp đã bán
-        </IonLabel>
-      </IonListHeader>
-      {Object.keys(metrics)
+  const data = useMemo(
+    () =>
+      Object.keys(metrics)
         .sort()
-        .filter((key) => metrics[key].value)
-        .map((key) => (
-          <IonItem>
-            <IonText>{metrics[key].name}</IonText>
-            <IonText slot="end">{metrics[key].value}</IonText>
-          </IonItem>
-        ))}
-    </IonList>
+        .filter((key) => metrics[key].value),
+    [metrics]
+  );
+  if (!metrics || data.length === 0) return null;
+  return (
+    <IonCol sizeMd="6" size="12">
+      <Item>
+        <IonRow>
+          <IonCol className="ion-padding" size="4">
+            <PieChart
+              data={data.map((key, i) => ({
+                title: metrics[key].name,
+                value: metrics[key].value,
+                color: CHART_COLOR[i % 20],
+              }))}
+            />
+            ;
+          </IonCol>
+          <IonCol>
+            <IonList lines="full" style={{ border: "none" }}>
+              <IonListHeader>
+                <IonLabel>
+                  <b>
+                    {Object.values(metrics)
+                      .map((m: any) => m.value)
+                      .reduce((a, b) => {
+                        return a + b;
+                      }, 0)}
+                  </b>
+                  &nbsp;sp đã bán
+                </IonLabel>
+              </IonListHeader>
+              {data.map((key, i) => (
+                <IonItem>
+                  <IonText style={{ color: CHART_COLOR[i % 20] }}>
+                    {metrics[key].name}
+                  </IonText>
+                  <IonText slot="end">{metrics[key].value}</IonText>
+                </IonItem>
+              ))}
+            </IonList>
+          </IonCol>
+        </IonRow>
+      </Item>
+    </IonCol>
   );
 };
 
@@ -402,15 +489,12 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
                 isEditting={isEditting}
               />
             </IonCol>
-            <IonCol sizeMd="3" size="6">
-              <Item>
-                <SellingsMetrics metrics={metricsSellings} />
-              </Item>
-            </IonCol>
-            <IonCol sizeMd="3" size="6">
+            <SellingsMetrics metrics={metricsSellings} />
+
+            <IonCol style={{ paddingTop: 12 }}  sizeMd="4" size="6">
               <RecentPayments />
             </IonCol>
-            <IonCol style={{ paddingTop: 12 }} sizeMd="6" size="12">
+            <IonCol style={{ paddingTop: 12 }} sizeMd="4" size="12">
               <IonListHeader>
                 <IonLabel>{stages.length > 0 ? "Sản xuất" : ""}</IonLabel>
               </IonListHeader>
@@ -434,7 +518,7 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
                 Xem toàn bộ
               </IonButton>
             </IonCol>
-            <IonCol style={{ paddingTop: 12 }} sizeMd="6" size="12">
+            <IonCol style={{ paddingTop: 12 }} sizeMd="4" size="12">
               <IonListHeader>
                 <IonLabel>{orders.length > 0 ? "Đơn hàng" : ""}</IonLabel>
               </IonListHeader>
