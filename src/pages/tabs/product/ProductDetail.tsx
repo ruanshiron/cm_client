@@ -82,7 +82,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = () => {
 
       router.push("/tabs/product");
     } catch (error) {
-      toast("Có lỗi xảy ra, vui lòng thử lại!");
+      toast(error.message);
     }
   };
   useEffect(() => {

@@ -75,7 +75,7 @@ export const WorkshopDetail: React.FC<WorkshopDetailProps> = () => {
 
       router.goBack();
     } catch (error) {
-      toast("Có lỗi xảy ra, vui lòng thử lại!");
+      toast(error.message);
     }
   };
   const handleRefresh = (event: CustomEvent<RefresherEventDetail>) => {

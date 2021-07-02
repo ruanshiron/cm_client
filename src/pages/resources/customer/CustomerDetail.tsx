@@ -64,7 +64,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = () => {
 
       router.goBack();
     } catch (error) {
-      toast("Có lỗi xảy ra, vui lòng thử lại!");
+      toast(error.message);
     }
   };
 

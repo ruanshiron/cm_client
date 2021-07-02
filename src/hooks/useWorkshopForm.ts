@@ -44,10 +44,14 @@ export const useWorkshopForm = (workshop = initialWorkshop) => {
       toast("Không tìm thấy xưởng này");
       return;
     }
-    await destroyWorkshop(uid, fields.id);
-    toast("Xóa thành công.");
-    router.push("/workshops/");
-    dispatch(removeWorkshop(fields.id));
+    try {
+      await destroyWorkshop(uid, fields.id);
+      toast("Xóa thành công.");
+      router.push("/workshops/");
+      dispatch(removeWorkshop(fields.id));
+    } catch (error) {
+      toast(error.message);
+    }
   };
   const setFieldsValue = (e: Partial<Workshop>) => {
     setFields((fields) => ({ ...fields, ...e }));

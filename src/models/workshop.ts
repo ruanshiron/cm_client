@@ -95,8 +95,17 @@ export const findWorkshop = (user: string, id: string) => {
     });
 };
 
-export const destroyWorkshop = (user: string, id: string) => {
-  return ref(user).doc(id).delete();
+export const destroyWorkshop = async (user: string, id: string) => {
+  const snap = await database
+    .collection("users")
+    .doc(user)
+    .collection("stages")
+    .where("workshopId", "==", id)
+    .limit(1)
+    .get();
+  if (snap.docs.length > 0) {
+    throw new Error("Nhật ký còn thông tin của xưởng nên không thể xóa");
+  } else return ref(user).doc(id).delete();
 };
 
 export const isInvalidWorkshop = (fields: Workshop) =>

@@ -69,8 +69,13 @@ export const saveCustomer = (user: string, param: Partial<Customer>) => {
     : ref(user).add(permittedParam);
 };
 
-export const destroyCustomer = (user: string, id: string) => {
-  return ref(user).doc(id).delete();
+export const destroyCustomer = async (user: string, id: string) => {
+  const snap = await ref(user).doc(id).collection("orders").limit(1).get();
+  if (snap.docs.length > 0) {
+    throw new Error("Xóa hết đơn hàng của người này trước");
+  } else {
+    return ref(user).doc(id).delete();
+  }
 };
 
 export const isInvalidCustomer = (fields: Customer) =>

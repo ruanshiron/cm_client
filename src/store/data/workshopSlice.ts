@@ -110,12 +110,14 @@ const workshopSlice = createSlice({
         return action.payload;
       })
       .addCase(findWorkshopById.fulfilled, (state, action) => {
-        let workshop = state.find((item) => item.id === action.payload.id);
-        if (action.payload && !workshop) state.unshift(action.payload);
-        if (action.payload && workshop?.id) {
-          return state.map((item) =>
-            item.id === action.payload.id ? action.payload : item
-          );
+        if (action.payload?.id) {
+          let workshop = state.find((item) => item.id === action.payload.id);
+          if (action.payload && !workshop) state.unshift(action.payload);
+          if (action.payload && workshop?.id) {
+            return state.map((item) =>
+              item.id === action.payload.id ? action.payload : item
+            );
+          }
         }
       });
   },

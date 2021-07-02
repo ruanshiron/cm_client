@@ -78,8 +78,17 @@ export const saveProduct = (user: string, param: Partial<Product>) => {
     : ref(user).add(permittedParam);
 };
 
-export const destroyProduct = (user: string, id: string) => {
-  return ref(user).doc(id).delete();
+export const destroyProduct = async (user: string, id: string) => {
+  const snap = await database
+    .collection("users")
+    .doc(user)
+    .collection("stages")
+    .where("productId", "==", id)
+    .limit(1)
+    .get();
+  if (snap.docs.length > 0) {
+    throw new Error("Nhật ký còn thông tin của sản phẩm nên không thể xóa");
+  } else return ref(user).doc(id).delete();
 };
 
 export const isInvalidProduct = (fields: Product) =>
