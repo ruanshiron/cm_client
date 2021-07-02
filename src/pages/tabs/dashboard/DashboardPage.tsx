@@ -163,18 +163,19 @@ const ProcessMetrics: React.FC<{ isEditting: boolean; metrics: any }> = ({
                     <span style={{ color: "rgb(54, 162, 235)" }}>
                       {metrics[key]?.pending || 0}
                     </span>
-                    <span className="ion-margin">/</span>
+                    <span style={{marginRight: 4, marginLeft: 4}}>/</span>
                     <span style={{ color: "rgb(75, 192, 192)" }}>
                       {metrics[key]?.fulfilled || 0}
                     </span>
-                    <span className="ion-margin">/</span>
+                    <span style={{marginRight: 4, marginLeft: 4}}>/</span>
                     <span style={{ color: "rgb(255, 99, 132)" }}>
                       {metrics[key]?.rejected || 0}
                     </span>
-                    <small className="ion-margin">sp</small>
+                    <small style={{marginRight: 4, marginLeft: 4}}>sp</small>
                   </p>
                 </IonLabel>
                 <IonProgressBar
+                  slot="end"
                   style={{ height: 10 }}
                   value={(metrics[key]?.fulfilled || 0) / metrics[key]?.pending}
                 />
@@ -260,7 +261,7 @@ const SellingsMetrics: React.FC<{ metrics: any }> = ({ metrics }) => {
               </IonListHeader>
               {data.length === 0 && <IonItem>📭 Chưa có dữ liệu</IonItem>}
               {data.map((key, i) => (
-                <IonItem>
+                <IonItem key={i}>
                   <IonText style={{ color: CHART_COLOR[i % 20] }}>
                     {metrics[key].name}
                   </IonText>
@@ -359,7 +360,7 @@ const RecentOrders = () => {
         <IonLabel>{orders.length > 0 ? "Đơn hàng" : ""}</IonLabel>
       </IonListHeader>
       {orders.map((order, i) => (
-        <Item>
+        <Item key={i}>
           <IonList lines="full" style={{ border: "none" }}>
             <IonItem>
               <IonLabel>
