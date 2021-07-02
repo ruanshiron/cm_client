@@ -99,6 +99,7 @@ const ProcessMetrics: React.FC<{ isEditting: boolean; metrics: any }> = ({
           .set({ metrics: { processes: metrics } }, { merge: true });
       });
   };
+  const data = useMemo(() => Object.keys(metrics).sort(), [metrics]);
   useEffect(() => {
     dispatch(fetchAllProcesses());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,34 +113,29 @@ const ProcessMetrics: React.FC<{ isEditting: boolean; metrics: any }> = ({
             <IonIcon icon={chart ? statsChartSharp : statsChartOutline} />
           </IonButton>
         </IonListHeader>
+        {data.length <= 0 && <IonItem>📭 Chưa có dữ liệu</IonItem>}
         {chart ? (
           <Bar
             style={{ padding: 12 }}
             type
             data={{
-              labels: Object.keys(metrics)
-                .sort()
-                .map((key) => processes.find((i) => i.id === key)?.name),
+              labels: data.map(
+                (key) => processes.find((i) => i.id === key)?.name
+              ),
               datasets: [
                 {
                   label: "tổng",
-                  data: Object.keys(metrics)
-                    .sort()
-                    .map((key) => metrics[key]?.pending),
+                  data: data.map((key) => metrics[key]?.pending),
                   backgroundColor: "rgb(54, 162, 235)",
                 },
                 {
                   label: "xong",
-                  data: Object.keys(metrics)
-                    .sort()
-                    .map((key) => metrics[key]?.fulfilled),
+                  data: data.map((key) => metrics[key]?.fulfilled),
                   backgroundColor: "rgb(75, 192, 192)",
                 },
                 {
                   label: "lỗi",
-                  data: Object.keys(metrics)
-                    .sort()
-                    .map((key) => metrics[key]?.rejected),
+                  data: data.map((key) => metrics[key]?.rejected),
                   backgroundColor: "rgb(255, 99, 132)",
                 },
               ],
@@ -208,13 +204,17 @@ const RecentPayments = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  if (payments.length <= 0) return null;
   return (
-    <>
+    <IonCol style={{ paddingTop: 12 }} sizeMd="4" size="12">
       <IonListHeader>
         <IonLabel>Thanh toán gần nhất</IonLabel>
       </IonListHeader>
       <Item>
         <IonList lines="full" style={{ border: "none" }}>
+          {payments.length === 0 && (
+            <IonItem>📭 Bạn chưa tạo thanh toán nào</IonItem>
+          )}
           {payments.map((item) => (
             <IonItem key={item.id}>
               <IonText>{item.note}</IonText>
@@ -228,7 +228,7 @@ const RecentPayments = () => {
           ))}
         </IonList>
       </Item>
-    </>
+    </IonCol>
   );
 };
 
@@ -240,21 +240,10 @@ const SellingsMetrics: React.FC<{ metrics: any }> = ({ metrics }) => {
         .filter((key) => metrics[key].value),
     [metrics]
   );
-  if (!metrics || data.length === 0) return null;
   return (
     <IonCol sizeMd="6" size="12">
       <Item>
         <IonRow>
-          <IonCol className="ion-padding" size="4">
-            <PieChart
-              data={data.map((key, i) => ({
-                title: metrics[key].name,
-                value: metrics[key].value,
-                color: CHART_COLOR[i % 20],
-              }))}
-            />
-            ;
-          </IonCol>
           <IonCol>
             <IonList lines="full" style={{ border: "none" }}>
               <IonListHeader>
@@ -269,6 +258,7 @@ const SellingsMetrics: React.FC<{ metrics: any }> = ({ metrics }) => {
                   &nbsp;sp đã bán
                 </IonLabel>
               </IonListHeader>
+              {data.length === 0 && <IonItem>📭 Chưa có dữ liệu</IonItem>}
               {data.map((key, i) => (
                 <IonItem>
                   <IonText style={{ color: CHART_COLOR[i % 20] }}>
@@ -279,8 +269,116 @@ const SellingsMetrics: React.FC<{ metrics: any }> = ({ metrics }) => {
               ))}
             </IonList>
           </IonCol>
+          {data.length > 0 && (
+            <IonCol className="ion-padding" size="4">
+              <PieChart
+                data={data.map((key, i) => ({
+                  title: metrics[key].name,
+                  value: metrics[key].value,
+                  color: CHART_COLOR[i % 20],
+                }))}
+              />
+              ;
+            </IonCol>
+          )}
         </IonRow>
       </Item>
+    </IonCol>
+  );
+};
+
+const RecentStages = () => {
+  const { uid } = useSelector((state) => state.user);
+  const [stages, setStages] = useState<any[]>([]);
+  useEffect(() => {
+    getStages(uid, { limit: 5 }).then((snap) => {
+      const groups = filter(
+        snap.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Stage))
+      );
+      setStages(groups);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  if (stages.length === 0) return null;
+  return (
+    <IonCol style={{ paddingTop: 12 }} sizeMd="4" size="12">
+      <IonListHeader>
+        <IonLabel>{stages.length > 0 ? "Sản xuất" : ""}</IonLabel>
+      </IonListHeader>
+      {stages.map((group, i) => (
+        <Item key={i}>
+          <IonList
+            style={{ border: "none" }}
+            className="fadin ion-margin-top"
+            key={i}
+          >
+            <IonItemDivider className="top-divider" color="white">
+              <IonLabel>{formatStringDate(group.name)}</IonLabel>
+            </IonItemDivider>
+            {group.events.map((item: any, j: number) => (
+              <StageItem stage={item} key={j} />
+            ))}
+          </IonList>
+        </Item>
+      ))}
+      <IonButton expand="block" fill="clear">
+        Xem toàn bộ
+      </IonButton>
+    </IonCol>
+  );
+};
+
+const RecentOrders = () => {
+  const { uid } = useSelector((state) => state.user);
+  const [orders, setOrders] = useState<any[]>([]);
+  useEffect(() => {
+    getOrders(uid).then((snap) => {
+      setOrders([]);
+      snap.docs.forEach((doc) => {
+        const data = doc.data();
+        if (doc.ref.parent.parent) {
+          doc.ref.parent.parent.get().then((customer) => {
+            const cus_data = customer.data();
+            const order = {
+              id: doc.id,
+              lines: data?.lines || [],
+              ...data,
+              customerName: cus_data?.name || "",
+            };
+            setOrders((o) => [order, ...o]);
+          });
+        }
+      });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  if (orders.length <= 0) return null;
+  return (
+    <IonCol style={{ paddingTop: 12 }} sizeMd="4" size="12">
+      <IonListHeader>
+        <IonLabel>{orders.length > 0 ? "Đơn hàng" : ""}</IonLabel>
+      </IonListHeader>
+      {orders.map((order, i) => (
+        <Item>
+          <IonList lines="full" style={{ border: "none" }}>
+            <IonItem>
+              <IonLabel>
+                {formatStringDate(order.date)} - {order.customerName}
+              </IonLabel>
+            </IonItem>
+            {order.lines.map((line: any) => (
+              <IonItem>
+                <IonText>
+                  <b>{line.productName}</b>
+                </IonText>
+                <IonText slot="end">
+                  <p>{line.quantity || 0} sp</p>
+                </IonText>
+              </IonItem>
+            ))}
+          </IonList>
+        </Item>
+      ))}
     </IonCol>
   );
 };
@@ -296,8 +394,6 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
   const [customersCount, setCustomersCount] = useState("Đang tải...");
   const [metricsProcesses, setMetricsProcesses] = useState({});
   const [metricsSellings, setMetricsSellings] = useState({});
-  const [stages, setStages] = useState<any[]>([]);
-  const [orders, setOrders] = useState<any[]>([]);
 
   const handleUpdate = (field: string) => {
     switch (field) {
@@ -361,33 +457,6 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
         break;
     }
   };
-  useEffect(() => {
-    getStages(uid, { limit: 5 }).then((snap) => {
-      const groups = filter(
-        snap.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Stage))
-      );
-      setStages(groups);
-    });
-    getOrders(uid).then((snap) => {
-      setOrders([]);
-      snap.docs.forEach((doc) => {
-        const data = doc.data();
-        if (doc.ref.parent.parent) {
-          doc.ref.parent.parent.get().then((customer) => {
-            const cus_data = customer.data();
-            const order = {
-              id: doc.id,
-              lines: data?.lines || [],
-              ...data,
-              customerName: cus_data?.name || "",
-            };
-            setOrders((o) => [order, ...o]);
-          });
-        }
-      });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   useEffect(() => {
     const unsubcribe = database
       .collection("users")
@@ -490,60 +559,9 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
               />
             </IonCol>
             <SellingsMetrics metrics={metricsSellings} />
-
-            <IonCol style={{ paddingTop: 12 }}  sizeMd="4" size="12">
-              <RecentPayments />
-            </IonCol>
-            <IonCol style={{ paddingTop: 12 }} sizeMd="4" size="12">
-              <IonListHeader>
-                <IonLabel>{stages.length > 0 ? "Sản xuất" : ""}</IonLabel>
-              </IonListHeader>
-              {stages.map((group, i) => (
-                <Item key={i}>
-                  <IonList
-                    style={{ border: "none" }}
-                    className="fadin ion-margin-top"
-                    key={i}
-                  >
-                    <IonItemDivider className="top-divider" color="white">
-                      <IonLabel>{formatStringDate(group.name)}</IonLabel>
-                    </IonItemDivider>
-                    {group.events.map((item: any, j: number) => (
-                      <StageItem stage={item} key={j} />
-                    ))}
-                  </IonList>
-                </Item>
-              ))}
-              <IonButton expand="block" fill="clear">
-                Xem toàn bộ
-              </IonButton>
-            </IonCol>
-            <IonCol style={{ paddingTop: 12 }} sizeMd="4" size="12">
-              <IonListHeader>
-                <IonLabel>{orders.length > 0 ? "Đơn hàng" : ""}</IonLabel>
-              </IonListHeader>
-              {orders.map((order, i) => (
-                <Item>
-                  <IonList lines="full" style={{ border: "none" }}>
-                    <IonItem>
-                      <IonLabel>
-                        {formatStringDate(order.date)} - {order.customerName}
-                      </IonLabel>
-                    </IonItem>
-                    {order.lines.map((line: any) => (
-                      <IonItem>
-                        <IonText>
-                          <b>{line.productName}</b>
-                        </IonText>
-                        <IonText slot="end">
-                          <p>{line.quantity || 0} sp</p>
-                        </IonText>
-                      </IonItem>
-                    ))}
-                  </IonList>
-                </Item>
-              ))}
-            </IonCol>
+            <RecentPayments />
+            <RecentStages />
+            <RecentOrders />
           </IonRow>
         </IonGrid>
       </IonContent>
