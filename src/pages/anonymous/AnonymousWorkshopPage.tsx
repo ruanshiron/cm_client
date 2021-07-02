@@ -21,6 +21,7 @@ import { addStatisticStages } from "../../store/data/stageSlice";
 import { setLoading } from "../../store/loading/loadingSlice";
 import { getAllStages, parseStage } from "../../models/stage";
 import AnonymousWorkshopStatisticTab from "../../components/statistics/AnonymousWorkshopStatisticTab";
+import { fetchAllPaymentsByWorkshop } from "../../store/data/paymentSlice";
 
 interface Props {}
 
@@ -58,7 +59,14 @@ const AnonymousWorkshopPage: React.FC<Props> = () => {
 
   useEffect(() => {
     dispatch(findWorkshopById(id));
-  }, [dispatch, id]);
+    dispatch(
+      fetchAllPaymentsByWorkshop({
+        workshopId: id,
+        from: workshop?.statistic?.from,
+        to: workshop?.statistic?.to,
+      })
+    );
+  }, [dispatch, id, workshop]);
 
   return (
     <IonPage className="list-page">

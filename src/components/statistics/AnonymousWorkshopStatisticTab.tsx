@@ -10,14 +10,15 @@ import {
   IonRow,
 } from "@ionic/react";
 import { calendarClearOutline, calendarNumberOutline } from "ionicons/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { formatStringDate } from "../../utils/date";
 import { useSelector } from "../../store";
-import { statisticHarderSelector } from "../../store/data/workshopSlice";
+import { statistic2HarderSelector } from "../../store/data/workshopSlice";
 import WorkshopSummary from "../../components/statistics/WorkshopSummary";
 import StageTable from "../../components/statistics/StageTable";
 import { Workshop } from "../../models/workshop";
 import { Process } from "../../models/process";
+import { database } from "../../config/firebase";
 
 interface Props {
   hide?: boolean;
@@ -30,10 +31,23 @@ const AnonymousWorkshopStatisticTab: React.FC<Props> = ({
   workshop,
   processes,
 }) => {
-  const { id } = useSelector((state) => state.user);
+  const [amounts, setAmounts] = useState<any[]>([]);
+  const { id, uid } = useSelector((state) => state.user);
   const { statistic, stages, total, payment } = useSelector((state) =>
-    statisticHarderSelector(state, id)
+    statistic2HarderSelector(state, id, amounts)
   );
+  useEffect(() => {
+    database
+      .collection("users")
+      .doc(uid)
+      .collection("amounts")
+      .where("workshopId", "==", id)
+      .get()
+      .then((snap) => {
+        setAmounts(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   if (!workshop || hide) return null;
 
   return (

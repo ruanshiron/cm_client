@@ -491,7 +491,7 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
             </IonCol>
             <SellingsMetrics metrics={metricsSellings} />
 
-            <IonCol style={{ paddingTop: 12 }}  sizeMd="4" size="6">
+            <IonCol style={{ paddingTop: 12 }}  sizeMd="4" size="12">
               <RecentPayments />
             </IonCol>
             <IonCol style={{ paddingTop: 12 }} sizeMd="4" size="12">
