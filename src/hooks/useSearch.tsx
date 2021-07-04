@@ -1,96 +1,97 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   useIonModal,
   IonContent,
   IonHeader,
-  IonSearchbar,
   IonToolbar,
   IonButtons,
   IonButton,
   IonIcon,
   IonTitle,
   IonItem,
-  IonList,
   IonLabel,
   IonText,
   IonNote,
 } from "@ionic/react";
 import { arrowBackOutline } from "ionicons/icons";
-import { stageIndex } from "../config/algolia";
+import { algoliaClient } from "../config/algolia";
 import { useSelector } from "../store";
 import { color } from "../components/items/StageItem";
 import { formatStringDate } from "../utils/date";
+import {
+  InstantSearch,
+  Hits,
+  Configure,
+  Highlight,
+} from "react-instantsearch-dom";
+import { SearchBox } from "../components/search/SearchBox";
 
 interface ModalProps {
   uid: string;
   onDidDismiss: () => void;
 }
 
+function Hit({ hit }: { hit: any }) {
+  return (
+    <IonItem
+      key={hit.objectID}
+      color="light"
+      button
+      routerLink={`tabs/diary/${hit.objectID}`}
+    >
+      <IonLabel>
+        <p>{formatStringDate(hit.date)}</p>
+        <b>{hit.workshopName}</b>
+        <p>
+          {hit.productName}
+          <span style={{ margin: 4 }}>|</span>
+          {hit.productSize}
+          {hit.productSizes?.join(", ")}
+        </p>
+        {hit.note && (
+          <IonText>
+            <span style={{ marginRight: 4 }}>📝</span>
+            <Highlight attribute="note" hit={hit} />
+          </IonText>
+        )}
+      </IonLabel>
+      <IonNote
+        className="ion-text-right"
+        slot="end"
+        color={color(hit.processStatus)}
+      >
+        <IonText>{hit.processLabel}</IonText>
+        <br />
+        <IonText style={{ fontSize: 18, fontWeight: 700 }}>
+          {hit.quantity}
+        </IonText>
+      </IonNote>
+    </IonItem>
+  );
+}
+
 const Modal: React.FC<ModalProps> = ({ uid, onDidDismiss }) => {
-  const [searchText, setSearchText] = useState("");
-  const [result, setResult] = useState<any[]>([]);
-  const handleChange = (text: string) => {
-    setSearchText(text);
-    stageIndex.search(text, { filters: `uid:${uid}` }).then(({ hits }) => {
-      setResult(hits);
-      console.log(hits);
-    });
-  };
   return (
     <>
-      <IonHeader className="ion-no-border">
-        <IonToolbar color="light">
-          <IonButtons slot="start">
-            <IonButton onClick={() => onDidDismiss()}>
-              <IonIcon slot="icon-only" icon={arrowBackOutline}></IonIcon>
-            </IonButton>
-          </IonButtons>
-          <IonTitle>Tìm kiếm</IonTitle>
-        </IonToolbar>
-        <IonToolbar color="light">
-          <IonSearchbar
-            animated
-            placeholder={"Nhập bất kỳ từ khóa bạn muốn tìm"}
-            value={searchText}
-            onIonChange={(e) => handleChange(e.detail.value!)}
-          ></IonSearchbar>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <IonList style={{ padding: 0 }}>
-          {result.map((item) => (
-            <IonItem
-              key={item.objectID}
-              color="light"
-              button
-              routerLink={`tabs/diary/${item.objectID}`}
-            >
-              <IonLabel>
-                <p>{formatStringDate(item.date)}</p>
-                <b>{item.workshopName}</b>
-                <p>
-                  {item.productName}
-                  <span style={{ margin: 4 }}>|</span>
-                  {item.productSize}
-                  {item.productSizes?.join(", ")}
-                </p>
-                {item.note && <IonText>item.note</IonText>}
-              </IonLabel>
-              <IonNote
-                className="ion-text-right"
-                slot="end"
-                color={color(item.processStatus)}
-              >
-                <IonText>{item.processLabel}</IonText>
-                <br />
-                <IonText style={{ fontSize: 18, fontWeight: 700 }}>
-                  {item.quantity}
-                </IonText>
-              </IonNote>
-            </IonItem>
-          ))}
-        </IonList>
-      </IonContent>
+      <InstantSearch indexName="stages" searchClient={algoliaClient}>
+        <Configure filters={`uid:${uid}`} hitsPerPage={20} distinct />
+        <IonHeader className="ion-no-border">
+          <IonToolbar color="light">
+            <IonButtons slot="start">
+              <IonButton onClick={() => onDidDismiss()}>
+                <IonIcon slot="icon-only" icon={arrowBackOutline}></IonIcon>
+              </IonButton>
+            </IonButtons>
+            <IonTitle>Tìm kiếm</IonTitle>
+          </IonToolbar>
+          <IonToolbar color="light">
+            <SearchBox />
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <Hits hitComponent={Hit} />
+        </IonContent>
+      </InstantSearch>
     </>
   );
 };

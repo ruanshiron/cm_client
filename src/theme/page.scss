@@ -293,3 +293,10 @@ ion-list {
   width: 5px;
   height: 5px;
 }
+
+.ais-Hits {
+  ul {
+    list-style-type: none;
+    padding-inline-start: 0.02em;
+  }
+}
