@@ -1,8 +1,8 @@
 import algoliasearch from "algoliasearch";
 
 export const algoliaClient = algoliasearch(
-  "QVMGMMUNGS",
-  "f72a7cd73d19ce99de72a1fd8e9bfbb5"
+  process.env.REACT_APP_ALGOLIA_APP_ID!,
+  process.env.REACT_APP_ALGOLIA_API_KEY!
 );
 
 export const stageIndex = algoliaClient.initIndex("stages");
