@@ -12,18 +12,20 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { filterOutline } from "ionicons/icons";
+import { filterOutline, searchOutline } from "ionicons/icons";
 import React, { useState } from "react";
 import { EventsViewAll } from "../../../components/EventsViewAll";
 import StageFab from "../../../components/fabs/StageFab";
 import StageFilterModal from "../../../components/modals/StageFilterModal";
 import PendingStageList from "../../../components/PendingStageList";
+import useSearch from "../../../hooks/useSearch";
 import { useSelector } from "../../../store";
 
 interface DiaryPageProps {}
 
 const DiaryPage: React.FC<DiaryPageProps> = () => {
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [present] = useSearch();
   const [segemnt, setSegment] = useState<string>("all");
   const hasFilter = useSelector((state) =>
     Object.values(state.diaryPage.stageFilter).reduce(
@@ -42,8 +44,8 @@ const DiaryPage: React.FC<DiaryPageProps> = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Nhật ký</IonTitle>
-          {segemnt === "all" && (
-            <IonButtons slot="end">
+          <IonButtons slot="end">
+            {segemnt === "all" && (
               <IonButton
                 className="notification-button"
                 onClick={() => setShowFilterModal(true)}
@@ -55,8 +57,11 @@ const DiaryPage: React.FC<DiaryPageProps> = () => {
                   </IonBadge>
                 )}
               </IonButton>
-            </IonButtons>
-          )}
+            )}
+            <IonButton onClick={() => present()}>
+              <IonIcon slot="icon-only" icon={searchOutline} />
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
         <IonToolbar>
           <IonSegment

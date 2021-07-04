@@ -227,3 +227,33 @@ export const processMetrics = (stages: Event.Stage[]) => {
   });
   return result;
 };
+
+export const monthlyProcessMetrics = (stages: Event.Stage[]) => {
+  const result: any = {};
+  stages.forEach((stage) => {
+    if (stage.processId in result) {
+      if (stage.date.substring(0, 7) in result[stage.processId]) {
+        if (stage.processStatus in result[stage.processId][stage.date.substring(0, 7)]) {
+          result[stage.processId][stage.date.substring(0, 7)][
+            stage.processStatus
+          ] += stage.quantity;
+        }
+      } else {
+        result[stage.processId][stage.date.substring(0, 7)] = {
+          pending: stage.processStatus === "pending" ? stage.quantity : 0,
+          fulfilled: stage.processStatus === "fulfilled" ? stage.quantity : 0,
+          rejected: stage.processStatus === "rejected" ? stage.quantity : 0,
+        };
+      }
+    } else {
+      result[stage.processId] = {
+        [stage.date.substring(0, 7)]: {
+          pending: stage.processStatus === "pending" ? stage.quantity : 0,
+          fulfilled: stage.processStatus === "fulfilled" ? stage.quantity : 0,
+          rejected: stage.processStatus === "rejected" ? stage.quantity : 0,
+        },
+      };
+    }
+  });
+  return result;
+};

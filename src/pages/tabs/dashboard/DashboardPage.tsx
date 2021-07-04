@@ -34,7 +34,12 @@ import { getOrders } from "../../../models/order";
 import { getStages, Stage } from "../../../models/stage";
 import { useSelector } from "../../../store";
 import { fetchAllProcesses } from "../../../store/data/processSlice";
-import { CHART_COLOR, filter, processMetrics } from "../../../utils/data";
+import {
+  CHART_COLOR,
+  filter,
+  monthlyProcessMetrics,
+  processMetrics,
+} from "../../../utils/data";
 import { formatStringDate } from "../../../utils/date";
 import { PieChart } from "react-minimal-pie-chart";
 import { Bar } from "react-chartjs-2";
@@ -156,22 +161,22 @@ const ProcessMetrics: React.FC<{ isEditting: boolean; metrics: any }> = ({
           Object.keys(metrics)
             .sort()
             .map((key) => (
-              <IonItem>
+              <IonItem key={key}>
                 <IonLabel slot="start">
                   <b>{processes.find((i) => i.id === key)?.name}</b>
                   <p>
                     <span style={{ color: "rgb(54, 162, 235)" }}>
                       {metrics[key]?.pending || 0}
                     </span>
-                    <span style={{marginRight: 4, marginLeft: 4}}>/</span>
+                    <span style={{ marginRight: 4, marginLeft: 4 }}>/</span>
                     <span style={{ color: "rgb(75, 192, 192)" }}>
                       {metrics[key]?.fulfilled || 0}
                     </span>
-                    <span style={{marginRight: 4, marginLeft: 4}}>/</span>
+                    <span style={{ marginRight: 4, marginLeft: 4 }}>/</span>
                     <span style={{ color: "rgb(255, 99, 132)" }}>
                       {metrics[key]?.rejected || 0}
                     </span>
-                    <small style={{marginRight: 4, marginLeft: 4}}>sp</small>
+                    <small style={{ marginRight: 4, marginLeft: 4 }}>sp</small>
                   </p>
                 </IonLabel>
                 <IonProgressBar
@@ -384,6 +389,65 @@ const RecentOrders = () => {
   );
 };
 
+const MonthlyStages = () => {
+  const { uid } = useSelector((state) => state.user);
+  const [stages, setStages] = useState<any[]>([]);
+
+  useEffect(() => {
+    getStages(uid, { limit: 1000 }).then((snap) => {
+      setStages(
+        snap.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Stage))
+      );
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const data = useMemo(() => {
+    const tmp = monthlyProcessMetrics(stages);
+    return Object.keys(tmp)
+      .sort()
+      .map((key) => {
+        return {
+          labels: Object.keys(tmp[key]).sort(),
+          datasets: [
+            {
+              label: "",
+              data: Object.keys(tmp[key])
+                .sort()
+                .map((m) => tmp[key][m]?.fulfilled || 0),
+              backgroundColor: ["rgba(75, 192, 192)"],
+            },
+          ],
+        };
+      });
+  }, [stages]);
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+  };
+  return (
+    <IonCol size="6">
+      <Item>
+        {data.map((d, i) => (
+          <Bar
+            key={i}
+            style={{ padding: 12 }}
+            type
+            data={d}
+            options={options}
+          />
+        ))}
+      </Item>
+    </IonCol>
+  );
+};
+
 interface DashboardPageProps {}
 
 const DashboardPage: React.FC<DashboardPageProps> = () => {
@@ -559,6 +623,7 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
                 isEditting={isEditting}
               />
             </IonCol>
+            {/* <MonthlyStages /> */}
             <SellingsMetrics metrics={metricsSellings} />
             <RecentPayments />
             <RecentStages />
