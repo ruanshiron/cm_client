@@ -6,7 +6,7 @@ importScripts("https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js");
 // messagingSenderId.
 
 const CACHE_NAME = "cm";
-const URLS_TO_CACHE = ["/assets/icon/kanna-icon.png"];
+const URLS_TO_CACHE = ["/assets/icon/icon.png"];
 
 self.addEventListener("install", function (event) {
   event.waitUntil(
